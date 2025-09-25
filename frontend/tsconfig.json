@@ -1,0 +1,12 @@
+// tsconfig.json
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler", // <- chave da correção
+    "target": "ES2020",
+    "jsx": "react-jsx", // se React
+    "skipLibCheck": true,
+    "types": ["vite/client", "node"]
+  },
+  "include": ["src", "vite.config.ts"]
+}
