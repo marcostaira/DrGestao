@@ -11,6 +11,7 @@ import { ApiResponse, AppError } from "./types";
 // Import routes
 import authRoutes from "./modules/auth/routes/auth.routes";
 import pacienteRoutes from "./modules/pacientes/routes/paciente.routes";
+import profissionalRoutes from "./modules/profissionais/routes/profissional.routes";
 
 // Load environment variables
 dotenv.config();
@@ -108,6 +109,7 @@ class App {
     // API routes
     this.app.use("/api/auth", authRoutes);
     this.app.use("/api/pacientes", pacienteRoutes);
+    this.app.use("/api/profissionais", profissionalRoutes);
 
     // 404 handler
     this.app.use("*", (req: Request, res: Response) => {

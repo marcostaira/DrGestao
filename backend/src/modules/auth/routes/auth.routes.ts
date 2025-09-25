@@ -16,6 +16,7 @@ import {
   paginationSchema,
   idSchema,
 } from "../../../middleware/validation";
+import Joi from "joi";
 
 // ============================================================================
 // AUTH ROUTES
@@ -30,11 +31,6 @@ const authRateLimit = createUserRateLimit();
 // PUBLIC ROUTES (Não requerem autenticação)
 // ==========================================================================
 
-/**
- * @route   POST /auth/login
- * @desc    Login de usuário
- * @access  Public
- */
 router.post(
   "/login",
   authRateLimit,
@@ -42,11 +38,6 @@ router.post(
   AuthController.login
 );
 
-/**
- * @route   POST /auth/register-tenant
- * @desc    Registro de novo tenant com usuário admin
- * @access  Public
- */
 router.post(
   "/register-tenant",
   authRateLimit,
@@ -54,34 +45,20 @@ router.post(
   AuthController.registerTenant
 );
 
-/**
- * @route   POST /auth/refresh
- * @desc    Renovar token usando refresh token
- * @access  Public
- */
 router.post(
   "/refresh",
   authRateLimit,
   validate({ body: refreshTokenSchema }),
-  refreshTokenMiddleware
+  refreshTokenMiddleware,
+  AuthController.refreshToken
 );
 
 // ==========================================================================
 // PROTECTED ROUTES (Requerem autenticação)
 // ==========================================================================
 
-/**
- * @route   GET /auth/profile
- * @desc    Obter perfil do usuário logado
- * @access  Private
- */
 router.get("/profile", authenticate, AuthController.getProfile);
 
-/**
- * @route   PUT /auth/profile
- * @desc    Atualizar perfil do usuário logado
- * @access  Private
- */
 router.put(
   "/profile",
   authenticate,
@@ -89,47 +66,27 @@ router.put(
   AuthController.updateProfile
 );
 
-/**
- * @route   POST /auth/change-password
- * @desc    Alterar própria senha
- * @access  Private
- */
 router.post(
   "/change-password",
   authenticate,
   authRateLimit,
   validate({
-    body: {
-      senhaAtual: loginSchema.extract("senha"),
-      novaSenha: loginSchema.extract("senha"),
-    },
+    body: Joi.object({
+      senhaAtual: Joi.string().min(6).required(),
+      novaSenha: Joi.string().min(6).required(),
+    }),
   }),
   AuthController.changePassword
 );
 
-/**
- * @route   POST /auth/logout
- * @desc    Logout (registra log)
- * @access  Private
- */
 router.post("/logout", authenticate, AuthController.logout);
 
-/**
- * @route   GET /auth/validate
- * @desc    Validar se token ainda é válido
- * @access  Private
- */
 router.get("/validate", authenticate, AuthController.validateToken);
 
 // ==========================================================================
 // ADMIN ONLY ROUTES
 // ==========================================================================
 
-/**
- * @route   POST /auth/users
- * @desc    Criar novo usuário no tenant
- * @access  Private (Admin only)
- */
 router.post(
   "/users",
   authenticate,
@@ -138,11 +95,6 @@ router.post(
   AuthController.createUser
 );
 
-/**
- * @route   GET /auth/users
- * @desc    Listar usuários do tenant
- * @access  Private (Admin only)
- */
 router.get(
   "/users",
   authenticate,
@@ -151,35 +103,25 @@ router.get(
   AuthController.listUsers
 );
 
-/**
- * @route   POST /auth/reset-password
- * @desc    Resetar senha de outro usuário (admin)
- * @access  Private (Admin only)
- */
 router.post(
   "/reset-password",
   authenticate,
   adminOnly,
   authRateLimit,
   validate({
-    body: {
+    body: Joi.object({
       usuarioId: idSchema,
-      novaSenha: loginSchema.extract("senha"),
-    },
+      novaSenha: Joi.string().min(6).required(),
+    }),
   }),
   AuthController.resetPassword
 );
 
-/**
- * @route   DELETE /auth/users/:id
- * @desc    Desativar usuário
- * @access  Private (Admin only)
- */
 router.delete(
   "/users/:id",
   authenticate,
   adminOnly,
-  validate({ params: { id: idSchema } }),
+  validate({ params: Joi.object({ id: idSchema }) }),
   AuthController.deactivateUser
 );
 
@@ -187,11 +129,6 @@ router.delete(
 // HEALTH CHECK ROUTE
 // ==========================================================================
 
-/**
- * @route   GET /auth/health
- * @desc    Health check para o módulo de autenticação
- * @access  Public
- */
 router.get("/health", (req, res) => {
   res.status(200).json({
     success: true,

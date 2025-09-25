@@ -1,33 +1,36 @@
 import { Request } from "express";
-import { TipoUsuario, StatusAgendamento, TipoLog } from "@prisma/client";
+import { StatusAgendamento, TipoUsuario } from "../generated/prisma";
 
-// ============================================================================
-// BASE TYPES
-// ============================================================================
+// Importar tipos do Prisma Client GERADO (não do @prisma/client)
+export { TipoUsuario, StatusAgendamento } from "../generated/prisma";
 
-export interface ApiResponse<T = any> {
-  success: boolean;
-  data?: T;
-  message?: string;
-  error?: string;
-  meta?: {
-    total?: number;
-    page?: number;
-    limit?: number;
-    totalPages?: number;
-  };
-}
-
-export interface PaginationParams {
-  page?: number;
-  limit?: number;
-  search?: string;
-  sortBy?: string;
-  sortOrder?: "asc" | "desc";
+// Se TipoLog não existir no schema, defina aqui
+export enum TipoLog {
+  LOGIN = "LOGIN",
+  LOGOUT = "LOGOUT",
+  CREATE = "CREATE",
+  UPDATE = "UPDATE",
+  DELETE = "DELETE",
+  ERROR = "ERROR",
 }
 
 // ============================================================================
-// AUTH TYPES
+// ERROR HANDLING
+// ============================================================================
+
+export class AppError extends Error {
+  constructor(
+    public override message: string,
+    public statusCode: number = 500
+  ) {
+    super(message);
+    this.name = "AppError";
+    Error.captureStackTrace(this, this.constructor);
+  }
+}
+
+// ============================================================================
+// REQUEST EXTENSIONS
 // ============================================================================
 
 export interface AuthenticatedRequest extends Request {
@@ -44,13 +47,23 @@ export interface AuthenticatedRequest extends Request {
     plano: string;
     ativo: boolean;
   };
+  tenantStats?: {
+    pacientes: number;
+    profissionais: number;
+    procedimentos: number;
+    agendamentos: number;
+    atendimentos: number;
+  };
 }
+
+// ============================================================================
+// JWT & AUTH TYPES
+// ============================================================================
 
 export interface JWTPayload {
   userId: string;
   tenantId: string;
   email: string;
-  nome: string;
   tipo: TipoUsuario;
   iat?: number;
   exp?: number;
@@ -118,6 +131,42 @@ export interface UpdateUserData {
 }
 
 // ============================================================================
+// API RESPONSE TYPES
+// ============================================================================
+
+export interface ApiResponse<T = any> {
+  success: boolean;
+  data?: T;
+  error?: string;
+  message?: string;
+  meta?: PaginationMeta;
+}
+
+export interface PaginationParams {
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+}
+
+export interface PaginationMeta {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+// ============================================================================
+// DATABASE CONFIG
+// ============================================================================
+
+export interface DatabaseConfig {
+  url: string;
+  maxConnections: number;
+  connectionTimeout: number;
+}
+
+// ============================================================================
 // PACIENTE TYPES
 // ============================================================================
 
@@ -140,6 +189,7 @@ export interface UpdatePacienteData {
 export interface PacienteFilters extends PaginationParams {
   profissionalId?: string;
   telefone?: string;
+  search?: string;
 }
 
 // ============================================================================
@@ -188,7 +238,7 @@ export interface CreateAgendamentoData {
   recorrencia?: {
     tipo: "DIARIO" | "SEMANAL" | "MENSAL";
     quantidade: number;
-    diasSemana?: number[]; // Para recorrência semanal
+    diasSemana?: number[];
   };
 }
 
@@ -247,25 +297,9 @@ export interface UpdateAtendimentoData {
   }[];
 }
 
-export interface AtendimentoFilters extends PaginationParams {
-  profissionalId?: string;
-  pacienteId?: string;
-  dataInicio?: Date | string;
-  dataFim?: Date | string;
-}
-
 // ============================================================================
 // WHATSAPP TYPES
 // ============================================================================
-
-export interface UpdateWhatsAppConfigData {
-  templateConfirmacao?: string;
-  templateSim?: string;
-  templateNao?: string;
-  templateOpcoesInvalidas?: string;
-  horasAntecedencia?: number;
-  ativo?: boolean;
-}
 
 export interface WhatsAppMessage {
   to: string;
@@ -275,124 +309,15 @@ export interface WhatsAppMessage {
 export interface WhatsAppWebhook {
   from: string;
   message: string;
-  messageId?: string;
-  timestamp?: string;
+  timestamp: string;
 }
 
-export interface ConfirmationJob {
-  agendamentoId: string;
-  pacienteNome: string;
-  pacienteTelefone: string;
-  dataHora: Date;
-  template: string;
-}
-
-// ============================================================================
-// GOOGLE CALENDAR TYPES
-// ============================================================================
-
-export interface GoogleCalendarEvent {
-  id?: string;
-  summary: string;
-  description?: string;
-  start: {
-    dateTime: string;
-    timeZone?: string;
-  };
-  end: {
-    dateTime: string;
-    timeZone?: string;
-  };
-  attendees?: {
-    email: string;
-    displayName?: string;
-  }[];
-}
-
-// ============================================================================
-// LOG TYPES
-// ============================================================================
-
-export interface CreateLogData {
-  tipo: TipoLog;
-  descricao: string;
-  usuarioId?: string;
-  metadata?: any;
-}
-
-// ============================================================================
-// ERROR TYPES
-// ============================================================================
-
-export class AppError extends Error {
-  public statusCode: number;
-  public isOperational: boolean;
-
-  constructor(
-    message: string,
-    statusCode: number = 500,
-    isOperational: boolean = true
-  ) {
-    super(message);
-    this.statusCode = statusCode;
-    this.isOperational = isOperational;
-
-    Error.captureStackTrace(this, this.constructor);
-  }
-}
-
-// ============================================================================
-// VALIDATION TYPES
-// ============================================================================
-
-export interface ValidationError {
-  field: string;
-  message: string;
-  value?: any;
-}
-
-export interface ValidationResult {
-  isValid: boolean;
-  errors?: ValidationError[];
-  data?: any;
-}
-
-// ============================================================================
-// DATABASE TYPES
-// ============================================================================
-
-export interface DatabaseConfig {
-  url: string;
-  maxConnections?: number;
-  connectionTimeout?: number;
-}
-
-// ============================================================================
-// EXPORT ENUMS - LOCAL DEFINITION (SAFE APPROACH)
-// ============================================================================
-
-// Definindo enums localmente para garantir compatibilidade
-export enum TipoUsuario {
-  ADMIN = "ADMIN",
-  SECRETARIA = "SECRETARIA",
-}
-
-export enum StatusAgendamento {
-  MARCADO = "MARCADO",
-  CONFIRMADO = "CONFIRMADO",
-  COMPARECEU = "COMPARECEU",
-  FALTOU = "FALTOU",
-  CANCELADO = "CANCELADO",
-}
-
-export enum TipoLog {
-  LOGIN = "LOGIN",
-  LOGOUT = "LOGOUT",
-  AGENDAMENTO_CRIADO = "AGENDAMENTO_CRIADO",
-  AGENDAMENTO_ATUALIZADO = "AGENDAMENTO_ATUALIZADO",
-  AGENDAMENTO_CANCELADO = "AGENDAMENTO_CANCELADO",
-  CONFIRMACAO_ENVIADA = "CONFIRMACAO_ENVIADA",
-  CONFIRMACAO_RECEBIDA = "CONFIRMACAO_RECEBIDA",
-  SYNC_GOOGLE_CALENDAR = "SYNC_GOOGLE_CALENDAR",
-  ERROR = "ERROR",
+export interface WhatsAppConfig {
+  tenantId: string;
+  templateConfirmacao: string;
+  templateSim: string;
+  templateNao: string;
+  templateOpcoesInvalidas: string;
+  horasAntecedencia: number;
+  ativo: boolean;
 }

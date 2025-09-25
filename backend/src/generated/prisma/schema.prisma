@@ -248,6 +248,9 @@ enum TipoLog {
   CONFIRMACAO_RECEBIDA
   SYNC_GOOGLE_CALENDAR
   ERROR
+  CREATE
+  UPDATE
+  DELETE
 }
 
 model LogSistema {

@@ -8,8 +8,7 @@ import {
   CreateTenantData,
   CreateUserData,
 } from "../../../types";
-import { TipoUsuario } from "@prisma/client";
-
+import { TipoUsuario } from "../../../generated/prisma";
 // ============================================================================
 // AUTH SERVICE
 // ============================================================================
@@ -72,6 +71,7 @@ export class AuthService {
       },
     });
 
+    // RETORNAR NO FORMATO CORRETO (sem success/data)
     return {
       token,
       refreshToken,
@@ -91,25 +91,11 @@ export class AuthService {
   }
 
   // ==========================================================================
-  // REGISTER TENANT (Cadastro completo de novo tenant)
+  // REGISTER TENANT
   // ==========================================================================
 
   static async registerTenant(data: CreateTenantData): Promise<AuthResponse> {
     const { nome, plano = "basico", adminUser } = data;
-
-    // Verificar se já existe tenant com mesmo nome
-    const existingTenant = await prisma.tenant.findFirst({
-      where: {
-        nome: {
-          equals: nome.trim(),
-          mode: "insensitive",
-        },
-      },
-    });
-
-    if (existingTenant) {
-      throw new AppError("Já existe um tenant com este nome", 400);
-    }
 
     // Verificar se já existe usuário com mesmo email
     const existingUser = await prisma.usuario.findFirst({
@@ -151,18 +137,10 @@ export class AuthService {
         },
       });
 
-      // Criar configuração padrão do WhatsApp
-      await tx.whatsAppConfig.create({
-        data: {
-          tenantId: tenant.id,
-          ativo: false, // Desabilitado por padrão
-        },
-      });
-
       return { tenant, usuario };
     });
 
-    // Gerar tokens para o usuário admin
+    // Gerar tokens
     const tokenPayload = {
       userId: result.usuario.id,
       tenantId: result.tenant.id,
@@ -174,21 +152,7 @@ export class AuthService {
     const token = generateToken(tokenPayload);
     const refreshToken = generateRefreshToken(tokenPayload);
 
-    // Log de criação
-    await prisma.logSistema.create({
-      data: {
-        tenantId: result.tenant.id,
-        usuarioId: result.usuario.id,
-        tipo: "LOGIN",
-        descricao: `Tenant criado e primeiro login realizado`,
-        metadata: {
-          tenantNome: result.tenant.nome,
-          plano: result.tenant.plano,
-          timestamp: new Date().toISOString(),
-        },
-      },
-    });
-
+    // RETORNAR NO FORMATO CORRETO (sem success/data)
     return {
       token,
       refreshToken,
@@ -622,5 +586,87 @@ export class AuthService {
         },
       },
     });
+  }
+
+  // ==========================================================================
+  // GENERATE NEW TOKENS (Para refresh token)
+  // ==========================================================================
+
+  static async generateNewTokens(
+    userId: string,
+    tenantId: string
+  ): Promise<{ token: string; refreshToken: string }> {
+    // Buscar usuário para validar
+    const usuario = await prisma.usuario.findUnique({
+      where: { id: userId, tenantId, ativo: true },
+    });
+
+    if (!usuario) {
+      throw new AppError("Usuário não encontrado ou inativo", 401);
+    }
+
+    // Gerar novos tokens
+    const tokenPayload = {
+      userId: usuario.id,
+      tenantId: usuario.tenantId,
+      email: usuario.email,
+      nome: usuario.nome,
+      tipo: usuario.tipo,
+    };
+
+    const token = generateToken(tokenPayload);
+    const refreshToken = generateRefreshToken(tokenPayload);
+
+    return { token, refreshToken };
+  }
+
+  // ==========================================================================
+  // GET USERS (Listar usuários do tenant)
+  // ==========================================================================
+
+  static async getUsers(
+    tenantId: string,
+    pagination: { page: number; limit: number }
+  ): Promise<{
+    data: any[];
+    meta: {
+      total: number;
+      page: number;
+      limit: number;
+      totalPages: number;
+    };
+  }> {
+    const { page = 1, limit = 10 } = pagination;
+    const skip = (page - 1) * limit;
+
+    // Buscar usuários
+    const [usuarios, total] = await Promise.all([
+      prisma.usuario.findMany({
+        where: { tenantId },
+        select: {
+          id: true,
+          nome: true,
+          email: true,
+          tipo: true,
+          ativo: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+        skip,
+        take: limit,
+        orderBy: { createdAt: "desc" },
+      }),
+      prisma.usuario.count({ where: { tenantId } }),
+    ]);
+
+    return {
+      data: usuarios,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import { Response, NextFunction } from "express";
 import { AuthenticatedRequest, AppError } from "../types";
 import { prisma } from "../config/database";

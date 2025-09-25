@@ -1,422 +1,118 @@
-import bcrypt from "bcryptjs";
-import { prisma } from "../../../config/database";
-import { generateToken, generateRefreshToken } from "../../../middleware/auth";
-import {
-  LoginCredentials,
-  AuthResponse,
-  AppError,
-  CreateTenantData,
-  CreateUserData,
-} from "../../../types";
-import { TipoUsuario } from "@prisma/client";
+import { Response } from "express";
+import { AuthService } from "../services/auth.service";
+import { AuthenticatedRequest, ApiResponse } from "../../../types";
 
 // ============================================================================
-// AUTH SERVICE
+// AUTH CONTROLLER
 // ============================================================================
 
-export class AuthService {
+export class AuthController {
   // ==========================================================================
   // LOGIN
   // ==========================================================================
 
-  static async login(credentials: LoginCredentials): Promise<AuthResponse> {
-    const { email, senha } = credentials;
+  static async login(req: AuthenticatedRequest, res: Response): Promise<void> {
+    try {
+      const { email, senha } = req.body;
+      const result = await AuthService.login({ email, senha });
 
-    // Buscar usuário com tenant
-    const usuario = await prisma.usuario.findFirst({
-      where: {
-        email: email.toLowerCase().trim(),
-        ativo: true,
-      },
-      include: {
-        tenant: true,
-      },
-    });
+      const response: ApiResponse = {
+        success: true,
+        data: result, // result JÁ TEM: token, refreshToken, user, tenant
+      };
 
-    if (!usuario) {
-      throw new AppError("Credenciais inválidas", 401);
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao fazer login",
+      };
+      res.status(error.statusCode || 500).json(response);
     }
-
-    if (!usuario.tenant.ativo) {
-      throw new AppError("Conta inativa. Entre em contato com o suporte.", 401);
-    }
-
-    // Verificar senha
-    const senhaValida = await bcrypt.compare(senha, usuario.senha);
-    if (!senhaValida) {
-      throw new AppError("Credenciais inválidas", 401);
-    }
-
-    // Gerar tokens
-    const tokenPayload = {
-      userId: usuario.id,
-      tenantId: usuario.tenantId,
-      email: usuario.email,
-      nome: usuario.nome,
-      tipo: usuario.tipo,
-    };
-
-    const token = generateToken(tokenPayload);
-    const refreshToken = generateRefreshToken(tokenPayload);
-
-    // Log do login
-    await prisma.logSistema.create({
-      data: {
-        tenantId: usuario.tenantId,
-        usuarioId: usuario.id,
-        tipo: "LOGIN",
-        descricao: `Login realizado por ${usuario.email}`,
-        metadata: {
-          timestamp: new Date().toISOString(),
-        },
-      },
-    });
-
-    return {
-      token,
-      refreshToken,
-      user: {
-        id: usuario.id,
-        tenantId: usuario.tenantId,
-        nome: usuario.nome,
-        email: usuario.email,
-        tipo: usuario.tipo,
-      },
-      tenant: {
-        id: usuario.tenant.id,
-        nome: usuario.tenant.nome,
-        plano: usuario.tenant.plano,
-      },
-    };
   }
 
   // ==========================================================================
-  // REGISTER TENANT (Cadastro completo de novo tenant)
+  // REGISTER TENANT
   // ==========================================================================
 
-  static async registerTenant(data: CreateTenantData): Promise<AuthResponse> {
-    const { nome, plano = "basico", adminUser } = data;
-
-    // Verificar se já existe tenant com mesmo nome
-    const existingTenant = await prisma.tenant.findFirst({
-      where: {
-        nome: {
-          equals: nome.trim(),
-          mode: "insensitive",
-        },
-      },
-    });
-
-    if (existingTenant) {
-      throw new AppError("Já existe um tenant com este nome", 400);
-    }
-
-    // Verificar se já existe usuário com mesmo email
-    const existingUser = await prisma.usuario.findFirst({
-      where: {
-        email: {
-          equals: adminUser.email.toLowerCase().trim(),
-          mode: "insensitive",
-        },
-      },
-    });
-
-    if (existingUser) {
-      throw new AppError("Já existe um usuário com este email", 400);
-    }
-
-    // Criptografar senha
-    const hashedPassword = await bcrypt.hash(adminUser.senha, 12);
-
-    // Criar tenant e usuário admin em uma transação
-    const result = await prisma.$transaction(async (tx) => {
-      // Criar tenant
-      const tenant = await tx.tenant.create({
-        data: {
-          nome: nome.trim(),
-          plano,
-          ativo: true,
-        },
-      });
-
-      // Criar usuário admin
-      const usuario = await tx.usuario.create({
-        data: {
-          tenantId: tenant.id,
-          nome: adminUser.nome.trim(),
-          email: adminUser.email.toLowerCase().trim(),
-          senha: hashedPassword,
-          tipo: TipoUsuario.ADMIN,
-          ativo: true,
-        },
-      });
-
-      // Criar configuração padrão do WhatsApp
-      await tx.whatsAppConfig.create({
-        data: {
-          tenantId: tenant.id,
-          ativo: false, // Desabilitado por padrão
-        },
-      });
-
-      return { tenant, usuario };
-    });
-
-    // Gerar tokens para o usuário admin
-    const tokenPayload = {
-      userId: result.usuario.id,
-      tenantId: result.tenant.id,
-      email: result.usuario.email,
-      nome: result.usuario.nome,
-      tipo: result.usuario.tipo,
-    };
-
-    const token = generateToken(tokenPayload);
-    const refreshToken = generateRefreshToken(tokenPayload);
-
-    // Log de criação
-    await prisma.logSistema.create({
-      data: {
-        tenantId: result.tenant.id,
-        usuarioId: result.usuario.id,
-        tipo: "LOGIN",
-        descricao: `Tenant criado e primeiro login realizado`,
-        metadata: {
-          tenantNome: result.tenant.nome,
-          plano: result.tenant.plano,
-          timestamp: new Date().toISOString(),
-        },
-      },
-    });
-
-    return {
-      token,
-      refreshToken,
-      user: {
-        id: result.usuario.id,
-        tenantId: result.tenant.id,
-        nome: result.usuario.nome,
-        email: result.usuario.email,
-        tipo: result.usuario.tipo,
-      },
-      tenant: {
-        id: result.tenant.id,
-        nome: result.tenant.nome,
-        plano: result.tenant.plano,
-      },
-    };
-  }
-
-  // ==========================================================================
-  // CREATE USER (Criar usuário adicional no tenant)
-  // ==========================================================================
-
-  static async createUser(
-    tenantId: string,
-    data: CreateUserData
+  static async registerTenant(
+    req: AuthenticatedRequest,
+    res: Response
   ): Promise<void> {
-    const { nome, email, senha, tipo = TipoUsuario.SECRETARIA } = data;
+    try {
+      const tenantData = req.body;
+      const result = await AuthService.registerTenant(tenantData);
 
-    // Verificar se tenant existe e está ativo
-    const tenant = await prisma.tenant.findUnique({
-      where: { id: tenantId },
-    });
+      const response: ApiResponse = {
+        success: true,
+        data: result, // result JÁ TEM: token, refreshToken, user, tenant
+        message: "Tenant registrado com sucesso",
+      };
 
-    if (!tenant || !tenant.ativo) {
-      throw new AppError("Tenant não encontrado ou inativo", 404);
+      res.status(201).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao registrar tenant",
+      };
+      res.status(error.statusCode || 500).json(response);
     }
-
-    // Verificar limites do plano
-    const currentUserCount = await prisma.usuario.count({
-      where: { tenantId, ativo: true },
-    });
-
-    const planLimits = {
-      basico: 2,
-      premium: 10,
-      enterprise: -1, // Ilimitado
-    };
-
-    const limit = planLimits[tenant.plano as keyof typeof planLimits] || 2;
-
-    if (limit !== -1 && currentUserCount >= limit) {
-      throw new AppError(
-        `Limite de usuários atingido para o plano ${tenant.plano}`,
-        402
-      );
-    }
-
-    // Verificar se email já existe
-    const existingUser = await prisma.usuario.findFirst({
-      where: {
-        email: {
-          equals: email.toLowerCase().trim(),
-          mode: "insensitive",
-        },
-      },
-    });
-
-    if (existingUser) {
-      throw new AppError("Já existe um usuário com este email", 400);
-    }
-
-    // Criptografar senha
-    const hashedPassword = await bcrypt.hash(senha, 12);
-
-    // Criar usuário
-    await prisma.usuario.create({
-      data: {
-        tenantId,
-        nome: nome.trim(),
-        email: email.toLowerCase().trim(),
-        senha: hashedPassword,
-        tipo,
-        ativo: true,
-      },
-    });
   }
 
   // ==========================================================================
-  // CHANGE PASSWORD
+  // REFRESH TOKEN
   // ==========================================================================
 
-  static async changePassword(
-    userId: string,
-    currentPassword: string,
-    newPassword: string
+  static async refreshToken(
+    req: AuthenticatedRequest,
+    res: Response
   ): Promise<void> {
-    // Buscar usuário
-    const usuario = await prisma.usuario.findUnique({
-      where: { id: userId, ativo: true },
-    });
+    try {
+      const userId = req.user!.id;
+      const tenantId = req.user!.tenantId;
 
-    if (!usuario) {
-      throw new AppError("Usuário não encontrado", 404);
+      const tokens = await AuthService.generateNewTokens(userId, tenantId);
+
+      const response: ApiResponse = {
+        success: true,
+        data: tokens,
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao renovar token",
+      };
+      res.status(error.statusCode || 500).json(response);
     }
-
-    // Verificar senha atual
-    const senhaValida = await bcrypt.compare(currentPassword, usuario.senha);
-    if (!senhaValida) {
-      throw new AppError("Senha atual incorreta", 400);
-    }
-
-    // Verificar se a nova senha é diferente da atual
-    const mesmaSenh = await bcrypt.compare(newPassword, usuario.senha);
-    if (mesmaSenh) {
-      throw new AppError("A nova senha deve ser diferente da atual", 400);
-    }
-
-    // Criptografar nova senha
-    const hashedNewPassword = await bcrypt.hash(newPassword, 12);
-
-    // Atualizar senha
-    await prisma.usuario.update({
-      where: { id: userId },
-      data: { senha: hashedNewPassword },
-    });
-
-    // Log da alteração
-    await prisma.logSistema.create({
-      data: {
-        tenantId: usuario.tenantId,
-        usuarioId: userId,
-        tipo: "LOGIN",
-        descricao: "Senha alterada pelo usuário",
-        metadata: {
-          timestamp: new Date().toISOString(),
-        },
-      },
-    });
   }
 
   // ==========================================================================
-  // RESET PASSWORD (Admin reset)
+  // GET PROFILE
   // ==========================================================================
 
-  static async resetPassword(
-    adminUserId: string,
-    targetUserId: string,
-    newPassword: string
+  static async getProfile(
+    req: AuthenticatedRequest,
+    res: Response
   ): Promise<void> {
-    // Buscar usuário admin
-    const adminUser = await prisma.usuario.findUnique({
-      where: { id: adminUserId, ativo: true },
-    });
-
-    if (!adminUser || adminUser.tipo !== TipoUsuario.ADMIN) {
-      throw new AppError("Apenas administradores podem resetar senhas", 403);
-    }
-
-    // Buscar usuário alvo
-    const targetUser = await prisma.usuario.findUnique({
-      where: { id: targetUserId, ativo: true },
-    });
-
-    if (!targetUser) {
-      throw new AppError("Usuário não encontrado", 404);
-    }
-
-    // Verificar se ambos pertencem ao mesmo tenant
-    if (adminUser.tenantId !== targetUser.tenantId) {
-      throw new AppError(
-        "Não é possível alterar senha de usuário de outro tenant",
-        403
-      );
-    }
-
-    // Criptografar nova senha
-    const hashedPassword = await bcrypt.hash(newPassword, 12);
-
-    // Atualizar senha
-    await prisma.usuario.update({
-      where: { id: targetUserId },
-      data: { senha: hashedPassword },
-    });
-
-    // Log da alteração
-    await prisma.logSistema.create({
-      data: {
-        tenantId: targetUser.tenantId,
-        usuarioId: adminUserId,
-        tipo: "LOGIN",
-        descricao: `Senha resetada pelo admin para usuário ${targetUser.email}`,
-        metadata: {
-          targetUserId,
-          targetUserEmail: targetUser.email,
-          timestamp: new Date().toISOString(),
+    try {
+      const response: ApiResponse = {
+        success: true,
+        data: {
+          user: req.user,
+          tenant: req.tenant,
         },
-      },
-    });
-  }
+      };
 
-  // ==========================================================================
-  // GET USER PROFILE
-  // ==========================================================================
-
-  static async getUserProfile(userId: string) {
-    const usuario = await prisma.usuario.findUnique({
-      where: { id: userId, ativo: true },
-      select: {
-        id: true,
-        nome: true,
-        email: true,
-        tipo: true,
-        createdAt: true,
-        tenant: {
-          select: {
-            id: true,
-            nome: true,
-            plano: true,
-          },
-        },
-      },
-    });
-
-    if (!usuario) {
-      throw new AppError("Usuário não encontrado", 404);
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao buscar perfil",
+      };
+      res.status(error.statusCode || 500).json(response);
     }
-
-    return usuario;
   }
 
   // ==========================================================================
@@ -424,203 +120,230 @@ export class AuthService {
   // ==========================================================================
 
   static async updateProfile(
-    userId: string,
-    data: { nome?: string; email?: string }
+    req: AuthenticatedRequest,
+    res: Response
   ): Promise<void> {
-    const updateData: any = {};
+    try {
+      const userId = req.user!.id;
+      const { nome, email } = req.body;
 
-    if (data.nome) {
-      updateData.nome = data.nome.trim();
+      await AuthService.updateProfile(userId, { nome, email });
+
+      const response: ApiResponse = {
+        success: true,
+        message: "Perfil atualizado com sucesso",
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao atualizar perfil",
+      };
+      res.status(error.statusCode || 500).json(response);
     }
-
-    if (data.email) {
-      // Verificar se o novo email já existe
-      const existingUser = await prisma.usuario.findFirst({
-        where: {
-          email: {
-            equals: data.email.toLowerCase().trim(),
-            mode: "insensitive",
-          },
-          id: { not: userId },
-        },
-      });
-
-      if (existingUser) {
-        throw new AppError("Este email já está em uso", 400);
-      }
-
-      updateData.email = data.email.toLowerCase().trim();
-    }
-
-    if (Object.keys(updateData).length === 0) {
-      return;
-    }
-
-    await prisma.usuario.update({
-      where: { id: userId },
-      data: updateData,
-    });
   }
 
   // ==========================================================================
-  // DEACTIVATE USER
+  // CHANGE PASSWORD
+  // ==========================================================================
+
+  static async changePassword(
+    req: AuthenticatedRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      const userId = req.user!.id;
+      const { senhaAtual, novaSenha } = req.body;
+
+      await AuthService.changePassword(userId, senhaAtual, novaSenha);
+
+      const response: ApiResponse = {
+        success: true,
+        message: "Senha alterada com sucesso",
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao alterar senha",
+      };
+      res.status(error.statusCode || 500).json(response);
+    }
+  }
+
+  // ==========================================================================
+  // LOGOUT
+  // ==========================================================================
+
+  static async logout(req: AuthenticatedRequest, res: Response): Promise<void> {
+    try {
+      const userId = req.user!.id;
+      const tenantId = req.user!.tenantId;
+
+      await AuthService.logout(userId, tenantId);
+
+      const response: ApiResponse = {
+        success: true,
+        message: "Logout realizado com sucesso",
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao fazer logout",
+      };
+      res.status(error.statusCode || 500).json(response);
+    }
+  }
+
+  // ==========================================================================
+  // VALIDATE TOKEN
+  // ==========================================================================
+
+  static async validateToken(
+    req: AuthenticatedRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      const response: ApiResponse = {
+        success: true,
+        data: {
+          valid: true,
+          user: req.user,
+        },
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Token inválido",
+      };
+      res.status(error.statusCode || 500).json(response);
+    }
+  }
+
+  // ==========================================================================
+  // CREATE USER (Admin only)
+  // ==========================================================================
+
+  static async createUser(
+    req: AuthenticatedRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      const tenantId = req.user!.tenantId;
+      const userData = req.body;
+
+      const result = await AuthService.createUser(tenantId, userData);
+
+      const response: ApiResponse = {
+        success: true,
+        data: result,
+        message: "Usuário criado com sucesso",
+      };
+
+      res.status(201).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao criar usuário",
+      };
+      res.status(error.statusCode || 500).json(response);
+    }
+  }
+
+  // ==========================================================================
+  // LIST USERS (Admin only)
+  // ==========================================================================
+
+  static async listUsers(
+    req: AuthenticatedRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      const tenantId = req.user!.tenantId;
+      const { page = 1, limit = 10 } = req.query;
+
+      const result = await AuthService.getUsers(tenantId, {
+        page: Number(page),
+        limit: Number(limit),
+      });
+
+      const response: ApiResponse = {
+        success: true,
+        data: result.data,
+        meta: result.meta,
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao listar usuários",
+      };
+      res.status(error.statusCode || 500).json(response);
+    }
+  }
+
+  // ==========================================================================
+  // RESET PASSWORD (Admin only)
+  // ==========================================================================
+
+  static async resetPassword(
+    req: AuthenticatedRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      const adminUserId = req.user!.id;
+      const { usuarioId, novaSenha } = req.body;
+
+      await AuthService.resetPassword(adminUserId, usuarioId, novaSenha);
+
+      const response: ApiResponse = {
+        success: true,
+        message: "Senha resetada com sucesso",
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao resetar senha",
+      };
+      res.status(error.statusCode || 500).json(response);
+    }
+  }
+
+  // ==========================================================================
+  // DEACTIVATE USER (Admin only)
   // ==========================================================================
 
   static async deactivateUser(
-    adminUserId: string,
-    targetUserId: string
+    req: AuthenticatedRequest,
+    res: Response
   ): Promise<void> {
-    // Buscar usuário admin
-    const adminUser = await prisma.usuario.findUnique({
-      where: { id: adminUserId, ativo: true },
-    });
+    try {
+      const adminUserId = req.user!.id;
+      const targetUserId = req.params.id;
 
-    if (!adminUser || adminUser.tipo !== TipoUsuario.ADMIN) {
-      throw new AppError(
-        "Apenas administradores podem desativar usuários",
-        403
-      );
+      await AuthService.deactivateUser(adminUserId, targetUserId);
+
+      const response: ApiResponse = {
+        success: true,
+        message: "Usuário desativado com sucesso",
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao desativar usuário",
+      };
+      res.status(error.statusCode || 500).json(response);
     }
-
-    // Não permitir auto-desativação
-    if (adminUserId === targetUserId) {
-      throw new AppError("Não é possível desativar seu próprio usuário", 400);
-    }
-
-    // Buscar usuário alvo
-    const targetUser = await prisma.usuario.findUnique({
-      where: { id: targetUserId },
-    });
-
-    if (!targetUser) {
-      throw new AppError("Usuário não encontrado", 404);
-    }
-
-    // Verificar se pertencem ao mesmo tenant
-    if (adminUser.tenantId !== targetUser.tenantId) {
-      throw new AppError(
-        "Não é possível desativar usuário de outro tenant",
-        403
-      );
-    }
-
-    // Desativar usuário
-    await prisma.usuario.update({
-      where: { id: targetUserId },
-      data: { ativo: false },
-    });
-
-    // Log da desativação
-    await prisma.logSistema.create({
-      data: {
-        tenantId: targetUser.tenantId,
-        usuarioId: adminUserId,
-        tipo: "LOGIN",
-        descricao: `Usuário ${targetUser.email} desativado pelo admin`,
-        metadata: {
-          targetUserId,
-          targetUserEmail: targetUser.email,
-          timestamp: new Date().toISOString(),
-        },
-      },
-    });
-  }
-
-  // ==========================================================================
-  // LIST TENANT USERS
-  // ==========================================================================
-
-  static async listTenantUsers(
-    tenantId: string,
-    page: number = 1,
-    limit: number = 20
-  ) {
-    const skip = (page - 1) * limit;
-
-    const [users, total] = await Promise.all([
-      prisma.usuario.findMany({
-        where: { tenantId },
-        select: {
-          id: true,
-          nome: true,
-          email: true,
-          tipo: true,
-          ativo: true,
-          createdAt: true,
-        },
-        orderBy: { createdAt: "desc" },
-        skip,
-        take: limit,
-      }),
-      prisma.usuario.count({
-        where: { tenantId },
-      }),
-    ]);
-
-    return {
-      users,
-      meta: {
-        total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
-      },
-    };
-  }
-
-  // ==========================================================================
-  // VALIDATE TOKEN (Para middleware)
-  // ==========================================================================
-
-  static async validateUserToken(userId: string, tenantId: string) {
-    const usuario = await prisma.usuario.findUnique({
-      where: { id: userId },
-      include: {
-        tenant: true,
-      },
-    });
-
-    if (!usuario || !usuario.ativo || !usuario.tenant.ativo) {
-      throw new AppError("Token inválido ou usuário inativo", 401);
-    }
-
-    if (usuario.tenantId !== tenantId) {
-      throw new AppError("Token inválido para este tenant", 401);
-    }
-
-    return {
-      user: {
-        id: usuario.id,
-        tenantId: usuario.tenantId,
-        email: usuario.email,
-        nome: usuario.nome,
-        tipo: usuario.tipo,
-      },
-      tenant: {
-        id: usuario.tenant.id,
-        nome: usuario.tenant.nome,
-        plano: usuario.tenant.plano,
-        ativo: usuario.tenant.ativo,
-      },
-    };
-  }
-
-  // ==========================================================================
-  // LOGOUT (Log da ação)
-  // ==========================================================================
-
-  static async logout(userId: string, tenantId: string): Promise<void> {
-    // Apenas registrar o log de logout
-    await prisma.logSistema.create({
-      data: {
-        tenantId,
-        usuarioId: userId,
-        tipo: "LOGOUT",
-        descricao: "Logout realizado",
-        metadata: {
-          timestamp: new Date().toISOString(),
-        },
-      },
-    });
   }
 }

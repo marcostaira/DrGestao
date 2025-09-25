@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../generated/prisma";
 import { DatabaseConfig } from "../types";
 
 // ============================================================================
@@ -27,46 +27,6 @@ class DatabaseService {
           process.env.NODE_ENV === "development"
             ? ["query", "info", "warn", "error"]
             : ["error"],
-      });
-
-      // Middleware para log de queries lentas
-      DatabaseService.instance.$use(async (params, next) => {
-        const before = Date.now();
-        const result = await next(params);
-        const after = Date.now();
-
-        const queryTime = after - before;
-        if (queryTime > 1000) {
-          // Log queries > 1s
-          console.warn(
-            `Slow query detected: ${params.model}.${params.action} took ${queryTime}ms`
-          );
-        }
-
-        return result;
-      });
-
-      // Middleware para isolamento de tenant
-      DatabaseService.instance.$use(async (params, next) => {
-        // Skip middleware para modelos que não têm tenantId
-        const skipModels = ["LogSistema"];
-        if (skipModels.includes(params.model || "")) {
-          return next(params);
-        }
-
-        // Para operações que não são de sistema
-        if (params.model && !["Tenant"].includes(params.model)) {
-          // Adicionar filtro de tenantId automaticamente se não estiver presente
-          if (params.action === "findMany" || params.action === "findFirst") {
-            if (params.args?.where && !params.args.where.tenantId) {
-              console.warn(
-                `Query without tenantId filter on model ${params.model}`
-              );
-            }
-          }
-        }
-
-        return next(params);
       });
     }
 
@@ -107,7 +67,7 @@ class DatabaseService {
 // ============================================================================
 
 export const runTransaction = async <T>(
-  callback: (prisma: PrismaClient) => Promise<T>
+  callback: (prisma: any) => Promise<T>
 ): Promise<T> => {
   const prisma = DatabaseService.getInstance();
   return prisma.$transaction(callback);
