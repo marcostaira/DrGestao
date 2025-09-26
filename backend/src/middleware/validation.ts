@@ -97,6 +97,10 @@ export const refreshTokenSchema = Joi.object({
   }),
 });
 
+// ============================================================================
+// TENANT VALIDATION SCHEMAS
+// ============================================================================
+
 export const createTenantSchema = Joi.object({
   nome: Joi.string().trim().min(2).max(100).required(),
   plano: Joi.string()
@@ -107,6 +111,12 @@ export const createTenantSchema = Joi.object({
     email: Joi.string().email().required(),
     senha: Joi.string().min(6).required(),
   }).required(),
+});
+
+export const updateTenantSchema = Joi.object({
+  nome: Joi.string().trim().min(2).max(100),
+  plano: Joi.string().valid("basico", "premium", "enterprise"),
+  ativo: Joi.boolean(),
 });
 
 export const createUserSchema = Joi.object({

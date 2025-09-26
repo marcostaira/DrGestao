@@ -7777,10 +7777,10 @@ export namespace Prisma {
     profissionalId: string | null
     procedimentoId: string | null
     dataHora: Date | null
+    dataHoraFim: Date | null
     status: $Enums.StatusAgendamento | null
     observacoes: string | null
     confirmacaoEnviada: boolean | null
-    googleCalendarId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -7792,10 +7792,10 @@ export namespace Prisma {
     profissionalId: string | null
     procedimentoId: string | null
     dataHora: Date | null
+    dataHoraFim: Date | null
     status: $Enums.StatusAgendamento | null
     observacoes: string | null
     confirmacaoEnviada: boolean | null
-    googleCalendarId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -7807,10 +7807,10 @@ export namespace Prisma {
     profissionalId: number
     procedimentoId: number
     dataHora: number
+    dataHoraFim: number
     status: number
     observacoes: number
     confirmacaoEnviada: number
-    googleCalendarId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -7824,10 +7824,10 @@ export namespace Prisma {
     profissionalId?: true
     procedimentoId?: true
     dataHora?: true
+    dataHoraFim?: true
     status?: true
     observacoes?: true
     confirmacaoEnviada?: true
-    googleCalendarId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -7839,10 +7839,10 @@ export namespace Prisma {
     profissionalId?: true
     procedimentoId?: true
     dataHora?: true
+    dataHoraFim?: true
     status?: true
     observacoes?: true
     confirmacaoEnviada?: true
-    googleCalendarId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -7854,10 +7854,10 @@ export namespace Prisma {
     profissionalId?: true
     procedimentoId?: true
     dataHora?: true
+    dataHoraFim?: true
     status?: true
     observacoes?: true
     confirmacaoEnviada?: true
-    googleCalendarId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -7942,10 +7942,10 @@ export namespace Prisma {
     profissionalId: string
     procedimentoId: string
     dataHora: Date
+    dataHoraFim: Date
     status: $Enums.StatusAgendamento
     observacoes: string | null
     confirmacaoEnviada: boolean
-    googleCalendarId: string | null
     createdAt: Date
     updatedAt: Date
     _count: AgendamentoCountAggregateOutputType | null
@@ -7974,10 +7974,10 @@ export namespace Prisma {
     profissionalId?: boolean
     procedimentoId?: boolean
     dataHora?: boolean
+    dataHoraFim?: boolean
     status?: boolean
     observacoes?: boolean
     confirmacaoEnviada?: boolean
-    googleCalendarId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
@@ -7994,10 +7994,10 @@ export namespace Prisma {
     profissionalId?: boolean
     procedimentoId?: boolean
     dataHora?: boolean
+    dataHoraFim?: boolean
     status?: boolean
     observacoes?: boolean
     confirmacaoEnviada?: boolean
-    googleCalendarId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
@@ -8013,10 +8013,10 @@ export namespace Prisma {
     profissionalId?: boolean
     procedimentoId?: boolean
     dataHora?: boolean
+    dataHoraFim?: boolean
     status?: boolean
     observacoes?: boolean
     confirmacaoEnviada?: boolean
-    googleCalendarId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
@@ -8032,15 +8032,15 @@ export namespace Prisma {
     profissionalId?: boolean
     procedimentoId?: boolean
     dataHora?: boolean
+    dataHoraFim?: boolean
     status?: boolean
     observacoes?: boolean
     confirmacaoEnviada?: boolean
-    googleCalendarId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type AgendamentoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "pacienteId" | "profissionalId" | "procedimentoId" | "dataHora" | "status" | "observacoes" | "confirmacaoEnviada" | "googleCalendarId" | "createdAt" | "updatedAt", ExtArgs["result"]["agendamento"]>
+  export type AgendamentoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "pacienteId" | "profissionalId" | "procedimentoId" | "dataHora" | "dataHoraFim" | "status" | "observacoes" | "confirmacaoEnviada" | "createdAt" | "updatedAt", ExtArgs["result"]["agendamento"]>
   export type AgendamentoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     paciente?: boolean | Agendamento$pacienteArgs<ExtArgs>
@@ -8077,10 +8077,10 @@ export namespace Prisma {
       profissionalId: string
       procedimentoId: string
       dataHora: Date
+      dataHoraFim: Date
       status: $Enums.StatusAgendamento
       observacoes: string | null
       confirmacaoEnviada: boolean
-      googleCalendarId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["agendamento"]>
@@ -8517,10 +8517,10 @@ export namespace Prisma {
     readonly profissionalId: FieldRef<"Agendamento", 'String'>
     readonly procedimentoId: FieldRef<"Agendamento", 'String'>
     readonly dataHora: FieldRef<"Agendamento", 'DateTime'>
+    readonly dataHoraFim: FieldRef<"Agendamento", 'DateTime'>
     readonly status: FieldRef<"Agendamento", 'StatusAgendamento'>
     readonly observacoes: FieldRef<"Agendamento", 'String'>
     readonly confirmacaoEnviada: FieldRef<"Agendamento", 'Boolean'>
-    readonly googleCalendarId: FieldRef<"Agendamento", 'String'>
     readonly createdAt: FieldRef<"Agendamento", 'DateTime'>
     readonly updatedAt: FieldRef<"Agendamento", 'DateTime'>
   }
@@ -12390,10 +12390,10 @@ export namespace Prisma {
     profissionalId: 'profissionalId',
     procedimentoId: 'procedimentoId',
     dataHora: 'dataHora',
+    dataHoraFim: 'dataHoraFim',
     status: 'status',
     observacoes: 'observacoes',
     confirmacaoEnviada: 'confirmacaoEnviada',
-    googleCalendarId: 'googleCalendarId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -13028,10 +13028,10 @@ export namespace Prisma {
     profissionalId?: StringFilter<"Agendamento"> | string
     procedimentoId?: StringFilter<"Agendamento"> | string
     dataHora?: DateTimeFilter<"Agendamento"> | Date | string
+    dataHoraFim?: DateTimeFilter<"Agendamento"> | Date | string
     status?: EnumStatusAgendamentoFilter<"Agendamento"> | $Enums.StatusAgendamento
     observacoes?: StringNullableFilter<"Agendamento"> | string | null
     confirmacaoEnviada?: BoolFilter<"Agendamento"> | boolean
-    googleCalendarId?: StringNullableFilter<"Agendamento"> | string | null
     createdAt?: DateTimeFilter<"Agendamento"> | Date | string
     updatedAt?: DateTimeFilter<"Agendamento"> | Date | string
     tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
@@ -13048,10 +13048,10 @@ export namespace Prisma {
     profissionalId?: SortOrder
     procedimentoId?: SortOrder
     dataHora?: SortOrder
+    dataHoraFim?: SortOrder
     status?: SortOrder
     observacoes?: SortOrderInput | SortOrder
     confirmacaoEnviada?: SortOrder
-    googleCalendarId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     tenant?: TenantOrderByWithRelationInput
@@ -13071,10 +13071,10 @@ export namespace Prisma {
     profissionalId?: StringFilter<"Agendamento"> | string
     procedimentoId?: StringFilter<"Agendamento"> | string
     dataHora?: DateTimeFilter<"Agendamento"> | Date | string
+    dataHoraFim?: DateTimeFilter<"Agendamento"> | Date | string
     status?: EnumStatusAgendamentoFilter<"Agendamento"> | $Enums.StatusAgendamento
     observacoes?: StringNullableFilter<"Agendamento"> | string | null
     confirmacaoEnviada?: BoolFilter<"Agendamento"> | boolean
-    googleCalendarId?: StringNullableFilter<"Agendamento"> | string | null
     createdAt?: DateTimeFilter<"Agendamento"> | Date | string
     updatedAt?: DateTimeFilter<"Agendamento"> | Date | string
     tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
@@ -13091,10 +13091,10 @@ export namespace Prisma {
     profissionalId?: SortOrder
     procedimentoId?: SortOrder
     dataHora?: SortOrder
+    dataHoraFim?: SortOrder
     status?: SortOrder
     observacoes?: SortOrderInput | SortOrder
     confirmacaoEnviada?: SortOrder
-    googleCalendarId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: AgendamentoCountOrderByAggregateInput
@@ -13112,10 +13112,10 @@ export namespace Prisma {
     profissionalId?: StringWithAggregatesFilter<"Agendamento"> | string
     procedimentoId?: StringWithAggregatesFilter<"Agendamento"> | string
     dataHora?: DateTimeWithAggregatesFilter<"Agendamento"> | Date | string
+    dataHoraFim?: DateTimeWithAggregatesFilter<"Agendamento"> | Date | string
     status?: EnumStatusAgendamentoWithAggregatesFilter<"Agendamento"> | $Enums.StatusAgendamento
     observacoes?: StringNullableWithAggregatesFilter<"Agendamento"> | string | null
     confirmacaoEnviada?: BoolWithAggregatesFilter<"Agendamento"> | boolean
-    googleCalendarId?: StringNullableWithAggregatesFilter<"Agendamento"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Agendamento"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Agendamento"> | Date | string
   }
@@ -13788,10 +13788,10 @@ export namespace Prisma {
   export type AgendamentoCreateInput = {
     id?: string
     dataHora: Date | string
+    dataHoraFim: Date | string
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
-    googleCalendarId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tenant: TenantCreateNestedOneWithoutAgendamentosInput
@@ -13808,10 +13808,10 @@ export namespace Prisma {
     profissionalId: string
     procedimentoId: string
     dataHora: Date | string
+    dataHoraFim: Date | string
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
-    googleCalendarId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     atendimento?: AtendimentoUncheckedCreateNestedOneWithoutAgendamentoInput
@@ -13820,10 +13820,10 @@ export namespace Prisma {
   export type AgendamentoUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    googleCalendarId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tenant?: TenantUpdateOneRequiredWithoutAgendamentosNestedInput
@@ -13840,10 +13840,10 @@ export namespace Prisma {
     profissionalId?: StringFieldUpdateOperationsInput | string
     procedimentoId?: StringFieldUpdateOperationsInput | string
     dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    googleCalendarId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     atendimento?: AtendimentoUncheckedUpdateOneWithoutAgendamentoNestedInput
@@ -13856,10 +13856,10 @@ export namespace Prisma {
     profissionalId: string
     procedimentoId: string
     dataHora: Date | string
+    dataHoraFim: Date | string
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
-    googleCalendarId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -13867,10 +13867,10 @@ export namespace Prisma {
   export type AgendamentoUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    googleCalendarId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13882,10 +13882,10 @@ export namespace Prisma {
     profissionalId?: StringFieldUpdateOperationsInput | string
     procedimentoId?: StringFieldUpdateOperationsInput | string
     dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    googleCalendarId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14602,10 +14602,10 @@ export namespace Prisma {
     profissionalId?: SortOrder
     procedimentoId?: SortOrder
     dataHora?: SortOrder
+    dataHoraFim?: SortOrder
     status?: SortOrder
     observacoes?: SortOrder
     confirmacaoEnviada?: SortOrder
-    googleCalendarId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14617,10 +14617,10 @@ export namespace Prisma {
     profissionalId?: SortOrder
     procedimentoId?: SortOrder
     dataHora?: SortOrder
+    dataHoraFim?: SortOrder
     status?: SortOrder
     observacoes?: SortOrder
     confirmacaoEnviada?: SortOrder
-    googleCalendarId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14632,10 +14632,10 @@ export namespace Prisma {
     profissionalId?: SortOrder
     procedimentoId?: SortOrder
     dataHora?: SortOrder
+    dataHoraFim?: SortOrder
     status?: SortOrder
     observacoes?: SortOrder
     confirmacaoEnviada?: SortOrder
-    googleCalendarId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16095,10 +16095,10 @@ export namespace Prisma {
   export type AgendamentoCreateWithoutTenantInput = {
     id?: string
     dataHora: Date | string
+    dataHoraFim: Date | string
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
-    googleCalendarId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     paciente?: PacienteCreateNestedOneWithoutAgendamentosInput
@@ -16113,10 +16113,10 @@ export namespace Prisma {
     profissionalId: string
     procedimentoId: string
     dataHora: Date | string
+    dataHoraFim: Date | string
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
-    googleCalendarId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     atendimento?: AtendimentoUncheckedCreateNestedOneWithoutAgendamentoInput
@@ -16342,10 +16342,10 @@ export namespace Prisma {
     profissionalId?: StringFilter<"Agendamento"> | string
     procedimentoId?: StringFilter<"Agendamento"> | string
     dataHora?: DateTimeFilter<"Agendamento"> | Date | string
+    dataHoraFim?: DateTimeFilter<"Agendamento"> | Date | string
     status?: EnumStatusAgendamentoFilter<"Agendamento"> | $Enums.StatusAgendamento
     observacoes?: StringNullableFilter<"Agendamento"> | string | null
     confirmacaoEnviada?: BoolFilter<"Agendamento"> | boolean
-    googleCalendarId?: StringNullableFilter<"Agendamento"> | string | null
     createdAt?: DateTimeFilter<"Agendamento"> | Date | string
     updatedAt?: DateTimeFilter<"Agendamento"> | Date | string
   }
@@ -16567,10 +16567,10 @@ export namespace Prisma {
   export type AgendamentoCreateWithoutProfissionalInput = {
     id?: string
     dataHora: Date | string
+    dataHoraFim: Date | string
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
-    googleCalendarId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tenant: TenantCreateNestedOneWithoutAgendamentosInput
@@ -16585,10 +16585,10 @@ export namespace Prisma {
     pacienteId?: string | null
     procedimentoId: string
     dataHora: Date | string
+    dataHoraFim: Date | string
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
-    googleCalendarId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     atendimento?: AtendimentoUncheckedCreateNestedOneWithoutAgendamentoInput
@@ -16796,10 +16796,10 @@ export namespace Prisma {
   export type AgendamentoCreateWithoutPacienteInput = {
     id?: string
     dataHora: Date | string
+    dataHoraFim: Date | string
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
-    googleCalendarId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tenant: TenantCreateNestedOneWithoutAgendamentosInput
@@ -16814,10 +16814,10 @@ export namespace Prisma {
     profissionalId: string
     procedimentoId: string
     dataHora: Date | string
+    dataHoraFim: Date | string
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
-    googleCalendarId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     atendimento?: AtendimentoUncheckedCreateNestedOneWithoutAgendamentoInput
@@ -17015,10 +17015,10 @@ export namespace Prisma {
   export type AgendamentoCreateWithoutProcedimentoInput = {
     id?: string
     dataHora: Date | string
+    dataHoraFim: Date | string
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
-    googleCalendarId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tenant: TenantCreateNestedOneWithoutAgendamentosInput
@@ -17033,10 +17033,10 @@ export namespace Prisma {
     pacienteId?: string | null
     profissionalId: string
     dataHora: Date | string
+    dataHoraFim: Date | string
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
-    googleCalendarId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     atendimento?: AtendimentoUncheckedCreateNestedOneWithoutAgendamentoInput
@@ -17533,10 +17533,10 @@ export namespace Prisma {
   export type AgendamentoCreateWithoutAtendimentoInput = {
     id?: string
     dataHora: Date | string
+    dataHoraFim: Date | string
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
-    googleCalendarId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tenant: TenantCreateNestedOneWithoutAgendamentosInput
@@ -17552,10 +17552,10 @@ export namespace Prisma {
     profissionalId: string
     procedimentoId: string
     dataHora: Date | string
+    dataHoraFim: Date | string
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
-    googleCalendarId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -17709,10 +17709,10 @@ export namespace Prisma {
   export type AgendamentoUpdateWithoutAtendimentoInput = {
     id?: StringFieldUpdateOperationsInput | string
     dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    googleCalendarId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tenant?: TenantUpdateOneRequiredWithoutAgendamentosNestedInput
@@ -17728,10 +17728,10 @@ export namespace Prisma {
     profissionalId?: StringFieldUpdateOperationsInput | string
     procedimentoId?: StringFieldUpdateOperationsInput | string
     dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    googleCalendarId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17966,10 +17966,10 @@ export namespace Prisma {
     profissionalId: string
     procedimentoId: string
     dataHora: Date | string
+    dataHoraFim: Date | string
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
-    googleCalendarId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18126,10 +18126,10 @@ export namespace Prisma {
   export type AgendamentoUpdateWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string
     dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    googleCalendarId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     paciente?: PacienteUpdateOneWithoutAgendamentosNestedInput
@@ -18144,10 +18144,10 @@ export namespace Prisma {
     profissionalId?: StringFieldUpdateOperationsInput | string
     procedimentoId?: StringFieldUpdateOperationsInput | string
     dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    googleCalendarId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     atendimento?: AtendimentoUncheckedUpdateOneWithoutAgendamentoNestedInput
@@ -18159,10 +18159,10 @@ export namespace Prisma {
     profissionalId?: StringFieldUpdateOperationsInput | string
     procedimentoId?: StringFieldUpdateOperationsInput | string
     dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    googleCalendarId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18220,10 +18220,10 @@ export namespace Prisma {
     pacienteId?: string | null
     procedimentoId: string
     dataHora: Date | string
+    dataHoraFim: Date | string
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
-    googleCalendarId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18280,10 +18280,10 @@ export namespace Prisma {
   export type AgendamentoUpdateWithoutProfissionalInput = {
     id?: StringFieldUpdateOperationsInput | string
     dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    googleCalendarId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tenant?: TenantUpdateOneRequiredWithoutAgendamentosNestedInput
@@ -18298,10 +18298,10 @@ export namespace Prisma {
     pacienteId?: NullableStringFieldUpdateOperationsInput | string | null
     procedimentoId?: StringFieldUpdateOperationsInput | string
     dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    googleCalendarId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     atendimento?: AtendimentoUncheckedUpdateOneWithoutAgendamentoNestedInput
@@ -18313,10 +18313,10 @@ export namespace Prisma {
     pacienteId?: NullableStringFieldUpdateOperationsInput | string | null
     procedimentoId?: StringFieldUpdateOperationsInput | string
     dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    googleCalendarId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18363,10 +18363,10 @@ export namespace Prisma {
     profissionalId: string
     procedimentoId: string
     dataHora: Date | string
+    dataHoraFim: Date | string
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
-    googleCalendarId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18386,10 +18386,10 @@ export namespace Prisma {
   export type AgendamentoUpdateWithoutPacienteInput = {
     id?: StringFieldUpdateOperationsInput | string
     dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    googleCalendarId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tenant?: TenantUpdateOneRequiredWithoutAgendamentosNestedInput
@@ -18404,10 +18404,10 @@ export namespace Prisma {
     profissionalId?: StringFieldUpdateOperationsInput | string
     procedimentoId?: StringFieldUpdateOperationsInput | string
     dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    googleCalendarId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     atendimento?: AtendimentoUncheckedUpdateOneWithoutAgendamentoNestedInput
@@ -18419,10 +18419,10 @@ export namespace Prisma {
     profissionalId?: StringFieldUpdateOperationsInput | string
     procedimentoId?: StringFieldUpdateOperationsInput | string
     dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    googleCalendarId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18469,10 +18469,10 @@ export namespace Prisma {
     pacienteId?: string | null
     profissionalId: string
     dataHora: Date | string
+    dataHoraFim: Date | string
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
-    googleCalendarId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18492,10 +18492,10 @@ export namespace Prisma {
   export type AgendamentoUpdateWithoutProcedimentoInput = {
     id?: StringFieldUpdateOperationsInput | string
     dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    googleCalendarId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tenant?: TenantUpdateOneRequiredWithoutAgendamentosNestedInput
@@ -18510,10 +18510,10 @@ export namespace Prisma {
     pacienteId?: NullableStringFieldUpdateOperationsInput | string | null
     profissionalId?: StringFieldUpdateOperationsInput | string
     dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    googleCalendarId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     atendimento?: AtendimentoUncheckedUpdateOneWithoutAgendamentoNestedInput
@@ -18525,10 +18525,10 @@ export namespace Prisma {
     pacienteId?: NullableStringFieldUpdateOperationsInput | string | null
     profissionalId?: StringFieldUpdateOperationsInput | string
     dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    googleCalendarId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

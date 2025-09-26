@@ -12,6 +12,10 @@ import { ApiResponse, AppError } from "./types";
 import authRoutes from "./modules/auth/routes/auth.routes";
 import pacienteRoutes from "./modules/pacientes/routes/paciente.routes";
 import profissionalRoutes from "./modules/profissionais/routes/profissional.routes";
+import procedimentoRoutes from "./modules/procedimentos/routes/procedimento.routes";
+import tenantRoutes from "./modules/tenants/routes/tenant.routes";
+import atendimentoRoutes from "./modules/atendimentos/routes/atendimento.routes";
+import agendamentoRoutes from "./modules/agenda/routes/agendamento.routes";
 
 // Load environment variables
 dotenv.config();
@@ -110,6 +114,10 @@ class App {
     this.app.use("/api/auth", authRoutes);
     this.app.use("/api/pacientes", pacienteRoutes);
     this.app.use("/api/profissionais", profissionalRoutes);
+    this.app.use("/api/procedimentos", procedimentoRoutes);
+    this.app.use("/api/tenants", tenantRoutes);
+    this.app.use("/api/atendimentos", atendimentoRoutes);
+    this.app.use("/api/agendamentos", agendamentoRoutes);
 
     // 404 handler
     this.app.use("*", (req: Request, res: Response) => {

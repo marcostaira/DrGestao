@@ -155,16 +155,16 @@ enum StatusAgendamento {
 }
 
 model Agendamento {
-  id                  String            @id @default(cuid())
-  tenantId            String            @map("tenant_id")
-  pacienteId          String?           @map("paciente_id")
-  profissionalId      String            @map("profissional_id")
-  procedimentoId      String            @map("procedimento_id")
-  dataHora            DateTime          @map("data_hora")
-  status              StatusAgendamento @default(MARCADO)
-  observacoes         String?
-  confirmacaoEnviada  Boolean           @default(false) @map("confirmacao_enviada")
-  googleCalendarId    String?           @map("google_calendar_id")
+  id             String   @id @default(cuid())
+  tenantId       String   @map("tenant_id")
+  pacienteId     String?  @map("paciente_id")
+  profissionalId String   @map("profissional_id")
+  procedimentoId String   @map("procedimento_id")
+  dataHora       DateTime @map("data_hora")
+  dataHoraFim    DateTime @map("data_hora_fim")  // ADICIONE ESTA LINHA
+  status         StatusAgendamento @default(MARCADO)
+  observacoes    String?
+  confirmacaoEnviada Boolean @default(false) @map("confirmacao_enviada")
   
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -177,8 +177,8 @@ model Agendamento {
   atendimento  Atendimento?
 
   @@index([tenantId, dataHora])
-  @@index([tenantId, profissionalId, dataHora])
-  @@index([tenantId, status])
+  @@index([tenantId, profissionalId])
+  @@index([tenantId, pacienteId])
   @@map("agendamentos")
 }
 
