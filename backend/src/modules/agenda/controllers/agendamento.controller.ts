@@ -276,4 +276,34 @@ export class AgendamentoController {
       res.status(error.statusCode || 500).json(response);
     }
   }
+
+  // ==========================================================================
+  // TOGGLE STATUS
+  // ==========================================================================
+
+  static async toggleStatus(
+    req: AuthenticatedRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      const tenantId = req.user!.tenantId;
+      const { id } = req.params;
+
+      const agendamento = await AgendamentoService.toggleStatus(tenantId, id);
+
+      const response: ApiResponse = {
+        success: true,
+        data: agendamento,
+        message: `Status alterado para ${agendamento.status}`,
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao alterar status",
+      };
+      res.status(error.statusCode || 500).json(response);
+    }
+  }
 }

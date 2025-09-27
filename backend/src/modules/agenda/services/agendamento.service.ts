@@ -539,4 +539,56 @@ export class AgendamentoService {
 
     return agendamentos;
   }
+
+  // ==========================================================================
+  // TOGGLE STATUS
+  // ==========================================================================
+
+  static async toggleStatus(tenantId: string, agendamentoId: string) {
+    const agendamento = await prisma.agendamento.findFirst({
+      where: { id: agendamentoId, tenantId },
+    });
+
+    if (!agendamento) {
+      throw new AppError("Agendamento não encontrado", 404);
+    }
+
+    // Definir próximo status baseado no atual
+    const statusFlow: { [key: string]: string } = {
+      MARCADO: "CONFIRMADO",
+      CONFIRMADO: "COMPARECEU",
+      COMPARECEU: "MARCADO",
+      FALTOU: "MARCADO",
+      CANCELADO: "MARCADO",
+    };
+
+    const novoStatus = statusFlow[agendamento.status] || "MARCADO";
+
+    const agendamentoAtualizado = await prisma.agendamento.update({
+      where: { id: agendamentoId },
+      data: { status: novoStatus as any },
+      include: {
+        paciente: {
+          select: {
+            id: true,
+            nome: true,
+          },
+        },
+        profissional: {
+          select: {
+            id: true,
+            nome: true,
+          },
+        },
+        procedimento: {
+          select: {
+            id: true,
+            nome: true,
+          },
+        },
+      },
+    });
+
+    return agendamentoAtualizado;
+  }
 }

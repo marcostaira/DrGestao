@@ -359,4 +359,63 @@ export class AtendimentoService {
 
     return atendimentos;
   }
+
+  // ==========================================================================
+  // TOGGLE STATUS DO AGENDAMENTO (via atendimento)
+  // ==========================================================================
+
+  static async toggleStatusAgendamento(
+    tenantId: string,
+    atendimentoId: string
+  ) {
+    const atendimento = await prisma.atendimento.findFirst({
+      where: { id: atendimentoId, tenantId },
+      include: {
+        agendamento: true,
+      },
+    });
+
+    if (!atendimento) {
+      throw new AppError("Atendimento não encontrado", 404);
+    }
+
+    const statusAtual = atendimento.agendamento.status;
+    let novoStatus: string;
+
+    // Toggle entre COMPARECEU e MARCADO
+    if (statusAtual === "COMPARECEU") {
+      novoStatus = "MARCADO";
+    } else {
+      novoStatus = "COMPARECEU";
+    }
+
+    await prisma.agendamento.update({
+      where: { id: atendimento.agendamentoId },
+      data: { status: novoStatus as any },
+    });
+
+    const atendimentoAtualizado = await prisma.atendimento.findFirst({
+      where: { id: atendimentoId, tenantId },
+      include: {
+        agendamento: {
+          include: {
+            paciente: {
+              select: {
+                id: true,
+                nome: true,
+              },
+            },
+            profissional: {
+              select: {
+                id: true,
+                nome: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return atendimentoAtualizado;
+  }
 }

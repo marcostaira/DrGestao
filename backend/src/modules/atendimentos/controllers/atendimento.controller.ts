@@ -184,4 +184,37 @@ export class AtendimentoController {
       res.status(error.statusCode || 500).json(response);
     }
   }
+
+  // ==========================================================================
+  // TOGGLE STATUS
+  // ==========================================================================
+
+  static async toggleStatus(
+    req: AuthenticatedRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      const tenantId = req.user!.tenantId;
+      const { id } = req.params;
+
+      const atendimento = await AtendimentoService.toggleStatusAgendamento(
+        tenantId,
+        id
+      );
+
+      const response: ApiResponse = {
+        success: true,
+        data: atendimento,
+        message: `Status alterado para ${atendimento?.agendamento.status}`,
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao alterar status",
+      };
+      res.status(error.statusCode || 500).json(response);
+    }
+  }
 }

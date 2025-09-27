@@ -42,10 +42,6 @@ const startServer = async (): Promise<void> => {
         console.log("   GET  /api/pacientes/:id         - Get patient by ID");
         console.log("   PUT  /api/pacientes/:id         - Update patient");
         console.log("   DEL  /api/pacientes/:id         - Delete patient");
-        console.log(
-          "\n🔗 Frontend URL:",
-          process.env.FRONTEND_URL || "http://localhost:3000"
-        );
       }
     });
 

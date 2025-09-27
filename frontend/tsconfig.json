@@ -1,12 +1,27 @@
-// tsconfig.json
 {
   "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "Bundler", // <- chave da correção
-    "target": "ES2020",
-    "jsx": "react-jsx", // se React
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
     "skipLibCheck": true,
-    "types": ["vite/client", "node"]
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
-  "include": ["src", "vite.config.ts"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "postcss.config.js"],
+  "exclude": ["node_modules"]
 }

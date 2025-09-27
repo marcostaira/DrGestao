@@ -100,4 +100,15 @@ router.delete(
   AtendimentoController.delete
 );
 
+/**
+ * @route   PATCH /atendimentos/:id/status
+ * @desc    Alternar status do agendamento relacionado
+ * @access  Private
+ */
+router.patch(
+  "/:id/status",
+  validate({ params: Joi.object({ id: idSchema }) }),
+  AtendimentoController.toggleStatus
+);
+
 export default router;
