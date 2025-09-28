@@ -49,11 +49,11 @@ export default function Table<T extends Record<string, any>>({
               <tr
                 key={index}
                 onClick={() => onRowClick?.(item)}
-                className={
-                  onRowClick
-                    ? "hover:bg-secondary-50 cursor-pointer transition-colors"
-                    : ""
-                }
+                className={`
+                  transition-colors
+                  ${index % 2 === 0 ? "bg-white" : "bg-secondary-25"}
+                  ${onRowClick ? "hover:bg-primary-50 cursor-pointer" : ""}
+                `}
               >
                 {columns.map((column) => (
                   <td

@@ -179,7 +179,7 @@ export default function ProfissionaisPage() {
       key: "actions",
       header: "Ações",
       render: (prof: Profissional) => (
-        <div className="flex gap-2">
+        <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
           <button
             onClick={() => handleOpenModal(prof)}
             className="text-primary-600 hover:text-primary-800"
@@ -301,7 +301,11 @@ export default function ProfissionaisPage() {
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
           </div>
         ) : (
-          <Table data={profissionais} columns={columns} />
+          <Table
+            data={profissionais}
+            columns={columns}
+            onRowClick={(profissional) => handleOpenModal(profissional)}
+          />
         )}
       </Card>
 

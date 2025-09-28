@@ -193,7 +193,7 @@ export default function UsuariosPage() {
       key: "actions",
       header: "Ações",
       render: (user: Usuario) => (
-        <div className="flex gap-2">
+        <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
           <button
             onClick={() => handleOpenModal(user)}
             className="text-primary-600 hover:text-primary-800"
@@ -331,7 +331,11 @@ export default function UsuariosPage() {
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
           </div>
         ) : (
-          <Table data={usuarios} columns={columns} />
+          <Table
+            data={usuarios}
+            columns={columns}
+            onRowClick={(usuario) => handleOpenModal(usuario)}
+          />
         )}
       </Card>
 

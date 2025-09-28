@@ -177,7 +177,7 @@ export default function ProcedimentosPage() {
       key: "actions",
       header: "Ações",
       render: (proc: Procedimento) => (
-        <div className="flex gap-2">
+        <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
           <button
             onClick={() => handleOpenModal(proc)}
             className="text-primary-600 hover:text-primary-800"
@@ -277,7 +277,11 @@ export default function ProcedimentosPage() {
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
           </div>
         ) : (
-          <Table data={procedimentos} columns={columns} />
+          <Table
+            data={procedimentos}
+            columns={columns}
+            onRowClick={(procedimento) => handleOpenModal(procedimento)}
+          />
         )}
       </Card>
 

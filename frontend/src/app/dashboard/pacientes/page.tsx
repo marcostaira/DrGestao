@@ -291,7 +291,10 @@ export default function PacientesPage() {
         <input
           type="checkbox"
           checked={selectedIds.includes(pac.id)}
-          onChange={() => toggleSelect(pac.id)}
+          onChange={(e) => {
+            e.stopPropagation(); // Impede que o clique propague para a linha
+            toggleSelect(pac.id);
+          }}
           className="rounded border-secondary-300 text-primary-600 focus:ring-primary-500"
         />
       ),
@@ -319,7 +322,7 @@ export default function PacientesPage() {
       key: "actions",
       header: "Ações",
       render: (pac: Paciente) => (
-        <div className="flex gap-2">
+        <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
           <button
             onClick={() => handleOpenModal(pac)}
             className="text-primary-600 hover:text-primary-800"
@@ -464,7 +467,11 @@ export default function PacientesPage() {
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
           </div>
         ) : (
-          <Table data={pacientes} columns={columns} />
+          <Table
+            data={pacientes}
+            columns={columns}
+            onRowClick={(paciente) => handleOpenModal(paciente)}
+          />
         )}
       </Card>
 

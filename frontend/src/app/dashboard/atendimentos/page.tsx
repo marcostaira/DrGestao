@@ -185,6 +185,17 @@ export default function AtendimentosPage() {
     return labels[nextStatus] || "";
   };
 
+  const getStatusDisplayName = (status: StatusAgendamento): string => {
+    const names: Record<StatusAgendamento, string> = {
+      [StatusAgendamento.MARCADO]: "Marcado",
+      [StatusAgendamento.CONFIRMADO]: "Confirmado",
+      [StatusAgendamento.COMPARECEU]: "Compareceu",
+      [StatusAgendamento.FALTOU]: "Faltou",
+      [StatusAgendamento.CANCELADO]: "Cancelado",
+    };
+    return names[status];
+  };
+
   const handleToggleStatus = async (
     agendamentoId: string,
     currentStatus: StatusAgendamento
@@ -217,7 +228,7 @@ export default function AtendimentosPage() {
     setIsSubmitting(true);
     try {
       await updateStatus(changingStatusAgendamento.id, newStatus);
-      setSuccess(`Status atualizado para ${newStatus}!`);
+      setSuccess(`Status atualizado para ${getStatusDisplayName(newStatus)}!`);
       setIsStatusModalOpen(false);
       setChangingStatusAgendamento(null);
       setNewStatus(null);
@@ -433,7 +444,7 @@ export default function AtendimentosPage() {
       key: "actions",
       header: "Ações",
       render: (atend: Atendimento) => (
-        <div className="flex gap-2">
+        <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
           <button
             onClick={() => {
               setSelectedAtendimento(atend);
@@ -801,6 +812,10 @@ export default function AtendimentosPage() {
           <Table
             data={atendimentos}
             columns={columns}
+            onRowClick={(atendimento) => {
+              setSelectedAtendimento(atendimento);
+              setIsDetailModalOpen(true);
+            }}
             emptyMessage="Nenhum atendimento registrado"
           />
         )}
@@ -1071,16 +1086,23 @@ export default function AtendimentosPage() {
                 }}
                 disabled={isSubmitting}
               >
-                Não
+                Não, manter como está
               </Button>
               <Button
                 variant={
-                  newStatus === StatusAgendamento.FALTOU ? "danger" : "primary"
+                  newStatus === StatusAgendamento.FALTOU
+                    ? "danger"
+                    : newStatus === StatusAgendamento.CANCELADO
+                    ? "secondary"
+                    : "primary"
                 }
                 onClick={handleConfirmStatusChange}
                 isLoading={isSubmitting}
               >
-                Sim, confirmar
+                {newStatus === StatusAgendamento.FALTOU &&
+                  "Sim, marcar como Faltou"}
+                {newStatus === StatusAgendamento.CANCELADO &&
+                  "Sim, cancelar agendamento"}
               </Button>
             </div>
           </div>
