@@ -314,7 +314,7 @@ export const refreshTokenMiddleware = async (
 
 export const createUserRateLimit = () => {
   const attempts = new Map<string, { count: number; resetTime: number }>();
-  const MAX_ATTEMPTS = 5;
+  const MAX_ATTEMPTS = 15;
   const WINDOW_MS = 15 * 60 * 1000;
 
   return (

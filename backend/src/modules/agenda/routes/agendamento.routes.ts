@@ -138,13 +138,20 @@ router.delete(
 
 /**
  * @route   PATCH /agendamentos/:id/status
- * @desc    Alternar status do agendamento
+ * @desc    Atualizar status do agendamento
  * @access  Private
  */
 router.patch(
   "/:id/status",
-  validate({ params: Joi.object({ id: idSchema }) }),
-  AgendamentoController.toggleStatus
+  validate({
+    params: Joi.object({ id: idSchema }),
+    body: Joi.object({
+      status: Joi.string()
+        .valid("MARCADO", "CONFIRMADO", "COMPARECEU", "FALTOU", "CANCELADO")
+        .required(),
+    }),
+  }),
+  AgendamentoController.updateStatus // Mudou de toggleStatus para updateStatus
 );
 
 export default router;

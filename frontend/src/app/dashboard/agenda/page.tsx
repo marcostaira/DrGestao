@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Agendamento,
   StatusAgendamento,
@@ -37,6 +37,15 @@ export default function AgendaPage() {
   const [viewMode, setViewMode] = useState<"day" | "week" | "month">("week");
   const [selectedProfissional, setSelectedProfissional] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
+
+  // Estados para drag and drop
+  const [draggedAgendamento, setDraggedAgendamento] =
+    useState<Agendamento | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOverSlot, setDragOverSlot] = useState<{
+    day: Date;
+    hour: number;
+  } | null>(null);
 
   // Modal states
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -136,6 +145,199 @@ export default function AgendaPage() {
     }
   };
 
+  // Funções para drag and drop
+  const handleDragStart = useCallback(
+    (e: React.DragEvent, agendamento: Agendamento) => {
+      if (agendamento.status === StatusAgendamento.CANCELADO) {
+        e.preventDefault();
+        setError("Agendamentos cancelados não podem ser movidos");
+        return;
+      }
+
+      setDraggedAgendamento(agendamento);
+      setIsDragging(true);
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", agendamento.id);
+
+      const target = e.currentTarget as HTMLElement;
+      target.style.opacity = "0.5";
+      target.style.transform = "rotate(2deg)";
+    },
+    []
+  );
+
+  const handleDragEnd = useCallback((e: React.DragEvent) => {
+    setDraggedAgendamento(null);
+    setIsDragging(false);
+    setDragOverSlot(null);
+
+    const target = e.currentTarget as HTMLElement;
+    target.style.opacity = "1";
+    target.style.transform = "none";
+  }, []);
+
+  const handleDragOver = useCallback(
+    (e: React.DragEvent, day: Date, hour: number) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+      setDragOverSlot({ day, hour });
+    },
+    []
+  );
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX;
+    const y = e.clientY;
+
+    if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
+      setDragOverSlot(null);
+    }
+  }, []);
+
+  const checkTimeConflict = useCallback(
+    (
+      targetDateTime: Date,
+      draggedAg: Agendamento,
+      allAgendamentos: Agendamento[]
+    ): boolean => {
+      const duration = draggedAg.procedimento?.duracaoMinutos || 30;
+      const endTime = new Date(targetDateTime.getTime() + duration * 60000);
+
+      return allAgendamentos.some((ag) => {
+        if (ag.id === draggedAg.id) return false;
+        if (ag.profissionalId !== draggedAg.profissionalId) return false;
+
+        const agDateTime = new Date(ag.dataHora);
+        const agDuration = ag.procedimento?.duracaoMinutos || 30;
+        const agEndTime = new Date(agDateTime.getTime() + agDuration * 60000);
+
+        return (
+          (targetDateTime >= agDateTime && targetDateTime < agEndTime) ||
+          (endTime > agDateTime && endTime <= agEndTime) ||
+          (targetDateTime <= agDateTime && endTime >= agEndTime)
+        );
+      });
+    },
+    []
+  );
+
+  const handleDrop = useCallback(
+    async (e: React.DragEvent, targetDay: Date, targetHour: number) => {
+      e.preventDefault();
+      setDragOverSlot(null);
+
+      if (!draggedAgendamento) return;
+
+      try {
+        // Criar nova data/hora
+        const newDateTime = new Date(targetDay);
+        newDateTime.setHours(targetHour, 0, 0, 0);
+
+        // Verificar se é a mesma data/hora
+        const originalDateTime = new Date(draggedAgendamento.dataHora);
+        if (newDateTime.getTime() === originalDateTime.getTime()) {
+          setDraggedAgendamento(null);
+          setIsDragging(false);
+          return;
+        }
+
+        // Validações
+        if (targetHour < 7 || targetHour >= 20) {
+          setError("Agendamentos só podem ser marcados entre 07:00 e 19:00");
+          setDraggedAgendamento(null);
+          setIsDragging(false);
+          setTimeout(() => setError(""), 3000);
+          return;
+        }
+
+        if (newDateTime < new Date()) {
+          setError("Não é possível agendar para datas/horários passados");
+          setDraggedAgendamento(null);
+          setIsDragging(false);
+          setTimeout(() => setError(""), 3000);
+          return;
+        }
+
+        if (checkTimeConflict(newDateTime, draggedAgendamento, agendamentos)) {
+          setError(
+            "Já existe um agendamento neste horário para este profissional"
+          );
+          setDraggedAgendamento(null);
+          setIsDragging(false);
+          setTimeout(() => setError(""), 3000);
+          return;
+        }
+
+        // Atualizar agendamento no backend
+        console.log("Atualizando agendamento:", {
+          id: draggedAgendamento.id,
+          novaDataHora: newDateTime.toISOString(),
+          original: draggedAgendamento.dataHora,
+        });
+
+        await updateAgendamento(draggedAgendamento.id, {
+          dataHora: newDateTime.toISOString(),
+        });
+
+        // Feedback de sucesso
+        const novaDataFormatada = newDateTime.toLocaleDateString("pt-BR");
+        const novoHorarioFormatado = newDateTime.toLocaleTimeString("pt-BR", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
+        setSuccess(
+          `Agendamento de ${
+            draggedAgendamento.paciente?.nome || "Bloqueio"
+          } movido para ${novaDataFormatada} às ${novoHorarioFormatado}`
+        );
+
+        // Recarregar agendamentos
+        await loadAgendamentos();
+
+        setTimeout(() => setSuccess(""), 4000);
+      } catch (err: any) {
+        console.error("Erro ao mover agendamento:", err);
+        setError(err.response?.data?.error || "Erro ao mover agendamento");
+        setTimeout(() => setError(""), 3000);
+      } finally {
+        setDraggedAgendamento(null);
+        setIsDragging(false);
+      }
+    },
+    [draggedAgendamento, agendamentos, checkTimeConflict, loadAgendamentos]
+  );
+
+  const isSlotHighlighted = useCallback(
+    (day: Date, hour: number): boolean => {
+      return (
+        dragOverSlot?.day.getTime() === day.getTime() &&
+        dragOverSlot?.hour === hour
+      );
+    },
+    [dragOverSlot]
+  );
+
+  const canDropInSlot = useCallback(
+    (day: Date, hour: number): boolean => {
+      if (!draggedAgendamento) return false;
+
+      const targetDateTime = new Date(day);
+      targetDateTime.setHours(hour, 0, 0, 0);
+
+      if (hour < 7 || hour >= 20) return false;
+      if (targetDateTime < new Date()) return false;
+
+      return !checkTimeConflict(
+        targetDateTime,
+        draggedAgendamento,
+        agendamentos
+      );
+    },
+    [draggedAgendamento, agendamentos, checkTimeConflict]
+  );
+
   const getStartOfWeek = (date: Date) => {
     const d = new Date(date);
     const day = d.getDay();
@@ -220,18 +422,15 @@ export default function AgendaPage() {
     const days = [];
     const startDay = firstDay.getDay();
 
-    // Dias do mês anterior
     for (let i = startDay - 1; i >= 0; i--) {
       const day = new Date(year, month, -i);
       days.push({ date: day, isCurrentMonth: false });
     }
 
-    // Dias do mês atual
     for (let i = 1; i <= lastDay.getDate(); i++) {
       days.push({ date: new Date(year, month, i), isCurrentMonth: true });
     }
 
-    // Completar semana final
     const remainingDays = 7 - (days.length % 7);
     if (remainingDays < 7) {
       for (let i = 1; i <= remainingDays; i++) {
@@ -251,6 +450,14 @@ export default function AgendaPage() {
       hours.push(i);
     }
     return hours;
+  };
+
+  const generateTimeSlots = () => {
+    const slots = [];
+    for (let hour = 7; hour < 20; hour++) {
+      slots.push(hour);
+    }
+    return slots;
   };
 
   const handleOpenModal = (agendamento?: Agendamento, dateTime?: Date) => {
@@ -304,7 +511,7 @@ export default function AgendaPage() {
       }
 
       handleCloseModal();
-      await loadAgendamentos(); // Aguarda atualização
+      await loadAgendamentos();
 
       setTimeout(() => setSuccess(""), 3000);
     } catch (err: any) {
@@ -323,7 +530,7 @@ export default function AgendaPage() {
       setSuccess("Agendamento excluído com sucesso!");
       setIsDeleteModalOpen(false);
       setDeletingAgendamento(null);
-      await loadAgendamentos(); // Aguarda atualização
+      await loadAgendamentos();
 
       setTimeout(() => setSuccess(""), 3000);
     } catch (err: any) {
@@ -337,7 +544,7 @@ export default function AgendaPage() {
     try {
       await updateStatus(id, status);
       setSuccess("Status atualizado!");
-      await loadAgendamentos(); // Aguarda atualização
+      await loadAgendamentos();
       if (selectedAgendamento?.id === id) {
         setSelectedAgendamento({ ...selectedAgendamento, status });
       }
@@ -408,14 +615,274 @@ export default function AgendaPage() {
       );
   };
 
+  // Componente de agendamento draggable
+  const DraggableAgendamento = ({
+    agendamento,
+    onClick,
+  }: {
+    agendamento: Agendamento;
+    onClick: (e?: React.MouseEvent) => void;
+  }) => (
+    <div
+      draggable={agendamento.status !== StatusAgendamento.CANCELADO}
+      onDragStart={(e) => handleDragStart(e, agendamento)}
+      onDragEnd={handleDragEnd}
+      onClick={onClick}
+      className={`
+        p-2 rounded-lg border cursor-pointer hover:shadow-md transition-all duration-200
+        ${getStatusColor(agendamento.status)}
+        ${
+          agendamento.status !== StatusAgendamento.CANCELADO
+            ? "cursor-grab active:cursor-grabbing"
+            : "cursor-pointer"
+        }
+        ${
+          isDragging && draggedAgendamento?.id === agendamento.id
+            ? "opacity-50 transform rotate-2"
+            : ""
+        }
+      `}
+      title={
+        agendamento.status !== StatusAgendamento.CANCELADO
+          ? "Clique e arraste para mover"
+          : "Agendamento cancelado"
+      }
+    >
+      <div className="text-xs font-semibold">
+        {formatTime(agendamento.dataHora)}
+      </div>
+      <div className="text-sm font-medium truncate">
+        {agendamento.paciente?.nome || "Bloqueio"}
+      </div>
+      {agendamento.procedimento && (
+        <div className="text-xs opacity-75 truncate">
+          {agendamento.procedimento.nome}
+        </div>
+      )}
+    </div>
+  );
+
+  // Componente de slot de horário que aceita drops
+  const DroppableTimeSlot = ({
+    day,
+    hour,
+    agendamentos: slotAgendamentos,
+    onAddClick,
+  }: {
+    day: Date;
+    hour: number;
+    agendamentos: Agendamento[];
+    onAddClick: () => void;
+  }) => {
+    const isDropTarget = isSlotHighlighted(day, hour);
+    const canDrop = canDropInSlot(day, hour);
+
+    return (
+      <div
+        onDragOver={(e) => handleDragOver(e, day, hour)}
+        onDragLeave={handleDragLeave}
+        onDrop={(e) => handleDrop(e, day, hour)}
+        onClick={(e) => {
+          // Se clicou em área vazia (não em um agendamento), abrir modal
+          if (
+            e.target === e.currentTarget ||
+            (e.target as HTMLElement).classList.contains("time-header")
+          ) {
+            onAddClick();
+          }
+        }}
+        className={`
+          min-h-[80px] p-2 border-b border-gray-100 space-y-1 transition-all duration-200 cursor-pointer
+          ${
+            isDropTarget
+              ? canDrop
+                ? "bg-blue-50 border-blue-300 border-2 border-dashed"
+                : "bg-red-50 border-red-300 border-2 border-dashed"
+              : ""
+          }
+          hover:bg-gray-50
+        `}
+        title="Clique para adicionar agendamento"
+      >
+        <div className="text-xs text-gray-500 font-medium time-header pointer-events-none">
+          {hour.toString().padStart(2, "0")}:00
+        </div>
+
+        {slotAgendamentos.map((ag) => (
+          <DraggableAgendamento
+            key={ag.id}
+            agendamento={ag}
+            onClick={(e) => {
+              if (e) e.stopPropagation(); // Impede que o clique no agendamento abra o modal de criação
+              setSelectedAgendamento(ag);
+              setIsDetailModalOpen(true);
+            }}
+          />
+        ))}
+
+        {/* Preview do agendamento sendo movido */}
+        {isDropTarget && draggedAgendamento && (
+          <div
+            className={`p-2 rounded-lg border-2 border-dashed transition-all pointer-events-none ${
+              canDrop
+                ? "border-blue-400 bg-blue-100 text-blue-800"
+                : "border-red-400 bg-red-100 text-red-800"
+            }`}
+          >
+            <div className="text-xs font-semibold">
+              {hour.toString().padStart(2, "0")}:00
+            </div>
+            <div className="text-sm font-medium truncate">
+              {draggedAgendamento.paciente?.nome || "Bloqueio"}
+            </div>
+            {draggedAgendamento.procedimento && (
+              <div className="text-xs opacity-75 truncate">
+                {draggedAgendamento.procedimento.nome}
+              </div>
+            )}
+            <div className="text-xs mt-1">
+              {canDrop ? "✓ Mover para cá" : "✗ Horário indisponível"}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // Visualização semanal com drag and drop
+  const WeekViewWithDragDrop = () => {
+    const weekDays = getWeekDays();
+    const timeSlots = generateTimeSlots();
+
+    return (
+      <div className="bg-white rounded-lg border overflow-hidden">
+        <div className="grid grid-cols-8 border-b bg-gray-50">
+          <div className="p-3 text-sm font-medium text-gray-600 border-r">
+            Horário
+          </div>
+          {weekDays.map((day) => {
+            const isToday = day.toDateString() === new Date().toDateString();
+            return (
+              <div
+                key={day.toISOString()}
+                className={`p-3 text-center border-r ${
+                  isToday ? "bg-blue-50" : ""
+                }`}
+              >
+                <div className="text-xs text-gray-500 uppercase">
+                  {day.toLocaleDateString("pt-BR", { weekday: "short" })}
+                </div>
+                <div
+                  className={`text-lg font-bold ${
+                    isToday ? "text-blue-600" : "text-gray-900"
+                  }`}
+                >
+                  {day.getDate()}
+                </div>
+                <div className="text-xs text-gray-500">
+                  {day.toLocaleDateString("pt-BR", { month: "short" })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="max-h-[600px] overflow-y-auto">
+          {timeSlots.map((hour) => (
+            <div
+              key={hour}
+              className="grid grid-cols-8 border-b border-gray-100"
+            >
+              <div className="p-3 text-sm font-medium text-gray-600 bg-gray-50 border-r">
+                {hour.toString().padStart(2, "0")}:00
+              </div>
+
+              {weekDays.map((day) => {
+                const slotAgendamentos = agendamentos.filter((ag) => {
+                  const agDate = new Date(ag.dataHora);
+                  return (
+                    agDate.getDate() === day.getDate() &&
+                    agDate.getMonth() === day.getMonth() &&
+                    agDate.getFullYear() === day.getFullYear() &&
+                    agDate.getHours() === hour
+                  );
+                });
+
+                return (
+                  <DroppableTimeSlot
+                    key={`${day.toISOString()}-${hour}`}
+                    day={day}
+                    hour={hour}
+                    agendamentos={slotAgendamentos}
+                    onAddClick={() => {
+                      const newDate = new Date(day);
+                      newDate.setHours(hour, 0, 0, 0);
+                      handleOpenModal(undefined, newDate);
+                    }}
+                  />
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
   const weekDays = getWeekDays();
 
   return (
     <div className="space-y-6">
+      <style jsx>{`
+        .dragging {
+          opacity: 0.6 !important;
+          transform: rotate(2deg) scale(0.95);
+          transition: transform 0.2s ease;
+          cursor: grabbing !important;
+          z-index: 1000;
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .drop-target {
+          background: linear-gradient(
+            135deg,
+            rgba(59, 130, 246, 0.1),
+            rgba(147, 197, 253, 0.1)
+          ) !important;
+          border: 2px dashed rgb(59, 130, 246) !important;
+          border-radius: 8px;
+          animation: pulse-drop 1.5s infinite;
+        }
+
+        .drop-invalid {
+          background: linear-gradient(
+            135deg,
+            rgba(239, 68, 68, 0.1),
+            rgba(252, 165, 165, 0.1)
+          ) !important;
+          border: 2px dashed rgb(239, 68, 68) !important;
+          border-radius: 8px;
+        }
+
+        @keyframes pulse-drop {
+          0%,
+          100% {
+            border-color: rgb(59, 130, 246);
+            background-color: rgba(59, 130, 246, 0.1);
+          }
+          50% {
+            border-color: rgb(147, 197, 253);
+            background-color: rgba(59, 130, 246, 0.2);
+          }
+        }
+      `}</style>
+
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-secondary-900">Agenda</h1>
-          <p className="text-secondary-600 mt-1">Gerencie os agendamentos</p>
+          <p className="text-secondary-600 mt-1">
+            Gerencie os agendamentos - Arraste para mover horários
+          </p>
         </div>
 
         <Button onClick={() => handleOpenModal()}>
@@ -576,38 +1043,14 @@ export default function AgendaPage() {
                       </div>
                       <div className="flex-1 min-h-[60px] p-2 space-y-1">
                         {hourAgendamentos.map((ag) => (
-                          <div
+                          <DraggableAgendamento
                             key={ag.id}
+                            agendamento={ag}
                             onClick={() => {
                               setSelectedAgendamento(ag);
                               setIsDetailModalOpen(true);
                             }}
-                            className={`p-2 rounded-lg border cursor-pointer hover:shadow-md transition-shadow ${getStatusColor(
-                              ag.status
-                            )}`}
-                          >
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <div className="text-xs font-semibold">
-                                  {formatTime(ag.dataHora)}
-                                </div>
-                                <div className="text-sm font-medium">
-                                  {ag.paciente?.nome || "Bloqueio"}
-                                </div>
-                                {ag.procedimento && (
-                                  <div className="text-xs opacity-75">
-                                    {ag.procedimento.nome}
-                                  </div>
-                                )}
-                              </div>
-                              <Badge
-                                variant={getStatusBadge(ag.status)}
-                                size="sm"
-                              >
-                                {ag.status}
-                              </Badge>
-                            </div>
-                          </div>
+                          />
                         ))}
                       </div>
                     </div>
@@ -617,76 +1060,8 @@ export default function AgendaPage() {
             </Card>
           )}
 
-          {/* Visualização Semanal */}
-          {viewMode === "week" && (
-            <div className="grid grid-cols-7 gap-2">
-              {weekDays.map((day, index) => {
-                const dayAgendamentos = getAgendamentosForDay(day);
-                const isToday =
-                  day.toDateString() === new Date().toDateString();
-
-                return (
-                  <Card
-                    key={index}
-                    className={`min-h-[400px] ${
-                      isToday ? "ring-2 ring-primary-500" : ""
-                    }`}
-                  >
-                    <div className="text-center mb-4">
-                      <div className="text-xs text-secondary-500 uppercase">
-                        {day.toLocaleDateString("pt-BR", { weekday: "short" })}
-                      </div>
-                      <div
-                        className={`text-lg font-bold ${
-                          isToday ? "text-primary-600" : "text-secondary-900"
-                        }`}
-                      >
-                        {day.getDate()}
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      {dayAgendamentos.map((ag) => (
-                        <div
-                          key={ag.id}
-                          onClick={() => {
-                            setSelectedAgendamento(ag);
-                            setIsDetailModalOpen(true);
-                          }}
-                          className={`p-2 rounded-lg border cursor-pointer hover:shadow-md transition-shadow ${getStatusColor(
-                            ag.status
-                          )}`}
-                        >
-                          <div className="text-xs font-semibold">
-                            {formatTime(ag.dataHora)}
-                          </div>
-                          <div className="text-sm font-medium truncate">
-                            {ag.paciente?.nome || "Bloqueio"}
-                          </div>
-                          {ag.procedimento && (
-                            <div className="text-xs opacity-75 truncate">
-                              {ag.procedimento.nome}
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-
-                    <button
-                      onClick={() => {
-                        const newDate = new Date(day);
-                        newDate.setHours(9, 0, 0, 0);
-                        handleOpenModal(undefined, newDate);
-                      }}
-                      className="mt-4 w-full py-2 text-sm text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
-                    >
-                      + Adicionar
-                    </button>
-                  </Card>
-                );
-              })}
-            </div>
-          )}
+          {/* Visualização Semanal com Drag and Drop */}
+          {viewMode === "week" && <WeekViewWithDragDrop />}
 
           {/* Visualização Mensal */}
           {viewMode === "month" && (

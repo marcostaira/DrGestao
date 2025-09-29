@@ -278,18 +278,32 @@ export class AgendamentoController {
   }
 
   // ==========================================================================
-  // TOGGLE STATUS
+  // UPDATE STATUS (Substituir o método toggleStatus existente)
   // ==========================================================================
 
-  static async toggleStatus(
+  static async updateStatus(
     req: AuthenticatedRequest,
     res: Response
   ): Promise<void> {
     try {
       const tenantId = req.user!.tenantId;
       const { id } = req.params;
+      const { status } = req.body;
 
-      const agendamento = await AgendamentoService.toggleStatus(tenantId, id);
+      if (!status) {
+        const response: ApiResponse = {
+          success: false,
+          error: "Status é obrigatório",
+        };
+        res.status(400).json(response);
+        return;
+      }
+
+      const agendamento = await AgendamentoService.updateStatus(
+        tenantId,
+        id,
+        status
+      );
 
       const response: ApiResponse = {
         success: true,

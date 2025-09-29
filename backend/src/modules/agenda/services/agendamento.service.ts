@@ -541,10 +541,18 @@ export class AgendamentoService {
   }
 
   // ==========================================================================
-  // TOGGLE STATUS
+  // UPDATE STATUS (Novo método para status específico)
   // ==========================================================================
 
-  static async toggleStatus(tenantId: string, agendamentoId: string) {
+  // ==========================================================================
+  // UPDATE STATUS (Novo método para status específico)
+  // ==========================================================================
+
+  static async updateStatus(
+    tenantId: string,
+    agendamentoId: string,
+    status: string
+  ) {
     const agendamento = await prisma.agendamento.findFirst({
       where: { id: agendamentoId, tenantId },
     });
@@ -553,25 +561,35 @@ export class AgendamentoService {
       throw new AppError("Agendamento não encontrado", 404);
     }
 
-    // Definir próximo status baseado no atual
-    const statusFlow: { [key: string]: string } = {
-      MARCADO: "CONFIRMADO",
-      CONFIRMADO: "COMPARECEU",
-      COMPARECEU: "MARCADO",
-      FALTOU: "MARCADO",
-      CANCELADO: "MARCADO",
-    };
+    // Validar se o status é válido
+    const validStatuses = [
+      "MARCADO",
+      "CONFIRMADO",
+      "COMPARECEU",
+      "FALTOU",
+      "CANCELADO",
+    ];
+    if (!validStatuses.includes(status)) {
+      throw new AppError("Status inválido", 400);
+    }
 
-    const novoStatus = statusFlow[agendamento.status] || "MARCADO";
+    // Verificar se o agendamento pode ter o status alterado
+    if (agendamento.status === "CANCELADO") {
+      throw new AppError(
+        "Agendamentos cancelados não podem ter o status alterado",
+        400
+      );
+    }
 
     const agendamentoAtualizado = await prisma.agendamento.update({
       where: { id: agendamentoId },
-      data: { status: novoStatus as any },
+      data: { status: status as any },
       include: {
         paciente: {
           select: {
             id: true,
             nome: true,
+            telefone: true,
           },
         },
         profissional: {
@@ -584,6 +602,7 @@ export class AgendamentoService {
           select: {
             id: true,
             nome: true,
+            duracaoMinutos: true,
           },
         },
       },

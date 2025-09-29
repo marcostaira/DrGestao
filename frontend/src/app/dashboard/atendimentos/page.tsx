@@ -158,6 +158,38 @@ export default function AtendimentosPage() {
     }
   };
 
+  // Funções corrigidas para gerenciamento de status
+  const canChangeStatus = (status: StatusAgendamento): boolean => {
+    return status !== StatusAgendamento.CANCELADO;
+  };
+
+  const getAvailableStatusChanges = (
+    currentStatus: StatusAgendamento
+  ): StatusAgendamento[] => {
+    switch (currentStatus) {
+      case StatusAgendamento.MARCADO:
+        return [
+          StatusAgendamento.CONFIRMADO,
+          StatusAgendamento.CANCELADO,
+          StatusAgendamento.FALTOU,
+        ];
+      case StatusAgendamento.CONFIRMADO:
+        return [
+          StatusAgendamento.COMPARECEU,
+          StatusAgendamento.CANCELADO,
+          StatusAgendamento.FALTOU,
+        ];
+      case StatusAgendamento.COMPARECEU:
+        return [];
+      case StatusAgendamento.FALTOU:
+        return [StatusAgendamento.MARCADO, StatusAgendamento.CONFIRMADO];
+      case StatusAgendamento.CANCELADO:
+        return [];
+      default:
+        return [];
+    }
+  };
+
   const getNextStatus = (
     currentStatus: StatusAgendamento
   ): StatusAgendamento | null => {
@@ -165,7 +197,7 @@ export default function AtendimentosPage() {
       [StatusAgendamento.MARCADO]: StatusAgendamento.CONFIRMADO,
       [StatusAgendamento.CONFIRMADO]: StatusAgendamento.COMPARECEU,
       [StatusAgendamento.COMPARECEU]: null,
-      [StatusAgendamento.FALTOU]: null,
+      [StatusAgendamento.FALTOU]: StatusAgendamento.MARCADO,
       [StatusAgendamento.CANCELADO]: null,
     };
     return statusFlow[currentStatus];
@@ -179,7 +211,7 @@ export default function AtendimentosPage() {
       [StatusAgendamento.MARCADO]: "",
       [StatusAgendamento.CONFIRMADO]: "Confirmar",
       [StatusAgendamento.COMPARECEU]: "Compareceu",
-      [StatusAgendamento.FALTOU]: "",
+      [StatusAgendamento.FALTOU]: "Reagendar",
       [StatusAgendamento.CANCELADO]: "",
     };
     return labels[nextStatus] || "";
@@ -205,7 +237,7 @@ export default function AtendimentosPage() {
 
     try {
       await updateStatus(agendamentoId, nextStatus);
-      setSuccess(`Status atualizado para ${nextStatus}!`);
+      setSuccess(`Status atualizado para ${getStatusDisplayName(nextStatus)}!`);
       await loadData();
       setTimeout(() => setSuccess(""), 2000);
     } catch (err: any) {
@@ -268,7 +300,8 @@ export default function AtendimentosPage() {
       return (
         agDate.getDate() === today.getDate() &&
         agDate.getMonth() === today.getMonth() &&
-        agDate.getFullYear() === today.getFullYear()
+        agDate.getFullYear() === today.getFullYear() &&
+        ag.status !== StatusAgendamento.CANCELADO
       );
     })
     .sort(
@@ -611,34 +644,41 @@ export default function AtendimentosPage() {
                         {ag.status}
                       </Badge>
 
-                      {getNextStatus(ag.status) && !hasAtendimento && (
-                        <Button
-                          size="sm"
-                          onClick={() => handleToggleStatus(ag.id, ag.status)}
-                          className="gap-1"
-                        >
-                          {getNextStatusLabel(ag.status)}
-                          <svg
-                            className="w-4 h-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M9 5l7 7-7 7"
-                            />
-                          </svg>
-                        </Button>
-                      )}
+                      {(() => {
+                        const nextStatus = getNextStatus(ag.status);
+                        if (nextStatus && !hasAtendimento) {
+                          return (
+                            <Button
+                              size="sm"
+                              onClick={() =>
+                                handleToggleStatus(ag.id, ag.status)
+                              }
+                              className="gap-1"
+                            >
+                              {getNextStatusLabel(ag.status)}
+                              <svg
+                                className="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M9 5l7 7-7 7"
+                                />
+                              </svg>
+                            </Button>
+                          );
+                        }
+                        return null;
+                      })()}
 
-                      {/* Botões de Cancelar e Faltou */}
-                      {!hasAtendimento &&
-                        ag.status !== StatusAgendamento.CANCELADO &&
-                        ag.status !== StatusAgendamento.FALTOU && (
-                          <div className="flex gap-2">
+                      {!hasAtendimento && canChangeStatus(ag.status) && (
+                        <div className="flex gap-2">
+                          {(ag.status === StatusAgendamento.CONFIRMADO ||
+                            ag.status === StatusAgendamento.MARCADO) && (
                             <button
                               onClick={() =>
                                 handleOpenStatusModal(
@@ -651,6 +691,9 @@ export default function AtendimentosPage() {
                             >
                               Faltou
                             </button>
+                          )}
+
+                          {ag.status !== StatusAgendamento.COMPARECEU && (
                             <button
                               onClick={() =>
                                 handleOpenStatusModal(
@@ -663,8 +706,9 @@ export default function AtendimentosPage() {
                             >
                               Cancelar
                             </button>
-                          </div>
-                        )}
+                          )}
+                        </div>
+                      )}
                     </div>
 
                     {hasAtendimento ? (
@@ -705,6 +749,84 @@ export default function AtendimentosPage() {
             })}
           </div>
         )}
+      </Card>
+
+      {/* Seção de Agendamentos Cancelados */}
+      <Card className="p-6">
+        <h2 className="text-lg font-semibold mb-4 text-gray-800">
+          Agendamentos Cancelados (Últimos 7 dias)
+        </h2>
+
+        {(() => {
+          const sevenDaysAgo = new Date();
+          sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+          const agendamentosCancelados = agendamentos
+            .filter((ag) => {
+              const agDate = new Date(ag.dataHora);
+              return (
+                ag.status === StatusAgendamento.CANCELADO &&
+                agDate >= sevenDaysAgo
+              );
+            })
+            .sort(
+              (a, b) =>
+                new Date(b.dataHora).getTime() - new Date(a.dataHora).getTime()
+            );
+
+          if (agendamentosCancelados.length === 0) {
+            return (
+              <p className="text-gray-500 text-center py-4">
+                Nenhum agendamento cancelado nos últimos 7 dias
+              </p>
+            );
+          }
+
+          return (
+            <div className="space-y-3">
+              {agendamentosCancelados.map((agendamento) => (
+                <div
+                  key={agendamento.id}
+                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200"
+                >
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="font-medium text-gray-900">
+                        {agendamento.paciente?.nome || "Sem paciente"}
+                      </span>
+                      <Badge variant="default">Cancelado</Badge>
+                    </div>
+                    <p className="text-sm text-gray-600">
+                      {new Date(agendamento.dataHora).toLocaleDateString(
+                        "pt-BR"
+                      )}{" "}
+                      às{" "}
+                      {new Date(agendamento.dataHora).toLocaleTimeString(
+                        "pt-BR",
+                        {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        }
+                      )}
+                    </p>
+                    {agendamento.procedimento && (
+                      <p className="text-sm text-gray-500">
+                        {agendamento.procedimento.nome}
+                      </p>
+                    )}
+                    {agendamento.observacoes && (
+                      <p className="text-sm text-gray-500 italic">
+                        {agendamento.observacoes}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="text-sm text-gray-400">Cancelado</div>
+                </div>
+              ))}
+            </div>
+          );
+        })()}
       </Card>
 
       {/* Agendamentos Pendentes de Atendimento */}
@@ -1039,44 +1161,46 @@ export default function AtendimentosPage() {
           setNewStatus(null);
         }}
         title="Confirmar Alteração de Status"
-        size="sm"
       >
         {changingStatusAgendamento && newStatus && (
           <div className="space-y-4">
-            <div className="p-4 bg-secondary-50 rounded-lg">
-              <p className="text-sm text-secondary-600 mb-1">Paciente:</p>
-              <p className="font-medium">
-                {changingStatusAgendamento.paciente?.nome || "Bloqueio"}
-              </p>
-              <p className="text-sm text-secondary-600 mt-2">Horário:</p>
-              <p className="font-medium">
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <p className="text-sm text-yellow-800">
+                <strong>Agendamento:</strong>{" "}
+                {changingStatusAgendamento.paciente?.nome || "Sem paciente"}
+                <br />
+                <strong>Data/Hora:</strong>{" "}
                 {new Date(changingStatusAgendamento.dataHora).toLocaleString(
-                  "pt-BR",
-                  {
-                    day: "2-digit",
-                    month: "2-digit",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }
+                  "pt-BR"
                 )}
+                <br />
+                <strong>Status atual:</strong>{" "}
+                {getStatusDisplayName(changingStatusAgendamento.status)}
+                <br />
+                <strong>Novo status:</strong> {getStatusDisplayName(newStatus)}
               </p>
             </div>
 
-            <p className="text-secondary-600">
-              {newStatus === StatusAgendamento.FALTOU && (
-                <>
-                  Confirma que o paciente <strong>não compareceu</strong> ao
-                  atendimento?
-                </>
-              )}
-              {newStatus === StatusAgendamento.CANCELADO && (
-                <>
-                  Confirma o <strong>cancelamento</strong> deste agendamento?
-                </>
-              )}
-            </p>
+            {newStatus === StatusAgendamento.CANCELADO && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                <p className="text-sm text-red-800">
+                  ⚠️ <strong>Atenção:</strong> Agendamentos cancelados não
+                  poderão ter o status alterado novamente e serão removidos da
+                  lista principal.
+                </p>
+              </div>
+            )}
 
-            <div className="flex justify-end gap-3">
+            {newStatus === StatusAgendamento.FALTOU && (
+              <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                <p className="text-sm text-orange-800">
+                  ℹ️ Agendamentos marcados como "Faltou" poderão ser reagendados
+                  posteriormente.
+                </p>
+              </div>
+            )}
+
+            <div className="flex gap-3 justify-end">
               <Button
                 variant="secondary"
                 onClick={() => {
@@ -1086,23 +1210,18 @@ export default function AtendimentosPage() {
                 }}
                 disabled={isSubmitting}
               >
-                Não, manter como está
+                Cancelar
               </Button>
               <Button
                 variant={
-                  newStatus === StatusAgendamento.FALTOU
+                  newStatus === StatusAgendamento.CANCELADO
                     ? "danger"
-                    : newStatus === StatusAgendamento.CANCELADO
-                    ? "secondary"
                     : "primary"
                 }
                 onClick={handleConfirmStatusChange}
                 isLoading={isSubmitting}
               >
-                {newStatus === StatusAgendamento.FALTOU &&
-                  "Sim, marcar como Faltou"}
-                {newStatus === StatusAgendamento.CANCELADO &&
-                  "Sim, cancelar agendamento"}
+                Confirmar {getStatusDisplayName(newStatus)}
               </Button>
             </div>
           </div>
