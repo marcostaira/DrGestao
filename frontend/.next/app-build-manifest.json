@@ -1,9 +1,9 @@
 {
   "pages": {
-    "/dashboard/atendimentos/page": [
+    "/dashboard/pacientes/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/atendimentos/page.js"
+      "static/chunks/app/dashboard/pacientes/page.js"
     ],
     "/dashboard/layout": [
       "static/chunks/webpack.js",
@@ -16,40 +16,30 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
+    "/dashboard/pacientes/[id]/editar/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/dashboard/pacientes/[id]/editar/page.js"
+    ],
+    "/dashboard/atendimentos/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/dashboard/atendimentos/page.js"
+    ],
     "/dashboard/agenda/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/dashboard/agenda/page.js"
     ],
-    "/dashboard/pacientes/page": [
+    "/dashboard/pacientes/novo/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/pacientes/page.js"
+      "static/chunks/app/dashboard/pacientes/novo/page.js"
     ],
-    "/dashboard/page": [
+    "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/page.js"
-    ],
-    "/dashboard/configuracoes/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/configuracoes/page.js"
-    ],
-    "/dashboard/usuarios/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/usuarios/page.js"
-    ],
-    "/dashboard/profissionais/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/profissionais/page.js"
-    ],
-    "/dashboard/procedimentos/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/procedimentos/page.js"
+      "static/chunks/app/_not-found/page.js"
     ]
   }
 }

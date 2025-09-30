@@ -132,31 +132,6 @@ export const updateUserSchema = Joi.object({
 });
 
 // ============================================================================
-// PACIENTE VALIDATION SCHEMAS
-// ============================================================================
-
-export const createPacienteSchema = Joi.object({
-  nome: Joi.string().trim().min(2).max(100).required(),
-  telefone: Joi.string()
-    .pattern(/^\d{10,11}$/)
-    .required()
-    .messages({
-      "string.pattern.base": "Telefone deve ter 10 ou 11 dígitos",
-    }),
-  email: Joi.string().email().optional().allow(""),
-  observacoes: Joi.string().max(500).optional().allow(""),
-  profissionalId: Joi.string().optional(),
-});
-
-export const updatePacienteSchema = Joi.object({
-  nome: Joi.string().trim().min(2).max(100),
-  telefone: Joi.string().pattern(/^\d{10,11}$/),
-  email: Joi.string().email().allow(""),
-  observacoes: Joi.string().max(500).allow(""),
-  profissionalId: Joi.string().allow(null),
-});
-
-// ============================================================================
 // PROFISSIONAL VALIDATION SCHEMAS
 // ============================================================================
 
@@ -308,3 +283,106 @@ export const validatePhone = (phone: string): boolean => {
 export const sanitizeInput = (input: string): string => {
   return input.trim().replace(/[<>]/g, "");
 };
+
+// ============================================================================
+// PACIENTE VALIDATION SCHEMAS
+// ============================================================================
+
+// ... código existente ...
+
+export const createPacienteSchema = Joi.object({
+  nome: Joi.string().required(),
+  cpf: Joi.string()
+    .pattern(/^\d{11}$/)
+    .optional()
+    .allow("", null),
+  dataNascimento: Joi.alternatives()
+    .try(Joi.date().iso(), Joi.string().pattern(/^\d{4}-\d{2}-\d{2}$/))
+    .optional()
+    .allow("", null),
+  telefone: Joi.string().required(),
+  telefone2: Joi.string().optional().allow("", null),
+  email: Joi.string().email().optional().allow("", null),
+
+  // Endereço
+  cep: Joi.string()
+    .pattern(/^\d{8}$/)
+    .optional()
+    .allow("", null),
+  logradouro: Joi.string().optional().allow("", null),
+  numero: Joi.string().optional().allow("", null),
+  complemento: Joi.string().optional().allow("", null),
+  bairro: Joi.string().optional().allow("", null),
+  cidade: Joi.string().optional().allow("", null),
+  estado: Joi.string().length(2).uppercase().optional().allow("", null),
+
+  // Dados médicos
+  alergias: Joi.string().optional().allow("", null),
+
+  // Responsável
+  menorIdade: Joi.boolean().optional(),
+  responsavelNome: Joi.string().when("menorIdade", {
+    is: true,
+    then: Joi.required(),
+    otherwise: Joi.optional().allow("", null),
+  }),
+  responsavelCpf: Joi.string()
+    .pattern(/^\d{11}$/)
+    .when("menorIdade", {
+      is: true,
+      then: Joi.required(),
+      otherwise: Joi.optional().allow("", null),
+    }),
+  responsavelTelefone: Joi.string().when("menorIdade", {
+    is: true,
+    then: Joi.required(),
+    otherwise: Joi.optional().allow("", null),
+  }),
+  responsavelParentesco: Joi.string().when("menorIdade", {
+    is: true,
+    then: Joi.required(),
+    otherwise: Joi.optional().allow("", null),
+  }),
+
+  profissionalId: Joi.string().optional().allow("", null),
+  observacoes: Joi.string().max(1000).allow("", null),
+});
+
+export const updatePacienteSchema = Joi.object({
+  nome: Joi.string(),
+  cpf: Joi.string()
+    .pattern(/^\d{11}$/)
+    .allow("", null),
+  dataNascimento: Joi.alternatives()
+    .try(Joi.date().iso(), Joi.string().pattern(/^\d{4}-\d{2}-\d{2}$/))
+    .allow("", null),
+  telefone: Joi.string(),
+  telefone2: Joi.string().allow("", null),
+  email: Joi.string().email().allow("", null),
+
+  // Endereço
+  cep: Joi.string()
+    .pattern(/^\d{8}$/)
+    .allow("", null),
+  logradouro: Joi.string().allow("", null),
+  numero: Joi.string().allow("", null),
+  complemento: Joi.string().allow("", null),
+  bairro: Joi.string().allow("", null),
+  cidade: Joi.string().allow("", null),
+  estado: Joi.string().length(2).uppercase().allow("", null),
+
+  // Dados médicos
+  alergias: Joi.string().allow("", null),
+
+  // Responsável
+  menorIdade: Joi.boolean(),
+  responsavelNome: Joi.string().allow("", null),
+  responsavelCpf: Joi.string()
+    .pattern(/^\d{11}$/)
+    .allow("", null),
+  responsavelTelefone: Joi.string().allow("", null),
+  responsavelParentesco: Joi.string().allow("", null),
+
+  profissionalId: Joi.string().allow("", null),
+  observacoes: Joi.string().max(1000).allow("", null),
+});

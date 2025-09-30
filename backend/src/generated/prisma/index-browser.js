@@ -181,12 +181,12 @@ exports.Prisma.AgendamentoScalarFieldEnum = {
   profissionalId: 'profissionalId',
   procedimentoId: 'procedimentoId',
   dataHora: 'dataHora',
-  dataHoraFim: 'dataHoraFim',
   status: 'status',
   observacoes: 'observacoes',
   confirmacaoEnviada: 'confirmacaoEnviada',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  dataHoraFim: 'dataHoraFim'
 };
 
 exports.Prisma.AtendimentoScalarFieldEnum = {

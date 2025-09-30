@@ -44,31 +44,54 @@ export class AgendamentoService {
       }
     }
 
-    // Calcular horário de término baseado na duração
+    // Converter string para Date (sem conversão de timezone)
+    // A string vem como "2025-09-30T12:00" e deve ser interpretada como horário local
     const dataHora = new Date(data.dataHora);
+
+    // Calcular horário de término baseado na duração
     const dataHoraFim = new Date(
       dataHora.getTime() + procedimento.duracaoMinutos * 60000
     );
 
+    // VALIDAÇÃO: Garantir que dataHoraFim é maior que dataHora
+    if (dataHoraFim <= dataHora) {
+      throw new AppError(
+        "Data/hora de término deve ser posterior à data/hora de início",
+        400
+      );
+    }
+
+    console.log("=".repeat(80));
+    console.log("DEBUG BACKEND - Criando agendamento:");
+    console.log("- dataHora string recebida:", data.dataHora);
+    console.log("- dataHora convertida:", dataHora.toISOString());
+    console.log("- dataHoraFim calculada:", dataHoraFim.toISOString());
+    console.log("- duração (minutos):", procedimento.duracaoMinutos);
+
     // Verificar conflitos de horário para o profissional
+    // Apenas agendamentos não cancelados E com datas válidas
     const conflito = await prisma.agendamento.findFirst({
       where: {
         tenantId,
         profissionalId: data.profissionalId,
         status: { notIn: ["CANCELADO"] },
+        dataHoraFim: { gt: prisma.agendamento.fields.dataHora }, // dataHoraFim deve ser maior que dataHora
         OR: [
+          // Novo agendamento inicia durante um agendamento existente
           {
             AND: [
               { dataHora: { lte: dataHora } },
               { dataHoraFim: { gt: dataHora } },
             ],
           },
+          // Novo agendamento termina durante um agendamento existente
           {
             AND: [
               { dataHora: { lt: dataHoraFim } },
               { dataHoraFim: { gte: dataHoraFim } },
             ],
           },
+          // Novo agendamento engloba um agendamento existente
           {
             AND: [
               { dataHora: { gte: dataHora } },
@@ -80,11 +103,22 @@ export class AgendamentoService {
     });
 
     if (conflito) {
+      console.log("❌ CONFLITO ENCONTRADO:");
+      console.log("- Agendamento conflitante:", {
+        id: conflito.id,
+        dataHora: conflito.dataHora.toISOString(),
+        dataHoraFim: conflito.dataHoraFim.toISOString(),
+      });
+      console.log("=".repeat(80));
+
       throw new AppError(
         "Já existe um agendamento neste horário para este profissional",
         400
       );
     }
+
+    console.log("✅ Nenhum conflito encontrado. Criando agendamento...");
+    console.log("=".repeat(80));
 
     // Criar agendamento
     const agendamento = await prisma.agendamento.create({
@@ -137,7 +171,7 @@ export class AgendamentoService {
     }
 
     const { tipo, quantidade, diasSemana } = data.recorrencia;
-    const agendamentos: any[] = []; // <-- ADICIONE : any[] aqui
+    const agendamentos: any[] = [];
     const dataInicial = new Date(data.dataHora);
 
     for (let i = 0; i < quantidade; i++) {
@@ -162,7 +196,7 @@ export class AgendamentoService {
       try {
         const agendamento = await this.create(tenantId, {
           ...data,
-          dataHora: novaData,
+          dataHora: novaData.toISOString(),
         });
         agendamentos.push(agendamento);
       } catch (error) {
@@ -314,6 +348,9 @@ export class AgendamentoService {
   ) {
     const existingAgendamento = await prisma.agendamento.findFirst({
       where: { id: agendamentoId, tenantId },
+      include: {
+        procedimento: true,
+      },
     });
 
     if (!existingAgendamento) {
@@ -364,6 +401,15 @@ export class AgendamentoService {
 
     if (data.dataHora) {
       updateData.dataHora = new Date(data.dataHora);
+
+      // Recalcular dataHoraFim se não foi recalculado pelo procedimento
+      if (!updateData.dataHoraFim) {
+        const duracaoMinutos =
+          existingAgendamento.procedimento?.duracaoMinutos || 30;
+        updateData.dataHoraFim = new Date(
+          updateData.dataHora.getTime() + duracaoMinutos * 60000
+        );
+      }
     }
 
     if (data.status) {
@@ -384,6 +430,7 @@ export class AgendamentoService {
           select: {
             id: true,
             nome: true,
+            telefone: true,
           },
         },
         profissional: {
@@ -396,6 +443,7 @@ export class AgendamentoService {
           select: {
             id: true,
             nome: true,
+            duracaoMinutos: true,
           },
         },
       },
@@ -541,11 +589,7 @@ export class AgendamentoService {
   }
 
   // ==========================================================================
-  // UPDATE STATUS (Novo método para status específico)
-  // ==========================================================================
-
-  // ==========================================================================
-  // UPDATE STATUS (Novo método para status específico)
+  // UPDATE STATUS
   // ==========================================================================
 
   static async updateStatus(
@@ -574,9 +618,9 @@ export class AgendamentoService {
     }
 
     // Verificar se o agendamento pode ter o status alterado
-    if (agendamento.status === "CANCELADO") {
+    if (agendamento.status === "CANCELADO" && status !== "MARCADO") {
       throw new AppError(
-        "Agendamentos cancelados não podem ter o status alterado",
+        "Agendamentos cancelados só podem voltar para MARCADO",
         400
       );
     }

@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
@@ -14,144 +8,93 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ============================================================================
-// TENANT MANAGEMENT
-// ============================================================================
-
 model Tenant {
-  id        String   @id @default(cuid())
-  nome      String
-  plano     String   @default("basico")
-  ativo     Boolean  @default(true)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  // Relacionamentos
-  usuarios       Usuario[]
-  pacientes      Paciente[]
-  profissionais  Profissional[]
-  procedimentos  Procedimento[]
+  id             String          @id @default(cuid())
+  nome           String
+  plano          String          @default("basico")
+  ativo          Boolean         @default(true)
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
   agendamentos   Agendamento[]
   atendimentos   Atendimento[]
+  pacientes      Paciente[]
+  procedimentos  Procedimento[]
+  profissionais  Profissional[]
+  usuarios       Usuario[]
   whatsappConfig WhatsAppConfig?
 
   @@map("tenants")
 }
 
-// ============================================================================
-// USER MANAGEMENT
-// ============================================================================
-
-enum TipoUsuario {
-  ADMIN
-  SECRETARIA
-}
-
 model Usuario {
-  id       String      @id @default(cuid())
-  tenantId String      @map("tenant_id")
-  nome     String
-  email    String
-  senha    String
-  tipo     TipoUsuario @default(SECRETARIA)
-  ativo    Boolean     @default(true)
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  // Relacionamentos
-  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  id        String      @id @default(cuid())
+  tenantId  String      @map("tenant_id")
+  nome      String
+  email     String
+  senha     String
+  tipo      TipoUsuario @default(SECRETARIA)
+  ativo     Boolean     @default(true)
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+  tenant    Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   @@unique([tenantId, email])
   @@index([tenantId, email])
   @@map("usuarios")
 }
 
-// ============================================================================
-// PROFISSIONAIS
-// ============================================================================
-
 model Profissional {
-  id            String  @id @default(cuid())
-  tenantId      String  @map("tenant_id")
+  id            String        @id @default(cuid())
+  tenantId      String        @map("tenant_id")
   nome          String
   especialidade String?
   observacoes   String?
-  ativo         Boolean @default(true)
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  // Relacionamentos
-  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  pacientes    Paciente[]
-  agendamentos Agendamento[]
-  atendimentos Atendimento[]
+  ativo         Boolean       @default(true)
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+  agendamentos  Agendamento[]
+  atendimentos  Atendimento[]
+  pacientes     Paciente[]
+  tenant        Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   @@index([tenantId, ativo])
   @@map("profissionais")
 }
 
-// ============================================================================
-// PACIENTES
-// ============================================================================
-
 model Paciente {
-  id             String  @id @default(cuid())
-  tenantId       String  @map("tenant_id")
-  profissionalId String? @map("profissional_id")
+  id             String        @id @default(cuid())
+  tenantId       String        @map("tenant_id")
+  profissionalId String?       @map("profissional_id")
   nome           String
   telefone       String
   email          String?
   observacoes    String?
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  // Relacionamentos
-  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  profissional Profissional? @relation(fields: [profissionalId], references: [id], onDelete: SetNull)
-  agendamentos Agendamento[]
-  atendimentos Atendimento[]
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+  agendamentos   Agendamento[]
+  atendimentos   Atendimento[]
+  profissional   Profissional? @relation(fields: [profissionalId], references: [id])
+  tenant         Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   @@index([tenantId, nome])
   @@index([tenantId, telefone])
   @@map("pacientes")
 }
 
-// ============================================================================
-// PROCEDIMENTOS
-// ============================================================================
-
 model Procedimento {
-  id             String   @id @default(cuid())
-  tenantId       String   @map("tenant_id")
+  id             String        @id @default(cuid())
+  tenantId       String        @map("tenant_id")
   nome           String
-  valor          Decimal? @db.Decimal(10, 2)
-  duracaoMinutos Int      @map("duracao_minutos")
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  // Relacionamentos
-  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  agendamentos Agendamento[]
-  atendimentos Atendimento[]
+  valor          Decimal?      @db.Decimal(10, 2)
+  duracaoMinutos Int           @map("duracao_minutos")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+  agendamentos   Agendamento[]
+  atendimentos   Atendimento[]
+  tenant         Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   @@index([tenantId, nome])
   @@map("procedimentos")
-}
-
-// ============================================================================
-// AGENDAMENTOS
-// ============================================================================
-
-enum StatusAgendamento {
-  MARCADO // 🟡 Amarelo
-  CONFIRMADO // 🟢 Verde
-  COMPARECEU // 🔵 Azul
-  FALTOU // 🔴 Vermelho
-  CANCELADO // ⚫ Cinza
 }
 
 model Agendamento {
@@ -161,20 +104,17 @@ model Agendamento {
   profissionalId     String            @map("profissional_id")
   procedimentoId     String            @map("procedimento_id")
   dataHora           DateTime          @map("data_hora")
-  dataHoraFim        DateTime          @map("data_hora_fim") // ADICIONE ESTA LINHA
   status             StatusAgendamento @default(MARCADO)
   observacoes        String?
   confirmacaoEnviada Boolean           @default(false) @map("confirmacao_enviada")
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  // Relacionamentos
-  tenant       Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  paciente     Paciente?    @relation(fields: [pacienteId], references: [id], onDelete: SetNull)
-  profissional Profissional @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
-  procedimento Procedimento @relation(fields: [procedimentoId], references: [id], onDelete: Cascade)
-  atendimento  Atendimento?
+  createdAt          DateTime          @default(now()) @map("created_at")
+  updatedAt          DateTime          @updatedAt @map("updated_at")
+  dataHoraFim        DateTime          @map("data_hora_fim")
+  paciente           Paciente?         @relation(fields: [pacienteId], references: [id])
+  procedimento       Procedimento      @relation(fields: [procedimentoId], references: [id], onDelete: Cascade)
+  profissional       Profissional      @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
+  tenant             Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  atendimento        Atendimento?
 
   @@index([tenantId, dataHora])
   @@index([tenantId, profissionalId])
@@ -182,61 +122,70 @@ model Agendamento {
   @@map("agendamentos")
 }
 
-// ============================================================================
-// ATENDIMENTOS
-// ============================================================================
-
 model Atendimento {
-  id                      String  @id @default(cuid())
-  tenantId                String  @map("tenant_id")
-  agendamentoId           String  @unique @map("agendamento_id")
-  pacienteId              String  @map("paciente_id")
-  profissionalId          String  @map("profissional_id")
-  procedimentoId          String  @map("procedimento_id")
+  id                      String       @id @default(cuid())
+  tenantId                String       @map("tenant_id")
+  agendamentoId           String       @unique @map("agendamento_id")
+  pacienteId              String       @map("paciente_id")
+  profissionalId          String       @map("profissional_id")
+  procedimentoId          String       @map("procedimento_id")
   anotacoes               String?
-  procedimentosRealizados Json?   @map("procedimentos_realizados")
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  // Relacionamentos
-  tenant       Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  agendamento  Agendamento  @relation(fields: [agendamentoId], references: [id], onDelete: Cascade)
-  paciente     Paciente     @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
-  profissional Profissional @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
-  procedimento Procedimento @relation(fields: [procedimentoId], references: [id], onDelete: Cascade)
+  procedimentosRealizados Json?        @map("procedimentos_realizados")
+  createdAt               DateTime     @default(now()) @map("created_at")
+  updatedAt               DateTime     @updatedAt @map("updated_at")
+  agendamento             Agendamento  @relation(fields: [agendamentoId], references: [id], onDelete: Cascade)
+  paciente                Paciente     @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
+  procedimento            Procedimento @relation(fields: [procedimentoId], references: [id], onDelete: Cascade)
+  profissional            Profissional @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
+  tenant                  Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   @@index([tenantId, pacienteId])
   @@index([tenantId, profissionalId])
   @@map("atendimentos")
 }
 
-// ============================================================================
-// WHATSAPP CONFIGURATION
-// ============================================================================
-
 model WhatsAppConfig {
-  id                      String  @id @default(cuid())
-  tenantId                String  @unique @map("tenant_id")
-  templateConfirmacao     String  @default("Olá {nome}! Você tem consulta marcada para {data} às {hora}. Para confirmar, responda: 1=SIM ou 2=NÃO") @map("template_confirmacao")
-  templateSim             String  @default("Consulta confirmada! Nos vemos em {data} às {hora}.") @map("template_sim")
-  templateNao             String  @default("Consulta cancelada. Entre em contato para reagendar.") @map("template_nao")
-  templateOpcoesInvalidas String  @default("Resposta não reconhecida. Digite 1 para SIM ou 2 para NÃO.") @map("template_opcoes_invalidas")
-  horasAntecedencia       Int     @default(24) @map("horas_antecedencia")
-  ativo                   Boolean @default(true)
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  // Relacionamentos
-  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  id                      String   @id @default(cuid())
+  tenantId                String   @unique @map("tenant_id")
+  templateConfirmacao     String   @default("Olá {nome}! Você tem consulta marcada para {data} às {hora}. Para confirmar, responda: 1=SIM ou 2=NÃO") @map("template_confirmacao")
+  templateSim             String   @default("Consulta confirmada! Nos vemos em {data} às {hora}.") @map("template_sim")
+  templateNao             String   @default("Consulta cancelada. Entre em contato para reagendar.") @map("template_nao")
+  templateOpcoesInvalidas String   @default("Resposta não reconhecida. Digite 1 para SIM ou 2 para NÃO.") @map("template_opcoes_invalidas")
+  horasAntecedencia       Int      @default(24) @map("horas_antecedencia")
+  ativo                   Boolean  @default(true)
+  createdAt               DateTime @default(now()) @map("created_at")
+  updatedAt               DateTime @updatedAt @map("updated_at")
+  tenant                  Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   @@map("whatsapp_config")
 }
 
-// ============================================================================
-// LOGS E AUDITORIA
-// ============================================================================
+model LogSistema {
+  id        String   @id @default(cuid())
+  tenantId  String   @map("tenant_id")
+  usuarioId String?  @map("usuario_id")
+  tipo      TipoLog
+  descricao String
+  metadata  Json?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([tenantId, tipo])
+  @@index([tenantId, createdAt])
+  @@map("logs_sistema")
+}
+
+enum TipoUsuario {
+  ADMIN
+  SECRETARIA
+}
+
+enum StatusAgendamento {
+  MARCADO
+  CONFIRMADO
+  COMPARECEU
+  FALTOU
+  CANCELADO
+}
 
 enum TipoLog {
   LOGIN
@@ -251,19 +200,4 @@ enum TipoLog {
   CREATE
   UPDATE
   DELETE
-}
-
-model LogSistema {
-  id        String  @id @default(cuid())
-  tenantId  String  @map("tenant_id")
-  usuarioId String? @map("usuario_id")
-  tipo      TipoLog
-  descricao String
-  metadata  Json?
-
-  createdAt DateTime @default(now()) @map("created_at")
-
-  @@index([tenantId, tipo])
-  @@index([tenantId, createdAt])
-  @@map("logs_sistema")
 }

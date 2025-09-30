@@ -1,3 +1,6 @@
+-- CreateSchema
+CREATE SCHEMA IF NOT EXISTS "public";
+
 -- CreateEnum
 CREATE TYPE "public"."TipoUsuario" AS ENUM ('ADMIN', 'SECRETARIA');
 
@@ -5,7 +8,7 @@ CREATE TYPE "public"."TipoUsuario" AS ENUM ('ADMIN', 'SECRETARIA');
 CREATE TYPE "public"."StatusAgendamento" AS ENUM ('MARCADO', 'CONFIRMADO', 'COMPARECEU', 'FALTOU', 'CANCELADO');
 
 -- CreateEnum
-CREATE TYPE "public"."TipoLog" AS ENUM ('LOGIN', 'LOGOUT', 'AGENDAMENTO_CRIADO', 'AGENDAMENTO_ATUALIZADO', 'AGENDAMENTO_CANCELADO', 'CONFIRMACAO_ENVIADA', 'CONFIRMACAO_RECEBIDA', 'SYNC_GOOGLE_CALENDAR', 'ERROR');
+CREATE TYPE "public"."TipoLog" AS ENUM ('LOGIN', 'LOGOUT', 'AGENDAMENTO_CRIADO', 'AGENDAMENTO_ATUALIZADO', 'AGENDAMENTO_CANCELADO', 'CONFIRMACAO_ENVIADA', 'CONFIRMACAO_RECEBIDA', 'SYNC_GOOGLE_CALENDAR', 'ERROR', 'CREATE', 'UPDATE', 'DELETE');
 
 -- CreateTable
 CREATE TABLE "public"."tenants" (
@@ -87,9 +90,9 @@ CREATE TABLE "public"."agendamentos" (
     "status" "public"."StatusAgendamento" NOT NULL DEFAULT 'MARCADO',
     "observacoes" TEXT,
     "confirmacao_enviada" BOOLEAN NOT NULL DEFAULT false,
-    "google_calendar_id" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
+    "data_hora_fim" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "agendamentos_pkey" PRIMARY KEY ("id")
 );
@@ -161,10 +164,10 @@ CREATE INDEX "procedimentos_tenant_id_nome_idx" ON "public"."procedimentos"("ten
 CREATE INDEX "agendamentos_tenant_id_data_hora_idx" ON "public"."agendamentos"("tenant_id", "data_hora");
 
 -- CreateIndex
-CREATE INDEX "agendamentos_tenant_id_profissional_id_data_hora_idx" ON "public"."agendamentos"("tenant_id", "profissional_id", "data_hora");
+CREATE INDEX "agendamentos_tenant_id_profissional_id_idx" ON "public"."agendamentos"("tenant_id", "profissional_id");
 
 -- CreateIndex
-CREATE INDEX "agendamentos_tenant_id_status_idx" ON "public"."agendamentos"("tenant_id", "status");
+CREATE INDEX "agendamentos_tenant_id_paciente_id_idx" ON "public"."agendamentos"("tenant_id", "paciente_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "atendimentos_agendamento_id_key" ON "public"."atendimentos"("agendamento_id");
@@ -191,28 +194,25 @@ ALTER TABLE "public"."usuarios" ADD CONSTRAINT "usuarios_tenant_id_fkey" FOREIGN
 ALTER TABLE "public"."profissionais" ADD CONSTRAINT "profissionais_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."tenants"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."pacientes" ADD CONSTRAINT "pacientes_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."tenants"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."pacientes" ADD CONSTRAINT "pacientes_profissional_id_fkey" FOREIGN KEY ("profissional_id") REFERENCES "public"."profissionais"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."pacientes" ADD CONSTRAINT "pacientes_profissional_id_fkey" FOREIGN KEY ("profissional_id") REFERENCES "public"."profissionais"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."pacientes" ADD CONSTRAINT "pacientes_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."tenants"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."procedimentos" ADD CONSTRAINT "procedimentos_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."tenants"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."agendamentos" ADD CONSTRAINT "agendamentos_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."tenants"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "public"."agendamentos" ADD CONSTRAINT "agendamentos_paciente_id_fkey" FOREIGN KEY ("paciente_id") REFERENCES "public"."pacientes"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "public"."agendamentos" ADD CONSTRAINT "agendamentos_profissional_id_fkey" FOREIGN KEY ("profissional_id") REFERENCES "public"."profissionais"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."agendamentos" ADD CONSTRAINT "agendamentos_procedimento_id_fkey" FOREIGN KEY ("procedimento_id") REFERENCES "public"."procedimentos"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."atendimentos" ADD CONSTRAINT "atendimentos_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."tenants"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."agendamentos" ADD CONSTRAINT "agendamentos_profissional_id_fkey" FOREIGN KEY ("profissional_id") REFERENCES "public"."profissionais"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."agendamentos" ADD CONSTRAINT "agendamentos_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."tenants"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."atendimentos" ADD CONSTRAINT "atendimentos_agendamento_id_fkey" FOREIGN KEY ("agendamento_id") REFERENCES "public"."agendamentos"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -221,10 +221,14 @@ ALTER TABLE "public"."atendimentos" ADD CONSTRAINT "atendimentos_agendamento_id_
 ALTER TABLE "public"."atendimentos" ADD CONSTRAINT "atendimentos_paciente_id_fkey" FOREIGN KEY ("paciente_id") REFERENCES "public"."pacientes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."atendimentos" ADD CONSTRAINT "atendimentos_profissional_id_fkey" FOREIGN KEY ("profissional_id") REFERENCES "public"."profissionais"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "public"."atendimentos" ADD CONSTRAINT "atendimentos_procedimento_id_fkey" FOREIGN KEY ("procedimento_id") REFERENCES "public"."procedimentos"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "public"."atendimentos" ADD CONSTRAINT "atendimentos_profissional_id_fkey" FOREIGN KEY ("profissional_id") REFERENCES "public"."profissionais"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."atendimentos" ADD CONSTRAINT "atendimentos_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."tenants"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "public"."whatsapp_config" ADD CONSTRAINT "whatsapp_config_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."tenants"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+

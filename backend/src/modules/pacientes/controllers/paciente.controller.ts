@@ -2,6 +2,23 @@ import { Response } from "express";
 import { PacienteService } from "../services/paciente.service";
 import { AuthenticatedRequest, ApiResponse, AppError } from "../../../types";
 
+// Helper para normalizar data
+const normalizeDate = (dateString?: string): Date | undefined => {
+  if (!dateString) return undefined;
+
+  // Se já está no formato ISO completo, retorna
+  if (dateString.includes("T")) {
+    return new Date(dateString);
+  }
+
+  // Se está no formato YYYY-MM-DD, adiciona hora
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+    return new Date(`${dateString}T00:00:00.000Z`);
+  }
+
+  return new Date(dateString);
+};
+
 // ============================================================================
 // PACIENTE CONTROLLER
 // ============================================================================
@@ -17,14 +34,52 @@ export class PacienteController {
         throw new AppError("Usuário não autenticado", 401);
       }
 
-      const { nome, telefone, email, observacoes, profissionalId } = req.body;
+      const {
+        nome,
+        cpf,
+        dataNascimento,
+        telefone,
+        telefone2,
+        email,
+        cep,
+        logradouro,
+        numero,
+        complemento,
+        bairro,
+        cidade,
+        estado,
+        alergias,
+        menorIdade,
+        responsavelNome,
+        responsavelCpf,
+        responsavelTelefone,
+        responsavelParentesco,
+        profissionalId,
+        observacoes,
+      } = req.body;
 
       const paciente = await PacienteService.create(req.user.tenantId, {
         nome,
+        cpf: cpf || undefined,
+        dataNascimento: normalizeDate(dataNascimento),
         telefone,
-        email,
-        observacoes,
-        profissionalId,
+        telefone2: telefone2 || undefined,
+        email: email || undefined,
+        cep: cep || undefined,
+        logradouro: logradouro || undefined,
+        numero: numero || undefined,
+        complemento: complemento || undefined,
+        bairro: bairro || undefined,
+        cidade: cidade || undefined,
+        estado: estado || undefined,
+        alergias: alergias || undefined,
+        menorIdade: menorIdade || false,
+        responsavelNome: responsavelNome || undefined,
+        responsavelCpf: responsavelCpf || undefined,
+        responsavelTelefone: responsavelTelefone || undefined,
+        responsavelParentesco: responsavelParentesco || undefined,
+        profissionalId: profissionalId || undefined,
+        observacoes: observacoes || undefined,
       });
 
       const response: ApiResponse = {
@@ -153,14 +208,52 @@ export class PacienteController {
       }
 
       const { id } = req.params;
-      const { nome, telefone, email, observacoes, profissionalId } = req.body;
+      const {
+        nome,
+        cpf,
+        dataNascimento,
+        telefone,
+        telefone2,
+        email,
+        cep,
+        logradouro,
+        numero,
+        complemento,
+        bairro,
+        cidade,
+        estado,
+        alergias,
+        menorIdade,
+        responsavelNome,
+        responsavelCpf,
+        responsavelTelefone,
+        responsavelParentesco,
+        profissionalId,
+        observacoes,
+      } = req.body;
 
       const paciente = await PacienteService.update(req.user.tenantId, id, {
         nome,
+        cpf: cpf || undefined,
+        dataNascimento: normalizeDate(dataNascimento),
         telefone,
-        email,
-        observacoes,
-        profissionalId,
+        telefone2: telefone2 || undefined,
+        email: email || undefined,
+        cep: cep || undefined,
+        logradouro: logradouro || undefined,
+        numero: numero || undefined,
+        complemento: complemento || undefined,
+        bairro: bairro || undefined,
+        cidade: cidade || undefined,
+        estado: estado || undefined,
+        alergias: alergias || undefined,
+        menorIdade,
+        responsavelNome: responsavelNome || undefined,
+        responsavelCpf: responsavelCpf || undefined,
+        responsavelTelefone: responsavelTelefone || undefined,
+        responsavelParentesco: responsavelParentesco || undefined,
+        profissionalId: profissionalId || undefined,
+        observacoes: observacoes || undefined,
       });
 
       const response: ApiResponse = {

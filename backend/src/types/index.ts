@@ -172,18 +172,50 @@ export interface DatabaseConfig {
 
 export interface CreatePacienteData {
   nome: string;
+  cpf?: string;
+  dataNascimento?: Date;
   telefone: string;
+  telefone2?: string;
   email?: string;
-  observacoes?: string;
+  cep?: string;
+  logradouro?: string;
+  numero?: string;
+  complemento?: string;
+  bairro?: string;
+  cidade?: string;
+  estado?: string;
+  alergias?: string;
+  menorIdade?: boolean;
+  responsavelNome?: string;
+  responsavelCpf?: string;
+  responsavelTelefone?: string;
+  responsavelParentesco?: string;
   profissionalId?: string;
+  observacoes?: string;
 }
 
 export interface UpdatePacienteData {
   nome?: string;
+  cpf?: string;
+  dataNascimento?: Date;
   telefone?: string;
+  telefone2?: string;
   email?: string;
-  observacoes?: string;
+  cep?: string;
+  logradouro?: string;
+  numero?: string;
+  complemento?: string;
+  bairro?: string;
+  cidade?: string;
+  estado?: string;
+  alergias?: string;
+  menorIdade?: boolean;
+  responsavelNome?: string;
+  responsavelCpf?: string;
+  responsavelTelefone?: string;
+  responsavelParentesco?: string;
   profissionalId?: string;
+  observacoes?: string;
 }
 
 export interface PacienteFilters extends PaginationParams {

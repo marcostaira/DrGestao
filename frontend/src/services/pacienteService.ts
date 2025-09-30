@@ -24,14 +24,6 @@ export interface CreatePacienteData {
   profissionalId?: string;
 }
 
-export interface UpdatePacienteData {
-  nome?: string;
-  telefone?: string;
-  email?: string;
-  observacoes?: string;
-  profissionalId?: string;
-}
-
 export interface PacienteFilters {
   search?: string;
   profissionalId?: string;
@@ -81,3 +73,73 @@ export async function deletePaciente(id: string): Promise<void> {
 export async function deletePacientesEmLote(ids: string[]): Promise<void> {
   await api.post("/pacientes/lote/delete", { ids });
 }
+
+export interface Paciente {
+  id: string;
+  tenantId: string;
+  profissionalId?: string;
+
+  // Dados pessoais
+  nome: string;
+  cpf?: string;
+  dataNascimento?: string;
+
+  // Contatos
+  telefone: string;
+  telefone2?: string;
+  email?: string;
+
+  // Endereço
+  cep?: string;
+  logradouro?: string;
+  numero?: string;
+  complemento?: string;
+  bairro?: string;
+  cidade?: string;
+  estado?: string;
+
+  // Dados médicos
+  alergias?: string;
+
+  // Responsável
+  menorIdade: boolean;
+  responsavelNome?: string;
+  responsavelCpf?: string;
+  responsavelTelefone?: string;
+  responsavelParentesco?: string;
+
+  observacoes?: string;
+  profissional?: {
+    id: string;
+    nome: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreatePacienteData {
+  nome: string;
+  cpf?: string;
+  dataNascimento?: string;
+  telefone: string;
+  telefone2?: string;
+  email?: string;
+  cep?: string;
+  logradouro?: string;
+  numero?: string;
+  complemento?: string;
+  bairro?: string;
+  cidade?: string;
+  estado?: string;
+  alergias?: string;
+  menorIdade?: boolean;
+  responsavelNome?: string;
+  responsavelCpf?: string;
+  responsavelTelefone?: string;
+  responsavelParentesco?: string;
+  profissionalId?: string;
+  observacoes?: string;
+}
+
+export type UpdatePacienteData = Partial<CreatePacienteData>;
+
