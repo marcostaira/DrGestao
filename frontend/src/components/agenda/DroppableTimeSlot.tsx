@@ -1,7 +1,6 @@
 import React from "react";
 import { Agendamento } from "@/services/agendamentoService";
 import { DraggableAgendamento } from "./DraggableAgendamento";
-import { isSlotOccupiedByPreviousAgendamento } from "@/utils/agendaUtils";
 
 interface DroppableTimeSlotProps {
   day: Date;
@@ -27,12 +26,11 @@ interface DroppableTimeSlotProps {
   showTimeInCards?: boolean;
 }
 
-export const DroppableTimeSlot: React.FC<DroppableTimeSlotProps> = ({
+export function DroppableTimeSlot({
   day,
   hour,
   minute,
   agendamentos,
-  allAgendamentos,
   onAddClick,
   onAgendamentoClick,
   onDragStart,
@@ -43,31 +41,14 @@ export const DroppableTimeSlot: React.FC<DroppableTimeSlotProps> = ({
   isHighlighted,
   canDrop,
   draggedAgendamento,
-  showTimeInCards = false,
-}) => {
-  const isOccupied = isSlotOccupiedByPreviousAgendamento(
-    allAgendamentos,
-    day,
-    hour,
-    minute
-  );
+  showTimeInCards = true,
+}: DroppableTimeSlotProps) {
+  const isOccupied = agendamentos.length > 0;
 
   return (
     <div
-      onDragOver={(e) => onDragOver(e, day, hour, minute)}
-      onDragLeave={onDragLeave}
-      onDrop={(e) => onDrop(e, day, hour, minute)}
-      onClick={(e) => {
-        if (
-          !isOccupied &&
-          (e.target === e.currentTarget ||
-            (e.target as HTMLElement).classList.contains("time-header"))
-        ) {
-          onAddClick();
-        }
-      }}
       className={`
-        h-[40px] min-h-[40px] p-1 border-b border-gray-100 transition-all duration-200 relative
+        relative min-h-[60px] border-r border-gray-100 transition-colors time-slot
         ${!isOccupied ? "cursor-pointer hover:bg-gray-50" : "bg-gray-50/30"}
         ${
           isHighlighted && !isOccupied
@@ -77,13 +58,25 @@ export const DroppableTimeSlot: React.FC<DroppableTimeSlotProps> = ({
             : ""
         }
       `}
+      onClick={!isOccupied ? onAddClick : undefined}
+      onDragOver={(e) => onDragOver(e, day, hour, minute)}
+      onDragLeave={onDragLeave}
+      onDrop={(e) => onDrop(e, day, hour, minute)}
       title={isOccupied ? "Ocupado" : "Clique para adicionar agendamento"}
     >
-      {/* Renderiza apenas agendamentos que COMEÇAM neste slot */}
-      {!isOccupied &&
-        agendamentos.map((ag) => (
+      {/* Renderiza agendamentos empilhados */}
+      {agendamentos.map((ag, index) => (
+        <div
+          key={ag.id}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: `${index * 8}px`, // Empilha deslocando 8px para direita
+            right: 0,
+            zIndex: 10 + index, // Cada um fica acima do anterior
+          }}
+        >
           <DraggableAgendamento
-            key={ag.id}
             agendamento={ag}
             onClick={(e) => {
               if (e) e.stopPropagation();
@@ -94,30 +87,49 @@ export const DroppableTimeSlot: React.FC<DroppableTimeSlotProps> = ({
             isDragging={draggedAgendamento?.id === ag.id}
             showTime={showTimeInCards}
           />
-        ))}
+        </div>
+      ))}
+
+      {/* Contador quando há múltiplos */}
+      {agendamentos.length > 1 && (
+        <div
+          className="absolute bottom-1 right-1 bg-gray-800 text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold z-50"
+          style={{ pointerEvents: "none" }}
+        >
+          {agendamentos.length}
+        </div>
+      )}
 
       {/* Preview durante drag */}
       {isHighlighted && draggedAgendamento && !isOccupied && (
         <div
-          className={`absolute top-0 left-0 right-0 mx-1 p-1.5 rounded border-2 border-dashed transition-all pointer-events-none text-xs z-50 ${
-            canDrop
-              ? "border-blue-400 bg-blue-100 text-blue-800"
-              : "border-red-400 bg-red-100 text-red-800"
+          className={`absolute top-0 left-0 right-0 mx-1 p-1.5 rounded border-2 border-dashed transition-all pointer-events-none text-xs z-50 font-medium ${
+            canDrop ? "border-blue-400" : "border-red-400"
           }`}
+          style={{
+            backgroundColor: canDrop
+              ? `${draggedAgendamento.profissional?.cor || "#3B82F6"}dd`
+              : "#fee2e2",
+            color: canDrop ? "#ffffff" : "#991b1b",
+            textShadow: canDrop ? "0 1px 2px rgba(0, 0, 0, 0.5)" : "none",
+          }}
         >
           <div className="font-medium truncate leading-tight">
             {draggedAgendamento.paciente?.nome || "Bloqueio"}
           </div>
           {draggedAgendamento.procedimento && (
-            <div className="opacity-75 truncate text-[10px] leading-tight">
+            <div
+              className="truncate text-[10px] leading-tight"
+              style={{ opacity: 0.9 }}
+            >
               {draggedAgendamento.procedimento.nome}
             </div>
           )}
-          <div className="text-[10px] mt-0.5">
+          <div className="text-[10px] mt-0.5 font-semibold">
             {canDrop ? "✓ Mover para cá" : "✗ Horário indisponível"}
           </div>
         </div>
       )}
     </div>
   );
-};
+}

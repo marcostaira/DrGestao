@@ -136,16 +136,31 @@ export const updateUserSchema = Joi.object({
 // ============================================================================
 
 export const createProfissionalSchema = Joi.object({
-  nome: Joi.string().trim().min(2).max(100).required(),
-  especialidade: Joi.string().max(100).optional().allow(""),
-  observacoes: Joi.string().max(500).optional().allow(""),
+  nome: Joi.string().required().trim().min(2).max(100).messages({
+    "string.empty": "Nome é obrigatório",
+    "string.min": "Nome deve ter pelo menos 2 caracteres",
+  }),
+  especialidade: Joi.string().optional().allow("", null).trim().max(100),
+  cor: Joi.string()
+    .optional()
+    .pattern(/^#[0-9A-Fa-f]{6}$/)
+    .messages({
+      "string.pattern.base": "Cor deve estar no formato hexadecimal (#RRGGBB)",
+    }),
+  observacoes: Joi.string().optional().allow("", null).trim().max(500),
 });
 
 export const updateProfissionalSchema = Joi.object({
-  nome: Joi.string().trim().min(2).max(100),
-  especialidade: Joi.string().max(100).allow(""),
-  observacoes: Joi.string().max(500).allow(""),
-  ativo: Joi.boolean(),
+  nome: Joi.string().optional().trim().min(2).max(100),
+  especialidade: Joi.string().optional().allow("", null).trim().max(100),
+  cor: Joi.string()
+    .optional()
+    .pattern(/^#[0-9A-Fa-f]{6}$/)
+    .messages({
+      "string.pattern.base": "Cor deve estar no formato hexadecimal (#RRGGBB)",
+    }),
+  observacoes: Joi.string().optional().allow("", null).trim().max(500),
+  ativo: Joi.boolean().optional(),
 });
 
 // ============================================================================

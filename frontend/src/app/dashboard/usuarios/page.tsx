@@ -19,13 +19,14 @@ import Badge from "@/components/ui/Badge";
 import Alert from "@/components/ui/Alert";
 
 export default function UsuariosPage() {
-  const { isAdmin } = useAuth();
+  const { isAdmin, user: loggedUser } = useAuth();
   const router = useRouter();
 
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [firstAdminId, setFirstAdminId] = useState<string | null>(null);
 
   // Modal states
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -55,6 +56,18 @@ export default function UsuariosPage() {
       setIsLoading(true);
       const data = await userService.getUsers();
       setUsuarios(data);
+
+      // Identificar o primeiro admin (criador do tenant)
+      const admins = data
+        .filter((u: Usuario) => u.tipo === TipoUsuario.ADMIN)
+        .sort(
+          (a: Usuario, b: Usuario) =>
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
+
+      if (admins.length > 0) {
+        setFirstAdminId(admins[0].id);
+      }
     } catch (err: any) {
       setError(err.response?.data?.error || "Erro ao carregar usuários");
     } finally {
@@ -147,6 +160,19 @@ export default function UsuariosPage() {
   };
 
   const handleToggleStatus = async (user: Usuario) => {
+    // Validações no frontend
+    if (user.id === loggedUser?.id) {
+      setError("Você não pode desativar seu próprio usuário");
+      setTimeout(() => setError(""), 3000);
+      return;
+    }
+
+    if (user.id === firstAdminId) {
+      setError("Não é possível desativar o administrador principal");
+      setTimeout(() => setError(""), 3000);
+      return;
+    }
+
     try {
       await userService.toggleUserStatus(user.id, !user.ativo);
       setSuccess(
@@ -157,6 +183,7 @@ export default function UsuariosPage() {
       setTimeout(() => setSuccess(""), 3000);
     } catch (err: any) {
       setError(err.response?.data?.error || "Erro ao alterar status");
+      setTimeout(() => setError(""), 3000);
     }
   };
 
@@ -192,38 +219,18 @@ export default function UsuariosPage() {
     {
       key: "actions",
       header: "Ações",
-      render: (user: Usuario) => (
-        <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-          <button
-            onClick={() => handleOpenModal(user)}
-            className="text-primary-600 hover:text-primary-800"
-            title="Editar"
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-              />
-            </svg>
-          </button>
+      render: (user: Usuario) => {
+        const isCurrentUser = user.id === loggedUser?.id;
+        const isFirstAdmin = user.id === firstAdminId;
+        const cannotToggle = isCurrentUser || isFirstAdmin;
 
-          <button
-            onClick={() => handleToggleStatus(user)}
-            className={
-              user.ativo
-                ? "text-yellow-600 hover:text-yellow-800"
-                : "text-green-600 hover:text-green-800"
-            }
-            title={user.ativo ? "Desativar" : "Ativar"}
-          >
-            {user.ativo ? (
+        return (
+          <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
+            <button
+              onClick={() => handleOpenModal(user)}
+              className="text-primary-600 hover:text-primary-800"
+              title="Editar"
+            >
               <svg
                 className="w-5 h-5"
                 fill="none"
@@ -234,10 +241,79 @@ export default function UsuariosPage() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                 />
               </svg>
-            ) : (
+            </button>
+
+            <button
+              onClick={() => handleToggleStatus(user)}
+              disabled={cannotToggle}
+              className={`transition-colors ${
+                cannotToggle
+                  ? "text-gray-300 cursor-not-allowed"
+                  : user.ativo
+                  ? "text-yellow-600 hover:text-yellow-800"
+                  : "text-green-600 hover:text-green-800"
+              }`}
+              title={
+                isCurrentUser
+                  ? "Você não pode desativar seu próprio usuário"
+                  : isFirstAdmin
+                  ? "Administrador principal não pode ser desativado"
+                  : user.ativo
+                  ? "Desativar"
+                  : "Ativar"
+              }
+            >
+              {user.ativo ? (
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              )}
+            </button>
+
+            <button
+              onClick={() => {
+                setDeletingUser(user);
+                setIsDeleteModalOpen(true);
+              }}
+              disabled={isFirstAdmin}
+              className={`transition-colors ${
+                isFirstAdmin
+                  ? "text-gray-300 cursor-not-allowed"
+                  : "text-red-600 hover:text-red-800"
+              }`}
+              title={
+                isFirstAdmin
+                  ? "Administrador principal não pode ser excluído"
+                  : "Excluir"
+              }
+            >
               <svg
                 className="w-5 h-5"
                 fill="none"
@@ -248,36 +324,13 @@ export default function UsuariosPage() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                 />
               </svg>
-            )}
-          </button>
-
-          <button
-            onClick={() => {
-              setDeletingUser(user);
-              setIsDeleteModalOpen(true);
-            }}
-            className="text-red-600 hover:text-red-800"
-            title="Excluir"
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-              />
-            </svg>
-          </button>
-        </div>
-      ),
+            </button>
+          </div>
+        );
+      },
     },
   ];
 

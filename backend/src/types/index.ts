@@ -231,12 +231,14 @@ export interface PacienteFilters extends PaginationParams {
 export interface CreateProfissionalData {
   nome: string;
   especialidade?: string;
+  cor?: string;
   observacoes?: string;
 }
 
 export interface UpdateProfissionalData {
   nome?: string;
   especialidade?: string;
+  cor?: string;
   observacoes?: string;
   ativo?: boolean;
 }

@@ -26,6 +26,9 @@ export class UsuarioService {
     // Verificar limite de usuários do plano
     const tenant = await prisma.tenant.findUnique({
       where: { id: tenantId },
+      include: {
+        plano: true,
+      },
     });
 
     if (!tenant) {
@@ -36,18 +39,10 @@ export class UsuarioService {
       where: { tenantId, ativo: true },
     });
 
-    const planLimits: { [key: string]: number } = {
-      basico: 2,
-      premium: 10,
-      enterprise: -1,
-    };
-
-    const limit = planLimits[tenant.plano] || 2;
-
-    if (limit !== -1 && usuariosAtivos >= limit) {
+    if (usuariosAtivos >= tenant.plano.usuarios) {
       throw new AppError(
-        `Limite de usuários ativos atingido para o plano ${tenant.plano}. Limite: ${limit}`,
-        402
+        `Limite de ${tenant.plano.usuarios} usuário(s) ativo(s) atingido para o plano ${tenant.plano.nome}.`,
+        403
       );
     }
 
@@ -207,40 +202,6 @@ export class UsuarioService {
   }
 
   // ==========================================================================
-  // DELETE USUARIO
-  // ==========================================================================
-
-  static async delete(tenantId: string, usuarioId: string) {
-    const existingUser = await prisma.usuario.findFirst({
-      where: { id: usuarioId, tenantId },
-    });
-
-    if (!existingUser) {
-      throw new AppError("Usuário não encontrado", 404);
-    }
-
-    // Não permitir excluir o último admin
-    if (existingUser.tipo === "ADMIN") {
-      const adminCount = await prisma.usuario.count({
-        where: { tenantId, tipo: "ADMIN", ativo: true },
-      });
-
-      if (adminCount <= 1) {
-        throw new AppError(
-          "Não é possível excluir o último administrador ativo",
-          400
-        );
-      }
-    }
-
-    // Soft delete (desativar)
-    await prisma.usuario.update({
-      where: { id: usuarioId },
-      data: { ativo: false },
-    });
-  }
-
-  // ==========================================================================
   // CHANGE PASSWORD
   // ==========================================================================
 
@@ -323,16 +284,86 @@ export class UsuarioService {
   }
 
   // ==========================================================================
-  // TOGGLE STATUS (Ativar/Desativar)
+  // DELETE USUARIO
   // ==========================================================================
 
-  static async toggleStatus(tenantId: string, usuarioId: string) {
+  static async delete(tenantId: string, usuarioId: string) {
     const existingUser = await prisma.usuario.findFirst({
       where: { id: usuarioId, tenantId },
     });
 
     if (!existingUser) {
       throw new AppError("Usuário não encontrado", 404);
+    }
+
+    // Não permitir excluir o primeiro usuário (admin criador do tenant)
+    const firstAdmin = await prisma.usuario.findFirst({
+      where: { tenantId, tipo: "ADMIN" },
+      orderBy: { createdAt: "asc" },
+    });
+
+    if (firstAdmin && firstAdmin.id === usuarioId) {
+      throw new AppError(
+        "Não é possível excluir o usuário administrador principal",
+        400
+      );
+    }
+
+    // Não permitir excluir o último admin ativo
+    if (existingUser.tipo === "ADMIN") {
+      const adminCount = await prisma.usuario.count({
+        where: { tenantId, tipo: "ADMIN", ativo: true },
+      });
+
+      if (adminCount <= 1) {
+        throw new AppError(
+          "Não é possível excluir o último administrador ativo",
+          400
+        );
+      }
+    }
+
+    // Soft delete (desativar)
+    await prisma.usuario.update({
+      where: { id: usuarioId },
+      data: { ativo: false },
+    });
+  }
+
+  // ==========================================================================
+  // TOGGLE STATUS (Ativar/Desativar)
+  // ==========================================================================
+
+  static async toggleStatus(
+    tenantId: string,
+    usuarioId: string,
+    currentUserId: string
+  ) {
+    const existingUser = await prisma.usuario.findFirst({
+      where: { id: usuarioId, tenantId },
+    });
+
+    if (!existingUser) {
+      throw new AppError("Usuário não encontrado", 404);
+    }
+
+    // Buscar o primeiro admin (criador do tenant)
+    const firstAdmin = await prisma.usuario.findFirst({
+      where: { tenantId, tipo: "ADMIN" },
+      orderBy: { createdAt: "asc" },
+    });
+
+    // Não permitir desativar o primeiro admin (criador do tenant)
+    if (firstAdmin && firstAdmin.id === usuarioId && existingUser.ativo) {
+      throw new AppError(
+        "Não é possível desativar o usuário administrador principal",
+        400
+      );
+    }
+
+    // Não permitir que o usuário desative a si mesmo
+    if (usuarioId === currentUserId) {
+      throw new AppError("Você não pode desativar seu próprio usuário", 400);
     }
 
     // Se está desativando um admin, verificar se não é o último

@@ -1733,15 +1733,15 @@ export namespace Prisma {
    */
 
   export type ProfissionalCountOutputType = {
+    pacientes: number
     agendamentos: number
     atendimentos: number
-    pacientes: number
   }
 
   export type ProfissionalCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    pacientes?: boolean | ProfissionalCountOutputTypeCountPacientesArgs
     agendamentos?: boolean | ProfissionalCountOutputTypeCountAgendamentosArgs
     atendimentos?: boolean | ProfissionalCountOutputTypeCountAtendimentosArgs
-    pacientes?: boolean | ProfissionalCountOutputTypeCountPacientesArgs
   }
 
   // Custom InputTypes
@@ -1758,6 +1758,13 @@ export namespace Prisma {
   /**
    * ProfissionalCountOutputType without action
    */
+  export type ProfissionalCountOutputTypeCountPacientesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PacienteWhereInput
+  }
+
+  /**
+   * ProfissionalCountOutputType without action
+   */
   export type ProfissionalCountOutputTypeCountAgendamentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AgendamentoWhereInput
   }
@@ -1767,13 +1774,6 @@ export namespace Prisma {
    */
   export type ProfissionalCountOutputTypeCountAtendimentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AtendimentoWhereInput
-  }
-
-  /**
-   * ProfissionalCountOutputType without action
-   */
-  export type ProfissionalCountOutputTypeCountPacientesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PacienteWhereInput
   }
 
 
@@ -3093,6 +3093,7 @@ export namespace Prisma {
     tenantId: string | null
     nome: string | null
     especialidade: string | null
+    cor: string | null
     observacoes: string | null
     ativo: boolean | null
     createdAt: Date | null
@@ -3104,6 +3105,7 @@ export namespace Prisma {
     tenantId: string | null
     nome: string | null
     especialidade: string | null
+    cor: string | null
     observacoes: string | null
     ativo: boolean | null
     createdAt: Date | null
@@ -3115,6 +3117,7 @@ export namespace Prisma {
     tenantId: number
     nome: number
     especialidade: number
+    cor: number
     observacoes: number
     ativo: number
     createdAt: number
@@ -3128,6 +3131,7 @@ export namespace Prisma {
     tenantId?: true
     nome?: true
     especialidade?: true
+    cor?: true
     observacoes?: true
     ativo?: true
     createdAt?: true
@@ -3139,6 +3143,7 @@ export namespace Prisma {
     tenantId?: true
     nome?: true
     especialidade?: true
+    cor?: true
     observacoes?: true
     ativo?: true
     createdAt?: true
@@ -3150,6 +3155,7 @@ export namespace Prisma {
     tenantId?: true
     nome?: true
     especialidade?: true
+    cor?: true
     observacoes?: true
     ativo?: true
     createdAt?: true
@@ -3234,6 +3240,7 @@ export namespace Prisma {
     tenantId: string
     nome: string
     especialidade: string | null
+    cor: string
     observacoes: string | null
     ativo: boolean
     createdAt: Date
@@ -3262,14 +3269,15 @@ export namespace Prisma {
     tenantId?: boolean
     nome?: boolean
     especialidade?: boolean
+    cor?: boolean
     observacoes?: boolean
     ativo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    pacientes?: boolean | Profissional$pacientesArgs<ExtArgs>
     agendamentos?: boolean | Profissional$agendamentosArgs<ExtArgs>
     atendimentos?: boolean | Profissional$atendimentosArgs<ExtArgs>
-    pacientes?: boolean | Profissional$pacientesArgs<ExtArgs>
-    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     _count?: boolean | ProfissionalCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["profissional"]>
 
@@ -3278,6 +3286,7 @@ export namespace Prisma {
     tenantId?: boolean
     nome?: boolean
     especialidade?: boolean
+    cor?: boolean
     observacoes?: boolean
     ativo?: boolean
     createdAt?: boolean
@@ -3290,6 +3299,7 @@ export namespace Prisma {
     tenantId?: boolean
     nome?: boolean
     especialidade?: boolean
+    cor?: boolean
     observacoes?: boolean
     ativo?: boolean
     createdAt?: boolean
@@ -3302,18 +3312,19 @@ export namespace Prisma {
     tenantId?: boolean
     nome?: boolean
     especialidade?: boolean
+    cor?: boolean
     observacoes?: boolean
     ativo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ProfissionalOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "nome" | "especialidade" | "observacoes" | "ativo" | "createdAt" | "updatedAt", ExtArgs["result"]["profissional"]>
+  export type ProfissionalOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "nome" | "especialidade" | "cor" | "observacoes" | "ativo" | "createdAt" | "updatedAt", ExtArgs["result"]["profissional"]>
   export type ProfissionalInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    pacientes?: boolean | Profissional$pacientesArgs<ExtArgs>
     agendamentos?: boolean | Profissional$agendamentosArgs<ExtArgs>
     atendimentos?: boolean | Profissional$atendimentosArgs<ExtArgs>
-    pacientes?: boolean | Profissional$pacientesArgs<ExtArgs>
-    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     _count?: boolean | ProfissionalCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProfissionalIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3326,16 +3337,17 @@ export namespace Prisma {
   export type $ProfissionalPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Profissional"
     objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>
+      pacientes: Prisma.$PacientePayload<ExtArgs>[]
       agendamentos: Prisma.$AgendamentoPayload<ExtArgs>[]
       atendimentos: Prisma.$AtendimentoPayload<ExtArgs>[]
-      pacientes: Prisma.$PacientePayload<ExtArgs>[]
-      tenant: Prisma.$TenantPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       tenantId: string
       nome: string
       especialidade: string | null
+      cor: string
       observacoes: string | null
       ativo: boolean
       createdAt: Date
@@ -3734,10 +3746,10 @@ export namespace Prisma {
    */
   export interface Prisma__ProfissionalClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TenantDefaultArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    pacientes<T extends Profissional$pacientesArgs<ExtArgs> = {}>(args?: Subset<T, Profissional$pacientesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PacientePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     agendamentos<T extends Profissional$agendamentosArgs<ExtArgs> = {}>(args?: Subset<T, Profissional$agendamentosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgendamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     atendimentos<T extends Profissional$atendimentosArgs<ExtArgs> = {}>(args?: Subset<T, Profissional$atendimentosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AtendimentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    pacientes<T extends Profissional$pacientesArgs<ExtArgs> = {}>(args?: Subset<T, Profissional$pacientesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PacientePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TenantDefaultArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3771,6 +3783,7 @@ export namespace Prisma {
     readonly tenantId: FieldRef<"Profissional", 'String'>
     readonly nome: FieldRef<"Profissional", 'String'>
     readonly especialidade: FieldRef<"Profissional", 'String'>
+    readonly cor: FieldRef<"Profissional", 'String'>
     readonly observacoes: FieldRef<"Profissional", 'String'>
     readonly ativo: FieldRef<"Profissional", 'Boolean'>
     readonly createdAt: FieldRef<"Profissional", 'DateTime'>
@@ -4171,6 +4184,30 @@ export namespace Prisma {
   }
 
   /**
+   * Profissional.pacientes
+   */
+  export type Profissional$pacientesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Paciente
+     */
+    select?: PacienteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Paciente
+     */
+    omit?: PacienteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PacienteInclude<ExtArgs> | null
+    where?: PacienteWhereInput
+    orderBy?: PacienteOrderByWithRelationInput | PacienteOrderByWithRelationInput[]
+    cursor?: PacienteWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PacienteScalarFieldEnum | PacienteScalarFieldEnum[]
+  }
+
+  /**
    * Profissional.agendamentos
    */
   export type Profissional$agendamentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4216,30 +4253,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AtendimentoScalarFieldEnum | AtendimentoScalarFieldEnum[]
-  }
-
-  /**
-   * Profissional.pacientes
-   */
-  export type Profissional$pacientesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Paciente
-     */
-    select?: PacienteSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Paciente
-     */
-    omit?: PacienteOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PacienteInclude<ExtArgs> | null
-    where?: PacienteWhereInput
-    orderBy?: PacienteOrderByWithRelationInput | PacienteOrderByWithRelationInput[]
-    cursor?: PacienteWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PacienteScalarFieldEnum | PacienteScalarFieldEnum[]
   }
 
   /**
@@ -13953,6 +13966,7 @@ export namespace Prisma {
     tenantId: 'tenantId',
     nome: 'nome',
     especialidade: 'especialidade',
+    cor: 'cor',
     observacoes: 'observacoes',
     ativo: 'ativo',
     createdAt: 'createdAt',
@@ -14369,14 +14383,15 @@ export namespace Prisma {
     tenantId?: StringFilter<"Profissional"> | string
     nome?: StringFilter<"Profissional"> | string
     especialidade?: StringNullableFilter<"Profissional"> | string | null
+    cor?: StringFilter<"Profissional"> | string
     observacoes?: StringNullableFilter<"Profissional"> | string | null
     ativo?: BoolFilter<"Profissional"> | boolean
     createdAt?: DateTimeFilter<"Profissional"> | Date | string
     updatedAt?: DateTimeFilter<"Profissional"> | Date | string
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
+    pacientes?: PacienteListRelationFilter
     agendamentos?: AgendamentoListRelationFilter
     atendimentos?: AtendimentoListRelationFilter
-    pacientes?: PacienteListRelationFilter
-    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
   }
 
   export type ProfissionalOrderByWithRelationInput = {
@@ -14384,14 +14399,15 @@ export namespace Prisma {
     tenantId?: SortOrder
     nome?: SortOrder
     especialidade?: SortOrderInput | SortOrder
+    cor?: SortOrder
     observacoes?: SortOrderInput | SortOrder
     ativo?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    tenant?: TenantOrderByWithRelationInput
+    pacientes?: PacienteOrderByRelationAggregateInput
     agendamentos?: AgendamentoOrderByRelationAggregateInput
     atendimentos?: AtendimentoOrderByRelationAggregateInput
-    pacientes?: PacienteOrderByRelationAggregateInput
-    tenant?: TenantOrderByWithRelationInput
   }
 
   export type ProfissionalWhereUniqueInput = Prisma.AtLeast<{
@@ -14402,14 +14418,15 @@ export namespace Prisma {
     tenantId?: StringFilter<"Profissional"> | string
     nome?: StringFilter<"Profissional"> | string
     especialidade?: StringNullableFilter<"Profissional"> | string | null
+    cor?: StringFilter<"Profissional"> | string
     observacoes?: StringNullableFilter<"Profissional"> | string | null
     ativo?: BoolFilter<"Profissional"> | boolean
     createdAt?: DateTimeFilter<"Profissional"> | Date | string
     updatedAt?: DateTimeFilter<"Profissional"> | Date | string
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
+    pacientes?: PacienteListRelationFilter
     agendamentos?: AgendamentoListRelationFilter
     atendimentos?: AtendimentoListRelationFilter
-    pacientes?: PacienteListRelationFilter
-    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
   }, "id">
 
   export type ProfissionalOrderByWithAggregationInput = {
@@ -14417,6 +14434,7 @@ export namespace Prisma {
     tenantId?: SortOrder
     nome?: SortOrder
     especialidade?: SortOrderInput | SortOrder
+    cor?: SortOrder
     observacoes?: SortOrderInput | SortOrder
     ativo?: SortOrder
     createdAt?: SortOrder
@@ -14434,6 +14452,7 @@ export namespace Prisma {
     tenantId?: StringWithAggregatesFilter<"Profissional"> | string
     nome?: StringWithAggregatesFilter<"Profissional"> | string
     especialidade?: StringNullableWithAggregatesFilter<"Profissional"> | string | null
+    cor?: StringWithAggregatesFilter<"Profissional"> | string
     observacoes?: StringNullableWithAggregatesFilter<"Profissional"> | string | null
     ativo?: BoolWithAggregatesFilter<"Profissional"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Profissional"> | Date | string
@@ -15295,14 +15314,15 @@ export namespace Prisma {
     id?: string
     nome: string
     especialidade?: string | null
+    cor?: string
     observacoes?: string | null
     ativo?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutProfissionaisInput
+    pacientes?: PacienteCreateNestedManyWithoutProfissionalInput
     agendamentos?: AgendamentoCreateNestedManyWithoutProfissionalInput
     atendimentos?: AtendimentoCreateNestedManyWithoutProfissionalInput
-    pacientes?: PacienteCreateNestedManyWithoutProfissionalInput
-    tenant: TenantCreateNestedOneWithoutProfissionaisInput
   }
 
   export type ProfissionalUncheckedCreateInput = {
@@ -15310,27 +15330,29 @@ export namespace Prisma {
     tenantId: string
     nome: string
     especialidade?: string | null
+    cor?: string
     observacoes?: string | null
     ativo?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    pacientes?: PacienteUncheckedCreateNestedManyWithoutProfissionalInput
     agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutProfissionalInput
     atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutProfissionalInput
-    pacientes?: PacienteUncheckedCreateNestedManyWithoutProfissionalInput
   }
 
   export type ProfissionalUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
     especialidade?: NullableStringFieldUpdateOperationsInput | string | null
+    cor?: StringFieldUpdateOperationsInput | string
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     ativo?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutProfissionaisNestedInput
+    pacientes?: PacienteUpdateManyWithoutProfissionalNestedInput
     agendamentos?: AgendamentoUpdateManyWithoutProfissionalNestedInput
     atendimentos?: AtendimentoUpdateManyWithoutProfissionalNestedInput
-    pacientes?: PacienteUpdateManyWithoutProfissionalNestedInput
-    tenant?: TenantUpdateOneRequiredWithoutProfissionaisNestedInput
   }
 
   export type ProfissionalUncheckedUpdateInput = {
@@ -15338,13 +15360,14 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
     especialidade?: NullableStringFieldUpdateOperationsInput | string | null
+    cor?: StringFieldUpdateOperationsInput | string
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     ativo?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    pacientes?: PacienteUncheckedUpdateManyWithoutProfissionalNestedInput
     agendamentos?: AgendamentoUncheckedUpdateManyWithoutProfissionalNestedInput
     atendimentos?: AtendimentoUncheckedUpdateManyWithoutProfissionalNestedInput
-    pacientes?: PacienteUncheckedUpdateManyWithoutProfissionalNestedInput
   }
 
   export type ProfissionalCreateManyInput = {
@@ -15352,6 +15375,7 @@ export namespace Prisma {
     tenantId: string
     nome: string
     especialidade?: string | null
+    cor?: string
     observacoes?: string | null
     ativo?: boolean
     createdAt?: Date | string
@@ -15362,6 +15386,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
     especialidade?: NullableStringFieldUpdateOperationsInput | string | null
+    cor?: StringFieldUpdateOperationsInput | string
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     ativo?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15373,6 +15398,7 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
     especialidade?: NullableStringFieldUpdateOperationsInput | string | null
+    cor?: StringFieldUpdateOperationsInput | string
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     ativo?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16385,6 +16411,12 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type PacienteListRelationFilter = {
+    every?: PacienteWhereInput
+    some?: PacienteWhereInput
+    none?: PacienteWhereInput
+  }
+
   export type AgendamentoListRelationFilter = {
     every?: AgendamentoWhereInput
     some?: AgendamentoWhereInput
@@ -16397,15 +16429,13 @@ export namespace Prisma {
     none?: AtendimentoWhereInput
   }
 
-  export type PacienteListRelationFilter = {
-    every?: PacienteWhereInput
-    some?: PacienteWhereInput
-    none?: PacienteWhereInput
-  }
-
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
+  }
+
+  export type PacienteOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type AgendamentoOrderByRelationAggregateInput = {
@@ -16416,15 +16446,12 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type PacienteOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type ProfissionalCountOrderByAggregateInput = {
     id?: SortOrder
     tenantId?: SortOrder
     nome?: SortOrder
     especialidade?: SortOrder
+    cor?: SortOrder
     observacoes?: SortOrder
     ativo?: SortOrder
     createdAt?: SortOrder
@@ -16436,6 +16463,7 @@ export namespace Prisma {
     tenantId?: SortOrder
     nome?: SortOrder
     especialidade?: SortOrder
+    cor?: SortOrder
     observacoes?: SortOrder
     ativo?: SortOrder
     createdAt?: SortOrder
@@ -16447,6 +16475,7 @@ export namespace Prisma {
     tenantId?: SortOrder
     nome?: SortOrder
     especialidade?: SortOrder
+    cor?: SortOrder
     observacoes?: SortOrder
     ativo?: SortOrder
     createdAt?: SortOrder
@@ -17133,6 +17162,19 @@ export namespace Prisma {
     update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutUsuariosInput, TenantUpdateWithoutUsuariosInput>, TenantUncheckedUpdateWithoutUsuariosInput>
   }
 
+  export type TenantCreateNestedOneWithoutProfissionaisInput = {
+    create?: XOR<TenantCreateWithoutProfissionaisInput, TenantUncheckedCreateWithoutProfissionaisInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutProfissionaisInput
+    connect?: TenantWhereUniqueInput
+  }
+
+  export type PacienteCreateNestedManyWithoutProfissionalInput = {
+    create?: XOR<PacienteCreateWithoutProfissionalInput, PacienteUncheckedCreateWithoutProfissionalInput> | PacienteCreateWithoutProfissionalInput[] | PacienteUncheckedCreateWithoutProfissionalInput[]
+    connectOrCreate?: PacienteCreateOrConnectWithoutProfissionalInput | PacienteCreateOrConnectWithoutProfissionalInput[]
+    createMany?: PacienteCreateManyProfissionalInputEnvelope
+    connect?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
+  }
+
   export type AgendamentoCreateNestedManyWithoutProfissionalInput = {
     create?: XOR<AgendamentoCreateWithoutProfissionalInput, AgendamentoUncheckedCreateWithoutProfissionalInput> | AgendamentoCreateWithoutProfissionalInput[] | AgendamentoUncheckedCreateWithoutProfissionalInput[]
     connectOrCreate?: AgendamentoCreateOrConnectWithoutProfissionalInput | AgendamentoCreateOrConnectWithoutProfissionalInput[]
@@ -17147,17 +17189,11 @@ export namespace Prisma {
     connect?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
   }
 
-  export type PacienteCreateNestedManyWithoutProfissionalInput = {
+  export type PacienteUncheckedCreateNestedManyWithoutProfissionalInput = {
     create?: XOR<PacienteCreateWithoutProfissionalInput, PacienteUncheckedCreateWithoutProfissionalInput> | PacienteCreateWithoutProfissionalInput[] | PacienteUncheckedCreateWithoutProfissionalInput[]
     connectOrCreate?: PacienteCreateOrConnectWithoutProfissionalInput | PacienteCreateOrConnectWithoutProfissionalInput[]
     createMany?: PacienteCreateManyProfissionalInputEnvelope
     connect?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
-  }
-
-  export type TenantCreateNestedOneWithoutProfissionaisInput = {
-    create?: XOR<TenantCreateWithoutProfissionaisInput, TenantUncheckedCreateWithoutProfissionaisInput>
-    connectOrCreate?: TenantCreateOrConnectWithoutProfissionaisInput
-    connect?: TenantWhereUniqueInput
   }
 
   export type AgendamentoUncheckedCreateNestedManyWithoutProfissionalInput = {
@@ -17174,15 +17210,30 @@ export namespace Prisma {
     connect?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
   }
 
-  export type PacienteUncheckedCreateNestedManyWithoutProfissionalInput = {
-    create?: XOR<PacienteCreateWithoutProfissionalInput, PacienteUncheckedCreateWithoutProfissionalInput> | PacienteCreateWithoutProfissionalInput[] | PacienteUncheckedCreateWithoutProfissionalInput[]
-    connectOrCreate?: PacienteCreateOrConnectWithoutProfissionalInput | PacienteCreateOrConnectWithoutProfissionalInput[]
-    createMany?: PacienteCreateManyProfissionalInputEnvelope
-    connect?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
-  }
-
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
+  }
+
+  export type TenantUpdateOneRequiredWithoutProfissionaisNestedInput = {
+    create?: XOR<TenantCreateWithoutProfissionaisInput, TenantUncheckedCreateWithoutProfissionaisInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutProfissionaisInput
+    upsert?: TenantUpsertWithoutProfissionaisInput
+    connect?: TenantWhereUniqueInput
+    update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutProfissionaisInput, TenantUpdateWithoutProfissionaisInput>, TenantUncheckedUpdateWithoutProfissionaisInput>
+  }
+
+  export type PacienteUpdateManyWithoutProfissionalNestedInput = {
+    create?: XOR<PacienteCreateWithoutProfissionalInput, PacienteUncheckedCreateWithoutProfissionalInput> | PacienteCreateWithoutProfissionalInput[] | PacienteUncheckedCreateWithoutProfissionalInput[]
+    connectOrCreate?: PacienteCreateOrConnectWithoutProfissionalInput | PacienteCreateOrConnectWithoutProfissionalInput[]
+    upsert?: PacienteUpsertWithWhereUniqueWithoutProfissionalInput | PacienteUpsertWithWhereUniqueWithoutProfissionalInput[]
+    createMany?: PacienteCreateManyProfissionalInputEnvelope
+    set?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
+    disconnect?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
+    delete?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
+    connect?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
+    update?: PacienteUpdateWithWhereUniqueWithoutProfissionalInput | PacienteUpdateWithWhereUniqueWithoutProfissionalInput[]
+    updateMany?: PacienteUpdateManyWithWhereWithoutProfissionalInput | PacienteUpdateManyWithWhereWithoutProfissionalInput[]
+    deleteMany?: PacienteScalarWhereInput | PacienteScalarWhereInput[]
   }
 
   export type AgendamentoUpdateManyWithoutProfissionalNestedInput = {
@@ -17213,7 +17264,7 @@ export namespace Prisma {
     deleteMany?: AtendimentoScalarWhereInput | AtendimentoScalarWhereInput[]
   }
 
-  export type PacienteUpdateManyWithoutProfissionalNestedInput = {
+  export type PacienteUncheckedUpdateManyWithoutProfissionalNestedInput = {
     create?: XOR<PacienteCreateWithoutProfissionalInput, PacienteUncheckedCreateWithoutProfissionalInput> | PacienteCreateWithoutProfissionalInput[] | PacienteUncheckedCreateWithoutProfissionalInput[]
     connectOrCreate?: PacienteCreateOrConnectWithoutProfissionalInput | PacienteCreateOrConnectWithoutProfissionalInput[]
     upsert?: PacienteUpsertWithWhereUniqueWithoutProfissionalInput | PacienteUpsertWithWhereUniqueWithoutProfissionalInput[]
@@ -17225,14 +17276,6 @@ export namespace Prisma {
     update?: PacienteUpdateWithWhereUniqueWithoutProfissionalInput | PacienteUpdateWithWhereUniqueWithoutProfissionalInput[]
     updateMany?: PacienteUpdateManyWithWhereWithoutProfissionalInput | PacienteUpdateManyWithWhereWithoutProfissionalInput[]
     deleteMany?: PacienteScalarWhereInput | PacienteScalarWhereInput[]
-  }
-
-  export type TenantUpdateOneRequiredWithoutProfissionaisNestedInput = {
-    create?: XOR<TenantCreateWithoutProfissionaisInput, TenantUncheckedCreateWithoutProfissionaisInput>
-    connectOrCreate?: TenantCreateOrConnectWithoutProfissionaisInput
-    upsert?: TenantUpsertWithoutProfissionaisInput
-    connect?: TenantWhereUniqueInput
-    update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutProfissionaisInput, TenantUpdateWithoutProfissionaisInput>, TenantUncheckedUpdateWithoutProfissionaisInput>
   }
 
   export type AgendamentoUncheckedUpdateManyWithoutProfissionalNestedInput = {
@@ -17261,20 +17304,6 @@ export namespace Prisma {
     update?: AtendimentoUpdateWithWhereUniqueWithoutProfissionalInput | AtendimentoUpdateWithWhereUniqueWithoutProfissionalInput[]
     updateMany?: AtendimentoUpdateManyWithWhereWithoutProfissionalInput | AtendimentoUpdateManyWithWhereWithoutProfissionalInput[]
     deleteMany?: AtendimentoScalarWhereInput | AtendimentoScalarWhereInput[]
-  }
-
-  export type PacienteUncheckedUpdateManyWithoutProfissionalNestedInput = {
-    create?: XOR<PacienteCreateWithoutProfissionalInput, PacienteUncheckedCreateWithoutProfissionalInput> | PacienteCreateWithoutProfissionalInput[] | PacienteUncheckedCreateWithoutProfissionalInput[]
-    connectOrCreate?: PacienteCreateOrConnectWithoutProfissionalInput | PacienteCreateOrConnectWithoutProfissionalInput[]
-    upsert?: PacienteUpsertWithWhereUniqueWithoutProfissionalInput | PacienteUpsertWithWhereUniqueWithoutProfissionalInput[]
-    createMany?: PacienteCreateManyProfissionalInputEnvelope
-    set?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
-    disconnect?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
-    delete?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
-    connect?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
-    update?: PacienteUpdateWithWhereUniqueWithoutProfissionalInput | PacienteUpdateWithWhereUniqueWithoutProfissionalInput[]
-    updateMany?: PacienteUpdateManyWithWhereWithoutProfissionalInput | PacienteUpdateManyWithWhereWithoutProfissionalInput[]
-    deleteMany?: PacienteScalarWhereInput | PacienteScalarWhereInput[]
   }
 
   export type TenantCreateNestedOneWithoutPacientesInput = {
@@ -18382,6 +18411,109 @@ export namespace Prisma {
     whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
   }
 
+  export type TenantCreateWithoutProfissionaisInput = {
+    id?: string
+    nome: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    plano: PlanoCreateNestedOneWithoutTenantsInput
+    agendamentos?: AgendamentoCreateNestedManyWithoutTenantInput
+    atendimentos?: AtendimentoCreateNestedManyWithoutTenantInput
+    pacientes?: PacienteCreateNestedManyWithoutTenantInput
+    procedimentos?: ProcedimentoCreateNestedManyWithoutTenantInput
+    usuarios?: UsuarioCreateNestedManyWithoutTenantInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateWithoutProfissionaisInput = {
+    id?: string
+    nome: string
+    planoId: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutTenantInput
+    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutTenantInput
+    pacientes?: PacienteUncheckedCreateNestedManyWithoutTenantInput
+    procedimentos?: ProcedimentoUncheckedCreateNestedManyWithoutTenantInput
+    usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
+  }
+
+  export type TenantCreateOrConnectWithoutProfissionaisInput = {
+    where: TenantWhereUniqueInput
+    create: XOR<TenantCreateWithoutProfissionaisInput, TenantUncheckedCreateWithoutProfissionaisInput>
+  }
+
+  export type PacienteCreateWithoutProfissionalInput = {
+    id?: string
+    nome: string
+    cpf?: string | null
+    dataNascimento?: Date | string | null
+    telefone: string
+    telefone2?: string | null
+    email?: string | null
+    cep?: string | null
+    logradouro?: string | null
+    numero?: string | null
+    complemento?: string | null
+    bairro?: string | null
+    cidade?: string | null
+    estado?: string | null
+    alergias?: string | null
+    menorIdade?: boolean
+    responsavelNome?: string | null
+    responsavelCpf?: string | null
+    responsavelTelefone?: string | null
+    responsavelParentesco?: string | null
+    observacoes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutPacientesInput
+    agendamentos?: AgendamentoCreateNestedManyWithoutPacienteInput
+    atendimentos?: AtendimentoCreateNestedManyWithoutPacienteInput
+  }
+
+  export type PacienteUncheckedCreateWithoutProfissionalInput = {
+    id?: string
+    tenantId: string
+    nome: string
+    cpf?: string | null
+    dataNascimento?: Date | string | null
+    telefone: string
+    telefone2?: string | null
+    email?: string | null
+    cep?: string | null
+    logradouro?: string | null
+    numero?: string | null
+    complemento?: string | null
+    bairro?: string | null
+    cidade?: string | null
+    estado?: string | null
+    alergias?: string | null
+    menorIdade?: boolean
+    responsavelNome?: string | null
+    responsavelCpf?: string | null
+    responsavelTelefone?: string | null
+    responsavelParentesco?: string | null
+    observacoes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutPacienteInput
+    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutPacienteInput
+  }
+
+  export type PacienteCreateOrConnectWithoutProfissionalInput = {
+    where: PacienteWhereUniqueInput
+    create: XOR<PacienteCreateWithoutProfissionalInput, PacienteUncheckedCreateWithoutProfissionalInput>
+  }
+
+  export type PacienteCreateManyProfissionalInputEnvelope = {
+    data: PacienteCreateManyProfissionalInput | PacienteCreateManyProfissionalInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AgendamentoCreateWithoutProfissionalInput = {
     id?: string
     dataHora: Date | string
@@ -18456,107 +18588,92 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type PacienteCreateWithoutProfissionalInput = {
-    id?: string
-    nome: string
-    cpf?: string | null
-    dataNascimento?: Date | string | null
-    telefone: string
-    telefone2?: string | null
-    email?: string | null
-    cep?: string | null
-    logradouro?: string | null
-    numero?: string | null
-    complemento?: string | null
-    bairro?: string | null
-    cidade?: string | null
-    estado?: string | null
-    alergias?: string | null
-    menorIdade?: boolean
-    responsavelNome?: string | null
-    responsavelCpf?: string | null
-    responsavelTelefone?: string | null
-    responsavelParentesco?: string | null
-    observacoes?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    tenant: TenantCreateNestedOneWithoutPacientesInput
-    agendamentos?: AgendamentoCreateNestedManyWithoutPacienteInput
-    atendimentos?: AtendimentoCreateNestedManyWithoutPacienteInput
+  export type TenantUpsertWithoutProfissionaisInput = {
+    update: XOR<TenantUpdateWithoutProfissionaisInput, TenantUncheckedUpdateWithoutProfissionaisInput>
+    create: XOR<TenantCreateWithoutProfissionaisInput, TenantUncheckedCreateWithoutProfissionaisInput>
+    where?: TenantWhereInput
   }
 
-  export type PacienteUncheckedCreateWithoutProfissionalInput = {
-    id?: string
-    tenantId: string
-    nome: string
-    cpf?: string | null
-    dataNascimento?: Date | string | null
-    telefone: string
-    telefone2?: string | null
-    email?: string | null
-    cep?: string | null
-    logradouro?: string | null
-    numero?: string | null
-    complemento?: string | null
-    bairro?: string | null
-    cidade?: string | null
-    estado?: string | null
-    alergias?: string | null
-    menorIdade?: boolean
-    responsavelNome?: string | null
-    responsavelCpf?: string | null
-    responsavelTelefone?: string | null
-    responsavelParentesco?: string | null
-    observacoes?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutPacienteInput
-    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutPacienteInput
+  export type TenantUpdateToOneWithWhereWithoutProfissionaisInput = {
+    where?: TenantWhereInput
+    data: XOR<TenantUpdateWithoutProfissionaisInput, TenantUncheckedUpdateWithoutProfissionaisInput>
   }
 
-  export type PacienteCreateOrConnectWithoutProfissionalInput = {
+  export type TenantUpdateWithoutProfissionaisInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    plano?: PlanoUpdateOneRequiredWithoutTenantsNestedInput
+    agendamentos?: AgendamentoUpdateManyWithoutTenantNestedInput
+    atendimentos?: AtendimentoUpdateManyWithoutTenantNestedInput
+    pacientes?: PacienteUpdateManyWithoutTenantNestedInput
+    procedimentos?: ProcedimentoUpdateManyWithoutTenantNestedInput
+    usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateWithoutProfissionaisInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    planoId?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUncheckedUpdateManyWithoutTenantNestedInput
+    atendimentos?: AtendimentoUncheckedUpdateManyWithoutTenantNestedInput
+    pacientes?: PacienteUncheckedUpdateManyWithoutTenantNestedInput
+    procedimentos?: ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput
+    usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
+  }
+
+  export type PacienteUpsertWithWhereUniqueWithoutProfissionalInput = {
     where: PacienteWhereUniqueInput
+    update: XOR<PacienteUpdateWithoutProfissionalInput, PacienteUncheckedUpdateWithoutProfissionalInput>
     create: XOR<PacienteCreateWithoutProfissionalInput, PacienteUncheckedCreateWithoutProfissionalInput>
   }
 
-  export type PacienteCreateManyProfissionalInputEnvelope = {
-    data: PacienteCreateManyProfissionalInput | PacienteCreateManyProfissionalInput[]
-    skipDuplicates?: boolean
+  export type PacienteUpdateWithWhereUniqueWithoutProfissionalInput = {
+    where: PacienteWhereUniqueInput
+    data: XOR<PacienteUpdateWithoutProfissionalInput, PacienteUncheckedUpdateWithoutProfissionalInput>
   }
 
-  export type TenantCreateWithoutProfissionaisInput = {
-    id?: string
-    nome: string
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    plano: PlanoCreateNestedOneWithoutTenantsInput
-    agendamentos?: AgendamentoCreateNestedManyWithoutTenantInput
-    atendimentos?: AtendimentoCreateNestedManyWithoutTenantInput
-    pacientes?: PacienteCreateNestedManyWithoutTenantInput
-    procedimentos?: ProcedimentoCreateNestedManyWithoutTenantInput
-    usuarios?: UsuarioCreateNestedManyWithoutTenantInput
-    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
+  export type PacienteUpdateManyWithWhereWithoutProfissionalInput = {
+    where: PacienteScalarWhereInput
+    data: XOR<PacienteUpdateManyMutationInput, PacienteUncheckedUpdateManyWithoutProfissionalInput>
   }
 
-  export type TenantUncheckedCreateWithoutProfissionaisInput = {
-    id?: string
-    nome: string
-    planoId: string
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutTenantInput
-    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutTenantInput
-    pacientes?: PacienteUncheckedCreateNestedManyWithoutTenantInput
-    procedimentos?: ProcedimentoUncheckedCreateNestedManyWithoutTenantInput
-    usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
-    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
-  }
-
-  export type TenantCreateOrConnectWithoutProfissionaisInput = {
-    where: TenantWhereUniqueInput
-    create: XOR<TenantCreateWithoutProfissionaisInput, TenantUncheckedCreateWithoutProfissionaisInput>
+  export type PacienteScalarWhereInput = {
+    AND?: PacienteScalarWhereInput | PacienteScalarWhereInput[]
+    OR?: PacienteScalarWhereInput[]
+    NOT?: PacienteScalarWhereInput | PacienteScalarWhereInput[]
+    id?: StringFilter<"Paciente"> | string
+    tenantId?: StringFilter<"Paciente"> | string
+    profissionalId?: StringNullableFilter<"Paciente"> | string | null
+    nome?: StringFilter<"Paciente"> | string
+    cpf?: StringNullableFilter<"Paciente"> | string | null
+    dataNascimento?: DateTimeNullableFilter<"Paciente"> | Date | string | null
+    telefone?: StringFilter<"Paciente"> | string
+    telefone2?: StringNullableFilter<"Paciente"> | string | null
+    email?: StringNullableFilter<"Paciente"> | string | null
+    cep?: StringNullableFilter<"Paciente"> | string | null
+    logradouro?: StringNullableFilter<"Paciente"> | string | null
+    numero?: StringNullableFilter<"Paciente"> | string | null
+    complemento?: StringNullableFilter<"Paciente"> | string | null
+    bairro?: StringNullableFilter<"Paciente"> | string | null
+    cidade?: StringNullableFilter<"Paciente"> | string | null
+    estado?: StringNullableFilter<"Paciente"> | string | null
+    alergias?: StringNullableFilter<"Paciente"> | string | null
+    menorIdade?: BoolFilter<"Paciente"> | boolean
+    responsavelNome?: StringNullableFilter<"Paciente"> | string | null
+    responsavelCpf?: StringNullableFilter<"Paciente"> | string | null
+    responsavelTelefone?: StringNullableFilter<"Paciente"> | string | null
+    responsavelParentesco?: StringNullableFilter<"Paciente"> | string | null
+    observacoes?: StringNullableFilter<"Paciente"> | string | null
+    createdAt?: DateTimeFilter<"Paciente"> | Date | string
+    updatedAt?: DateTimeFilter<"Paciente"> | Date | string
   }
 
   export type AgendamentoUpsertWithWhereUniqueWithoutProfissionalInput = {
@@ -18625,94 +18742,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Atendimento"> | Date | string
   }
 
-  export type PacienteUpsertWithWhereUniqueWithoutProfissionalInput = {
-    where: PacienteWhereUniqueInput
-    update: XOR<PacienteUpdateWithoutProfissionalInput, PacienteUncheckedUpdateWithoutProfissionalInput>
-    create: XOR<PacienteCreateWithoutProfissionalInput, PacienteUncheckedCreateWithoutProfissionalInput>
-  }
-
-  export type PacienteUpdateWithWhereUniqueWithoutProfissionalInput = {
-    where: PacienteWhereUniqueInput
-    data: XOR<PacienteUpdateWithoutProfissionalInput, PacienteUncheckedUpdateWithoutProfissionalInput>
-  }
-
-  export type PacienteUpdateManyWithWhereWithoutProfissionalInput = {
-    where: PacienteScalarWhereInput
-    data: XOR<PacienteUpdateManyMutationInput, PacienteUncheckedUpdateManyWithoutProfissionalInput>
-  }
-
-  export type PacienteScalarWhereInput = {
-    AND?: PacienteScalarWhereInput | PacienteScalarWhereInput[]
-    OR?: PacienteScalarWhereInput[]
-    NOT?: PacienteScalarWhereInput | PacienteScalarWhereInput[]
-    id?: StringFilter<"Paciente"> | string
-    tenantId?: StringFilter<"Paciente"> | string
-    profissionalId?: StringNullableFilter<"Paciente"> | string | null
-    nome?: StringFilter<"Paciente"> | string
-    cpf?: StringNullableFilter<"Paciente"> | string | null
-    dataNascimento?: DateTimeNullableFilter<"Paciente"> | Date | string | null
-    telefone?: StringFilter<"Paciente"> | string
-    telefone2?: StringNullableFilter<"Paciente"> | string | null
-    email?: StringNullableFilter<"Paciente"> | string | null
-    cep?: StringNullableFilter<"Paciente"> | string | null
-    logradouro?: StringNullableFilter<"Paciente"> | string | null
-    numero?: StringNullableFilter<"Paciente"> | string | null
-    complemento?: StringNullableFilter<"Paciente"> | string | null
-    bairro?: StringNullableFilter<"Paciente"> | string | null
-    cidade?: StringNullableFilter<"Paciente"> | string | null
-    estado?: StringNullableFilter<"Paciente"> | string | null
-    alergias?: StringNullableFilter<"Paciente"> | string | null
-    menorIdade?: BoolFilter<"Paciente"> | boolean
-    responsavelNome?: StringNullableFilter<"Paciente"> | string | null
-    responsavelCpf?: StringNullableFilter<"Paciente"> | string | null
-    responsavelTelefone?: StringNullableFilter<"Paciente"> | string | null
-    responsavelParentesco?: StringNullableFilter<"Paciente"> | string | null
-    observacoes?: StringNullableFilter<"Paciente"> | string | null
-    createdAt?: DateTimeFilter<"Paciente"> | Date | string
-    updatedAt?: DateTimeFilter<"Paciente"> | Date | string
-  }
-
-  export type TenantUpsertWithoutProfissionaisInput = {
-    update: XOR<TenantUpdateWithoutProfissionaisInput, TenantUncheckedUpdateWithoutProfissionaisInput>
-    create: XOR<TenantCreateWithoutProfissionaisInput, TenantUncheckedCreateWithoutProfissionaisInput>
-    where?: TenantWhereInput
-  }
-
-  export type TenantUpdateToOneWithWhereWithoutProfissionaisInput = {
-    where?: TenantWhereInput
-    data: XOR<TenantUpdateWithoutProfissionaisInput, TenantUncheckedUpdateWithoutProfissionaisInput>
-  }
-
-  export type TenantUpdateWithoutProfissionaisInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    plano?: PlanoUpdateOneRequiredWithoutTenantsNestedInput
-    agendamentos?: AgendamentoUpdateManyWithoutTenantNestedInput
-    atendimentos?: AtendimentoUpdateManyWithoutTenantNestedInput
-    pacientes?: PacienteUpdateManyWithoutTenantNestedInput
-    procedimentos?: ProcedimentoUpdateManyWithoutTenantNestedInput
-    usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
-    whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
-  }
-
-  export type TenantUncheckedUpdateWithoutProfissionaisInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    planoId?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUncheckedUpdateManyWithoutTenantNestedInput
-    atendimentos?: AtendimentoUncheckedUpdateManyWithoutTenantNestedInput
-    pacientes?: PacienteUncheckedUpdateManyWithoutTenantNestedInput
-    procedimentos?: ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput
-    usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
-    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
-  }
-
   export type TenantCreateWithoutPacientesInput = {
     id?: string
     nome: string
@@ -18752,13 +18781,14 @@ export namespace Prisma {
     id?: string
     nome: string
     especialidade?: string | null
+    cor?: string
     observacoes?: string | null
     ativo?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutProfissionaisInput
     agendamentos?: AgendamentoCreateNestedManyWithoutProfissionalInput
     atendimentos?: AtendimentoCreateNestedManyWithoutProfissionalInput
-    tenant: TenantCreateNestedOneWithoutProfissionaisInput
   }
 
   export type ProfissionalUncheckedCreateWithoutPacientesInput = {
@@ -18766,6 +18796,7 @@ export namespace Prisma {
     tenantId: string
     nome: string
     especialidade?: string | null
+    cor?: string
     observacoes?: string | null
     ativo?: boolean
     createdAt?: Date | string
@@ -18909,13 +18940,14 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
     especialidade?: NullableStringFieldUpdateOperationsInput | string | null
+    cor?: StringFieldUpdateOperationsInput | string
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     ativo?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutProfissionaisNestedInput
     agendamentos?: AgendamentoUpdateManyWithoutProfissionalNestedInput
     atendimentos?: AtendimentoUpdateManyWithoutProfissionalNestedInput
-    tenant?: TenantUpdateOneRequiredWithoutProfissionaisNestedInput
   }
 
   export type ProfissionalUncheckedUpdateWithoutPacientesInput = {
@@ -18923,6 +18955,7 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
     especialidade?: NullableStringFieldUpdateOperationsInput | string | null
+    cor?: StringFieldUpdateOperationsInput | string
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     ativo?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19239,13 +19272,14 @@ export namespace Prisma {
     id?: string
     nome: string
     especialidade?: string | null
+    cor?: string
     observacoes?: string | null
     ativo?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    atendimentos?: AtendimentoCreateNestedManyWithoutProfissionalInput
-    pacientes?: PacienteCreateNestedManyWithoutProfissionalInput
     tenant: TenantCreateNestedOneWithoutProfissionaisInput
+    pacientes?: PacienteCreateNestedManyWithoutProfissionalInput
+    atendimentos?: AtendimentoCreateNestedManyWithoutProfissionalInput
   }
 
   export type ProfissionalUncheckedCreateWithoutAgendamentosInput = {
@@ -19253,12 +19287,13 @@ export namespace Prisma {
     tenantId: string
     nome: string
     especialidade?: string | null
+    cor?: string
     observacoes?: string | null
     ativo?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutProfissionalInput
     pacientes?: PacienteUncheckedCreateNestedManyWithoutProfissionalInput
+    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutProfissionalInput
   }
 
   export type ProfissionalCreateOrConnectWithoutAgendamentosInput = {
@@ -19447,13 +19482,14 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
     especialidade?: NullableStringFieldUpdateOperationsInput | string | null
+    cor?: StringFieldUpdateOperationsInput | string
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     ativo?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    atendimentos?: AtendimentoUpdateManyWithoutProfissionalNestedInput
-    pacientes?: PacienteUpdateManyWithoutProfissionalNestedInput
     tenant?: TenantUpdateOneRequiredWithoutProfissionaisNestedInput
+    pacientes?: PacienteUpdateManyWithoutProfissionalNestedInput
+    atendimentos?: AtendimentoUpdateManyWithoutProfissionalNestedInput
   }
 
   export type ProfissionalUncheckedUpdateWithoutAgendamentosInput = {
@@ -19461,12 +19497,13 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
     especialidade?: NullableStringFieldUpdateOperationsInput | string | null
+    cor?: StringFieldUpdateOperationsInput | string
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     ativo?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    atendimentos?: AtendimentoUncheckedUpdateManyWithoutProfissionalNestedInput
     pacientes?: PacienteUncheckedUpdateManyWithoutProfissionalNestedInput
+    atendimentos?: AtendimentoUncheckedUpdateManyWithoutProfissionalNestedInput
   }
 
   export type TenantUpsertWithoutAgendamentosInput = {
@@ -19674,13 +19711,14 @@ export namespace Prisma {
     id?: string
     nome: string
     especialidade?: string | null
+    cor?: string
     observacoes?: string | null
     ativo?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    agendamentos?: AgendamentoCreateNestedManyWithoutProfissionalInput
-    pacientes?: PacienteCreateNestedManyWithoutProfissionalInput
     tenant: TenantCreateNestedOneWithoutProfissionaisInput
+    pacientes?: PacienteCreateNestedManyWithoutProfissionalInput
+    agendamentos?: AgendamentoCreateNestedManyWithoutProfissionalInput
   }
 
   export type ProfissionalUncheckedCreateWithoutAtendimentosInput = {
@@ -19688,12 +19726,13 @@ export namespace Prisma {
     tenantId: string
     nome: string
     especialidade?: string | null
+    cor?: string
     observacoes?: string | null
     ativo?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutProfissionalInput
     pacientes?: PacienteUncheckedCreateNestedManyWithoutProfissionalInput
+    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutProfissionalInput
   }
 
   export type ProfissionalCreateOrConnectWithoutAtendimentosInput = {
@@ -19894,13 +19933,14 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
     especialidade?: NullableStringFieldUpdateOperationsInput | string | null
+    cor?: StringFieldUpdateOperationsInput | string
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     ativo?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUpdateManyWithoutProfissionalNestedInput
-    pacientes?: PacienteUpdateManyWithoutProfissionalNestedInput
     tenant?: TenantUpdateOneRequiredWithoutProfissionaisNestedInput
+    pacientes?: PacienteUpdateManyWithoutProfissionalNestedInput
+    agendamentos?: AgendamentoUpdateManyWithoutProfissionalNestedInput
   }
 
   export type ProfissionalUncheckedUpdateWithoutAtendimentosInput = {
@@ -19908,12 +19948,13 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
     especialidade?: NullableStringFieldUpdateOperationsInput | string | null
+    cor?: StringFieldUpdateOperationsInput | string
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     ativo?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUncheckedUpdateManyWithoutProfissionalNestedInput
     pacientes?: PacienteUncheckedUpdateManyWithoutProfissionalNestedInput
+    agendamentos?: AgendamentoUncheckedUpdateManyWithoutProfissionalNestedInput
   }
 
   export type TenantUpsertWithoutAtendimentosInput = {
@@ -20322,26 +20363,28 @@ export namespace Prisma {
     id?: string
     nome: string
     especialidade?: string | null
+    cor?: string
     observacoes?: string | null
     ativo?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    pacientes?: PacienteCreateNestedManyWithoutProfissionalInput
     agendamentos?: AgendamentoCreateNestedManyWithoutProfissionalInput
     atendimentos?: AtendimentoCreateNestedManyWithoutProfissionalInput
-    pacientes?: PacienteCreateNestedManyWithoutProfissionalInput
   }
 
   export type ProfissionalUncheckedCreateWithoutTenantInput = {
     id?: string
     nome: string
     especialidade?: string | null
+    cor?: string
     observacoes?: string | null
     ativo?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    pacientes?: PacienteUncheckedCreateNestedManyWithoutProfissionalInput
     agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutProfissionalInput
     atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutProfissionalInput
-    pacientes?: PacienteUncheckedCreateNestedManyWithoutProfissionalInput
   }
 
   export type ProfissionalCreateOrConnectWithoutTenantInput = {
@@ -20565,6 +20608,7 @@ export namespace Prisma {
     tenantId?: StringFilter<"Profissional"> | string
     nome?: StringFilter<"Profissional"> | string
     especialidade?: StringNullableFilter<"Profissional"> | string | null
+    cor?: StringFilter<"Profissional"> | string
     observacoes?: StringNullableFilter<"Profissional"> | string | null
     ativo?: BoolFilter<"Profissional"> | boolean
     createdAt?: DateTimeFilter<"Profissional"> | Date | string
@@ -20637,32 +20681,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AgendamentoCreateManyProfissionalInput = {
-    id?: string
-    tenantId: string
-    pacienteId?: string | null
-    procedimentoId: string
-    dataHora: Date | string
-    status?: $Enums.StatusAgendamento
-    observacoes?: string | null
-    confirmacaoEnviada?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    dataHoraFim: Date | string
-  }
-
-  export type AtendimentoCreateManyProfissionalInput = {
-    id?: string
-    tenantId: string
-    agendamentoId: string
-    pacienteId: string
-    procedimentoId: string
-    anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
   export type PacienteCreateManyProfissionalInput = {
     id?: string
     tenantId: string
@@ -20690,84 +20708,30 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type AgendamentoUpdateWithoutProfissionalInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
-    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
-    paciente?: PacienteUpdateOneWithoutAgendamentosNestedInput
-    procedimento?: ProcedimentoUpdateOneRequiredWithoutAgendamentosNestedInput
-    tenant?: TenantUpdateOneRequiredWithoutAgendamentosNestedInput
-    atendimento?: AtendimentoUpdateOneWithoutAgendamentoNestedInput
+  export type AgendamentoCreateManyProfissionalInput = {
+    id?: string
+    tenantId: string
+    pacienteId?: string | null
+    procedimentoId: string
+    dataHora: Date | string
+    status?: $Enums.StatusAgendamento
+    observacoes?: string | null
+    confirmacaoEnviada?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dataHoraFim: Date | string
   }
 
-  export type AgendamentoUncheckedUpdateWithoutProfissionalInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    tenantId?: StringFieldUpdateOperationsInput | string
-    pacienteId?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentoId?: StringFieldUpdateOperationsInput | string
-    dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
-    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
-    atendimento?: AtendimentoUncheckedUpdateOneWithoutAgendamentoNestedInput
-  }
-
-  export type AgendamentoUncheckedUpdateManyWithoutProfissionalInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    tenantId?: StringFieldUpdateOperationsInput | string
-    pacienteId?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentoId?: StringFieldUpdateOperationsInput | string
-    dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
-    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AtendimentoUpdateWithoutProfissionalInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
+  export type AtendimentoCreateManyProfissionalInput = {
+    id?: string
+    tenantId: string
+    agendamentoId: string
+    pacienteId: string
+    procedimentoId: string
+    anotacoes?: string | null
     procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamento?: AgendamentoUpdateOneRequiredWithoutAtendimentoNestedInput
-    paciente?: PacienteUpdateOneRequiredWithoutAtendimentosNestedInput
-    procedimento?: ProcedimentoUpdateOneRequiredWithoutAtendimentosNestedInput
-    tenant?: TenantUpdateOneRequiredWithoutAtendimentosNestedInput
-  }
-
-  export type AtendimentoUncheckedUpdateWithoutProfissionalInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    tenantId?: StringFieldUpdateOperationsInput | string
-    agendamentoId?: StringFieldUpdateOperationsInput | string
-    pacienteId?: StringFieldUpdateOperationsInput | string
-    procedimentoId?: StringFieldUpdateOperationsInput | string
-    anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AtendimentoUncheckedUpdateManyWithoutProfissionalInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    tenantId?: StringFieldUpdateOperationsInput | string
-    agendamentoId?: StringFieldUpdateOperationsInput | string
-    pacienteId?: StringFieldUpdateOperationsInput | string
-    procedimentoId?: StringFieldUpdateOperationsInput | string
-    anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type PacienteUpdateWithoutProfissionalInput = {
@@ -20851,6 +20815,86 @@ export namespace Prisma {
     responsavelTelefone?: NullableStringFieldUpdateOperationsInput | string | null
     responsavelParentesco?: NullableStringFieldUpdateOperationsInput | string | null
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgendamentoUpdateWithoutProfissionalInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
+    paciente?: PacienteUpdateOneWithoutAgendamentosNestedInput
+    procedimento?: ProcedimentoUpdateOneRequiredWithoutAgendamentosNestedInput
+    tenant?: TenantUpdateOneRequiredWithoutAgendamentosNestedInput
+    atendimento?: AtendimentoUpdateOneWithoutAgendamentoNestedInput
+  }
+
+  export type AgendamentoUncheckedUpdateWithoutProfissionalInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    pacienteId?: NullableStringFieldUpdateOperationsInput | string | null
+    procedimentoId?: StringFieldUpdateOperationsInput | string
+    dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
+    atendimento?: AtendimentoUncheckedUpdateOneWithoutAgendamentoNestedInput
+  }
+
+  export type AgendamentoUncheckedUpdateManyWithoutProfissionalInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    pacienteId?: NullableStringFieldUpdateOperationsInput | string | null
+    procedimentoId?: StringFieldUpdateOperationsInput | string
+    dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AtendimentoUpdateWithoutProfissionalInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamento?: AgendamentoUpdateOneRequiredWithoutAtendimentoNestedInput
+    paciente?: PacienteUpdateOneRequiredWithoutAtendimentosNestedInput
+    procedimento?: ProcedimentoUpdateOneRequiredWithoutAtendimentosNestedInput
+    tenant?: TenantUpdateOneRequiredWithoutAtendimentosNestedInput
+  }
+
+  export type AtendimentoUncheckedUpdateWithoutProfissionalInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    agendamentoId?: StringFieldUpdateOperationsInput | string
+    pacienteId?: StringFieldUpdateOperationsInput | string
+    procedimentoId?: StringFieldUpdateOperationsInput | string
+    anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AtendimentoUncheckedUpdateManyWithoutProfissionalInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    agendamentoId?: StringFieldUpdateOperationsInput | string
+    pacienteId?: StringFieldUpdateOperationsInput | string
+    procedimentoId?: StringFieldUpdateOperationsInput | string
+    anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -21179,6 +21223,7 @@ export namespace Prisma {
     id?: string
     nome: string
     especialidade?: string | null
+    cor?: string
     observacoes?: string | null
     ativo?: boolean
     createdAt?: Date | string
@@ -21396,32 +21441,35 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
     especialidade?: NullableStringFieldUpdateOperationsInput | string | null
+    cor?: StringFieldUpdateOperationsInput | string
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     ativo?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    pacientes?: PacienteUpdateManyWithoutProfissionalNestedInput
     agendamentos?: AgendamentoUpdateManyWithoutProfissionalNestedInput
     atendimentos?: AtendimentoUpdateManyWithoutProfissionalNestedInput
-    pacientes?: PacienteUpdateManyWithoutProfissionalNestedInput
   }
 
   export type ProfissionalUncheckedUpdateWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
     especialidade?: NullableStringFieldUpdateOperationsInput | string | null
+    cor?: StringFieldUpdateOperationsInput | string
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     ativo?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    pacientes?: PacienteUncheckedUpdateManyWithoutProfissionalNestedInput
     agendamentos?: AgendamentoUncheckedUpdateManyWithoutProfissionalNestedInput
     atendimentos?: AtendimentoUncheckedUpdateManyWithoutProfissionalNestedInput
-    pacientes?: PacienteUncheckedUpdateManyWithoutProfissionalNestedInput
   }
 
   export type ProfissionalUncheckedUpdateManyWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
     especialidade?: NullableStringFieldUpdateOperationsInput | string | null
+    cor?: StringFieldUpdateOperationsInput | string
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     ativo?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

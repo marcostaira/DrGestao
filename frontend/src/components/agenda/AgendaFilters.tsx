@@ -130,6 +130,33 @@ export const AgendaFilters: React.FC<AgendaFiltersProps> = ({
             <option value={StatusAgendamento.CANCELADO}>Cancelado</option>
           </select>
         </div>
+
+        {/* Legenda de Profissionais por Cor */}
+        {profissionais.length > 0 && (
+          <div className="flex flex-wrap gap-3 pt-3 border-t">
+            <span className="text-sm font-medium text-gray-700">
+              Profissionais:
+            </span>
+            {profissionais.map((prof) => (
+              <div
+                key={prof.id}
+                className="flex items-center gap-2 px-2 py-1 rounded"
+                style={{
+                  backgroundColor:
+                    selectedProfissional === prof.id
+                      ? `${prof.cor}20`
+                      : "transparent",
+                }}
+              >
+                <div
+                  className="w-3 h-3 rounded-full"
+                  style={{ backgroundColor: prof.cor }}
+                />
+                <span className="text-sm text-gray-700">{prof.nome}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </Card>
   );

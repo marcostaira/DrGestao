@@ -14,6 +14,7 @@ export class TenantService {
     const tenant = await prisma.tenant.findUnique({
       where: { id: tenantId },
       include: {
+        plano: true,
         usuarios: {
           select: {
             id: true,
@@ -76,12 +77,26 @@ export class TenantService {
     const updateData: any = {};
 
     if (data.nome) updateData.nome = data.nome.trim();
-    if (data.plano) updateData.plano = data.plano;
+    if (data.plano) {
+      // Se está mudando de plano, buscar o ID do novo plano
+      const novoPlano = await prisma.plano.findFirst({
+        where: { slug: data.plano },
+      });
+      
+      if (!novoPlano) {
+        throw new AppError("Plano não encontrado", 404);
+      }
+      
+      updateData.planoId = novoPlano.id;
+    }
     if (data.ativo !== undefined) updateData.ativo = data.ativo;
 
     const tenant = await prisma.tenant.update({
       where: { id: tenantId },
       data: updateData,
+      include: {
+        plano: true,
+      },
     });
 
     return tenant;
@@ -147,31 +162,14 @@ export class TenantService {
   static async getPlanLimits(tenantId: string) {
     const tenant = await prisma.tenant.findUnique({
       where: { id: tenantId },
+      include: {
+        plano: true,
+      },
     });
 
     if (!tenant) {
       throw new AppError("Tenant não encontrado", 404);
     }
-
-    const planLimits: { [key: string]: any } = {
-      basico: {
-        profissionais: 1,
-        usuarios: 2,
-        agendamentos_mensais: 1000,
-      },
-      premium: {
-        profissionais: 5,
-        usuarios: 10,
-        agendamentos_mensais: 5000,
-      },
-      enterprise: {
-        profissionais: -1,
-        usuarios: -1,
-        agendamentos_mensais: -1,
-      },
-    };
-
-    const limits = planLimits[tenant.plano] || planLimits.basico;
 
     const [profissionaisAtivos, usuariosAtivos, agendamentosMes] =
       await Promise.all([
@@ -192,8 +190,15 @@ export class TenantService {
       ]);
 
     return {
-      plano: tenant.plano,
-      limits,
+      plano: {
+        nome: tenant.plano.nome,
+        slug: tenant.plano.slug,
+      },
+      limits: {
+        profissionais: tenant.plano.profissionaisAtivos,
+        usuarios: tenant.plano.usuarios,
+        agendamentos_mensais: tenant.plano.agendamentosMes,
+      },
       usage: {
         profissionais: profissionaisAtivos,
         usuarios: usuariosAtivos,
@@ -201,17 +206,26 @@ export class TenantService {
       },
       available: {
         profissionais:
-          limits.profissionais === -1
+          tenant.plano.profissionaisAtivos === 999999
             ? "Ilimitado"
-            : limits.profissionais - profissionaisAtivos,
+            : tenant.plano.profissionaisAtivos - profissionaisAtivos,
         usuarios:
-          limits.usuarios === -1
+          tenant.plano.usuarios === 999999
             ? "Ilimitado"
-            : limits.usuarios - usuariosAtivos,
+            : tenant.plano.usuarios - usuariosAtivos,
         agendamentos_mensais:
-          limits.agendamentos_mensais === -1
+          tenant.plano.agendamentosMes === 999999
             ? "Ilimitado"
-            : limits.agendamentos_mensais - agendamentosMes,
+            : tenant.plano.agendamentosMes - agendamentosMes,
+      },
+      percentual: {
+        profissionais: Math.round(
+          (profissionaisAtivos / tenant.plano.profissionaisAtivos) * 100
+        ),
+        usuarios: Math.round((usuariosAtivos / tenant.plano.usuarios) * 100),
+        agendamentos_mensais: Math.round(
+          (agendamentosMes / tenant.plano.agendamentosMes) * 100
+        ),
       },
     };
   }

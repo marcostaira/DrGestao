@@ -137,6 +137,7 @@ exports.Prisma.ProfissionalScalarFieldEnum = {
   tenantId: 'tenantId',
   nome: 'nome',
   especialidade: 'especialidade',
+  cor: 'cor',
   observacoes: 'observacoes',
   ativo: 'ativo',
   createdAt: 'createdAt',

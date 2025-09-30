@@ -17,9 +17,12 @@ export const validateTenant = async (
       throw new AppError("Informações de tenant não disponíveis", 401);
     }
 
-    // Verificar se o tenant ainda está ativo
+    // Verificar se o tenant ainda está ativo (incluindo plano)
     const tenant = await prisma.tenant.findUnique({
       where: { id: req.tenant.id },
+      include: {
+        plano: true,
+      },
     });
 
     if (!tenant) {
@@ -34,7 +37,7 @@ export const validateTenant = async (
     req.tenant = {
       id: tenant.id,
       nome: tenant.nome,
-      plano: tenant.plano,
+      plano: tenant.plano.nome,
       ativo: tenant.ativo,
     };
 
@@ -184,115 +187,6 @@ export const validateResourceOwnership = (
 };
 
 // ============================================================================
-// PLAN RESTRICTIONS MIDDLEWARE
-// ============================================================================
-
-export const checkPlanLimits = (
-  feature: "profissionais" | "usuarios" | "agendamentos_mensais"
-) => {
-  return async (
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> => {
-    try {
-      if (!req.tenant) {
-        throw new AppError("Informações do tenant não disponíveis", 401);
-      }
-
-      // Definir limites por plano
-      const planLimits = {
-        basico: {
-          profissionais: 1,
-          usuarios: 2,
-          agendamentos_mensais: 1000,
-        },
-        premium: {
-          profissionais: 5,
-          usuarios: 10,
-          agendamentos_mensais: 5000,
-        },
-        enterprise: {
-          profissionais: -1, // Ilimitado
-          usuarios: -1, // Ilimitado
-          agendamentos_mensais: -1, // Ilimitado
-        },
-      };
-
-      const currentLimits =
-        planLimits[req.tenant.plano as keyof typeof planLimits] ||
-        planLimits.basico;
-      const limit = currentLimits[feature];
-
-      // Se o limite é -1, é ilimitado
-      if (limit === -1) {
-        return next();
-      }
-
-      let currentCount = 0;
-
-      switch (feature) {
-        case "profissionais":
-          currentCount = await prisma.profissional.count({
-            where: { tenantId: req.tenant.id, ativo: true },
-          });
-          break;
-
-        case "usuarios":
-          currentCount = await prisma.usuario.count({
-            where: { tenantId: req.tenant.id, ativo: true },
-          });
-          break;
-
-        case "agendamentos_mensais":
-          const now = new Date();
-          const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-          const endOfMonth = new Date(
-            now.getFullYear(),
-            now.getMonth() + 1,
-            0,
-            23,
-            59,
-            59
-          );
-
-          currentCount = await prisma.agendamento.count({
-            where: {
-              tenantId: req.tenant.id,
-              createdAt: {
-                gte: startOfMonth,
-                lte: endOfMonth,
-              },
-            },
-          });
-          break;
-      }
-
-      if (currentCount >= limit) {
-        throw new AppError(
-          `Limite do plano atingido para ${feature}. Limite atual: ${limit}`,
-          402
-        );
-      }
-
-      next();
-    } catch (error) {
-      if (error instanceof AppError) {
-        res.status(error.statusCode).json({
-          success: false,
-          error: error.message,
-        });
-      } else {
-        res.status(500).json({
-          success: false,
-          error: "Erro ao verificar limites do plano",
-        });
-      }
-    }
-  };
-};
-
-// ============================================================================
 // TENANT STATISTICS MIDDLEWARE
 // ============================================================================
 
@@ -326,7 +220,6 @@ export const attachTenantStats = async (
 
     next();
   } catch (error) {
-    // Não bloquear a requisição se não conseguir obter estatísticas
     console.error("Erro ao obter estatísticas do tenant:", error);
     next();
   }
@@ -347,10 +240,8 @@ export const validateSubdomain = async (
       return next();
     }
 
-    // Extrair subdomínio se existir
     const subdomain = host.split(".")[0];
 
-    // Se não for localhost ou IP, validar subdomínio
     if (!host.includes("localhost") && !host.match(/^\d+\.\d+\.\d+\.\d+/)) {
       const tenant = await prisma.tenant.findFirst({
         where: {
@@ -360,18 +251,20 @@ export const validateSubdomain = async (
           },
           ativo: true,
         },
+        include: {
+          plano: true,
+        },
       });
 
       if (!tenant) {
         throw new AppError("Tenant não encontrado para este subdomínio", 404);
       }
 
-      // Adicionar informações do tenant à requisição se não existir usuário autenticado
       if (!req.tenant) {
         req.tenant = {
           id: tenant.id,
           nome: tenant.nome,
-          plano: tenant.plano,
+          plano: tenant.plano.nome,
           ativo: tenant.ativo,
         };
       }
@@ -405,12 +298,11 @@ export const logTenantActivity = (action: string) => {
   ): Promise<void> => {
     try {
       if (req.user && req.tenant) {
-        // Log da atividade (pode ser usado para auditoria)
         await prisma.logSistema.create({
           data: {
             tenantId: req.tenant.id,
             usuarioId: req.user.id,
-            tipo: "LOGIN" as any, // Ajustar conforme necessário
+            tipo: "LOGIN" as any,
             descricao: `${action} - ${req.method} ${req.path}`,
             metadata: {
               ip: req.ip,
@@ -423,7 +315,6 @@ export const logTenantActivity = (action: string) => {
 
       next();
     } catch (error) {
-      // Não bloquear a requisição se não conseguir fazer log
       console.error("Erro ao registrar atividade do tenant:", error);
       next();
     }

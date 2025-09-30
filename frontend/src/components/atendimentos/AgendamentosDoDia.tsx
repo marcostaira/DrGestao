@@ -96,22 +96,35 @@ export const AgendamentosDoDia: React.FC<AgendamentosDoDiaProps> = ({
           return (
             <div
               key={ag.id}
-              className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-primary-500 transition-colors"
+              className="flex items-center justify-between p-4 border rounded-lg border-l-4 hover:shadow-md transition-all"
+              style={{
+                borderLeftColor: ag.profissional.cor,
+                backgroundColor: `${ag.profissional.cor}08`,
+              }}
             >
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-1">
+                  {/* Indicador circular do profissional */}
+                  <div
+                    className="w-3 h-3 rounded-full flex-shrink-0"
+                    style={{ backgroundColor: ag.profissional.cor }}
+                  />
                   <span className="font-medium text-gray-900">
                     {new Date(ag.dataHora).toLocaleTimeString("pt-BR", {
                       hour: "2-digit",
                       minute: "2-digit",
                     })}
                   </span>
-                  <span className="text-gray-600">•</span>
-                  <span className="font-medium text-gray-900">
+                  <span className="text-gray-400">•</span>
+                  <span className="font-semibold text-gray-900">
                     {ag.paciente?.nome || "Bloqueio"}
                   </span>
+                  <Badge variant={getStatusBadgeVariant(ag.status)}>
+                    {ag.status}
+                  </Badge>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-500">
+
+                <div className="ml-6 flex items-center gap-2 text-sm text-gray-600">
                   <span>{ag.profissional.nome}</span>
                   {ag.procedimento && (
                     <>
@@ -120,13 +133,15 @@ export const AgendamentosDoDia: React.FC<AgendamentosDoDiaProps> = ({
                     </>
                   )}
                 </div>
+
+                {ag.observacoes && (
+                  <p className="ml-6 text-sm text-gray-500 italic mt-1">
+                    {ag.observacoes}
+                  </p>
+                )}
               </div>
 
               <div className="flex items-center gap-3">
-                <Badge variant={getStatusBadgeVariant(ag.status)}>
-                  {ag.status}
-                </Badge>
-
                 {(() => {
                   const nextStatus = getNextStatus(ag.status);
                   if (nextStatus && !hasAtendimento) {

@@ -309,6 +309,7 @@ export class AgendamentoService {
             select: {
               id: true,
               nome: true,
+              cor: true,
             },
           },
           procedimento: {

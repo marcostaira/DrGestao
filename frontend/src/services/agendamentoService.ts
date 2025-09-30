@@ -25,6 +25,7 @@ export interface Agendamento {
   profissional: {
     id: string;
     nome: string;
+    cor: string;
   };
   procedimento?: {
     id: string;

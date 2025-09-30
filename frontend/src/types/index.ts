@@ -96,3 +96,33 @@ export interface PaginatedResponse<T> {
   data: T[];
   meta: PaginationMeta;
 }
+
+// ============================================================================
+// API PROFESSIONAL TYPES
+// ============================================================================
+
+export interface Profissional {
+  id: string;
+  nome: string;
+  especialidade?: string;
+  cor?: string;
+  observacoes?: string;
+  ativo: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateProfissionalData {
+  nome: string;
+  especialidade?: string;
+  cor?: string;
+  observacoes?: string;
+}
+
+export interface UpdateProfissionalData {
+  nome?: string;
+  especialidade?: string;
+  cor?: string;
+  observacoes?: string;
+  ativo?: boolean;
+}

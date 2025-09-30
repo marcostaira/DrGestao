@@ -18,6 +18,9 @@ export class ProfissionalService {
     // Verificar limite de profissionais ativos para o plano
     const tenant = await prisma.tenant.findUnique({
       where: { id: tenantId },
+      include: {
+        plano: true,
+      },
     });
 
     if (!tenant) {
@@ -29,24 +32,16 @@ export class ProfissionalService {
       where: { tenantId, ativo: true },
     });
 
-    // Verificar limites por plano
-    const planLimits: { [key: string]: number } = {
-      basico: 1,
-      premium: 5,
-      enterprise: -1, // Ilimitado
-    };
-
-    const limit = planLimits[tenant.plano] || 1;
-
-    if (limit !== -1 && profissionaisAtivos >= limit) {
+    // Verificar limite do plano
+    if (profissionaisAtivos >= tenant.plano.profissionaisAtivos) {
       throw new AppError(
-        `Limite de profissionais ativos atingido para o plano ${tenant.plano}. Limite: ${limit}`,
-        402
+        `Limite de ${tenant.plano.profissionaisAtivos} profissional(is) ativo(s) atingido para o plano ${tenant.plano.nome}.`,
+        403
       );
     }
 
     // Se já existe um profissional ativo no plano básico, desativar
-    if (tenant.plano === "basico" && profissionaisAtivos > 0) {
+    if (tenant.plano.slug === "basico" && profissionaisAtivos > 0) {
       await prisma.profissional.updateMany({
         where: { tenantId, ativo: true },
         data: { ativo: false },
@@ -59,6 +54,7 @@ export class ProfissionalService {
         tenantId,
         nome: data.nome.trim(),
         especialidade: data.especialidade?.trim() || null,
+        cor: data.cor || "#3B82F6",
         observacoes: data.observacoes?.trim() || null,
         ativo: true,
       },
@@ -151,9 +147,12 @@ export class ProfissionalService {
     if (data.ativo === true) {
       const tenant = await prisma.tenant.findUnique({
         where: { id: tenantId },
+        include: {
+          plano: true,
+        },
       });
 
-      if (tenant?.plano === "basico") {
+      if (tenant?.plano.slug === "basico") {
         await prisma.profissional.updateMany({
           where: {
             tenantId,
@@ -173,6 +172,9 @@ export class ProfissionalService {
       updateData.especialidade = data.especialidade
         ? data.especialidade.trim()
         : null;
+    }
+    if (data.cor !== undefined) {
+      updateData.cor = data.cor;
     }
     if (data.observacoes !== undefined) {
       updateData.observacoes = data.observacoes

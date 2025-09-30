@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { UsuarioService } from "../services/usuario.service";
-import { AuthenticatedRequest, ApiResponse } from "../../../types";
+import { AuthenticatedRequest, ApiResponse, AppError } from "../../../types";
 
 // ============================================================================
 // USUARIO CONTROLLER
@@ -235,31 +235,34 @@ export class UsuarioController {
   // TOGGLE STATUS
   // ==========================================================================
 
-  static async toggleStatus(
-    req: AuthenticatedRequest,
-    res: Response
-  ): Promise<void> {
+  static async toggleStatus(req: AuthenticatedRequest, res: Response) {
     try {
-      const tenantId = req.user!.tenantId;
       const { id } = req.params;
+      const tenantId = req.user!.tenantId;
+      const currentUserId = req.user!.id; // ID do usuário logado
 
-      const usuario = await UsuarioService.toggleStatus(tenantId, id);
+      const usuario = await UsuarioService.toggleStatus(
+        tenantId,
+        id,
+        currentUserId
+      );
 
-      const response: ApiResponse = {
+      res.json({
         success: true,
         data: usuario,
-        message: usuario.ativo
-          ? "Usuário ativado com sucesso"
-          : "Usuário desativado com sucesso",
-      };
-
-      res.status(200).json(response);
-    } catch (error: any) {
-      const response: ApiResponse = {
-        success: false,
-        error: error.message || "Erro ao alterar status do usuário",
-      };
-      res.status(error.statusCode || 500).json(response);
+      });
+    } catch (error) {
+      if (error instanceof AppError) {
+        res.status(error.statusCode).json({
+          success: false,
+          error: error.message,
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          error: "Erro ao alternar status do usuário",
+        });
+      }
     }
   }
 }

@@ -1,60 +1,68 @@
 import React from "react";
 import { Agendamento, StatusAgendamento } from "@/services/agendamentoService";
-import { getStatusColor, calculateCardHeight } from "@/utils/agendaUtils";
 
 interface DraggableAgendamentoProps {
   agendamento: Agendamento;
   onClick: (e?: React.MouseEvent) => void;
   onDragStart: (e: React.DragEvent, agendamento: Agendamento) => void;
   onDragEnd: (e: React.DragEvent) => void;
-  isDragging?: boolean;
+  isDragging: boolean;
   showTime?: boolean;
 }
 
-export const DraggableAgendamento: React.FC<DraggableAgendamentoProps> = ({
+const getStatusBorderColor = (status: StatusAgendamento): string => {
+  const colors = {
+    [StatusAgendamento.MARCADO]: "#F59E0B",
+    [StatusAgendamento.CONFIRMADO]: "#10B981",
+    [StatusAgendamento.COMPARECEU]: "#3B82F6",
+    [StatusAgendamento.FALTOU]: "#EF4444",
+    [StatusAgendamento.CANCELADO]: "#6B7280",
+  };
+  return colors[status] || "#6B7280";
+};
+
+export function DraggableAgendamento({
   agendamento,
   onClick,
   onDragStart,
   onDragEnd,
-  isDragging = false,
-  showTime = false,
-}) => {
-  const canDrag = agendamento.status !== StatusAgendamento.CANCELADO;
-  const duracaoMinutos = agendamento.procedimento?.duracaoMinutos || 30;
-  const altura = calculateCardHeight(duracaoMinutos);
+  isDragging,
+  showTime = true,
+}: DraggableAgendamentoProps) {
+  const profissionalCor = agendamento.profissional?.cor || "#3B82F6";
+  const statusCor = getStatusBorderColor(agendamento.status);
 
   return (
     <div
-      draggable={canDrag}
-      onDragStart={(e) => canDrag && onDragStart(e, agendamento)}
+      draggable
+      onDragStart={(e) => onDragStart(e, agendamento)}
       onDragEnd={onDragEnd}
       onClick={onClick}
+      className="p-1.5 rounded text-xs cursor-grab active:cursor-grabbing hover:shadow-lg transition-all draggable-item mx-1"
       style={{
-        height: `${altura - 2}px`,
-        minHeight: `${altura - 2}px`,
-        zIndex: isDragging ? 1000 : 10,
+        backgroundColor: profissionalCor,
+        borderLeft: `4px solid ${statusCor}`,
+        color: "#ffffff",
+        textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
+        opacity: isDragging ? 0.5 : 1,
       }}
-      className={`
-        absolute top-0 left-0 right-0 mx-1
-        p-1.5 rounded border cursor-pointer hover:shadow-md transition-all duration-200 text-xs
-        flex flex-col justify-start
-        ${getStatusColor(agendamento.status)}
-        ${canDrag ? "cursor-grab active:cursor-grabbing" : "cursor-pointer"}
-        ${isDragging ? "opacity-50 transform rotate-2" : ""}
-      `}
-      title={canDrag ? "Clique e arraste para mover" : "Agendamento cancelado"}
     >
+      {showTime && (
+        <div className="font-semibold text-[10px] mb-0.5 opacity-95">
+          {new Date(agendamento.dataHora).toLocaleTimeString("pt-BR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </div>
+      )}
       <div className="font-medium truncate leading-tight">
         {agendamento.paciente?.nome || "Bloqueio"}
       </div>
       {agendamento.procedimento && (
-        <div className="opacity-75 truncate text-[10px] leading-tight mt-0.5">
+        <div className="opacity-90 truncate text-[10px] leading-tight mt-0.5">
           {agendamento.procedimento.nome}
         </div>
       )}
-      {duracaoMinutos > 30 && (
-        <div className="text-[9px] opacity-60 mt-1">{duracaoMinutos}min</div>
-      )}
     </div>
   );
-};
+}

@@ -26,18 +26,20 @@ model Usuario {
 }
 
 model Profissional {
-  id            String        @id @default(cuid())
-  tenantId      String        @map("tenant_id")
+  id            String   @id @default(uuid())
+  tenantId      String   @map("tenant_id")
   nome          String
   especialidade String?
+  cor           String   @default("#3B82F6") // Azul padrão
   observacoes   String?
-  ativo         Boolean       @default(true)
-  createdAt     DateTime      @default(now()) @map("created_at")
-  updatedAt     DateTime      @updatedAt @map("updated_at")
-  agendamentos  Agendamento[]
-  atendimentos  Atendimento[]
-  pacientes     Paciente[]
-  tenant        Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  ativo         Boolean  @default(true)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  pacientes    Paciente[]
+  agendamentos Agendamento[]
+  atendimentos Atendimento[]
 
   @@index([tenantId, ativo])
   @@map("profissionais")

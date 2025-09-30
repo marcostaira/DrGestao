@@ -20,6 +20,7 @@ import Modal from "@/components/ui/Modal";
 import Input from "@/components/ui/Input";
 import Badge from "@/components/ui/Badge";
 import Alert from "@/components/ui/Alert";
+import ColorPicker from "@/components/ui/ColorPicker";
 
 export default function ProfissionaisPage() {
   const { isAdmin } = useAuth();
@@ -39,10 +40,10 @@ export default function ProfissionaisPage() {
     useState<Profissional | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Form states
   const [formData, setFormData] = useState<CreateProfissionalData>({
     nome: "",
     especialidade: "",
+    cor: "#3B82F6", // Cor padrão
     observacoes: "",
   });
 
@@ -101,16 +102,32 @@ export default function ProfissionaisPage() {
     setError("");
 
     try {
+      // Log para debug - remova depois
+      console.log("Dados do formulário:", formData);
+
       if (editingProfissional) {
         const updateData: UpdateProfissionalData = {
           nome: formData.nome,
           especialidade: formData.especialidade || undefined,
+          cor: formData.cor, // ← CERTIFIQUE-SE QUE ESTÁ AQUI
           observacoes: formData.observacoes || undefined,
         };
+
+        console.log("Dados de atualização:", updateData); // Debug
+
         await updateProfissional(editingProfissional.id, updateData);
         setSuccess("Profissional atualizado com sucesso!");
       } else {
-        await createProfissional(formData);
+        const createData: CreateProfissionalData = {
+          nome: formData.nome,
+          especialidade: formData.especialidade || undefined,
+          cor: formData.cor, // ← CERTIFIQUE-SE QUE ESTÁ AQUI
+          observacoes: formData.observacoes || undefined,
+        };
+
+        console.log("Dados de criação:", createData); // Debug
+
+        await createProfissional(createData);
         setSuccess("Profissional criado com sucesso!");
       }
 
@@ -119,6 +136,7 @@ export default function ProfissionaisPage() {
 
       setTimeout(() => setSuccess(""), 3000);
     } catch (err: any) {
+      console.error("Erro:", err); // Debug
       setError(err.response?.data?.error || "Erro ao salvar profissional");
     } finally {
       setIsSubmitting(false);
@@ -160,6 +178,18 @@ export default function ProfissionaisPage() {
     {
       key: "nome",
       header: "Nome",
+    },
+    {
+      key: "cor",
+      header: "Cor",
+      render: (profissional: Profissional) => (
+        <div className="flex items-center gap-2">
+          <div
+            className="w-8 h-8 rounded-full border-2 border-secondary-200"
+            style={{ backgroundColor: profissional.cor }}
+          />
+        </div>
+      ),
     },
     {
       key: "especialidade",
@@ -322,6 +352,13 @@ export default function ProfissionaisPage() {
             label="Nome"
             value={formData.nome}
             onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
+            required
+          />
+
+          <ColorPicker
+            label="Cor"
+            value={formData.cor || "#3B82F6"}
+            onChange={(cor) => setFormData({ ...formData, cor })}
             required
           />
 

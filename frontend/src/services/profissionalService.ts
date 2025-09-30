@@ -4,6 +4,7 @@ export interface Profissional {
   id: string;
   tenantId: string;
   nome: string;
+  cor?: string;
   especialidade?: string;
   observacoes?: string;
   ativo: boolean;
@@ -13,6 +14,7 @@ export interface Profissional {
 
 export interface CreateProfissionalData {
   nome: string;
+  cor?: string;
   especialidade?: string;
   observacoes?: string;
 }
@@ -20,6 +22,7 @@ export interface CreateProfissionalData {
 export interface UpdateProfissionalData {
   nome?: string;
   especialidade?: string;
+  cor?: string;
   observacoes?: string;
   ativo?: boolean;
 }

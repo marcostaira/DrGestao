@@ -1,5 +1,5 @@
 import React from "react";
-import { Agendamento } from "@/services/agendamentoService";
+import { Agendamento, StatusAgendamento } from "@/services/agendamentoService";
 import { DroppableTimeSlot } from "./DroppableTimeSlot";
 import {
   generateTimeSlots,
@@ -46,7 +46,7 @@ export const WeekView: React.FC<WeekViewProps> = ({
 
   return (
     <div className="bg-white rounded-lg border overflow-hidden">
-      {/* Header - sem alterações */}
+      {/* Header */}
       <div className="grid grid-cols-8 border-b bg-gray-50 sticky top-0 z-10">
         <div className="p-1.5 text-[10px] font-medium text-gray-600 border-r">
           Horário
@@ -106,7 +106,6 @@ export const WeekView: React.FC<WeekViewProps> = ({
                   agendamentos={slotAgendamentos}
                   allAgendamentos={agendamentos}
                   onAddClick={() => {
-                    // Criar data local sem conversão UTC
                     const newDate = new Date(
                       day.getFullYear(),
                       day.getMonth(),
