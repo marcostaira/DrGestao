@@ -1,7 +1,7 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
   "/dashboard/pacientes/[id]/editar/page": "app/dashboard/pacientes/[id]/editar/page.js",
-  "/dashboard/atendimentos/page": "app/dashboard/atendimentos/page.js",
   "/dashboard/pacientes/page": "app/dashboard/pacientes/page.js",
-  "/dashboard/pacientes/novo/page": "app/dashboard/pacientes/novo/page.js"
+  "/dashboard/pacientes/novo/page": "app/dashboard/pacientes/novo/page.js",
+  "/dashboard/atendimentos/page": "app/dashboard/atendimentos/page.js"
 }

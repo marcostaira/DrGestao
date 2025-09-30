@@ -85,7 +85,13 @@ export const authenticate = async (
 
     const usuario = await prisma.usuario.findUnique({
       where: { id: decoded.userId },
-      include: { tenant: true },
+      include: {
+        tenant: {
+          include: {
+            plano: true,
+          },
+        },
+      },
     });
 
     if (!usuario) {
@@ -111,7 +117,7 @@ export const authenticate = async (
     req.tenant = {
       id: usuario.tenant.id,
       nome: usuario.tenant.nome,
-      plano: usuario.tenant.plano,
+      plano: usuario.tenant.plano.nome,
       ativo: usuario.tenant.ativo,
     };
 
@@ -210,7 +216,13 @@ export const optionalAuth = async (
 
     const usuario = await prisma.usuario.findUnique({
       where: { id: decoded.userId },
-      include: { tenant: true },
+      include: {
+        tenant: {
+          include: {
+            plano: true,
+          },
+        },
+      },
     });
 
     if (usuario && usuario.ativo && usuario.tenant.ativo) {
@@ -225,7 +237,7 @@ export const optionalAuth = async (
       req.tenant = {
         id: usuario.tenant.id,
         nome: usuario.tenant.nome,
-        plano: usuario.tenant.plano,
+        plano: usuario.tenant.plano.nome,
         ativo: usuario.tenant.ativo,
       };
     }
@@ -256,7 +268,13 @@ export const refreshTokenMiddleware = async (
 
     const usuario = await prisma.usuario.findUnique({
       where: { id: decoded.userId },
-      include: { tenant: true },
+      include: {
+        tenant: {
+          include: {
+            plano: true,
+          },
+        },
+      },
     });
 
     if (!usuario || !usuario.ativo || !usuario.tenant.ativo) {
@@ -289,7 +307,7 @@ export const refreshTokenMiddleware = async (
         tenant: {
           id: usuario.tenant.id,
           nome: usuario.tenant.nome,
-          plano: usuario.tenant.plano,
+          plano: usuario.tenant.plano.nome,
         },
       },
     });

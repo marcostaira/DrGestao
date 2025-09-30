@@ -232,3 +232,24 @@ ALTER TABLE "public"."atendimentos" ADD CONSTRAINT "atendimentos_tenant_id_fkey"
 -- AddForeignKey
 ALTER TABLE "public"."whatsapp_config" ADD CONSTRAINT "whatsapp_config_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "public"."tenants"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
+-- AlterTable - Adicionar novos campos ao modelo Paciente
+ALTER TABLE "pacientes" 
+ADD COLUMN IF NOT EXISTS "cpf" TEXT,
+ADD COLUMN IF NOT EXISTS "data_nascimento" TIMESTAMP(3),
+ADD COLUMN IF NOT EXISTS "telefone2" TEXT,
+ADD COLUMN IF NOT EXISTS "cep" TEXT,
+ADD COLUMN IF NOT EXISTS "logradouro" TEXT,
+ADD COLUMN IF NOT EXISTS "numero" TEXT,
+ADD COLUMN IF NOT EXISTS "complemento" TEXT,
+ADD COLUMN IF NOT EXISTS "bairro" TEXT,
+ADD COLUMN IF NOT EXISTS "cidade" TEXT,
+ADD COLUMN IF NOT EXISTS "estado" VARCHAR(2),
+ADD COLUMN IF NOT EXISTS "alergias" TEXT,
+ADD COLUMN IF NOT EXISTS "menor_idade" BOOLEAN NOT NULL DEFAULT false,
+ADD COLUMN IF NOT EXISTS "responsavel_nome" TEXT,
+ADD COLUMN IF NOT EXISTS "responsavel_cpf" TEXT,
+ADD COLUMN IF NOT EXISTS "responsavel_telefone" TEXT,
+ADD COLUMN IF NOT EXISTS "responsavel_parentesco" TEXT;
+
+-- CreateIndex - Adicionar índice para CPF
+CREATE INDEX IF NOT EXISTS "pacientes_cpf_idx" ON "pacientes"("cpf");

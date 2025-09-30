@@ -60,10 +60,16 @@ export default function EditarPacientePage() {
       ]);
 
       setProfissionais(profissionaisData);
+
+      // Converter data ISO para formato YYYY-MM-DD
+      const dataNascimentoFormatada = pacienteData.dataNascimento
+        ? new Date(pacienteData.dataNascimento).toISOString().split("T")[0]
+        : "";
+
       setFormData({
         nome: pacienteData.nome,
         cpf: pacienteData.cpf || "",
-        dataNascimento: pacienteData.dataNascimento || "",
+        dataNascimento: dataNascimentoFormatada,
         telefone: pacienteData.telefone,
         telefone2: pacienteData.telefone2 || "",
         email: pacienteData.email || "",

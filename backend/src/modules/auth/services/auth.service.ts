@@ -9,6 +9,7 @@ import {
   CreateUserData,
 } from "../../../types";
 import { TipoUsuario } from "../../../generated/prisma";
+
 // ============================================================================
 // AUTH SERVICE
 // ============================================================================
@@ -21,14 +22,18 @@ export class AuthService {
   static async login(credentials: LoginCredentials): Promise<AuthResponse> {
     const { email, senha } = credentials;
 
-    // Buscar usuário com tenant
+    // Buscar usuário com tenant e plano
     const usuario = await prisma.usuario.findFirst({
       where: {
         email: email.toLowerCase().trim(),
         ativo: true,
       },
       include: {
-        tenant: true,
+        tenant: {
+          include: {
+            plano: true,
+          },
+        },
       },
     });
 
@@ -71,7 +76,6 @@ export class AuthService {
       },
     });
 
-    // RETORNAR NO FORMATO CORRETO (sem success/data)
     return {
       token,
       refreshToken,
@@ -85,7 +89,7 @@ export class AuthService {
       tenant: {
         id: usuario.tenant.id,
         nome: usuario.tenant.nome,
-        plano: usuario.tenant.plano,
+        plano: usuario.tenant.plano.nome,
       },
     };
   }
@@ -95,7 +99,7 @@ export class AuthService {
   // ==========================================================================
 
   static async registerTenant(data: CreateTenantData): Promise<AuthResponse> {
-    const { nome, plano = "basico", adminUser } = data;
+    const { nome, adminUser } = data;
 
     // Verificar se já existe usuário com mesmo email
     const existingUser = await prisma.usuario.findFirst({
@@ -111,6 +115,18 @@ export class AuthService {
       throw new AppError("Já existe um usuário com este email", 400);
     }
 
+    // Buscar plano básico
+    const planoBasico = await prisma.plano.findFirst({
+      where: { slug: "basico", ativo: true },
+    });
+
+    if (!planoBasico) {
+      throw new AppError(
+        "Plano básico não encontrado. Execute o seed primeiro.",
+        500
+      );
+    }
+
     // Criptografar senha
     const hashedPassword = await bcrypt.hash(adminUser.senha, 12);
 
@@ -120,8 +136,11 @@ export class AuthService {
       const tenant = await tx.tenant.create({
         data: {
           nome: nome.trim(),
-          plano,
+          planoId: planoBasico.id,
           ativo: true,
+        },
+        include: {
+          plano: true,
         },
       });
 
@@ -152,7 +171,6 @@ export class AuthService {
     const token = generateToken(tokenPayload);
     const refreshToken = generateRefreshToken(tokenPayload);
 
-    // RETORNAR NO FORMATO CORRETO (sem success/data)
     return {
       token,
       refreshToken,
@@ -166,7 +184,7 @@ export class AuthService {
       tenant: {
         id: result.tenant.id,
         nome: result.tenant.nome,
-        plano: result.tenant.plano,
+        plano: result.tenant.plano.nome,
       },
     };
   }
@@ -184,6 +202,9 @@ export class AuthService {
     // Verificar se tenant existe e está ativo
     const tenant = await prisma.tenant.findUnique({
       where: { id: tenantId },
+      include: {
+        plano: true,
+      },
     });
 
     if (!tenant || !tenant.ativo) {
@@ -191,22 +212,14 @@ export class AuthService {
     }
 
     // Verificar limites do plano
-    const currentUserCount = await prisma.usuario.count({
+    const usuariosAtivos = await prisma.usuario.count({
       where: { tenantId, ativo: true },
     });
 
-    const planLimits = {
-      basico: 2,
-      premium: 10,
-      enterprise: -1, // Ilimitado
-    };
-
-    const limit = planLimits[tenant.plano as keyof typeof planLimits] || 2;
-
-    if (limit !== -1 && currentUserCount >= limit) {
+    if (usuariosAtivos >= tenant.plano.usuarios) {
       throw new AppError(
-        `Limite de usuários atingido para o plano ${tenant.plano}`,
-        402
+        `Limite de ${tenant.plano.usuarios} usuário(s) atingido para o plano ${tenant.plano.nome}. Faça upgrade do plano.`,
+        403
       );
     }
 
@@ -249,7 +262,6 @@ export class AuthService {
     currentPassword: string,
     newPassword: string
   ): Promise<void> {
-    // Buscar usuário
     const usuario = await prisma.usuario.findUnique({
       where: { id: userId, ativo: true },
     });
@@ -258,28 +270,23 @@ export class AuthService {
       throw new AppError("Usuário não encontrado", 404);
     }
 
-    // Verificar senha atual
     const senhaValida = await bcrypt.compare(currentPassword, usuario.senha);
     if (!senhaValida) {
       throw new AppError("Senha atual incorreta", 400);
     }
 
-    // Verificar se a nova senha é diferente da atual
     const mesmaSenh = await bcrypt.compare(newPassword, usuario.senha);
     if (mesmaSenh) {
       throw new AppError("A nova senha deve ser diferente da atual", 400);
     }
 
-    // Criptografar nova senha
     const hashedNewPassword = await bcrypt.hash(newPassword, 12);
 
-    // Atualizar senha
     await prisma.usuario.update({
       where: { id: userId },
       data: { senha: hashedNewPassword },
     });
 
-    // Log da alteração
     await prisma.logSistema.create({
       data: {
         tenantId: usuario.tenantId,
@@ -302,7 +309,6 @@ export class AuthService {
     targetUserId: string,
     newPassword: string
   ): Promise<void> {
-    // Buscar usuário admin
     const adminUser = await prisma.usuario.findUnique({
       where: { id: adminUserId, ativo: true },
     });
@@ -311,7 +317,6 @@ export class AuthService {
       throw new AppError("Apenas administradores podem resetar senhas", 403);
     }
 
-    // Buscar usuário alvo
     const targetUser = await prisma.usuario.findUnique({
       where: { id: targetUserId, ativo: true },
     });
@@ -320,7 +325,6 @@ export class AuthService {
       throw new AppError("Usuário não encontrado", 404);
     }
 
-    // Verificar se ambos pertencem ao mesmo tenant
     if (adminUser.tenantId !== targetUser.tenantId) {
       throw new AppError(
         "Não é possível alterar senha de usuário de outro tenant",
@@ -328,16 +332,13 @@ export class AuthService {
       );
     }
 
-    // Criptografar nova senha
     const hashedPassword = await bcrypt.hash(newPassword, 12);
 
-    // Atualizar senha
     await prisma.usuario.update({
       where: { id: targetUserId },
       data: { senha: hashedPassword },
     });
 
-    // Log da alteração
     await prisma.logSistema.create({
       data: {
         tenantId: targetUser.tenantId,
@@ -370,7 +371,12 @@ export class AuthService {
           select: {
             id: true,
             nome: true,
-            plano: true,
+            plano: {
+              select: {
+                nome: true,
+                slug: true,
+              },
+            },
           },
         },
       },
@@ -398,7 +404,6 @@ export class AuthService {
     }
 
     if (data.email) {
-      // Verificar se o novo email já existe
       const existingUser = await prisma.usuario.findFirst({
         where: {
           email: {
@@ -434,7 +439,6 @@ export class AuthService {
     adminUserId: string,
     targetUserId: string
   ): Promise<void> {
-    // Buscar usuário admin
     const adminUser = await prisma.usuario.findUnique({
       where: { id: adminUserId, ativo: true },
     });
@@ -446,12 +450,10 @@ export class AuthService {
       );
     }
 
-    // Não permitir auto-desativação
     if (adminUserId === targetUserId) {
       throw new AppError("Não é possível desativar seu próprio usuário", 400);
     }
 
-    // Buscar usuário alvo
     const targetUser = await prisma.usuario.findUnique({
       where: { id: targetUserId },
     });
@@ -460,7 +462,6 @@ export class AuthService {
       throw new AppError("Usuário não encontrado", 404);
     }
 
-    // Verificar se pertencem ao mesmo tenant
     if (adminUser.tenantId !== targetUser.tenantId) {
       throw new AppError(
         "Não é possível desativar usuário de outro tenant",
@@ -468,13 +469,11 @@ export class AuthService {
       );
     }
 
-    // Desativar usuário
     await prisma.usuario.update({
       where: { id: targetUserId },
       data: { ativo: false },
     });
 
-    // Log da desativação
     await prisma.logSistema.create({
       data: {
         tenantId: targetUser.tenantId,
@@ -540,7 +539,11 @@ export class AuthService {
     const usuario = await prisma.usuario.findUnique({
       where: { id: userId },
       include: {
-        tenant: true,
+        tenant: {
+          include: {
+            plano: true,
+          },
+        },
       },
     });
 
@@ -563,7 +566,7 @@ export class AuthService {
       tenant: {
         id: usuario.tenant.id,
         nome: usuario.tenant.nome,
-        plano: usuario.tenant.plano,
+        plano: usuario.tenant.plano.nome,
         ativo: usuario.tenant.ativo,
       },
     };
@@ -574,7 +577,6 @@ export class AuthService {
   // ==========================================================================
 
   static async logout(userId: string, tenantId: string): Promise<void> {
-    // Apenas registrar o log de logout
     await prisma.logSistema.create({
       data: {
         tenantId,
@@ -596,7 +598,6 @@ export class AuthService {
     userId: string,
     tenantId: string
   ): Promise<{ token: string; refreshToken: string }> {
-    // Buscar usuário para validar
     const usuario = await prisma.usuario.findUnique({
       where: { id: userId, tenantId, ativo: true },
     });
@@ -605,7 +606,6 @@ export class AuthService {
       throw new AppError("Usuário não encontrado ou inativo", 401);
     }
 
-    // Gerar novos tokens
     const tokenPayload = {
       userId: usuario.id,
       tenantId: usuario.tenantId,
@@ -639,7 +639,6 @@ export class AuthService {
     const { page = 1, limit = 10 } = pagination;
     const skip = (page - 1) * limit;
 
-    // Buscar usuários
     const [usuarios, total] = await Promise.all([
       prisma.usuario.findMany({
         where: { tenantId },

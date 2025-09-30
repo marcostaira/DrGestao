@@ -8,24 +8,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Tenant {
-  id             String          @id @default(cuid())
-  nome           String
-  plano          String          @default("basico")
-  ativo          Boolean         @default(true)
-  createdAt      DateTime        @default(now()) @map("created_at")
-  updatedAt      DateTime        @updatedAt @map("updated_at")
-  agendamentos   Agendamento[]
-  atendimentos   Atendimento[]
-  pacientes      Paciente[]
-  procedimentos  Procedimento[]
-  profissionais  Profissional[]
-  usuarios       Usuario[]
-  whatsappConfig WhatsAppConfig?
-
-  @@map("tenants")
-}
-
 model Usuario {
   id        String      @id @default(cuid())
   tenantId  String      @map("tenant_id")
@@ -62,23 +44,54 @@ model Profissional {
 }
 
 model Paciente {
-  id             String        @id @default(cuid())
-  tenantId       String        @map("tenant_id")
-  profissionalId String?       @map("profissional_id")
-  nome           String
-  telefone       String
-  email          String?
-  observacoes    String?
-  createdAt      DateTime      @default(now()) @map("created_at")
-  updatedAt      DateTime      @updatedAt @map("updated_at")
-  agendamentos   Agendamento[]
-  atendimentos   Atendimento[]
-  profissional   Profissional? @relation(fields: [profissionalId], references: [id])
-  tenant         Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  id        String   @id @default(cuid())
+  tenantId  String   @map("tenant_id")
+  profissionalId String? @map("profissional_id")
+  
+  // Dados pessoais
+  nome      String
+  cpf       String?
+  dataNascimento DateTime? @map("data_nascimento")
+  
+  // Contatos
+  telefone  String
+  telefone2 String?  @map("telefone2")
+  email     String?
+  
+  // Endereço
+  cep       String?
+  logradouro String?
+  numero    String?
+  complemento String?
+  bairro    String?
+  cidade    String?
+  estado    String?  @db.VarChar(2)
+  
+  // Dados médicos
+  alergias  String?  @db.Text
+  
+  // Responsável (para menores de idade)
+  menorIdade Boolean @default(false) @map("menor_idade")
+  responsavelNome String? @map("responsavel_nome")
+  responsavelCpf String? @map("responsavel_cpf")
+  responsavelTelefone String? @map("responsavel_telefone")
+  responsavelParentesco String? @map("responsavel_parentesco")
+  
+  observacoes String? @db.Text
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
+  tenant        Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  profissional  Profissional? @relation(fields: [profissionalId], references: [id], onDelete: SetNull)
+  agendamentos  Agendamento[]
+  atendimentos  Atendimento[]
+
+  @@map("pacientes")
+  @@index([tenantId])
   @@index([tenantId, nome])
   @@index([tenantId, telefone])
-  @@map("pacientes")
+  @@index([cpf])
 }
 
 model Procedimento {
@@ -201,3 +214,55 @@ enum TipoLog {
   UPDATE
   DELETE
 }
+
+model Plano {
+  id        String   @id @default(cuid())
+  nome      String   @unique
+  slug      String   @unique
+  descricao String?
+  
+  // Limites
+  profissionaisAtivos Int  @map("profissionais_ativos")
+  usuarios            Int
+  agendamentosMes     Int  @map("agendamentos_mes")
+  pacientes           Int
+  armazenamentoMB     Int  @map("armazenamento_mb")
+  
+  // Funcionalidades
+  whatsappAtivo       Boolean @default(false) @map("whatsapp_ativo")
+  googleCalendarSync  Boolean @default(false) @map("google_calendar_sync")
+  
+  // Preço
+  valorMensal         Decimal? @db.Decimal(10, 2) @map("valor_mensal")
+  valorAnual          Decimal? @db.Decimal(10, 2) @map("valor_anual")
+  
+  ativo     Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  tenants   Tenant[]
+
+  @@map("planos")
+}
+
+model Tenant {
+  id             String          @id @default(cuid())
+  nome           String
+  planoId        String          @map("plano_id")
+  ativo          Boolean         @default(true)
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+  
+  plano          Plano           @relation(fields: [planoId], references: [id])
+  agendamentos   Agendamento[]
+  atendimentos   Atendimento[]
+  pacientes      Paciente[]
+  procedimentos  Procedimento[]
+  profissionais  Profissional[]
+  usuarios       Usuario[]
+  whatsappConfig WhatsAppConfig?
+
+  @@index([planoId])
+  @@map("tenants")
+}
+

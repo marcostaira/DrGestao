@@ -1,3 +1,4 @@
+import { PlanoService } from "@/modules/planos/services/plano.service";
 import { prisma } from "../../../config/database";
 import {
   CreatePacienteData,
@@ -16,6 +17,9 @@ export class PacienteService {
   // ==========================================================================
 
   static async create(tenantId: string, data: CreatePacienteData) {
+    // Validar limite do plano
+    await PlanoService.verificarLimitePacientes(tenantId);
+
     // Verificar se já existe paciente com mesmo telefone
     const existingPaciente = await prisma.paciente.findFirst({
       where: {
@@ -30,7 +34,7 @@ export class PacienteService {
 
     // Verificar se profissional existe (se fornecido)
     if (data.profissionalId) {
-      const profissional = await prisma.profissional.findUnique({
+      const profissional = await prisma.profissional.findFirst({
         where: { id: data.profissionalId, tenantId },
       });
 
@@ -39,13 +43,29 @@ export class PacienteService {
       }
     }
 
-    // Criar paciente
+    // Criar paciente com TODOS os campos
     const paciente = await prisma.paciente.create({
       data: {
         tenantId,
         nome: data.nome.trim(),
+        cpf: data.cpf || null,
+        dataNascimento: data.dataNascimento || null,
         telefone: data.telefone.trim(),
+        telefone2: data.telefone2 || null,
         email: data.email?.trim().toLowerCase() || null,
+        cep: data.cep || null,
+        logradouro: data.logradouro || null,
+        numero: data.numero || null,
+        complemento: data.complemento || null,
+        bairro: data.bairro || null,
+        cidade: data.cidade || null,
+        estado: data.estado || null,
+        alergias: data.alergias || null,
+        menorIdade: data.menorIdade || false,
+        responsavelNome: data.responsavelNome || null,
+        responsavelCpf: data.responsavelCpf || null,
+        responsavelTelefone: data.responsavelTelefone || null,
+        responsavelParentesco: data.responsavelParentesco || null,
         observacoes: data.observacoes?.trim() || null,
         profissionalId: data.profissionalId || null,
       },
@@ -236,14 +256,39 @@ export class PacienteService {
       }
     }
 
-    // Preparar dados para atualização
+    // Preparar dados para atualização com TODOS os campos
     const updateData: any = {};
 
-    if (data.nome) updateData.nome = data.nome.trim();
-    if (data.telefone) updateData.telefone = data.telefone.trim();
+    if (data.nome !== undefined) updateData.nome = data.nome.trim();
+    if (data.cpf !== undefined) updateData.cpf = data.cpf || null;
+    if (data.dataNascimento !== undefined)
+      updateData.dataNascimento = data.dataNascimento || null;
+    if (data.telefone !== undefined) updateData.telefone = data.telefone.trim();
+    if (data.telefone2 !== undefined)
+      updateData.telefone2 = data.telefone2 || null;
     if (data.email !== undefined) {
       updateData.email = data.email ? data.email.trim().toLowerCase() : null;
     }
+    if (data.cep !== undefined) updateData.cep = data.cep || null;
+    if (data.logradouro !== undefined)
+      updateData.logradouro = data.logradouro || null;
+    if (data.numero !== undefined) updateData.numero = data.numero || null;
+    if (data.complemento !== undefined)
+      updateData.complemento = data.complemento || null;
+    if (data.bairro !== undefined) updateData.bairro = data.bairro || null;
+    if (data.cidade !== undefined) updateData.cidade = data.cidade || null;
+    if (data.estado !== undefined) updateData.estado = data.estado || null;
+    if (data.alergias !== undefined)
+      updateData.alergias = data.alergias || null;
+    if (data.menorIdade !== undefined) updateData.menorIdade = data.menorIdade;
+    if (data.responsavelNome !== undefined)
+      updateData.responsavelNome = data.responsavelNome || null;
+    if (data.responsavelCpf !== undefined)
+      updateData.responsavelCpf = data.responsavelCpf || null;
+    if (data.responsavelTelefone !== undefined)
+      updateData.responsavelTelefone = data.responsavelTelefone || null;
+    if (data.responsavelParentesco !== undefined)
+      updateData.responsavelParentesco = data.responsavelParentesco || null;
     if (data.observacoes !== undefined) {
       updateData.observacoes = data.observacoes
         ? data.observacoes.trim()

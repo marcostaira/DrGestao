@@ -14,11 +14,6 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
 
 
 /**
- * Model Tenant
- * 
- */
-export type Tenant = $Result.DefaultSelection<Prisma.$TenantPayload>
-/**
  * Model Usuario
  * 
  */
@@ -58,6 +53,16 @@ export type WhatsAppConfig = $Result.DefaultSelection<Prisma.$WhatsAppConfigPayl
  * 
  */
 export type LogSistema = $Result.DefaultSelection<Prisma.$LogSistemaPayload>
+/**
+ * Model Plano
+ * 
+ */
+export type Plano = $Result.DefaultSelection<Prisma.$PlanoPayload>
+/**
+ * Model Tenant
+ * 
+ */
+export type Tenant = $Result.DefaultSelection<Prisma.$TenantPayload>
 
 /**
  * Enums
@@ -120,8 +125,8 @@ export const TipoLog: typeof $Enums.TipoLog
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Tenants
- * const tenants = await prisma.tenant.findMany()
+ * // Fetch zero or more Usuarios
+ * const usuarios = await prisma.usuario.findMany()
  * ```
  *
  *
@@ -141,8 +146,8 @@ export class PrismaClient<
    * @example
    * ```
    * const prisma = new PrismaClient()
-   * // Fetch zero or more Tenants
-   * const tenants = await prisma.tenant.findMany()
+   * // Fetch zero or more Usuarios
+   * const usuarios = await prisma.usuario.findMany()
    * ```
    *
    *
@@ -232,16 +237,6 @@ export class PrismaClient<
   }>>
 
       /**
-   * `prisma.tenant`: Exposes CRUD operations for the **Tenant** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Tenants
-    * const tenants = await prisma.tenant.findMany()
-    * ```
-    */
-  get tenant(): Prisma.TenantDelegate<ExtArgs, ClientOptions>;
-
-  /**
    * `prisma.usuario`: Exposes CRUD operations for the **Usuario** model.
     * Example usage:
     * ```ts
@@ -320,6 +315,26 @@ export class PrismaClient<
     * ```
     */
   get logSistema(): Prisma.LogSistemaDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.plano`: Exposes CRUD operations for the **Plano** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Planos
+    * const planos = await prisma.plano.findMany()
+    * ```
+    */
+  get plano(): Prisma.PlanoDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.tenant`: Exposes CRUD operations for the **Tenant** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Tenants
+    * const tenants = await prisma.tenant.findMany()
+    * ```
+    */
+  get tenant(): Prisma.TenantDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -760,7 +775,6 @@ export namespace Prisma {
 
 
   export const ModelName: {
-    Tenant: 'Tenant',
     Usuario: 'Usuario',
     Profissional: 'Profissional',
     Paciente: 'Paciente',
@@ -768,7 +782,9 @@ export namespace Prisma {
     Agendamento: 'Agendamento',
     Atendimento: 'Atendimento',
     WhatsAppConfig: 'WhatsAppConfig',
-    LogSistema: 'LogSistema'
+    LogSistema: 'LogSistema',
+    Plano: 'Plano',
+    Tenant: 'Tenant'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -787,84 +803,10 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "tenant" | "usuario" | "profissional" | "paciente" | "procedimento" | "agendamento" | "atendimento" | "whatsAppConfig" | "logSistema"
+      modelProps: "usuario" | "profissional" | "paciente" | "procedimento" | "agendamento" | "atendimento" | "whatsAppConfig" | "logSistema" | "plano" | "tenant"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
-      Tenant: {
-        payload: Prisma.$TenantPayload<ExtArgs>
-        fields: Prisma.TenantFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.TenantFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TenantPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.TenantFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TenantPayload>
-          }
-          findFirst: {
-            args: Prisma.TenantFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TenantPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.TenantFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TenantPayload>
-          }
-          findMany: {
-            args: Prisma.TenantFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TenantPayload>[]
-          }
-          create: {
-            args: Prisma.TenantCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TenantPayload>
-          }
-          createMany: {
-            args: Prisma.TenantCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.TenantCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TenantPayload>[]
-          }
-          delete: {
-            args: Prisma.TenantDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TenantPayload>
-          }
-          update: {
-            args: Prisma.TenantUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TenantPayload>
-          }
-          deleteMany: {
-            args: Prisma.TenantDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.TenantUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.TenantUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TenantPayload>[]
-          }
-          upsert: {
-            args: Prisma.TenantUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TenantPayload>
-          }
-          aggregate: {
-            args: Prisma.TenantAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateTenant>
-          }
-          groupBy: {
-            args: Prisma.TenantGroupByArgs<ExtArgs>
-            result: $Utils.Optional<TenantGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.TenantCountArgs<ExtArgs>
-            result: $Utils.Optional<TenantCountAggregateOutputType> | number
-          }
-        }
-      }
       Usuario: {
         payload: Prisma.$UsuarioPayload<ExtArgs>
         fields: Prisma.UsuarioFieldRefs
@@ -1457,6 +1399,154 @@ export namespace Prisma {
           }
         }
       }
+      Plano: {
+        payload: Prisma.$PlanoPayload<ExtArgs>
+        fields: Prisma.PlanoFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PlanoFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanoPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PlanoFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanoPayload>
+          }
+          findFirst: {
+            args: Prisma.PlanoFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanoPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PlanoFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanoPayload>
+          }
+          findMany: {
+            args: Prisma.PlanoFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanoPayload>[]
+          }
+          create: {
+            args: Prisma.PlanoCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanoPayload>
+          }
+          createMany: {
+            args: Prisma.PlanoCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PlanoCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanoPayload>[]
+          }
+          delete: {
+            args: Prisma.PlanoDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanoPayload>
+          }
+          update: {
+            args: Prisma.PlanoUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanoPayload>
+          }
+          deleteMany: {
+            args: Prisma.PlanoDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PlanoUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PlanoUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanoPayload>[]
+          }
+          upsert: {
+            args: Prisma.PlanoUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanoPayload>
+          }
+          aggregate: {
+            args: Prisma.PlanoAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePlano>
+          }
+          groupBy: {
+            args: Prisma.PlanoGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PlanoGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PlanoCountArgs<ExtArgs>
+            result: $Utils.Optional<PlanoCountAggregateOutputType> | number
+          }
+        }
+      }
+      Tenant: {
+        payload: Prisma.$TenantPayload<ExtArgs>
+        fields: Prisma.TenantFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TenantFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TenantFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPayload>
+          }
+          findFirst: {
+            args: Prisma.TenantFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TenantFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPayload>
+          }
+          findMany: {
+            args: Prisma.TenantFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPayload>[]
+          }
+          create: {
+            args: Prisma.TenantCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPayload>
+          }
+          createMany: {
+            args: Prisma.TenantCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TenantCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPayload>[]
+          }
+          delete: {
+            args: Prisma.TenantDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPayload>
+          }
+          update: {
+            args: Prisma.TenantUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPayload>
+          }
+          deleteMany: {
+            args: Prisma.TenantDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TenantUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TenantUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPayload>[]
+          }
+          upsert: {
+            args: Prisma.TenantUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPayload>
+          }
+          aggregate: {
+            args: Prisma.TenantAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTenant>
+          }
+          groupBy: {
+            args: Prisma.TenantGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TenantGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TenantCountArgs<ExtArgs>
+            result: $Utils.Optional<TenantCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1553,7 +1643,6 @@ export namespace Prisma {
     omit?: Prisma.GlobalOmitConfig
   }
   export type GlobalOmitConfig = {
-    tenant?: TenantOmit
     usuario?: UsuarioOmit
     profissional?: ProfissionalOmit
     paciente?: PacienteOmit
@@ -1562,6 +1651,8 @@ export namespace Prisma {
     atendimento?: AtendimentoOmit
     whatsAppConfig?: WhatsAppConfigOmit
     logSistema?: LogSistemaOmit
+    plano?: PlanoOmit
+    tenant?: TenantOmit
   }
 
   /* Types for Logging */
@@ -1635,82 +1726,6 @@ export namespace Prisma {
   /**
    * Count Types
    */
-
-
-  /**
-   * Count Type TenantCountOutputType
-   */
-
-  export type TenantCountOutputType = {
-    agendamentos: number
-    atendimentos: number
-    pacientes: number
-    procedimentos: number
-    profissionais: number
-    usuarios: number
-  }
-
-  export type TenantCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    agendamentos?: boolean | TenantCountOutputTypeCountAgendamentosArgs
-    atendimentos?: boolean | TenantCountOutputTypeCountAtendimentosArgs
-    pacientes?: boolean | TenantCountOutputTypeCountPacientesArgs
-    procedimentos?: boolean | TenantCountOutputTypeCountProcedimentosArgs
-    profissionais?: boolean | TenantCountOutputTypeCountProfissionaisArgs
-    usuarios?: boolean | TenantCountOutputTypeCountUsuariosArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * TenantCountOutputType without action
-   */
-  export type TenantCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TenantCountOutputType
-     */
-    select?: TenantCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * TenantCountOutputType without action
-   */
-  export type TenantCountOutputTypeCountAgendamentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AgendamentoWhereInput
-  }
-
-  /**
-   * TenantCountOutputType without action
-   */
-  export type TenantCountOutputTypeCountAtendimentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AtendimentoWhereInput
-  }
-
-  /**
-   * TenantCountOutputType without action
-   */
-  export type TenantCountOutputTypeCountPacientesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PacienteWhereInput
-  }
-
-  /**
-   * TenantCountOutputType without action
-   */
-  export type TenantCountOutputTypeCountProcedimentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProcedimentoWhereInput
-  }
-
-  /**
-   * TenantCountOutputType without action
-   */
-  export type TenantCountOutputTypeCountProfissionaisArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProfissionalWhereInput
-  }
-
-  /**
-   * TenantCountOutputType without action
-   */
-  export type TenantCountOutputTypeCountUsuariosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UsuarioWhereInput
-  }
 
 
   /**
@@ -1843,1254 +1858,115 @@ export namespace Prisma {
 
 
   /**
-   * Models
+   * Count Type PlanoCountOutputType
    */
 
-  /**
-   * Model Tenant
-   */
-
-  export type AggregateTenant = {
-    _count: TenantCountAggregateOutputType | null
-    _min: TenantMinAggregateOutputType | null
-    _max: TenantMaxAggregateOutputType | null
+  export type PlanoCountOutputType = {
+    tenants: number
   }
 
-  export type TenantMinAggregateOutputType = {
-    id: string | null
-    nome: string | null
-    plano: string | null
-    ativo: boolean | null
-    createdAt: Date | null
-    updatedAt: Date | null
+  export type PlanoCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenants?: boolean | PlanoCountOutputTypeCountTenantsArgs
   }
-
-  export type TenantMaxAggregateOutputType = {
-    id: string | null
-    nome: string | null
-    plano: string | null
-    ativo: boolean | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type TenantCountAggregateOutputType = {
-    id: number
-    nome: number
-    plano: number
-    ativo: number
-    createdAt: number
-    updatedAt: number
-    _all: number
-  }
-
-
-  export type TenantMinAggregateInputType = {
-    id?: true
-    nome?: true
-    plano?: true
-    ativo?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type TenantMaxAggregateInputType = {
-    id?: true
-    nome?: true
-    plano?: true
-    ativo?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type TenantCountAggregateInputType = {
-    id?: true
-    nome?: true
-    plano?: true
-    ativo?: true
-    createdAt?: true
-    updatedAt?: true
-    _all?: true
-  }
-
-  export type TenantAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Tenant to aggregate.
-     */
-    where?: TenantWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Tenants to fetch.
-     */
-    orderBy?: TenantOrderByWithRelationInput | TenantOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: TenantWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Tenants from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Tenants.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Tenants
-    **/
-    _count?: true | TenantCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: TenantMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: TenantMaxAggregateInputType
-  }
-
-  export type GetTenantAggregateType<T extends TenantAggregateArgs> = {
-        [P in keyof T & keyof AggregateTenant]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateTenant[P]>
-      : GetScalarType<T[P], AggregateTenant[P]>
-  }
-
-
-
-
-  export type TenantGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TenantWhereInput
-    orderBy?: TenantOrderByWithAggregationInput | TenantOrderByWithAggregationInput[]
-    by: TenantScalarFieldEnum[] | TenantScalarFieldEnum
-    having?: TenantScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: TenantCountAggregateInputType | true
-    _min?: TenantMinAggregateInputType
-    _max?: TenantMaxAggregateInputType
-  }
-
-  export type TenantGroupByOutputType = {
-    id: string
-    nome: string
-    plano: string
-    ativo: boolean
-    createdAt: Date
-    updatedAt: Date
-    _count: TenantCountAggregateOutputType | null
-    _min: TenantMinAggregateOutputType | null
-    _max: TenantMaxAggregateOutputType | null
-  }
-
-  type GetTenantGroupByPayload<T extends TenantGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<TenantGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof TenantGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], TenantGroupByOutputType[P]>
-            : GetScalarType<T[P], TenantGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type TenantSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    nome?: boolean
-    plano?: boolean
-    ativo?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    agendamentos?: boolean | Tenant$agendamentosArgs<ExtArgs>
-    atendimentos?: boolean | Tenant$atendimentosArgs<ExtArgs>
-    pacientes?: boolean | Tenant$pacientesArgs<ExtArgs>
-    procedimentos?: boolean | Tenant$procedimentosArgs<ExtArgs>
-    profissionais?: boolean | Tenant$profissionaisArgs<ExtArgs>
-    usuarios?: boolean | Tenant$usuariosArgs<ExtArgs>
-    whatsappConfig?: boolean | Tenant$whatsappConfigArgs<ExtArgs>
-    _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["tenant"]>
-
-  export type TenantSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    nome?: boolean
-    plano?: boolean
-    ativo?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }, ExtArgs["result"]["tenant"]>
-
-  export type TenantSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    nome?: boolean
-    plano?: boolean
-    ativo?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }, ExtArgs["result"]["tenant"]>
-
-  export type TenantSelectScalar = {
-    id?: boolean
-    nome?: boolean
-    plano?: boolean
-    ativo?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }
-
-  export type TenantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome" | "plano" | "ativo" | "createdAt" | "updatedAt", ExtArgs["result"]["tenant"]>
-  export type TenantInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    agendamentos?: boolean | Tenant$agendamentosArgs<ExtArgs>
-    atendimentos?: boolean | Tenant$atendimentosArgs<ExtArgs>
-    pacientes?: boolean | Tenant$pacientesArgs<ExtArgs>
-    procedimentos?: boolean | Tenant$procedimentosArgs<ExtArgs>
-    profissionais?: boolean | Tenant$profissionaisArgs<ExtArgs>
-    usuarios?: boolean | Tenant$usuariosArgs<ExtArgs>
-    whatsappConfig?: boolean | Tenant$whatsappConfigArgs<ExtArgs>
-    _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type TenantIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type TenantIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-
-  export type $TenantPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Tenant"
-    objects: {
-      agendamentos: Prisma.$AgendamentoPayload<ExtArgs>[]
-      atendimentos: Prisma.$AtendimentoPayload<ExtArgs>[]
-      pacientes: Prisma.$PacientePayload<ExtArgs>[]
-      procedimentos: Prisma.$ProcedimentoPayload<ExtArgs>[]
-      profissionais: Prisma.$ProfissionalPayload<ExtArgs>[]
-      usuarios: Prisma.$UsuarioPayload<ExtArgs>[]
-      whatsappConfig: Prisma.$WhatsAppConfigPayload<ExtArgs> | null
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      nome: string
-      plano: string
-      ativo: boolean
-      createdAt: Date
-      updatedAt: Date
-    }, ExtArgs["result"]["tenant"]>
-    composites: {}
-  }
-
-  type TenantGetPayload<S extends boolean | null | undefined | TenantDefaultArgs> = $Result.GetResult<Prisma.$TenantPayload, S>
-
-  type TenantCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<TenantFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: TenantCountAggregateInputType | true
-    }
-
-  export interface TenantDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Tenant'], meta: { name: 'Tenant' } }
-    /**
-     * Find zero or one Tenant that matches the filter.
-     * @param {TenantFindUniqueArgs} args - Arguments to find a Tenant
-     * @example
-     * // Get one Tenant
-     * const tenant = await prisma.tenant.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends TenantFindUniqueArgs>(args: SelectSubset<T, TenantFindUniqueArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Tenant that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {TenantFindUniqueOrThrowArgs} args - Arguments to find a Tenant
-     * @example
-     * // Get one Tenant
-     * const tenant = await prisma.tenant.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends TenantFindUniqueOrThrowArgs>(args: SelectSubset<T, TenantFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Tenant that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TenantFindFirstArgs} args - Arguments to find a Tenant
-     * @example
-     * // Get one Tenant
-     * const tenant = await prisma.tenant.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends TenantFindFirstArgs>(args?: SelectSubset<T, TenantFindFirstArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Tenant that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TenantFindFirstOrThrowArgs} args - Arguments to find a Tenant
-     * @example
-     * // Get one Tenant
-     * const tenant = await prisma.tenant.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends TenantFindFirstOrThrowArgs>(args?: SelectSubset<T, TenantFindFirstOrThrowArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Tenants that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TenantFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Tenants
-     * const tenants = await prisma.tenant.findMany()
-     * 
-     * // Get first 10 Tenants
-     * const tenants = await prisma.tenant.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const tenantWithIdOnly = await prisma.tenant.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends TenantFindManyArgs>(args?: SelectSubset<T, TenantFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Tenant.
-     * @param {TenantCreateArgs} args - Arguments to create a Tenant.
-     * @example
-     * // Create one Tenant
-     * const Tenant = await prisma.tenant.create({
-     *   data: {
-     *     // ... data to create a Tenant
-     *   }
-     * })
-     * 
-     */
-    create<T extends TenantCreateArgs>(args: SelectSubset<T, TenantCreateArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Tenants.
-     * @param {TenantCreateManyArgs} args - Arguments to create many Tenants.
-     * @example
-     * // Create many Tenants
-     * const tenant = await prisma.tenant.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends TenantCreateManyArgs>(args?: SelectSubset<T, TenantCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Tenants and returns the data saved in the database.
-     * @param {TenantCreateManyAndReturnArgs} args - Arguments to create many Tenants.
-     * @example
-     * // Create many Tenants
-     * const tenant = await prisma.tenant.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Tenants and only return the `id`
-     * const tenantWithIdOnly = await prisma.tenant.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends TenantCreateManyAndReturnArgs>(args?: SelectSubset<T, TenantCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Tenant.
-     * @param {TenantDeleteArgs} args - Arguments to delete one Tenant.
-     * @example
-     * // Delete one Tenant
-     * const Tenant = await prisma.tenant.delete({
-     *   where: {
-     *     // ... filter to delete one Tenant
-     *   }
-     * })
-     * 
-     */
-    delete<T extends TenantDeleteArgs>(args: SelectSubset<T, TenantDeleteArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Tenant.
-     * @param {TenantUpdateArgs} args - Arguments to update one Tenant.
-     * @example
-     * // Update one Tenant
-     * const tenant = await prisma.tenant.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends TenantUpdateArgs>(args: SelectSubset<T, TenantUpdateArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Tenants.
-     * @param {TenantDeleteManyArgs} args - Arguments to filter Tenants to delete.
-     * @example
-     * // Delete a few Tenants
-     * const { count } = await prisma.tenant.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends TenantDeleteManyArgs>(args?: SelectSubset<T, TenantDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Tenants.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TenantUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Tenants
-     * const tenant = await prisma.tenant.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends TenantUpdateManyArgs>(args: SelectSubset<T, TenantUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Tenants and returns the data updated in the database.
-     * @param {TenantUpdateManyAndReturnArgs} args - Arguments to update many Tenants.
-     * @example
-     * // Update many Tenants
-     * const tenant = await prisma.tenant.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Tenants and only return the `id`
-     * const tenantWithIdOnly = await prisma.tenant.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends TenantUpdateManyAndReturnArgs>(args: SelectSubset<T, TenantUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Tenant.
-     * @param {TenantUpsertArgs} args - Arguments to update or create a Tenant.
-     * @example
-     * // Update or create a Tenant
-     * const tenant = await prisma.tenant.upsert({
-     *   create: {
-     *     // ... data to create a Tenant
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Tenant we want to update
-     *   }
-     * })
-     */
-    upsert<T extends TenantUpsertArgs>(args: SelectSubset<T, TenantUpsertArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Tenants.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TenantCountArgs} args - Arguments to filter Tenants to count.
-     * @example
-     * // Count the number of Tenants
-     * const count = await prisma.tenant.count({
-     *   where: {
-     *     // ... the filter for the Tenants we want to count
-     *   }
-     * })
-    **/
-    count<T extends TenantCountArgs>(
-      args?: Subset<T, TenantCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], TenantCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Tenant.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TenantAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends TenantAggregateArgs>(args: Subset<T, TenantAggregateArgs>): Prisma.PrismaPromise<GetTenantAggregateType<T>>
-
-    /**
-     * Group by Tenant.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TenantGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends TenantGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: TenantGroupByArgs['orderBy'] }
-        : { orderBy?: TenantGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, TenantGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTenantGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Tenant model
-   */
-  readonly fields: TenantFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Tenant.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__TenantClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    agendamentos<T extends Tenant$agendamentosArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$agendamentosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgendamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    atendimentos<T extends Tenant$atendimentosArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$atendimentosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AtendimentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    pacientes<T extends Tenant$pacientesArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$pacientesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PacientePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    procedimentos<T extends Tenant$procedimentosArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$procedimentosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProcedimentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    profissionais<T extends Tenant$profissionaisArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$profissionaisArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProfissionalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    usuarios<T extends Tenant$usuariosArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$usuariosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    whatsappConfig<T extends Tenant$whatsappConfigArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$whatsappConfigArgs<ExtArgs>>): Prisma__WhatsAppConfigClient<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Tenant model
-   */
-  interface TenantFieldRefs {
-    readonly id: FieldRef<"Tenant", 'String'>
-    readonly nome: FieldRef<"Tenant", 'String'>
-    readonly plano: FieldRef<"Tenant", 'String'>
-    readonly ativo: FieldRef<"Tenant", 'Boolean'>
-    readonly createdAt: FieldRef<"Tenant", 'DateTime'>
-    readonly updatedAt: FieldRef<"Tenant", 'DateTime'>
-  }
-    
 
   // Custom InputTypes
   /**
-   * Tenant findUnique
+   * PlanoCountOutputType without action
    */
-  export type TenantFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PlanoCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Tenant
+     * Select specific fields to fetch from the PlanoCountOutputType
      */
-    select?: TenantSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Tenant
-     */
-    omit?: TenantOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TenantInclude<ExtArgs> | null
-    /**
-     * Filter, which Tenant to fetch.
-     */
-    where: TenantWhereUniqueInput
+    select?: PlanoCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * Tenant findUniqueOrThrow
+   * PlanoCountOutputType without action
    */
-  export type TenantFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Tenant
-     */
-    select?: TenantSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Tenant
-     */
-    omit?: TenantOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TenantInclude<ExtArgs> | null
-    /**
-     * Filter, which Tenant to fetch.
-     */
-    where: TenantWhereUniqueInput
-  }
-
-  /**
-   * Tenant findFirst
-   */
-  export type TenantFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Tenant
-     */
-    select?: TenantSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Tenant
-     */
-    omit?: TenantOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TenantInclude<ExtArgs> | null
-    /**
-     * Filter, which Tenant to fetch.
-     */
+  export type PlanoCountOutputTypeCountTenantsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TenantWhereInput
+  }
+
+
+  /**
+   * Count Type TenantCountOutputType
+   */
+
+  export type TenantCountOutputType = {
+    agendamentos: number
+    atendimentos: number
+    pacientes: number
+    procedimentos: number
+    profissionais: number
+    usuarios: number
+  }
+
+  export type TenantCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    agendamentos?: boolean | TenantCountOutputTypeCountAgendamentosArgs
+    atendimentos?: boolean | TenantCountOutputTypeCountAtendimentosArgs
+    pacientes?: boolean | TenantCountOutputTypeCountPacientesArgs
+    procedimentos?: boolean | TenantCountOutputTypeCountProcedimentosArgs
+    profissionais?: boolean | TenantCountOutputTypeCountProfissionaisArgs
+    usuarios?: boolean | TenantCountOutputTypeCountUsuariosArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Tenants to fetch.
+     * Select specific fields to fetch from the TenantCountOutputType
      */
-    orderBy?: TenantOrderByWithRelationInput | TenantOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Tenants.
-     */
-    cursor?: TenantWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Tenants from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Tenants.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Tenants.
-     */
-    distinct?: TenantScalarFieldEnum | TenantScalarFieldEnum[]
+    select?: TenantCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * Tenant findFirstOrThrow
+   * TenantCountOutputType without action
    */
-  export type TenantFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Tenant
-     */
-    select?: TenantSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Tenant
-     */
-    omit?: TenantOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TenantInclude<ExtArgs> | null
-    /**
-     * Filter, which Tenant to fetch.
-     */
-    where?: TenantWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Tenants to fetch.
-     */
-    orderBy?: TenantOrderByWithRelationInput | TenantOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Tenants.
-     */
-    cursor?: TenantWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Tenants from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Tenants.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Tenants.
-     */
-    distinct?: TenantScalarFieldEnum | TenantScalarFieldEnum[]
-  }
-
-  /**
-   * Tenant findMany
-   */
-  export type TenantFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Tenant
-     */
-    select?: TenantSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Tenant
-     */
-    omit?: TenantOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TenantInclude<ExtArgs> | null
-    /**
-     * Filter, which Tenants to fetch.
-     */
-    where?: TenantWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Tenants to fetch.
-     */
-    orderBy?: TenantOrderByWithRelationInput | TenantOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Tenants.
-     */
-    cursor?: TenantWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Tenants from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Tenants.
-     */
-    skip?: number
-    distinct?: TenantScalarFieldEnum | TenantScalarFieldEnum[]
-  }
-
-  /**
-   * Tenant create
-   */
-  export type TenantCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Tenant
-     */
-    select?: TenantSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Tenant
-     */
-    omit?: TenantOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TenantInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Tenant.
-     */
-    data: XOR<TenantCreateInput, TenantUncheckedCreateInput>
-  }
-
-  /**
-   * Tenant createMany
-   */
-  export type TenantCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Tenants.
-     */
-    data: TenantCreateManyInput | TenantCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Tenant createManyAndReturn
-   */
-  export type TenantCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Tenant
-     */
-    select?: TenantSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Tenant
-     */
-    omit?: TenantOmit<ExtArgs> | null
-    /**
-     * The data used to create many Tenants.
-     */
-    data: TenantCreateManyInput | TenantCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Tenant update
-   */
-  export type TenantUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Tenant
-     */
-    select?: TenantSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Tenant
-     */
-    omit?: TenantOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TenantInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Tenant.
-     */
-    data: XOR<TenantUpdateInput, TenantUncheckedUpdateInput>
-    /**
-     * Choose, which Tenant to update.
-     */
-    where: TenantWhereUniqueInput
-  }
-
-  /**
-   * Tenant updateMany
-   */
-  export type TenantUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Tenants.
-     */
-    data: XOR<TenantUpdateManyMutationInput, TenantUncheckedUpdateManyInput>
-    /**
-     * Filter which Tenants to update
-     */
-    where?: TenantWhereInput
-    /**
-     * Limit how many Tenants to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Tenant updateManyAndReturn
-   */
-  export type TenantUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Tenant
-     */
-    select?: TenantSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Tenant
-     */
-    omit?: TenantOmit<ExtArgs> | null
-    /**
-     * The data used to update Tenants.
-     */
-    data: XOR<TenantUpdateManyMutationInput, TenantUncheckedUpdateManyInput>
-    /**
-     * Filter which Tenants to update
-     */
-    where?: TenantWhereInput
-    /**
-     * Limit how many Tenants to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Tenant upsert
-   */
-  export type TenantUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Tenant
-     */
-    select?: TenantSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Tenant
-     */
-    omit?: TenantOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TenantInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Tenant to update in case it exists.
-     */
-    where: TenantWhereUniqueInput
-    /**
-     * In case the Tenant found by the `where` argument doesn't exist, create a new Tenant with this data.
-     */
-    create: XOR<TenantCreateInput, TenantUncheckedCreateInput>
-    /**
-     * In case the Tenant was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<TenantUpdateInput, TenantUncheckedUpdateInput>
-  }
-
-  /**
-   * Tenant delete
-   */
-  export type TenantDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Tenant
-     */
-    select?: TenantSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Tenant
-     */
-    omit?: TenantOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TenantInclude<ExtArgs> | null
-    /**
-     * Filter which Tenant to delete.
-     */
-    where: TenantWhereUniqueInput
-  }
-
-  /**
-   * Tenant deleteMany
-   */
-  export type TenantDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Tenants to delete
-     */
-    where?: TenantWhereInput
-    /**
-     * Limit how many Tenants to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Tenant.agendamentos
-   */
-  export type Tenant$agendamentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Agendamento
-     */
-    select?: AgendamentoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Agendamento
-     */
-    omit?: AgendamentoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AgendamentoInclude<ExtArgs> | null
+  export type TenantCountOutputTypeCountAgendamentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AgendamentoWhereInput
-    orderBy?: AgendamentoOrderByWithRelationInput | AgendamentoOrderByWithRelationInput[]
-    cursor?: AgendamentoWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: AgendamentoScalarFieldEnum | AgendamentoScalarFieldEnum[]
   }
 
   /**
-   * Tenant.atendimentos
+   * TenantCountOutputType without action
    */
-  export type Tenant$atendimentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Atendimento
-     */
-    select?: AtendimentoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Atendimento
-     */
-    omit?: AtendimentoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AtendimentoInclude<ExtArgs> | null
+  export type TenantCountOutputTypeCountAtendimentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AtendimentoWhereInput
-    orderBy?: AtendimentoOrderByWithRelationInput | AtendimentoOrderByWithRelationInput[]
-    cursor?: AtendimentoWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: AtendimentoScalarFieldEnum | AtendimentoScalarFieldEnum[]
   }
 
   /**
-   * Tenant.pacientes
+   * TenantCountOutputType without action
    */
-  export type Tenant$pacientesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Paciente
-     */
-    select?: PacienteSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Paciente
-     */
-    omit?: PacienteOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PacienteInclude<ExtArgs> | null
+  export type TenantCountOutputTypeCountPacientesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PacienteWhereInput
-    orderBy?: PacienteOrderByWithRelationInput | PacienteOrderByWithRelationInput[]
-    cursor?: PacienteWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PacienteScalarFieldEnum | PacienteScalarFieldEnum[]
   }
 
   /**
-   * Tenant.procedimentos
+   * TenantCountOutputType without action
    */
-  export type Tenant$procedimentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Procedimento
-     */
-    select?: ProcedimentoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Procedimento
-     */
-    omit?: ProcedimentoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ProcedimentoInclude<ExtArgs> | null
+  export type TenantCountOutputTypeCountProcedimentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProcedimentoWhereInput
-    orderBy?: ProcedimentoOrderByWithRelationInput | ProcedimentoOrderByWithRelationInput[]
-    cursor?: ProcedimentoWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ProcedimentoScalarFieldEnum | ProcedimentoScalarFieldEnum[]
   }
 
   /**
-   * Tenant.profissionais
+   * TenantCountOutputType without action
    */
-  export type Tenant$profissionaisArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Profissional
-     */
-    select?: ProfissionalSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Profissional
-     */
-    omit?: ProfissionalOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ProfissionalInclude<ExtArgs> | null
+  export type TenantCountOutputTypeCountProfissionaisArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProfissionalWhereInput
-    orderBy?: ProfissionalOrderByWithRelationInput | ProfissionalOrderByWithRelationInput[]
-    cursor?: ProfissionalWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ProfissionalScalarFieldEnum | ProfissionalScalarFieldEnum[]
   }
 
   /**
-   * Tenant.usuarios
+   * TenantCountOutputType without action
    */
-  export type Tenant$usuariosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Usuario
-     */
-    select?: UsuarioSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Usuario
-     */
-    omit?: UsuarioOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UsuarioInclude<ExtArgs> | null
+  export type TenantCountOutputTypeCountUsuariosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UsuarioWhereInput
-    orderBy?: UsuarioOrderByWithRelationInput | UsuarioOrderByWithRelationInput[]
-    cursor?: UsuarioWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: UsuarioScalarFieldEnum | UsuarioScalarFieldEnum[]
   }
+
 
   /**
-   * Tenant.whatsappConfig
+   * Models
    */
-  export type Tenant$whatsappConfigArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WhatsAppConfig
-     */
-    select?: WhatsAppConfigSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the WhatsAppConfig
-     */
-    omit?: WhatsAppConfigOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WhatsAppConfigInclude<ExtArgs> | null
-    where?: WhatsAppConfigWhereInput
-  }
-
-  /**
-   * Tenant without action
-   */
-  export type TenantDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Tenant
-     */
-    select?: TenantSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Tenant
-     */
-    omit?: TenantOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TenantInclude<ExtArgs> | null
-  }
-
 
   /**
    * Model Usuario
@@ -5400,8 +4276,24 @@ export namespace Prisma {
     tenantId: string | null
     profissionalId: string | null
     nome: string | null
+    cpf: string | null
+    dataNascimento: Date | null
     telefone: string | null
+    telefone2: string | null
     email: string | null
+    cep: string | null
+    logradouro: string | null
+    numero: string | null
+    complemento: string | null
+    bairro: string | null
+    cidade: string | null
+    estado: string | null
+    alergias: string | null
+    menorIdade: boolean | null
+    responsavelNome: string | null
+    responsavelCpf: string | null
+    responsavelTelefone: string | null
+    responsavelParentesco: string | null
     observacoes: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -5412,8 +4304,24 @@ export namespace Prisma {
     tenantId: string | null
     profissionalId: string | null
     nome: string | null
+    cpf: string | null
+    dataNascimento: Date | null
     telefone: string | null
+    telefone2: string | null
     email: string | null
+    cep: string | null
+    logradouro: string | null
+    numero: string | null
+    complemento: string | null
+    bairro: string | null
+    cidade: string | null
+    estado: string | null
+    alergias: string | null
+    menorIdade: boolean | null
+    responsavelNome: string | null
+    responsavelCpf: string | null
+    responsavelTelefone: string | null
+    responsavelParentesco: string | null
     observacoes: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -5424,8 +4332,24 @@ export namespace Prisma {
     tenantId: number
     profissionalId: number
     nome: number
+    cpf: number
+    dataNascimento: number
     telefone: number
+    telefone2: number
     email: number
+    cep: number
+    logradouro: number
+    numero: number
+    complemento: number
+    bairro: number
+    cidade: number
+    estado: number
+    alergias: number
+    menorIdade: number
+    responsavelNome: number
+    responsavelCpf: number
+    responsavelTelefone: number
+    responsavelParentesco: number
     observacoes: number
     createdAt: number
     updatedAt: number
@@ -5438,8 +4362,24 @@ export namespace Prisma {
     tenantId?: true
     profissionalId?: true
     nome?: true
+    cpf?: true
+    dataNascimento?: true
     telefone?: true
+    telefone2?: true
     email?: true
+    cep?: true
+    logradouro?: true
+    numero?: true
+    complemento?: true
+    bairro?: true
+    cidade?: true
+    estado?: true
+    alergias?: true
+    menorIdade?: true
+    responsavelNome?: true
+    responsavelCpf?: true
+    responsavelTelefone?: true
+    responsavelParentesco?: true
     observacoes?: true
     createdAt?: true
     updatedAt?: true
@@ -5450,8 +4390,24 @@ export namespace Prisma {
     tenantId?: true
     profissionalId?: true
     nome?: true
+    cpf?: true
+    dataNascimento?: true
     telefone?: true
+    telefone2?: true
     email?: true
+    cep?: true
+    logradouro?: true
+    numero?: true
+    complemento?: true
+    bairro?: true
+    cidade?: true
+    estado?: true
+    alergias?: true
+    menorIdade?: true
+    responsavelNome?: true
+    responsavelCpf?: true
+    responsavelTelefone?: true
+    responsavelParentesco?: true
     observacoes?: true
     createdAt?: true
     updatedAt?: true
@@ -5462,8 +4418,24 @@ export namespace Prisma {
     tenantId?: true
     profissionalId?: true
     nome?: true
+    cpf?: true
+    dataNascimento?: true
     telefone?: true
+    telefone2?: true
     email?: true
+    cep?: true
+    logradouro?: true
+    numero?: true
+    complemento?: true
+    bairro?: true
+    cidade?: true
+    estado?: true
+    alergias?: true
+    menorIdade?: true
+    responsavelNome?: true
+    responsavelCpf?: true
+    responsavelTelefone?: true
+    responsavelParentesco?: true
     observacoes?: true
     createdAt?: true
     updatedAt?: true
@@ -5547,8 +4519,24 @@ export namespace Prisma {
     tenantId: string
     profissionalId: string | null
     nome: string
+    cpf: string | null
+    dataNascimento: Date | null
     telefone: string
+    telefone2: string | null
     email: string | null
+    cep: string | null
+    logradouro: string | null
+    numero: string | null
+    complemento: string | null
+    bairro: string | null
+    cidade: string | null
+    estado: string | null
+    alergias: string | null
+    menorIdade: boolean
+    responsavelNome: string | null
+    responsavelCpf: string | null
+    responsavelTelefone: string | null
+    responsavelParentesco: string | null
     observacoes: string | null
     createdAt: Date
     updatedAt: Date
@@ -5576,15 +4564,31 @@ export namespace Prisma {
     tenantId?: boolean
     profissionalId?: boolean
     nome?: boolean
+    cpf?: boolean
+    dataNascimento?: boolean
     telefone?: boolean
+    telefone2?: boolean
     email?: boolean
+    cep?: boolean
+    logradouro?: boolean
+    numero?: boolean
+    complemento?: boolean
+    bairro?: boolean
+    cidade?: boolean
+    estado?: boolean
+    alergias?: boolean
+    menorIdade?: boolean
+    responsavelNome?: boolean
+    responsavelCpf?: boolean
+    responsavelTelefone?: boolean
+    responsavelParentesco?: boolean
     observacoes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    profissional?: boolean | Paciente$profissionalArgs<ExtArgs>
     agendamentos?: boolean | Paciente$agendamentosArgs<ExtArgs>
     atendimentos?: boolean | Paciente$atendimentosArgs<ExtArgs>
-    profissional?: boolean | Paciente$profissionalArgs<ExtArgs>
-    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     _count?: boolean | PacienteCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["paciente"]>
 
@@ -5593,13 +4597,29 @@ export namespace Prisma {
     tenantId?: boolean
     profissionalId?: boolean
     nome?: boolean
+    cpf?: boolean
+    dataNascimento?: boolean
     telefone?: boolean
+    telefone2?: boolean
     email?: boolean
+    cep?: boolean
+    logradouro?: boolean
+    numero?: boolean
+    complemento?: boolean
+    bairro?: boolean
+    cidade?: boolean
+    estado?: boolean
+    alergias?: boolean
+    menorIdade?: boolean
+    responsavelNome?: boolean
+    responsavelCpf?: boolean
+    responsavelTelefone?: boolean
+    responsavelParentesco?: boolean
     observacoes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    profissional?: boolean | Paciente$profissionalArgs<ExtArgs>
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    profissional?: boolean | Paciente$profissionalArgs<ExtArgs>
   }, ExtArgs["result"]["paciente"]>
 
   export type PacienteSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -5607,13 +4627,29 @@ export namespace Prisma {
     tenantId?: boolean
     profissionalId?: boolean
     nome?: boolean
+    cpf?: boolean
+    dataNascimento?: boolean
     telefone?: boolean
+    telefone2?: boolean
     email?: boolean
+    cep?: boolean
+    logradouro?: boolean
+    numero?: boolean
+    complemento?: boolean
+    bairro?: boolean
+    cidade?: boolean
+    estado?: boolean
+    alergias?: boolean
+    menorIdade?: boolean
+    responsavelNome?: boolean
+    responsavelCpf?: boolean
+    responsavelTelefone?: boolean
+    responsavelParentesco?: boolean
     observacoes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    profissional?: boolean | Paciente$profissionalArgs<ExtArgs>
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    profissional?: boolean | Paciente$profissionalArgs<ExtArgs>
   }, ExtArgs["result"]["paciente"]>
 
   export type PacienteSelectScalar = {
@@ -5621,45 +4657,77 @@ export namespace Prisma {
     tenantId?: boolean
     profissionalId?: boolean
     nome?: boolean
+    cpf?: boolean
+    dataNascimento?: boolean
     telefone?: boolean
+    telefone2?: boolean
     email?: boolean
+    cep?: boolean
+    logradouro?: boolean
+    numero?: boolean
+    complemento?: boolean
+    bairro?: boolean
+    cidade?: boolean
+    estado?: boolean
+    alergias?: boolean
+    menorIdade?: boolean
+    responsavelNome?: boolean
+    responsavelCpf?: boolean
+    responsavelTelefone?: boolean
+    responsavelParentesco?: boolean
     observacoes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type PacienteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "profissionalId" | "nome" | "telefone" | "email" | "observacoes" | "createdAt" | "updatedAt", ExtArgs["result"]["paciente"]>
+  export type PacienteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "profissionalId" | "nome" | "cpf" | "dataNascimento" | "telefone" | "telefone2" | "email" | "cep" | "logradouro" | "numero" | "complemento" | "bairro" | "cidade" | "estado" | "alergias" | "menorIdade" | "responsavelNome" | "responsavelCpf" | "responsavelTelefone" | "responsavelParentesco" | "observacoes" | "createdAt" | "updatedAt", ExtArgs["result"]["paciente"]>
   export type PacienteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    profissional?: boolean | Paciente$profissionalArgs<ExtArgs>
     agendamentos?: boolean | Paciente$agendamentosArgs<ExtArgs>
     atendimentos?: boolean | Paciente$atendimentosArgs<ExtArgs>
-    profissional?: boolean | Paciente$profissionalArgs<ExtArgs>
-    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     _count?: boolean | PacienteCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PacienteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    profissional?: boolean | Paciente$profissionalArgs<ExtArgs>
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    profissional?: boolean | Paciente$profissionalArgs<ExtArgs>
   }
   export type PacienteIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    profissional?: boolean | Paciente$profissionalArgs<ExtArgs>
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    profissional?: boolean | Paciente$profissionalArgs<ExtArgs>
   }
 
   export type $PacientePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Paciente"
     objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>
+      profissional: Prisma.$ProfissionalPayload<ExtArgs> | null
       agendamentos: Prisma.$AgendamentoPayload<ExtArgs>[]
       atendimentos: Prisma.$AtendimentoPayload<ExtArgs>[]
-      profissional: Prisma.$ProfissionalPayload<ExtArgs> | null
-      tenant: Prisma.$TenantPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       tenantId: string
       profissionalId: string | null
       nome: string
+      cpf: string | null
+      dataNascimento: Date | null
       telefone: string
+      telefone2: string | null
       email: string | null
+      cep: string | null
+      logradouro: string | null
+      numero: string | null
+      complemento: string | null
+      bairro: string | null
+      cidade: string | null
+      estado: string | null
+      alergias: string | null
+      menorIdade: boolean
+      responsavelNome: string | null
+      responsavelCpf: string | null
+      responsavelTelefone: string | null
+      responsavelParentesco: string | null
       observacoes: string | null
       createdAt: Date
       updatedAt: Date
@@ -6057,10 +5125,10 @@ export namespace Prisma {
    */
   export interface Prisma__PacienteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TenantDefaultArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    profissional<T extends Paciente$profissionalArgs<ExtArgs> = {}>(args?: Subset<T, Paciente$profissionalArgs<ExtArgs>>): Prisma__ProfissionalClient<$Result.GetResult<Prisma.$ProfissionalPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     agendamentos<T extends Paciente$agendamentosArgs<ExtArgs> = {}>(args?: Subset<T, Paciente$agendamentosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgendamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     atendimentos<T extends Paciente$atendimentosArgs<ExtArgs> = {}>(args?: Subset<T, Paciente$atendimentosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AtendimentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    profissional<T extends Paciente$profissionalArgs<ExtArgs> = {}>(args?: Subset<T, Paciente$profissionalArgs<ExtArgs>>): Prisma__ProfissionalClient<$Result.GetResult<Prisma.$ProfissionalPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TenantDefaultArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6094,8 +5162,24 @@ export namespace Prisma {
     readonly tenantId: FieldRef<"Paciente", 'String'>
     readonly profissionalId: FieldRef<"Paciente", 'String'>
     readonly nome: FieldRef<"Paciente", 'String'>
+    readonly cpf: FieldRef<"Paciente", 'String'>
+    readonly dataNascimento: FieldRef<"Paciente", 'DateTime'>
     readonly telefone: FieldRef<"Paciente", 'String'>
+    readonly telefone2: FieldRef<"Paciente", 'String'>
     readonly email: FieldRef<"Paciente", 'String'>
+    readonly cep: FieldRef<"Paciente", 'String'>
+    readonly logradouro: FieldRef<"Paciente", 'String'>
+    readonly numero: FieldRef<"Paciente", 'String'>
+    readonly complemento: FieldRef<"Paciente", 'String'>
+    readonly bairro: FieldRef<"Paciente", 'String'>
+    readonly cidade: FieldRef<"Paciente", 'String'>
+    readonly estado: FieldRef<"Paciente", 'String'>
+    readonly alergias: FieldRef<"Paciente", 'String'>
+    readonly menorIdade: FieldRef<"Paciente", 'Boolean'>
+    readonly responsavelNome: FieldRef<"Paciente", 'String'>
+    readonly responsavelCpf: FieldRef<"Paciente", 'String'>
+    readonly responsavelTelefone: FieldRef<"Paciente", 'String'>
+    readonly responsavelParentesco: FieldRef<"Paciente", 'String'>
     readonly observacoes: FieldRef<"Paciente", 'String'>
     readonly createdAt: FieldRef<"Paciente", 'DateTime'>
     readonly updatedAt: FieldRef<"Paciente", 'DateTime'>
@@ -6495,6 +5579,25 @@ export namespace Prisma {
   }
 
   /**
+   * Paciente.profissional
+   */
+  export type Paciente$profissionalArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Profissional
+     */
+    select?: ProfissionalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Profissional
+     */
+    omit?: ProfissionalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfissionalInclude<ExtArgs> | null
+    where?: ProfissionalWhereInput
+  }
+
+  /**
    * Paciente.agendamentos
    */
   export type Paciente$agendamentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6540,25 +5643,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AtendimentoScalarFieldEnum | AtendimentoScalarFieldEnum[]
-  }
-
-  /**
-   * Paciente.profissional
-   */
-  export type Paciente$profissionalArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Profissional
-     */
-    select?: ProfissionalSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Profissional
-     */
-    omit?: ProfissionalOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ProfissionalInclude<ExtArgs> | null
-    where?: ProfissionalWhereInput
   }
 
   /**
@@ -12301,6 +11385,2541 @@ export namespace Prisma {
 
 
   /**
+   * Model Plano
+   */
+
+  export type AggregatePlano = {
+    _count: PlanoCountAggregateOutputType | null
+    _avg: PlanoAvgAggregateOutputType | null
+    _sum: PlanoSumAggregateOutputType | null
+    _min: PlanoMinAggregateOutputType | null
+    _max: PlanoMaxAggregateOutputType | null
+  }
+
+  export type PlanoAvgAggregateOutputType = {
+    profissionaisAtivos: number | null
+    usuarios: number | null
+    agendamentosMes: number | null
+    pacientes: number | null
+    armazenamentoMB: number | null
+    valorMensal: Decimal | null
+    valorAnual: Decimal | null
+  }
+
+  export type PlanoSumAggregateOutputType = {
+    profissionaisAtivos: number | null
+    usuarios: number | null
+    agendamentosMes: number | null
+    pacientes: number | null
+    armazenamentoMB: number | null
+    valorMensal: Decimal | null
+    valorAnual: Decimal | null
+  }
+
+  export type PlanoMinAggregateOutputType = {
+    id: string | null
+    nome: string | null
+    slug: string | null
+    descricao: string | null
+    profissionaisAtivos: number | null
+    usuarios: number | null
+    agendamentosMes: number | null
+    pacientes: number | null
+    armazenamentoMB: number | null
+    whatsappAtivo: boolean | null
+    googleCalendarSync: boolean | null
+    valorMensal: Decimal | null
+    valorAnual: Decimal | null
+    ativo: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PlanoMaxAggregateOutputType = {
+    id: string | null
+    nome: string | null
+    slug: string | null
+    descricao: string | null
+    profissionaisAtivos: number | null
+    usuarios: number | null
+    agendamentosMes: number | null
+    pacientes: number | null
+    armazenamentoMB: number | null
+    whatsappAtivo: boolean | null
+    googleCalendarSync: boolean | null
+    valorMensal: Decimal | null
+    valorAnual: Decimal | null
+    ativo: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PlanoCountAggregateOutputType = {
+    id: number
+    nome: number
+    slug: number
+    descricao: number
+    profissionaisAtivos: number
+    usuarios: number
+    agendamentosMes: number
+    pacientes: number
+    armazenamentoMB: number
+    whatsappAtivo: number
+    googleCalendarSync: number
+    valorMensal: number
+    valorAnual: number
+    ativo: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PlanoAvgAggregateInputType = {
+    profissionaisAtivos?: true
+    usuarios?: true
+    agendamentosMes?: true
+    pacientes?: true
+    armazenamentoMB?: true
+    valorMensal?: true
+    valorAnual?: true
+  }
+
+  export type PlanoSumAggregateInputType = {
+    profissionaisAtivos?: true
+    usuarios?: true
+    agendamentosMes?: true
+    pacientes?: true
+    armazenamentoMB?: true
+    valorMensal?: true
+    valorAnual?: true
+  }
+
+  export type PlanoMinAggregateInputType = {
+    id?: true
+    nome?: true
+    slug?: true
+    descricao?: true
+    profissionaisAtivos?: true
+    usuarios?: true
+    agendamentosMes?: true
+    pacientes?: true
+    armazenamentoMB?: true
+    whatsappAtivo?: true
+    googleCalendarSync?: true
+    valorMensal?: true
+    valorAnual?: true
+    ativo?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PlanoMaxAggregateInputType = {
+    id?: true
+    nome?: true
+    slug?: true
+    descricao?: true
+    profissionaisAtivos?: true
+    usuarios?: true
+    agendamentosMes?: true
+    pacientes?: true
+    armazenamentoMB?: true
+    whatsappAtivo?: true
+    googleCalendarSync?: true
+    valorMensal?: true
+    valorAnual?: true
+    ativo?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PlanoCountAggregateInputType = {
+    id?: true
+    nome?: true
+    slug?: true
+    descricao?: true
+    profissionaisAtivos?: true
+    usuarios?: true
+    agendamentosMes?: true
+    pacientes?: true
+    armazenamentoMB?: true
+    whatsappAtivo?: true
+    googleCalendarSync?: true
+    valorMensal?: true
+    valorAnual?: true
+    ativo?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PlanoAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Plano to aggregate.
+     */
+    where?: PlanoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Planos to fetch.
+     */
+    orderBy?: PlanoOrderByWithRelationInput | PlanoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PlanoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Planos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Planos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Planos
+    **/
+    _count?: true | PlanoCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PlanoAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PlanoSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PlanoMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PlanoMaxAggregateInputType
+  }
+
+  export type GetPlanoAggregateType<T extends PlanoAggregateArgs> = {
+        [P in keyof T & keyof AggregatePlano]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePlano[P]>
+      : GetScalarType<T[P], AggregatePlano[P]>
+  }
+
+
+
+
+  export type PlanoGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PlanoWhereInput
+    orderBy?: PlanoOrderByWithAggregationInput | PlanoOrderByWithAggregationInput[]
+    by: PlanoScalarFieldEnum[] | PlanoScalarFieldEnum
+    having?: PlanoScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PlanoCountAggregateInputType | true
+    _avg?: PlanoAvgAggregateInputType
+    _sum?: PlanoSumAggregateInputType
+    _min?: PlanoMinAggregateInputType
+    _max?: PlanoMaxAggregateInputType
+  }
+
+  export type PlanoGroupByOutputType = {
+    id: string
+    nome: string
+    slug: string
+    descricao: string | null
+    profissionaisAtivos: number
+    usuarios: number
+    agendamentosMes: number
+    pacientes: number
+    armazenamentoMB: number
+    whatsappAtivo: boolean
+    googleCalendarSync: boolean
+    valorMensal: Decimal | null
+    valorAnual: Decimal | null
+    ativo: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: PlanoCountAggregateOutputType | null
+    _avg: PlanoAvgAggregateOutputType | null
+    _sum: PlanoSumAggregateOutputType | null
+    _min: PlanoMinAggregateOutputType | null
+    _max: PlanoMaxAggregateOutputType | null
+  }
+
+  type GetPlanoGroupByPayload<T extends PlanoGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PlanoGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PlanoGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PlanoGroupByOutputType[P]>
+            : GetScalarType<T[P], PlanoGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PlanoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nome?: boolean
+    slug?: boolean
+    descricao?: boolean
+    profissionaisAtivos?: boolean
+    usuarios?: boolean
+    agendamentosMes?: boolean
+    pacientes?: boolean
+    armazenamentoMB?: boolean
+    whatsappAtivo?: boolean
+    googleCalendarSync?: boolean
+    valorMensal?: boolean
+    valorAnual?: boolean
+    ativo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenants?: boolean | Plano$tenantsArgs<ExtArgs>
+    _count?: boolean | PlanoCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["plano"]>
+
+  export type PlanoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nome?: boolean
+    slug?: boolean
+    descricao?: boolean
+    profissionaisAtivos?: boolean
+    usuarios?: boolean
+    agendamentosMes?: boolean
+    pacientes?: boolean
+    armazenamentoMB?: boolean
+    whatsappAtivo?: boolean
+    googleCalendarSync?: boolean
+    valorMensal?: boolean
+    valorAnual?: boolean
+    ativo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["plano"]>
+
+  export type PlanoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nome?: boolean
+    slug?: boolean
+    descricao?: boolean
+    profissionaisAtivos?: boolean
+    usuarios?: boolean
+    agendamentosMes?: boolean
+    pacientes?: boolean
+    armazenamentoMB?: boolean
+    whatsappAtivo?: boolean
+    googleCalendarSync?: boolean
+    valorMensal?: boolean
+    valorAnual?: boolean
+    ativo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["plano"]>
+
+  export type PlanoSelectScalar = {
+    id?: boolean
+    nome?: boolean
+    slug?: boolean
+    descricao?: boolean
+    profissionaisAtivos?: boolean
+    usuarios?: boolean
+    agendamentosMes?: boolean
+    pacientes?: boolean
+    armazenamentoMB?: boolean
+    whatsappAtivo?: boolean
+    googleCalendarSync?: boolean
+    valorMensal?: boolean
+    valorAnual?: boolean
+    ativo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PlanoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome" | "slug" | "descricao" | "profissionaisAtivos" | "usuarios" | "agendamentosMes" | "pacientes" | "armazenamentoMB" | "whatsappAtivo" | "googleCalendarSync" | "valorMensal" | "valorAnual" | "ativo" | "createdAt" | "updatedAt", ExtArgs["result"]["plano"]>
+  export type PlanoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenants?: boolean | Plano$tenantsArgs<ExtArgs>
+    _count?: boolean | PlanoCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type PlanoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type PlanoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $PlanoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Plano"
+    objects: {
+      tenants: Prisma.$TenantPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      nome: string
+      slug: string
+      descricao: string | null
+      profissionaisAtivos: number
+      usuarios: number
+      agendamentosMes: number
+      pacientes: number
+      armazenamentoMB: number
+      whatsappAtivo: boolean
+      googleCalendarSync: boolean
+      valorMensal: Prisma.Decimal | null
+      valorAnual: Prisma.Decimal | null
+      ativo: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["plano"]>
+    composites: {}
+  }
+
+  type PlanoGetPayload<S extends boolean | null | undefined | PlanoDefaultArgs> = $Result.GetResult<Prisma.$PlanoPayload, S>
+
+  type PlanoCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PlanoFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PlanoCountAggregateInputType | true
+    }
+
+  export interface PlanoDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Plano'], meta: { name: 'Plano' } }
+    /**
+     * Find zero or one Plano that matches the filter.
+     * @param {PlanoFindUniqueArgs} args - Arguments to find a Plano
+     * @example
+     * // Get one Plano
+     * const plano = await prisma.plano.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PlanoFindUniqueArgs>(args: SelectSubset<T, PlanoFindUniqueArgs<ExtArgs>>): Prisma__PlanoClient<$Result.GetResult<Prisma.$PlanoPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Plano that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PlanoFindUniqueOrThrowArgs} args - Arguments to find a Plano
+     * @example
+     * // Get one Plano
+     * const plano = await prisma.plano.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PlanoFindUniqueOrThrowArgs>(args: SelectSubset<T, PlanoFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PlanoClient<$Result.GetResult<Prisma.$PlanoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Plano that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanoFindFirstArgs} args - Arguments to find a Plano
+     * @example
+     * // Get one Plano
+     * const plano = await prisma.plano.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PlanoFindFirstArgs>(args?: SelectSubset<T, PlanoFindFirstArgs<ExtArgs>>): Prisma__PlanoClient<$Result.GetResult<Prisma.$PlanoPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Plano that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanoFindFirstOrThrowArgs} args - Arguments to find a Plano
+     * @example
+     * // Get one Plano
+     * const plano = await prisma.plano.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PlanoFindFirstOrThrowArgs>(args?: SelectSubset<T, PlanoFindFirstOrThrowArgs<ExtArgs>>): Prisma__PlanoClient<$Result.GetResult<Prisma.$PlanoPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Planos that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanoFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Planos
+     * const planos = await prisma.plano.findMany()
+     * 
+     * // Get first 10 Planos
+     * const planos = await prisma.plano.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const planoWithIdOnly = await prisma.plano.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PlanoFindManyArgs>(args?: SelectSubset<T, PlanoFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Plano.
+     * @param {PlanoCreateArgs} args - Arguments to create a Plano.
+     * @example
+     * // Create one Plano
+     * const Plano = await prisma.plano.create({
+     *   data: {
+     *     // ... data to create a Plano
+     *   }
+     * })
+     * 
+     */
+    create<T extends PlanoCreateArgs>(args: SelectSubset<T, PlanoCreateArgs<ExtArgs>>): Prisma__PlanoClient<$Result.GetResult<Prisma.$PlanoPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Planos.
+     * @param {PlanoCreateManyArgs} args - Arguments to create many Planos.
+     * @example
+     * // Create many Planos
+     * const plano = await prisma.plano.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PlanoCreateManyArgs>(args?: SelectSubset<T, PlanoCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Planos and returns the data saved in the database.
+     * @param {PlanoCreateManyAndReturnArgs} args - Arguments to create many Planos.
+     * @example
+     * // Create many Planos
+     * const plano = await prisma.plano.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Planos and only return the `id`
+     * const planoWithIdOnly = await prisma.plano.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PlanoCreateManyAndReturnArgs>(args?: SelectSubset<T, PlanoCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanoPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Plano.
+     * @param {PlanoDeleteArgs} args - Arguments to delete one Plano.
+     * @example
+     * // Delete one Plano
+     * const Plano = await prisma.plano.delete({
+     *   where: {
+     *     // ... filter to delete one Plano
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PlanoDeleteArgs>(args: SelectSubset<T, PlanoDeleteArgs<ExtArgs>>): Prisma__PlanoClient<$Result.GetResult<Prisma.$PlanoPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Plano.
+     * @param {PlanoUpdateArgs} args - Arguments to update one Plano.
+     * @example
+     * // Update one Plano
+     * const plano = await prisma.plano.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PlanoUpdateArgs>(args: SelectSubset<T, PlanoUpdateArgs<ExtArgs>>): Prisma__PlanoClient<$Result.GetResult<Prisma.$PlanoPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Planos.
+     * @param {PlanoDeleteManyArgs} args - Arguments to filter Planos to delete.
+     * @example
+     * // Delete a few Planos
+     * const { count } = await prisma.plano.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PlanoDeleteManyArgs>(args?: SelectSubset<T, PlanoDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Planos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanoUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Planos
+     * const plano = await prisma.plano.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PlanoUpdateManyArgs>(args: SelectSubset<T, PlanoUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Planos and returns the data updated in the database.
+     * @param {PlanoUpdateManyAndReturnArgs} args - Arguments to update many Planos.
+     * @example
+     * // Update many Planos
+     * const plano = await prisma.plano.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Planos and only return the `id`
+     * const planoWithIdOnly = await prisma.plano.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PlanoUpdateManyAndReturnArgs>(args: SelectSubset<T, PlanoUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanoPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Plano.
+     * @param {PlanoUpsertArgs} args - Arguments to update or create a Plano.
+     * @example
+     * // Update or create a Plano
+     * const plano = await prisma.plano.upsert({
+     *   create: {
+     *     // ... data to create a Plano
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Plano we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PlanoUpsertArgs>(args: SelectSubset<T, PlanoUpsertArgs<ExtArgs>>): Prisma__PlanoClient<$Result.GetResult<Prisma.$PlanoPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Planos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanoCountArgs} args - Arguments to filter Planos to count.
+     * @example
+     * // Count the number of Planos
+     * const count = await prisma.plano.count({
+     *   where: {
+     *     // ... the filter for the Planos we want to count
+     *   }
+     * })
+    **/
+    count<T extends PlanoCountArgs>(
+      args?: Subset<T, PlanoCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PlanoCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Plano.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanoAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PlanoAggregateArgs>(args: Subset<T, PlanoAggregateArgs>): Prisma.PrismaPromise<GetPlanoAggregateType<T>>
+
+    /**
+     * Group by Plano.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanoGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PlanoGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PlanoGroupByArgs['orderBy'] }
+        : { orderBy?: PlanoGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PlanoGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPlanoGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Plano model
+   */
+  readonly fields: PlanoFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Plano.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PlanoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    tenants<T extends Plano$tenantsArgs<ExtArgs> = {}>(args?: Subset<T, Plano$tenantsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Plano model
+   */
+  interface PlanoFieldRefs {
+    readonly id: FieldRef<"Plano", 'String'>
+    readonly nome: FieldRef<"Plano", 'String'>
+    readonly slug: FieldRef<"Plano", 'String'>
+    readonly descricao: FieldRef<"Plano", 'String'>
+    readonly profissionaisAtivos: FieldRef<"Plano", 'Int'>
+    readonly usuarios: FieldRef<"Plano", 'Int'>
+    readonly agendamentosMes: FieldRef<"Plano", 'Int'>
+    readonly pacientes: FieldRef<"Plano", 'Int'>
+    readonly armazenamentoMB: FieldRef<"Plano", 'Int'>
+    readonly whatsappAtivo: FieldRef<"Plano", 'Boolean'>
+    readonly googleCalendarSync: FieldRef<"Plano", 'Boolean'>
+    readonly valorMensal: FieldRef<"Plano", 'Decimal'>
+    readonly valorAnual: FieldRef<"Plano", 'Decimal'>
+    readonly ativo: FieldRef<"Plano", 'Boolean'>
+    readonly createdAt: FieldRef<"Plano", 'DateTime'>
+    readonly updatedAt: FieldRef<"Plano", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Plano findUnique
+   */
+  export type PlanoFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plano
+     */
+    select?: PlanoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Plano
+     */
+    omit?: PlanoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanoInclude<ExtArgs> | null
+    /**
+     * Filter, which Plano to fetch.
+     */
+    where: PlanoWhereUniqueInput
+  }
+
+  /**
+   * Plano findUniqueOrThrow
+   */
+  export type PlanoFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plano
+     */
+    select?: PlanoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Plano
+     */
+    omit?: PlanoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanoInclude<ExtArgs> | null
+    /**
+     * Filter, which Plano to fetch.
+     */
+    where: PlanoWhereUniqueInput
+  }
+
+  /**
+   * Plano findFirst
+   */
+  export type PlanoFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plano
+     */
+    select?: PlanoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Plano
+     */
+    omit?: PlanoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanoInclude<ExtArgs> | null
+    /**
+     * Filter, which Plano to fetch.
+     */
+    where?: PlanoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Planos to fetch.
+     */
+    orderBy?: PlanoOrderByWithRelationInput | PlanoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Planos.
+     */
+    cursor?: PlanoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Planos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Planos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Planos.
+     */
+    distinct?: PlanoScalarFieldEnum | PlanoScalarFieldEnum[]
+  }
+
+  /**
+   * Plano findFirstOrThrow
+   */
+  export type PlanoFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plano
+     */
+    select?: PlanoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Plano
+     */
+    omit?: PlanoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanoInclude<ExtArgs> | null
+    /**
+     * Filter, which Plano to fetch.
+     */
+    where?: PlanoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Planos to fetch.
+     */
+    orderBy?: PlanoOrderByWithRelationInput | PlanoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Planos.
+     */
+    cursor?: PlanoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Planos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Planos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Planos.
+     */
+    distinct?: PlanoScalarFieldEnum | PlanoScalarFieldEnum[]
+  }
+
+  /**
+   * Plano findMany
+   */
+  export type PlanoFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plano
+     */
+    select?: PlanoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Plano
+     */
+    omit?: PlanoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanoInclude<ExtArgs> | null
+    /**
+     * Filter, which Planos to fetch.
+     */
+    where?: PlanoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Planos to fetch.
+     */
+    orderBy?: PlanoOrderByWithRelationInput | PlanoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Planos.
+     */
+    cursor?: PlanoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Planos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Planos.
+     */
+    skip?: number
+    distinct?: PlanoScalarFieldEnum | PlanoScalarFieldEnum[]
+  }
+
+  /**
+   * Plano create
+   */
+  export type PlanoCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plano
+     */
+    select?: PlanoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Plano
+     */
+    omit?: PlanoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanoInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Plano.
+     */
+    data: XOR<PlanoCreateInput, PlanoUncheckedCreateInput>
+  }
+
+  /**
+   * Plano createMany
+   */
+  export type PlanoCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Planos.
+     */
+    data: PlanoCreateManyInput | PlanoCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Plano createManyAndReturn
+   */
+  export type PlanoCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plano
+     */
+    select?: PlanoSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Plano
+     */
+    omit?: PlanoOmit<ExtArgs> | null
+    /**
+     * The data used to create many Planos.
+     */
+    data: PlanoCreateManyInput | PlanoCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Plano update
+   */
+  export type PlanoUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plano
+     */
+    select?: PlanoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Plano
+     */
+    omit?: PlanoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanoInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Plano.
+     */
+    data: XOR<PlanoUpdateInput, PlanoUncheckedUpdateInput>
+    /**
+     * Choose, which Plano to update.
+     */
+    where: PlanoWhereUniqueInput
+  }
+
+  /**
+   * Plano updateMany
+   */
+  export type PlanoUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Planos.
+     */
+    data: XOR<PlanoUpdateManyMutationInput, PlanoUncheckedUpdateManyInput>
+    /**
+     * Filter which Planos to update
+     */
+    where?: PlanoWhereInput
+    /**
+     * Limit how many Planos to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Plano updateManyAndReturn
+   */
+  export type PlanoUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plano
+     */
+    select?: PlanoSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Plano
+     */
+    omit?: PlanoOmit<ExtArgs> | null
+    /**
+     * The data used to update Planos.
+     */
+    data: XOR<PlanoUpdateManyMutationInput, PlanoUncheckedUpdateManyInput>
+    /**
+     * Filter which Planos to update
+     */
+    where?: PlanoWhereInput
+    /**
+     * Limit how many Planos to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Plano upsert
+   */
+  export type PlanoUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plano
+     */
+    select?: PlanoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Plano
+     */
+    omit?: PlanoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanoInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Plano to update in case it exists.
+     */
+    where: PlanoWhereUniqueInput
+    /**
+     * In case the Plano found by the `where` argument doesn't exist, create a new Plano with this data.
+     */
+    create: XOR<PlanoCreateInput, PlanoUncheckedCreateInput>
+    /**
+     * In case the Plano was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PlanoUpdateInput, PlanoUncheckedUpdateInput>
+  }
+
+  /**
+   * Plano delete
+   */
+  export type PlanoDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plano
+     */
+    select?: PlanoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Plano
+     */
+    omit?: PlanoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanoInclude<ExtArgs> | null
+    /**
+     * Filter which Plano to delete.
+     */
+    where: PlanoWhereUniqueInput
+  }
+
+  /**
+   * Plano deleteMany
+   */
+  export type PlanoDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Planos to delete
+     */
+    where?: PlanoWhereInput
+    /**
+     * Limit how many Planos to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Plano.tenants
+   */
+  export type Plano$tenantsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInclude<ExtArgs> | null
+    where?: TenantWhereInput
+    orderBy?: TenantOrderByWithRelationInput | TenantOrderByWithRelationInput[]
+    cursor?: TenantWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TenantScalarFieldEnum | TenantScalarFieldEnum[]
+  }
+
+  /**
+   * Plano without action
+   */
+  export type PlanoDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plano
+     */
+    select?: PlanoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Plano
+     */
+    omit?: PlanoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanoInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Tenant
+   */
+
+  export type AggregateTenant = {
+    _count: TenantCountAggregateOutputType | null
+    _min: TenantMinAggregateOutputType | null
+    _max: TenantMaxAggregateOutputType | null
+  }
+
+  export type TenantMinAggregateOutputType = {
+    id: string | null
+    nome: string | null
+    planoId: string | null
+    ativo: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TenantMaxAggregateOutputType = {
+    id: string | null
+    nome: string | null
+    planoId: string | null
+    ativo: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TenantCountAggregateOutputType = {
+    id: number
+    nome: number
+    planoId: number
+    ativo: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type TenantMinAggregateInputType = {
+    id?: true
+    nome?: true
+    planoId?: true
+    ativo?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TenantMaxAggregateInputType = {
+    id?: true
+    nome?: true
+    planoId?: true
+    ativo?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TenantCountAggregateInputType = {
+    id?: true
+    nome?: true
+    planoId?: true
+    ativo?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type TenantAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Tenant to aggregate.
+     */
+    where?: TenantWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tenants to fetch.
+     */
+    orderBy?: TenantOrderByWithRelationInput | TenantOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TenantWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tenants from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tenants.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Tenants
+    **/
+    _count?: true | TenantCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TenantMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TenantMaxAggregateInputType
+  }
+
+  export type GetTenantAggregateType<T extends TenantAggregateArgs> = {
+        [P in keyof T & keyof AggregateTenant]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTenant[P]>
+      : GetScalarType<T[P], AggregateTenant[P]>
+  }
+
+
+
+
+  export type TenantGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TenantWhereInput
+    orderBy?: TenantOrderByWithAggregationInput | TenantOrderByWithAggregationInput[]
+    by: TenantScalarFieldEnum[] | TenantScalarFieldEnum
+    having?: TenantScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TenantCountAggregateInputType | true
+    _min?: TenantMinAggregateInputType
+    _max?: TenantMaxAggregateInputType
+  }
+
+  export type TenantGroupByOutputType = {
+    id: string
+    nome: string
+    planoId: string
+    ativo: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: TenantCountAggregateOutputType | null
+    _min: TenantMinAggregateOutputType | null
+    _max: TenantMaxAggregateOutputType | null
+  }
+
+  type GetTenantGroupByPayload<T extends TenantGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TenantGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TenantGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TenantGroupByOutputType[P]>
+            : GetScalarType<T[P], TenantGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TenantSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nome?: boolean
+    planoId?: boolean
+    ativo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    plano?: boolean | PlanoDefaultArgs<ExtArgs>
+    agendamentos?: boolean | Tenant$agendamentosArgs<ExtArgs>
+    atendimentos?: boolean | Tenant$atendimentosArgs<ExtArgs>
+    pacientes?: boolean | Tenant$pacientesArgs<ExtArgs>
+    procedimentos?: boolean | Tenant$procedimentosArgs<ExtArgs>
+    profissionais?: boolean | Tenant$profissionaisArgs<ExtArgs>
+    usuarios?: boolean | Tenant$usuariosArgs<ExtArgs>
+    whatsappConfig?: boolean | Tenant$whatsappConfigArgs<ExtArgs>
+    _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tenant"]>
+
+  export type TenantSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nome?: boolean
+    planoId?: boolean
+    ativo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    plano?: boolean | PlanoDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tenant"]>
+
+  export type TenantSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nome?: boolean
+    planoId?: boolean
+    ativo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    plano?: boolean | PlanoDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tenant"]>
+
+  export type TenantSelectScalar = {
+    id?: boolean
+    nome?: boolean
+    planoId?: boolean
+    ativo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type TenantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome" | "planoId" | "ativo" | "createdAt" | "updatedAt", ExtArgs["result"]["tenant"]>
+  export type TenantInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    plano?: boolean | PlanoDefaultArgs<ExtArgs>
+    agendamentos?: boolean | Tenant$agendamentosArgs<ExtArgs>
+    atendimentos?: boolean | Tenant$atendimentosArgs<ExtArgs>
+    pacientes?: boolean | Tenant$pacientesArgs<ExtArgs>
+    procedimentos?: boolean | Tenant$procedimentosArgs<ExtArgs>
+    profissionais?: boolean | Tenant$profissionaisArgs<ExtArgs>
+    usuarios?: boolean | Tenant$usuariosArgs<ExtArgs>
+    whatsappConfig?: boolean | Tenant$whatsappConfigArgs<ExtArgs>
+    _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type TenantIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    plano?: boolean | PlanoDefaultArgs<ExtArgs>
+  }
+  export type TenantIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    plano?: boolean | PlanoDefaultArgs<ExtArgs>
+  }
+
+  export type $TenantPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Tenant"
+    objects: {
+      plano: Prisma.$PlanoPayload<ExtArgs>
+      agendamentos: Prisma.$AgendamentoPayload<ExtArgs>[]
+      atendimentos: Prisma.$AtendimentoPayload<ExtArgs>[]
+      pacientes: Prisma.$PacientePayload<ExtArgs>[]
+      procedimentos: Prisma.$ProcedimentoPayload<ExtArgs>[]
+      profissionais: Prisma.$ProfissionalPayload<ExtArgs>[]
+      usuarios: Prisma.$UsuarioPayload<ExtArgs>[]
+      whatsappConfig: Prisma.$WhatsAppConfigPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      nome: string
+      planoId: string
+      ativo: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["tenant"]>
+    composites: {}
+  }
+
+  type TenantGetPayload<S extends boolean | null | undefined | TenantDefaultArgs> = $Result.GetResult<Prisma.$TenantPayload, S>
+
+  type TenantCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TenantFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TenantCountAggregateInputType | true
+    }
+
+  export interface TenantDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Tenant'], meta: { name: 'Tenant' } }
+    /**
+     * Find zero or one Tenant that matches the filter.
+     * @param {TenantFindUniqueArgs} args - Arguments to find a Tenant
+     * @example
+     * // Get one Tenant
+     * const tenant = await prisma.tenant.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TenantFindUniqueArgs>(args: SelectSubset<T, TenantFindUniqueArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Tenant that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TenantFindUniqueOrThrowArgs} args - Arguments to find a Tenant
+     * @example
+     * // Get one Tenant
+     * const tenant = await prisma.tenant.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TenantFindUniqueOrThrowArgs>(args: SelectSubset<T, TenantFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Tenant that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantFindFirstArgs} args - Arguments to find a Tenant
+     * @example
+     * // Get one Tenant
+     * const tenant = await prisma.tenant.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TenantFindFirstArgs>(args?: SelectSubset<T, TenantFindFirstArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Tenant that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantFindFirstOrThrowArgs} args - Arguments to find a Tenant
+     * @example
+     * // Get one Tenant
+     * const tenant = await prisma.tenant.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TenantFindFirstOrThrowArgs>(args?: SelectSubset<T, TenantFindFirstOrThrowArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Tenants that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Tenants
+     * const tenants = await prisma.tenant.findMany()
+     * 
+     * // Get first 10 Tenants
+     * const tenants = await prisma.tenant.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const tenantWithIdOnly = await prisma.tenant.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TenantFindManyArgs>(args?: SelectSubset<T, TenantFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Tenant.
+     * @param {TenantCreateArgs} args - Arguments to create a Tenant.
+     * @example
+     * // Create one Tenant
+     * const Tenant = await prisma.tenant.create({
+     *   data: {
+     *     // ... data to create a Tenant
+     *   }
+     * })
+     * 
+     */
+    create<T extends TenantCreateArgs>(args: SelectSubset<T, TenantCreateArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Tenants.
+     * @param {TenantCreateManyArgs} args - Arguments to create many Tenants.
+     * @example
+     * // Create many Tenants
+     * const tenant = await prisma.tenant.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TenantCreateManyArgs>(args?: SelectSubset<T, TenantCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Tenants and returns the data saved in the database.
+     * @param {TenantCreateManyAndReturnArgs} args - Arguments to create many Tenants.
+     * @example
+     * // Create many Tenants
+     * const tenant = await prisma.tenant.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Tenants and only return the `id`
+     * const tenantWithIdOnly = await prisma.tenant.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TenantCreateManyAndReturnArgs>(args?: SelectSubset<T, TenantCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Tenant.
+     * @param {TenantDeleteArgs} args - Arguments to delete one Tenant.
+     * @example
+     * // Delete one Tenant
+     * const Tenant = await prisma.tenant.delete({
+     *   where: {
+     *     // ... filter to delete one Tenant
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TenantDeleteArgs>(args: SelectSubset<T, TenantDeleteArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Tenant.
+     * @param {TenantUpdateArgs} args - Arguments to update one Tenant.
+     * @example
+     * // Update one Tenant
+     * const tenant = await prisma.tenant.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TenantUpdateArgs>(args: SelectSubset<T, TenantUpdateArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Tenants.
+     * @param {TenantDeleteManyArgs} args - Arguments to filter Tenants to delete.
+     * @example
+     * // Delete a few Tenants
+     * const { count } = await prisma.tenant.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TenantDeleteManyArgs>(args?: SelectSubset<T, TenantDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Tenants.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Tenants
+     * const tenant = await prisma.tenant.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TenantUpdateManyArgs>(args: SelectSubset<T, TenantUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Tenants and returns the data updated in the database.
+     * @param {TenantUpdateManyAndReturnArgs} args - Arguments to update many Tenants.
+     * @example
+     * // Update many Tenants
+     * const tenant = await prisma.tenant.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Tenants and only return the `id`
+     * const tenantWithIdOnly = await prisma.tenant.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TenantUpdateManyAndReturnArgs>(args: SelectSubset<T, TenantUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Tenant.
+     * @param {TenantUpsertArgs} args - Arguments to update or create a Tenant.
+     * @example
+     * // Update or create a Tenant
+     * const tenant = await prisma.tenant.upsert({
+     *   create: {
+     *     // ... data to create a Tenant
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Tenant we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TenantUpsertArgs>(args: SelectSubset<T, TenantUpsertArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Tenants.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantCountArgs} args - Arguments to filter Tenants to count.
+     * @example
+     * // Count the number of Tenants
+     * const count = await prisma.tenant.count({
+     *   where: {
+     *     // ... the filter for the Tenants we want to count
+     *   }
+     * })
+    **/
+    count<T extends TenantCountArgs>(
+      args?: Subset<T, TenantCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TenantCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Tenant.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TenantAggregateArgs>(args: Subset<T, TenantAggregateArgs>): Prisma.PrismaPromise<GetTenantAggregateType<T>>
+
+    /**
+     * Group by Tenant.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TenantGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TenantGroupByArgs['orderBy'] }
+        : { orderBy?: TenantGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TenantGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTenantGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Tenant model
+   */
+  readonly fields: TenantFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Tenant.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TenantClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    plano<T extends PlanoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PlanoDefaultArgs<ExtArgs>>): Prisma__PlanoClient<$Result.GetResult<Prisma.$PlanoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    agendamentos<T extends Tenant$agendamentosArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$agendamentosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgendamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    atendimentos<T extends Tenant$atendimentosArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$atendimentosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AtendimentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    pacientes<T extends Tenant$pacientesArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$pacientesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PacientePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    procedimentos<T extends Tenant$procedimentosArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$procedimentosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProcedimentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    profissionais<T extends Tenant$profissionaisArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$profissionaisArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProfissionalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    usuarios<T extends Tenant$usuariosArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$usuariosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    whatsappConfig<T extends Tenant$whatsappConfigArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$whatsappConfigArgs<ExtArgs>>): Prisma__WhatsAppConfigClient<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Tenant model
+   */
+  interface TenantFieldRefs {
+    readonly id: FieldRef<"Tenant", 'String'>
+    readonly nome: FieldRef<"Tenant", 'String'>
+    readonly planoId: FieldRef<"Tenant", 'String'>
+    readonly ativo: FieldRef<"Tenant", 'Boolean'>
+    readonly createdAt: FieldRef<"Tenant", 'DateTime'>
+    readonly updatedAt: FieldRef<"Tenant", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Tenant findUnique
+   */
+  export type TenantFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInclude<ExtArgs> | null
+    /**
+     * Filter, which Tenant to fetch.
+     */
+    where: TenantWhereUniqueInput
+  }
+
+  /**
+   * Tenant findUniqueOrThrow
+   */
+  export type TenantFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInclude<ExtArgs> | null
+    /**
+     * Filter, which Tenant to fetch.
+     */
+    where: TenantWhereUniqueInput
+  }
+
+  /**
+   * Tenant findFirst
+   */
+  export type TenantFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInclude<ExtArgs> | null
+    /**
+     * Filter, which Tenant to fetch.
+     */
+    where?: TenantWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tenants to fetch.
+     */
+    orderBy?: TenantOrderByWithRelationInput | TenantOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Tenants.
+     */
+    cursor?: TenantWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tenants from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tenants.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Tenants.
+     */
+    distinct?: TenantScalarFieldEnum | TenantScalarFieldEnum[]
+  }
+
+  /**
+   * Tenant findFirstOrThrow
+   */
+  export type TenantFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInclude<ExtArgs> | null
+    /**
+     * Filter, which Tenant to fetch.
+     */
+    where?: TenantWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tenants to fetch.
+     */
+    orderBy?: TenantOrderByWithRelationInput | TenantOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Tenants.
+     */
+    cursor?: TenantWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tenants from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tenants.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Tenants.
+     */
+    distinct?: TenantScalarFieldEnum | TenantScalarFieldEnum[]
+  }
+
+  /**
+   * Tenant findMany
+   */
+  export type TenantFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInclude<ExtArgs> | null
+    /**
+     * Filter, which Tenants to fetch.
+     */
+    where?: TenantWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tenants to fetch.
+     */
+    orderBy?: TenantOrderByWithRelationInput | TenantOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Tenants.
+     */
+    cursor?: TenantWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tenants from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tenants.
+     */
+    skip?: number
+    distinct?: TenantScalarFieldEnum | TenantScalarFieldEnum[]
+  }
+
+  /**
+   * Tenant create
+   */
+  export type TenantCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Tenant.
+     */
+    data: XOR<TenantCreateInput, TenantUncheckedCreateInput>
+  }
+
+  /**
+   * Tenant createMany
+   */
+  export type TenantCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Tenants.
+     */
+    data: TenantCreateManyInput | TenantCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Tenant createManyAndReturn
+   */
+  export type TenantCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * The data used to create many Tenants.
+     */
+    data: TenantCreateManyInput | TenantCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Tenant update
+   */
+  export type TenantUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Tenant.
+     */
+    data: XOR<TenantUpdateInput, TenantUncheckedUpdateInput>
+    /**
+     * Choose, which Tenant to update.
+     */
+    where: TenantWhereUniqueInput
+  }
+
+  /**
+   * Tenant updateMany
+   */
+  export type TenantUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Tenants.
+     */
+    data: XOR<TenantUpdateManyMutationInput, TenantUncheckedUpdateManyInput>
+    /**
+     * Filter which Tenants to update
+     */
+    where?: TenantWhereInput
+    /**
+     * Limit how many Tenants to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Tenant updateManyAndReturn
+   */
+  export type TenantUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * The data used to update Tenants.
+     */
+    data: XOR<TenantUpdateManyMutationInput, TenantUncheckedUpdateManyInput>
+    /**
+     * Filter which Tenants to update
+     */
+    where?: TenantWhereInput
+    /**
+     * Limit how many Tenants to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Tenant upsert
+   */
+  export type TenantUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Tenant to update in case it exists.
+     */
+    where: TenantWhereUniqueInput
+    /**
+     * In case the Tenant found by the `where` argument doesn't exist, create a new Tenant with this data.
+     */
+    create: XOR<TenantCreateInput, TenantUncheckedCreateInput>
+    /**
+     * In case the Tenant was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TenantUpdateInput, TenantUncheckedUpdateInput>
+  }
+
+  /**
+   * Tenant delete
+   */
+  export type TenantDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInclude<ExtArgs> | null
+    /**
+     * Filter which Tenant to delete.
+     */
+    where: TenantWhereUniqueInput
+  }
+
+  /**
+   * Tenant deleteMany
+   */
+  export type TenantDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Tenants to delete
+     */
+    where?: TenantWhereInput
+    /**
+     * Limit how many Tenants to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Tenant.agendamentos
+   */
+  export type Tenant$agendamentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Agendamento
+     */
+    select?: AgendamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Agendamento
+     */
+    omit?: AgendamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgendamentoInclude<ExtArgs> | null
+    where?: AgendamentoWhereInput
+    orderBy?: AgendamentoOrderByWithRelationInput | AgendamentoOrderByWithRelationInput[]
+    cursor?: AgendamentoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AgendamentoScalarFieldEnum | AgendamentoScalarFieldEnum[]
+  }
+
+  /**
+   * Tenant.atendimentos
+   */
+  export type Tenant$atendimentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Atendimento
+     */
+    select?: AtendimentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Atendimento
+     */
+    omit?: AtendimentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AtendimentoInclude<ExtArgs> | null
+    where?: AtendimentoWhereInput
+    orderBy?: AtendimentoOrderByWithRelationInput | AtendimentoOrderByWithRelationInput[]
+    cursor?: AtendimentoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AtendimentoScalarFieldEnum | AtendimentoScalarFieldEnum[]
+  }
+
+  /**
+   * Tenant.pacientes
+   */
+  export type Tenant$pacientesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Paciente
+     */
+    select?: PacienteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Paciente
+     */
+    omit?: PacienteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PacienteInclude<ExtArgs> | null
+    where?: PacienteWhereInput
+    orderBy?: PacienteOrderByWithRelationInput | PacienteOrderByWithRelationInput[]
+    cursor?: PacienteWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PacienteScalarFieldEnum | PacienteScalarFieldEnum[]
+  }
+
+  /**
+   * Tenant.procedimentos
+   */
+  export type Tenant$procedimentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Procedimento
+     */
+    select?: ProcedimentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Procedimento
+     */
+    omit?: ProcedimentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedimentoInclude<ExtArgs> | null
+    where?: ProcedimentoWhereInput
+    orderBy?: ProcedimentoOrderByWithRelationInput | ProcedimentoOrderByWithRelationInput[]
+    cursor?: ProcedimentoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProcedimentoScalarFieldEnum | ProcedimentoScalarFieldEnum[]
+  }
+
+  /**
+   * Tenant.profissionais
+   */
+  export type Tenant$profissionaisArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Profissional
+     */
+    select?: ProfissionalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Profissional
+     */
+    omit?: ProfissionalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfissionalInclude<ExtArgs> | null
+    where?: ProfissionalWhereInput
+    orderBy?: ProfissionalOrderByWithRelationInput | ProfissionalOrderByWithRelationInput[]
+    cursor?: ProfissionalWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProfissionalScalarFieldEnum | ProfissionalScalarFieldEnum[]
+  }
+
+  /**
+   * Tenant.usuarios
+   */
+  export type Tenant$usuariosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Usuario
+     */
+    select?: UsuarioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Usuario
+     */
+    omit?: UsuarioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsuarioInclude<ExtArgs> | null
+    where?: UsuarioWhereInput
+    orderBy?: UsuarioOrderByWithRelationInput | UsuarioOrderByWithRelationInput[]
+    cursor?: UsuarioWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UsuarioScalarFieldEnum | UsuarioScalarFieldEnum[]
+  }
+
+  /**
+   * Tenant.whatsappConfig
+   */
+  export type Tenant$whatsappConfigArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigInclude<ExtArgs> | null
+    where?: WhatsAppConfigWhereInput
+  }
+
+  /**
+   * Tenant without action
+   */
+  export type TenantDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -12312,18 +13931,6 @@ export namespace Prisma {
   };
 
   export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
-
-
-  export const TenantScalarFieldEnum: {
-    id: 'id',
-    nome: 'nome',
-    plano: 'plano',
-    ativo: 'ativo',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
-  };
-
-  export type TenantScalarFieldEnum = (typeof TenantScalarFieldEnum)[keyof typeof TenantScalarFieldEnum]
 
 
   export const UsuarioScalarFieldEnum: {
@@ -12360,8 +13967,24 @@ export namespace Prisma {
     tenantId: 'tenantId',
     profissionalId: 'profissionalId',
     nome: 'nome',
+    cpf: 'cpf',
+    dataNascimento: 'dataNascimento',
     telefone: 'telefone',
+    telefone2: 'telefone2',
     email: 'email',
+    cep: 'cep',
+    logradouro: 'logradouro',
+    numero: 'numero',
+    complemento: 'complemento',
+    bairro: 'bairro',
+    cidade: 'cidade',
+    estado: 'estado',
+    alergias: 'alergias',
+    menorIdade: 'menorIdade',
+    responsavelNome: 'responsavelNome',
+    responsavelCpf: 'responsavelCpf',
+    responsavelTelefone: 'responsavelTelefone',
+    responsavelParentesco: 'responsavelParentesco',
     observacoes: 'observacoes',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -12446,6 +14069,40 @@ export namespace Prisma {
   export type LogSistemaScalarFieldEnum = (typeof LogSistemaScalarFieldEnum)[keyof typeof LogSistemaScalarFieldEnum]
 
 
+  export const PlanoScalarFieldEnum: {
+    id: 'id',
+    nome: 'nome',
+    slug: 'slug',
+    descricao: 'descricao',
+    profissionaisAtivos: 'profissionaisAtivos',
+    usuarios: 'usuarios',
+    agendamentosMes: 'agendamentosMes',
+    pacientes: 'pacientes',
+    armazenamentoMB: 'armazenamentoMB',
+    whatsappAtivo: 'whatsappAtivo',
+    googleCalendarSync: 'googleCalendarSync',
+    valorMensal: 'valorMensal',
+    valorAnual: 'valorAnual',
+    ativo: 'ativo',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PlanoScalarFieldEnum = (typeof PlanoScalarFieldEnum)[keyof typeof PlanoScalarFieldEnum]
+
+
+  export const TenantScalarFieldEnum: {
+    id: 'id',
+    nome: 'nome',
+    planoId: 'planoId',
+    ativo: 'ativo',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type TenantScalarFieldEnum = (typeof TenantScalarFieldEnum)[keyof typeof TenantScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -12507,6 +14164,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'TipoUsuario'
+   */
+  export type EnumTipoUsuarioFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoUsuario'>
+    
+
+
+  /**
+   * Reference to a field of type 'TipoUsuario[]'
+   */
+  export type ListEnumTipoUsuarioFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoUsuario[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
@@ -12524,20 +14195,6 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'TipoUsuario'
-   */
-  export type EnumTipoUsuarioFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoUsuario'>
-    
-
-
-  /**
-   * Reference to a field of type 'TipoUsuario[]'
-   */
-  export type ListEnumTipoUsuarioFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoUsuario[]'>
     
 
 
@@ -12627,84 +14284,6 @@ export namespace Prisma {
    * Deep Input Types
    */
 
-
-  export type TenantWhereInput = {
-    AND?: TenantWhereInput | TenantWhereInput[]
-    OR?: TenantWhereInput[]
-    NOT?: TenantWhereInput | TenantWhereInput[]
-    id?: StringFilter<"Tenant"> | string
-    nome?: StringFilter<"Tenant"> | string
-    plano?: StringFilter<"Tenant"> | string
-    ativo?: BoolFilter<"Tenant"> | boolean
-    createdAt?: DateTimeFilter<"Tenant"> | Date | string
-    updatedAt?: DateTimeFilter<"Tenant"> | Date | string
-    agendamentos?: AgendamentoListRelationFilter
-    atendimentos?: AtendimentoListRelationFilter
-    pacientes?: PacienteListRelationFilter
-    procedimentos?: ProcedimentoListRelationFilter
-    profissionais?: ProfissionalListRelationFilter
-    usuarios?: UsuarioListRelationFilter
-    whatsappConfig?: XOR<WhatsAppConfigNullableScalarRelationFilter, WhatsAppConfigWhereInput> | null
-  }
-
-  export type TenantOrderByWithRelationInput = {
-    id?: SortOrder
-    nome?: SortOrder
-    plano?: SortOrder
-    ativo?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    agendamentos?: AgendamentoOrderByRelationAggregateInput
-    atendimentos?: AtendimentoOrderByRelationAggregateInput
-    pacientes?: PacienteOrderByRelationAggregateInput
-    procedimentos?: ProcedimentoOrderByRelationAggregateInput
-    profissionais?: ProfissionalOrderByRelationAggregateInput
-    usuarios?: UsuarioOrderByRelationAggregateInput
-    whatsappConfig?: WhatsAppConfigOrderByWithRelationInput
-  }
-
-  export type TenantWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: TenantWhereInput | TenantWhereInput[]
-    OR?: TenantWhereInput[]
-    NOT?: TenantWhereInput | TenantWhereInput[]
-    nome?: StringFilter<"Tenant"> | string
-    plano?: StringFilter<"Tenant"> | string
-    ativo?: BoolFilter<"Tenant"> | boolean
-    createdAt?: DateTimeFilter<"Tenant"> | Date | string
-    updatedAt?: DateTimeFilter<"Tenant"> | Date | string
-    agendamentos?: AgendamentoListRelationFilter
-    atendimentos?: AtendimentoListRelationFilter
-    pacientes?: PacienteListRelationFilter
-    procedimentos?: ProcedimentoListRelationFilter
-    profissionais?: ProfissionalListRelationFilter
-    usuarios?: UsuarioListRelationFilter
-    whatsappConfig?: XOR<WhatsAppConfigNullableScalarRelationFilter, WhatsAppConfigWhereInput> | null
-  }, "id">
-
-  export type TenantOrderByWithAggregationInput = {
-    id?: SortOrder
-    nome?: SortOrder
-    plano?: SortOrder
-    ativo?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    _count?: TenantCountOrderByAggregateInput
-    _max?: TenantMaxOrderByAggregateInput
-    _min?: TenantMinOrderByAggregateInput
-  }
-
-  export type TenantScalarWhereWithAggregatesInput = {
-    AND?: TenantScalarWhereWithAggregatesInput | TenantScalarWhereWithAggregatesInput[]
-    OR?: TenantScalarWhereWithAggregatesInput[]
-    NOT?: TenantScalarWhereWithAggregatesInput | TenantScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Tenant"> | string
-    nome?: StringWithAggregatesFilter<"Tenant"> | string
-    plano?: StringWithAggregatesFilter<"Tenant"> | string
-    ativo?: BoolWithAggregatesFilter<"Tenant"> | boolean
-    createdAt?: DateTimeWithAggregatesFilter<"Tenant"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Tenant"> | Date | string
-  }
 
   export type UsuarioWhereInput = {
     AND?: UsuarioWhereInput | UsuarioWhereInput[]
@@ -12869,15 +14448,31 @@ export namespace Prisma {
     tenantId?: StringFilter<"Paciente"> | string
     profissionalId?: StringNullableFilter<"Paciente"> | string | null
     nome?: StringFilter<"Paciente"> | string
+    cpf?: StringNullableFilter<"Paciente"> | string | null
+    dataNascimento?: DateTimeNullableFilter<"Paciente"> | Date | string | null
     telefone?: StringFilter<"Paciente"> | string
+    telefone2?: StringNullableFilter<"Paciente"> | string | null
     email?: StringNullableFilter<"Paciente"> | string | null
+    cep?: StringNullableFilter<"Paciente"> | string | null
+    logradouro?: StringNullableFilter<"Paciente"> | string | null
+    numero?: StringNullableFilter<"Paciente"> | string | null
+    complemento?: StringNullableFilter<"Paciente"> | string | null
+    bairro?: StringNullableFilter<"Paciente"> | string | null
+    cidade?: StringNullableFilter<"Paciente"> | string | null
+    estado?: StringNullableFilter<"Paciente"> | string | null
+    alergias?: StringNullableFilter<"Paciente"> | string | null
+    menorIdade?: BoolFilter<"Paciente"> | boolean
+    responsavelNome?: StringNullableFilter<"Paciente"> | string | null
+    responsavelCpf?: StringNullableFilter<"Paciente"> | string | null
+    responsavelTelefone?: StringNullableFilter<"Paciente"> | string | null
+    responsavelParentesco?: StringNullableFilter<"Paciente"> | string | null
     observacoes?: StringNullableFilter<"Paciente"> | string | null
     createdAt?: DateTimeFilter<"Paciente"> | Date | string
     updatedAt?: DateTimeFilter<"Paciente"> | Date | string
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
+    profissional?: XOR<ProfissionalNullableScalarRelationFilter, ProfissionalWhereInput> | null
     agendamentos?: AgendamentoListRelationFilter
     atendimentos?: AtendimentoListRelationFilter
-    profissional?: XOR<ProfissionalNullableScalarRelationFilter, ProfissionalWhereInput> | null
-    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
   }
 
   export type PacienteOrderByWithRelationInput = {
@@ -12885,15 +14480,31 @@ export namespace Prisma {
     tenantId?: SortOrder
     profissionalId?: SortOrderInput | SortOrder
     nome?: SortOrder
+    cpf?: SortOrderInput | SortOrder
+    dataNascimento?: SortOrderInput | SortOrder
     telefone?: SortOrder
+    telefone2?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
+    cep?: SortOrderInput | SortOrder
+    logradouro?: SortOrderInput | SortOrder
+    numero?: SortOrderInput | SortOrder
+    complemento?: SortOrderInput | SortOrder
+    bairro?: SortOrderInput | SortOrder
+    cidade?: SortOrderInput | SortOrder
+    estado?: SortOrderInput | SortOrder
+    alergias?: SortOrderInput | SortOrder
+    menorIdade?: SortOrder
+    responsavelNome?: SortOrderInput | SortOrder
+    responsavelCpf?: SortOrderInput | SortOrder
+    responsavelTelefone?: SortOrderInput | SortOrder
+    responsavelParentesco?: SortOrderInput | SortOrder
     observacoes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    tenant?: TenantOrderByWithRelationInput
+    profissional?: ProfissionalOrderByWithRelationInput
     agendamentos?: AgendamentoOrderByRelationAggregateInput
     atendimentos?: AtendimentoOrderByRelationAggregateInput
-    profissional?: ProfissionalOrderByWithRelationInput
-    tenant?: TenantOrderByWithRelationInput
   }
 
   export type PacienteWhereUniqueInput = Prisma.AtLeast<{
@@ -12904,15 +14515,31 @@ export namespace Prisma {
     tenantId?: StringFilter<"Paciente"> | string
     profissionalId?: StringNullableFilter<"Paciente"> | string | null
     nome?: StringFilter<"Paciente"> | string
+    cpf?: StringNullableFilter<"Paciente"> | string | null
+    dataNascimento?: DateTimeNullableFilter<"Paciente"> | Date | string | null
     telefone?: StringFilter<"Paciente"> | string
+    telefone2?: StringNullableFilter<"Paciente"> | string | null
     email?: StringNullableFilter<"Paciente"> | string | null
+    cep?: StringNullableFilter<"Paciente"> | string | null
+    logradouro?: StringNullableFilter<"Paciente"> | string | null
+    numero?: StringNullableFilter<"Paciente"> | string | null
+    complemento?: StringNullableFilter<"Paciente"> | string | null
+    bairro?: StringNullableFilter<"Paciente"> | string | null
+    cidade?: StringNullableFilter<"Paciente"> | string | null
+    estado?: StringNullableFilter<"Paciente"> | string | null
+    alergias?: StringNullableFilter<"Paciente"> | string | null
+    menorIdade?: BoolFilter<"Paciente"> | boolean
+    responsavelNome?: StringNullableFilter<"Paciente"> | string | null
+    responsavelCpf?: StringNullableFilter<"Paciente"> | string | null
+    responsavelTelefone?: StringNullableFilter<"Paciente"> | string | null
+    responsavelParentesco?: StringNullableFilter<"Paciente"> | string | null
     observacoes?: StringNullableFilter<"Paciente"> | string | null
     createdAt?: DateTimeFilter<"Paciente"> | Date | string
     updatedAt?: DateTimeFilter<"Paciente"> | Date | string
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
+    profissional?: XOR<ProfissionalNullableScalarRelationFilter, ProfissionalWhereInput> | null
     agendamentos?: AgendamentoListRelationFilter
     atendimentos?: AtendimentoListRelationFilter
-    profissional?: XOR<ProfissionalNullableScalarRelationFilter, ProfissionalWhereInput> | null
-    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
   }, "id">
 
   export type PacienteOrderByWithAggregationInput = {
@@ -12920,8 +14547,24 @@ export namespace Prisma {
     tenantId?: SortOrder
     profissionalId?: SortOrderInput | SortOrder
     nome?: SortOrder
+    cpf?: SortOrderInput | SortOrder
+    dataNascimento?: SortOrderInput | SortOrder
     telefone?: SortOrder
+    telefone2?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
+    cep?: SortOrderInput | SortOrder
+    logradouro?: SortOrderInput | SortOrder
+    numero?: SortOrderInput | SortOrder
+    complemento?: SortOrderInput | SortOrder
+    bairro?: SortOrderInput | SortOrder
+    cidade?: SortOrderInput | SortOrder
+    estado?: SortOrderInput | SortOrder
+    alergias?: SortOrderInput | SortOrder
+    menorIdade?: SortOrder
+    responsavelNome?: SortOrderInput | SortOrder
+    responsavelCpf?: SortOrderInput | SortOrder
+    responsavelTelefone?: SortOrderInput | SortOrder
+    responsavelParentesco?: SortOrderInput | SortOrder
     observacoes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -12938,8 +14581,24 @@ export namespace Prisma {
     tenantId?: StringWithAggregatesFilter<"Paciente"> | string
     profissionalId?: StringNullableWithAggregatesFilter<"Paciente"> | string | null
     nome?: StringWithAggregatesFilter<"Paciente"> | string
+    cpf?: StringNullableWithAggregatesFilter<"Paciente"> | string | null
+    dataNascimento?: DateTimeNullableWithAggregatesFilter<"Paciente"> | Date | string | null
     telefone?: StringWithAggregatesFilter<"Paciente"> | string
+    telefone2?: StringNullableWithAggregatesFilter<"Paciente"> | string | null
     email?: StringNullableWithAggregatesFilter<"Paciente"> | string | null
+    cep?: StringNullableWithAggregatesFilter<"Paciente"> | string | null
+    logradouro?: StringNullableWithAggregatesFilter<"Paciente"> | string | null
+    numero?: StringNullableWithAggregatesFilter<"Paciente"> | string | null
+    complemento?: StringNullableWithAggregatesFilter<"Paciente"> | string | null
+    bairro?: StringNullableWithAggregatesFilter<"Paciente"> | string | null
+    cidade?: StringNullableWithAggregatesFilter<"Paciente"> | string | null
+    estado?: StringNullableWithAggregatesFilter<"Paciente"> | string | null
+    alergias?: StringNullableWithAggregatesFilter<"Paciente"> | string | null
+    menorIdade?: BoolWithAggregatesFilter<"Paciente"> | boolean
+    responsavelNome?: StringNullableWithAggregatesFilter<"Paciente"> | string | null
+    responsavelCpf?: StringNullableWithAggregatesFilter<"Paciente"> | string | null
+    responsavelTelefone?: StringNullableWithAggregatesFilter<"Paciente"> | string | null
+    responsavelParentesco?: StringNullableWithAggregatesFilter<"Paciente"> | string | null
     observacoes?: StringNullableWithAggregatesFilter<"Paciente"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Paciente"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Paciente"> | Date | string
@@ -13356,95 +15015,197 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"LogSistema"> | Date | string
   }
 
-  export type TenantCreateInput = {
+  export type PlanoWhereInput = {
+    AND?: PlanoWhereInput | PlanoWhereInput[]
+    OR?: PlanoWhereInput[]
+    NOT?: PlanoWhereInput | PlanoWhereInput[]
+    id?: StringFilter<"Plano"> | string
+    nome?: StringFilter<"Plano"> | string
+    slug?: StringFilter<"Plano"> | string
+    descricao?: StringNullableFilter<"Plano"> | string | null
+    profissionaisAtivos?: IntFilter<"Plano"> | number
+    usuarios?: IntFilter<"Plano"> | number
+    agendamentosMes?: IntFilter<"Plano"> | number
+    pacientes?: IntFilter<"Plano"> | number
+    armazenamentoMB?: IntFilter<"Plano"> | number
+    whatsappAtivo?: BoolFilter<"Plano"> | boolean
+    googleCalendarSync?: BoolFilter<"Plano"> | boolean
+    valorMensal?: DecimalNullableFilter<"Plano"> | Decimal | DecimalJsLike | number | string | null
+    valorAnual?: DecimalNullableFilter<"Plano"> | Decimal | DecimalJsLike | number | string | null
+    ativo?: BoolFilter<"Plano"> | boolean
+    createdAt?: DateTimeFilter<"Plano"> | Date | string
+    updatedAt?: DateTimeFilter<"Plano"> | Date | string
+    tenants?: TenantListRelationFilter
+  }
+
+  export type PlanoOrderByWithRelationInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    slug?: SortOrder
+    descricao?: SortOrderInput | SortOrder
+    profissionaisAtivos?: SortOrder
+    usuarios?: SortOrder
+    agendamentosMes?: SortOrder
+    pacientes?: SortOrder
+    armazenamentoMB?: SortOrder
+    whatsappAtivo?: SortOrder
+    googleCalendarSync?: SortOrder
+    valorMensal?: SortOrderInput | SortOrder
+    valorAnual?: SortOrderInput | SortOrder
+    ativo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    tenants?: TenantOrderByRelationAggregateInput
+  }
+
+  export type PlanoWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    nome: string
-    plano?: string
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoCreateNestedManyWithoutTenantInput
-    atendimentos?: AtendimentoCreateNestedManyWithoutTenantInput
-    pacientes?: PacienteCreateNestedManyWithoutTenantInput
-    procedimentos?: ProcedimentoCreateNestedManyWithoutTenantInput
-    profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
-    usuarios?: UsuarioCreateNestedManyWithoutTenantInput
-    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
+    nome?: string
+    slug?: string
+    AND?: PlanoWhereInput | PlanoWhereInput[]
+    OR?: PlanoWhereInput[]
+    NOT?: PlanoWhereInput | PlanoWhereInput[]
+    descricao?: StringNullableFilter<"Plano"> | string | null
+    profissionaisAtivos?: IntFilter<"Plano"> | number
+    usuarios?: IntFilter<"Plano"> | number
+    agendamentosMes?: IntFilter<"Plano"> | number
+    pacientes?: IntFilter<"Plano"> | number
+    armazenamentoMB?: IntFilter<"Plano"> | number
+    whatsappAtivo?: BoolFilter<"Plano"> | boolean
+    googleCalendarSync?: BoolFilter<"Plano"> | boolean
+    valorMensal?: DecimalNullableFilter<"Plano"> | Decimal | DecimalJsLike | number | string | null
+    valorAnual?: DecimalNullableFilter<"Plano"> | Decimal | DecimalJsLike | number | string | null
+    ativo?: BoolFilter<"Plano"> | boolean
+    createdAt?: DateTimeFilter<"Plano"> | Date | string
+    updatedAt?: DateTimeFilter<"Plano"> | Date | string
+    tenants?: TenantListRelationFilter
+  }, "id" | "nome" | "slug">
+
+  export type PlanoOrderByWithAggregationInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    slug?: SortOrder
+    descricao?: SortOrderInput | SortOrder
+    profissionaisAtivos?: SortOrder
+    usuarios?: SortOrder
+    agendamentosMes?: SortOrder
+    pacientes?: SortOrder
+    armazenamentoMB?: SortOrder
+    whatsappAtivo?: SortOrder
+    googleCalendarSync?: SortOrder
+    valorMensal?: SortOrderInput | SortOrder
+    valorAnual?: SortOrderInput | SortOrder
+    ativo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PlanoCountOrderByAggregateInput
+    _avg?: PlanoAvgOrderByAggregateInput
+    _max?: PlanoMaxOrderByAggregateInput
+    _min?: PlanoMinOrderByAggregateInput
+    _sum?: PlanoSumOrderByAggregateInput
   }
 
-  export type TenantUncheckedCreateInput = {
+  export type PlanoScalarWhereWithAggregatesInput = {
+    AND?: PlanoScalarWhereWithAggregatesInput | PlanoScalarWhereWithAggregatesInput[]
+    OR?: PlanoScalarWhereWithAggregatesInput[]
+    NOT?: PlanoScalarWhereWithAggregatesInput | PlanoScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Plano"> | string
+    nome?: StringWithAggregatesFilter<"Plano"> | string
+    slug?: StringWithAggregatesFilter<"Plano"> | string
+    descricao?: StringNullableWithAggregatesFilter<"Plano"> | string | null
+    profissionaisAtivos?: IntWithAggregatesFilter<"Plano"> | number
+    usuarios?: IntWithAggregatesFilter<"Plano"> | number
+    agendamentosMes?: IntWithAggregatesFilter<"Plano"> | number
+    pacientes?: IntWithAggregatesFilter<"Plano"> | number
+    armazenamentoMB?: IntWithAggregatesFilter<"Plano"> | number
+    whatsappAtivo?: BoolWithAggregatesFilter<"Plano"> | boolean
+    googleCalendarSync?: BoolWithAggregatesFilter<"Plano"> | boolean
+    valorMensal?: DecimalNullableWithAggregatesFilter<"Plano"> | Decimal | DecimalJsLike | number | string | null
+    valorAnual?: DecimalNullableWithAggregatesFilter<"Plano"> | Decimal | DecimalJsLike | number | string | null
+    ativo?: BoolWithAggregatesFilter<"Plano"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Plano"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Plano"> | Date | string
+  }
+
+  export type TenantWhereInput = {
+    AND?: TenantWhereInput | TenantWhereInput[]
+    OR?: TenantWhereInput[]
+    NOT?: TenantWhereInput | TenantWhereInput[]
+    id?: StringFilter<"Tenant"> | string
+    nome?: StringFilter<"Tenant"> | string
+    planoId?: StringFilter<"Tenant"> | string
+    ativo?: BoolFilter<"Tenant"> | boolean
+    createdAt?: DateTimeFilter<"Tenant"> | Date | string
+    updatedAt?: DateTimeFilter<"Tenant"> | Date | string
+    plano?: XOR<PlanoScalarRelationFilter, PlanoWhereInput>
+    agendamentos?: AgendamentoListRelationFilter
+    atendimentos?: AtendimentoListRelationFilter
+    pacientes?: PacienteListRelationFilter
+    procedimentos?: ProcedimentoListRelationFilter
+    profissionais?: ProfissionalListRelationFilter
+    usuarios?: UsuarioListRelationFilter
+    whatsappConfig?: XOR<WhatsAppConfigNullableScalarRelationFilter, WhatsAppConfigWhereInput> | null
+  }
+
+  export type TenantOrderByWithRelationInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    planoId?: SortOrder
+    ativo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    plano?: PlanoOrderByWithRelationInput
+    agendamentos?: AgendamentoOrderByRelationAggregateInput
+    atendimentos?: AtendimentoOrderByRelationAggregateInput
+    pacientes?: PacienteOrderByRelationAggregateInput
+    procedimentos?: ProcedimentoOrderByRelationAggregateInput
+    profissionais?: ProfissionalOrderByRelationAggregateInput
+    usuarios?: UsuarioOrderByRelationAggregateInput
+    whatsappConfig?: WhatsAppConfigOrderByWithRelationInput
+  }
+
+  export type TenantWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    nome: string
-    plano?: string
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutTenantInput
-    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutTenantInput
-    pacientes?: PacienteUncheckedCreateNestedManyWithoutTenantInput
-    procedimentos?: ProcedimentoUncheckedCreateNestedManyWithoutTenantInput
-    profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
-    usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
-    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
+    AND?: TenantWhereInput | TenantWhereInput[]
+    OR?: TenantWhereInput[]
+    NOT?: TenantWhereInput | TenantWhereInput[]
+    nome?: StringFilter<"Tenant"> | string
+    planoId?: StringFilter<"Tenant"> | string
+    ativo?: BoolFilter<"Tenant"> | boolean
+    createdAt?: DateTimeFilter<"Tenant"> | Date | string
+    updatedAt?: DateTimeFilter<"Tenant"> | Date | string
+    plano?: XOR<PlanoScalarRelationFilter, PlanoWhereInput>
+    agendamentos?: AgendamentoListRelationFilter
+    atendimentos?: AtendimentoListRelationFilter
+    pacientes?: PacienteListRelationFilter
+    procedimentos?: ProcedimentoListRelationFilter
+    profissionais?: ProfissionalListRelationFilter
+    usuarios?: UsuarioListRelationFilter
+    whatsappConfig?: XOR<WhatsAppConfigNullableScalarRelationFilter, WhatsAppConfigWhereInput> | null
+  }, "id">
+
+  export type TenantOrderByWithAggregationInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    planoId?: SortOrder
+    ativo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: TenantCountOrderByAggregateInput
+    _max?: TenantMaxOrderByAggregateInput
+    _min?: TenantMinOrderByAggregateInput
   }
 
-  export type TenantUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    plano?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUpdateManyWithoutTenantNestedInput
-    atendimentos?: AtendimentoUpdateManyWithoutTenantNestedInput
-    pacientes?: PacienteUpdateManyWithoutTenantNestedInput
-    procedimentos?: ProcedimentoUpdateManyWithoutTenantNestedInput
-    profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
-    usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
-    whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
-  }
-
-  export type TenantUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    plano?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUncheckedUpdateManyWithoutTenantNestedInput
-    atendimentos?: AtendimentoUncheckedUpdateManyWithoutTenantNestedInput
-    pacientes?: PacienteUncheckedUpdateManyWithoutTenantNestedInput
-    procedimentos?: ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput
-    profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
-    usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
-    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
-  }
-
-  export type TenantCreateManyInput = {
-    id?: string
-    nome: string
-    plano?: string
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type TenantUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    plano?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type TenantUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    plano?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type TenantScalarWhereWithAggregatesInput = {
+    AND?: TenantScalarWhereWithAggregatesInput | TenantScalarWhereWithAggregatesInput[]
+    OR?: TenantScalarWhereWithAggregatesInput[]
+    NOT?: TenantScalarWhereWithAggregatesInput | TenantScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Tenant"> | string
+    nome?: StringWithAggregatesFilter<"Tenant"> | string
+    planoId?: StringWithAggregatesFilter<"Tenant"> | string
+    ativo?: BoolWithAggregatesFilter<"Tenant"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Tenant"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Tenant"> | Date | string
   }
 
   export type UsuarioCreateInput = {
@@ -13621,15 +15382,31 @@ export namespace Prisma {
   export type PacienteCreateInput = {
     id?: string
     nome: string
+    cpf?: string | null
+    dataNascimento?: Date | string | null
     telefone: string
+    telefone2?: string | null
     email?: string | null
+    cep?: string | null
+    logradouro?: string | null
+    numero?: string | null
+    complemento?: string | null
+    bairro?: string | null
+    cidade?: string | null
+    estado?: string | null
+    alergias?: string | null
+    menorIdade?: boolean
+    responsavelNome?: string | null
+    responsavelCpf?: string | null
+    responsavelTelefone?: string | null
+    responsavelParentesco?: string | null
     observacoes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutPacientesInput
+    profissional?: ProfissionalCreateNestedOneWithoutPacientesInput
     agendamentos?: AgendamentoCreateNestedManyWithoutPacienteInput
     atendimentos?: AtendimentoCreateNestedManyWithoutPacienteInput
-    profissional?: ProfissionalCreateNestedOneWithoutPacientesInput
-    tenant: TenantCreateNestedOneWithoutPacientesInput
   }
 
   export type PacienteUncheckedCreateInput = {
@@ -13637,8 +15414,24 @@ export namespace Prisma {
     tenantId: string
     profissionalId?: string | null
     nome: string
+    cpf?: string | null
+    dataNascimento?: Date | string | null
     telefone: string
+    telefone2?: string | null
     email?: string | null
+    cep?: string | null
+    logradouro?: string | null
+    numero?: string | null
+    complemento?: string | null
+    bairro?: string | null
+    cidade?: string | null
+    estado?: string | null
+    alergias?: string | null
+    menorIdade?: boolean
+    responsavelNome?: string | null
+    responsavelCpf?: string | null
+    responsavelTelefone?: string | null
+    responsavelParentesco?: string | null
     observacoes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13649,15 +15442,31 @@ export namespace Prisma {
   export type PacienteUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
+    dataNascimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     telefone?: StringFieldUpdateOperationsInput | string
+    telefone2?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    cep?: NullableStringFieldUpdateOperationsInput | string | null
+    logradouro?: NullableStringFieldUpdateOperationsInput | string | null
+    numero?: NullableStringFieldUpdateOperationsInput | string | null
+    complemento?: NullableStringFieldUpdateOperationsInput | string | null
+    bairro?: NullableStringFieldUpdateOperationsInput | string | null
+    cidade?: NullableStringFieldUpdateOperationsInput | string | null
+    estado?: NullableStringFieldUpdateOperationsInput | string | null
+    alergias?: NullableStringFieldUpdateOperationsInput | string | null
+    menorIdade?: BoolFieldUpdateOperationsInput | boolean
+    responsavelNome?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelCpf?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelTelefone?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelParentesco?: NullableStringFieldUpdateOperationsInput | string | null
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutPacientesNestedInput
+    profissional?: ProfissionalUpdateOneWithoutPacientesNestedInput
     agendamentos?: AgendamentoUpdateManyWithoutPacienteNestedInput
     atendimentos?: AtendimentoUpdateManyWithoutPacienteNestedInput
-    profissional?: ProfissionalUpdateOneWithoutPacientesNestedInput
-    tenant?: TenantUpdateOneRequiredWithoutPacientesNestedInput
   }
 
   export type PacienteUncheckedUpdateInput = {
@@ -13665,8 +15474,24 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     profissionalId?: NullableStringFieldUpdateOperationsInput | string | null
     nome?: StringFieldUpdateOperationsInput | string
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
+    dataNascimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     telefone?: StringFieldUpdateOperationsInput | string
+    telefone2?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    cep?: NullableStringFieldUpdateOperationsInput | string | null
+    logradouro?: NullableStringFieldUpdateOperationsInput | string | null
+    numero?: NullableStringFieldUpdateOperationsInput | string | null
+    complemento?: NullableStringFieldUpdateOperationsInput | string | null
+    bairro?: NullableStringFieldUpdateOperationsInput | string | null
+    cidade?: NullableStringFieldUpdateOperationsInput | string | null
+    estado?: NullableStringFieldUpdateOperationsInput | string | null
+    alergias?: NullableStringFieldUpdateOperationsInput | string | null
+    menorIdade?: BoolFieldUpdateOperationsInput | boolean
+    responsavelNome?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelCpf?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelTelefone?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelParentesco?: NullableStringFieldUpdateOperationsInput | string | null
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13679,8 +15504,24 @@ export namespace Prisma {
     tenantId: string
     profissionalId?: string | null
     nome: string
+    cpf?: string | null
+    dataNascimento?: Date | string | null
     telefone: string
+    telefone2?: string | null
     email?: string | null
+    cep?: string | null
+    logradouro?: string | null
+    numero?: string | null
+    complemento?: string | null
+    bairro?: string | null
+    cidade?: string | null
+    estado?: string | null
+    alergias?: string | null
+    menorIdade?: boolean
+    responsavelNome?: string | null
+    responsavelCpf?: string | null
+    responsavelTelefone?: string | null
+    responsavelParentesco?: string | null
     observacoes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13689,8 +15530,24 @@ export namespace Prisma {
   export type PacienteUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
+    dataNascimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     telefone?: StringFieldUpdateOperationsInput | string
+    telefone2?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    cep?: NullableStringFieldUpdateOperationsInput | string | null
+    logradouro?: NullableStringFieldUpdateOperationsInput | string | null
+    numero?: NullableStringFieldUpdateOperationsInput | string | null
+    complemento?: NullableStringFieldUpdateOperationsInput | string | null
+    bairro?: NullableStringFieldUpdateOperationsInput | string | null
+    cidade?: NullableStringFieldUpdateOperationsInput | string | null
+    estado?: NullableStringFieldUpdateOperationsInput | string | null
+    alergias?: NullableStringFieldUpdateOperationsInput | string | null
+    menorIdade?: BoolFieldUpdateOperationsInput | boolean
+    responsavelNome?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelCpf?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelTelefone?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelParentesco?: NullableStringFieldUpdateOperationsInput | string | null
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13701,8 +15558,24 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     profissionalId?: NullableStringFieldUpdateOperationsInput | string | null
     nome?: StringFieldUpdateOperationsInput | string
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
+    dataNascimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     telefone?: StringFieldUpdateOperationsInput | string
+    telefone2?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    cep?: NullableStringFieldUpdateOperationsInput | string | null
+    logradouro?: NullableStringFieldUpdateOperationsInput | string | null
+    numero?: NullableStringFieldUpdateOperationsInput | string | null
+    complemento?: NullableStringFieldUpdateOperationsInput | string | null
+    bairro?: NullableStringFieldUpdateOperationsInput | string | null
+    cidade?: NullableStringFieldUpdateOperationsInput | string | null
+    estado?: NullableStringFieldUpdateOperationsInput | string | null
+    alergias?: NullableStringFieldUpdateOperationsInput | string | null
+    menorIdade?: BoolFieldUpdateOperationsInput | boolean
+    responsavelNome?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelCpf?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelTelefone?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelParentesco?: NullableStringFieldUpdateOperationsInput | string | null
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14136,6 +16009,233 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PlanoCreateInput = {
+    id?: string
+    nome: string
+    slug: string
+    descricao?: string | null
+    profissionaisAtivos: number
+    usuarios: number
+    agendamentosMes: number
+    pacientes: number
+    armazenamentoMB: number
+    whatsappAtivo?: boolean
+    googleCalendarSync?: boolean
+    valorMensal?: Decimal | DecimalJsLike | number | string | null
+    valorAnual?: Decimal | DecimalJsLike | number | string | null
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenants?: TenantCreateNestedManyWithoutPlanoInput
+  }
+
+  export type PlanoUncheckedCreateInput = {
+    id?: string
+    nome: string
+    slug: string
+    descricao?: string | null
+    profissionaisAtivos: number
+    usuarios: number
+    agendamentosMes: number
+    pacientes: number
+    armazenamentoMB: number
+    whatsappAtivo?: boolean
+    googleCalendarSync?: boolean
+    valorMensal?: Decimal | DecimalJsLike | number | string | null
+    valorAnual?: Decimal | DecimalJsLike | number | string | null
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenants?: TenantUncheckedCreateNestedManyWithoutPlanoInput
+  }
+
+  export type PlanoUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    profissionaisAtivos?: IntFieldUpdateOperationsInput | number
+    usuarios?: IntFieldUpdateOperationsInput | number
+    agendamentosMes?: IntFieldUpdateOperationsInput | number
+    pacientes?: IntFieldUpdateOperationsInput | number
+    armazenamentoMB?: IntFieldUpdateOperationsInput | number
+    whatsappAtivo?: BoolFieldUpdateOperationsInput | boolean
+    googleCalendarSync?: BoolFieldUpdateOperationsInput | boolean
+    valorMensal?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    valorAnual?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenants?: TenantUpdateManyWithoutPlanoNestedInput
+  }
+
+  export type PlanoUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    profissionaisAtivos?: IntFieldUpdateOperationsInput | number
+    usuarios?: IntFieldUpdateOperationsInput | number
+    agendamentosMes?: IntFieldUpdateOperationsInput | number
+    pacientes?: IntFieldUpdateOperationsInput | number
+    armazenamentoMB?: IntFieldUpdateOperationsInput | number
+    whatsappAtivo?: BoolFieldUpdateOperationsInput | boolean
+    googleCalendarSync?: BoolFieldUpdateOperationsInput | boolean
+    valorMensal?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    valorAnual?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenants?: TenantUncheckedUpdateManyWithoutPlanoNestedInput
+  }
+
+  export type PlanoCreateManyInput = {
+    id?: string
+    nome: string
+    slug: string
+    descricao?: string | null
+    profissionaisAtivos: number
+    usuarios: number
+    agendamentosMes: number
+    pacientes: number
+    armazenamentoMB: number
+    whatsappAtivo?: boolean
+    googleCalendarSync?: boolean
+    valorMensal?: Decimal | DecimalJsLike | number | string | null
+    valorAnual?: Decimal | DecimalJsLike | number | string | null
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PlanoUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    profissionaisAtivos?: IntFieldUpdateOperationsInput | number
+    usuarios?: IntFieldUpdateOperationsInput | number
+    agendamentosMes?: IntFieldUpdateOperationsInput | number
+    pacientes?: IntFieldUpdateOperationsInput | number
+    armazenamentoMB?: IntFieldUpdateOperationsInput | number
+    whatsappAtivo?: BoolFieldUpdateOperationsInput | boolean
+    googleCalendarSync?: BoolFieldUpdateOperationsInput | boolean
+    valorMensal?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    valorAnual?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlanoUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    profissionaisAtivos?: IntFieldUpdateOperationsInput | number
+    usuarios?: IntFieldUpdateOperationsInput | number
+    agendamentosMes?: IntFieldUpdateOperationsInput | number
+    pacientes?: IntFieldUpdateOperationsInput | number
+    armazenamentoMB?: IntFieldUpdateOperationsInput | number
+    whatsappAtivo?: BoolFieldUpdateOperationsInput | boolean
+    googleCalendarSync?: BoolFieldUpdateOperationsInput | boolean
+    valorMensal?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    valorAnual?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TenantCreateInput = {
+    id?: string
+    nome: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    plano: PlanoCreateNestedOneWithoutTenantsInput
+    agendamentos?: AgendamentoCreateNestedManyWithoutTenantInput
+    atendimentos?: AtendimentoCreateNestedManyWithoutTenantInput
+    pacientes?: PacienteCreateNestedManyWithoutTenantInput
+    procedimentos?: ProcedimentoCreateNestedManyWithoutTenantInput
+    profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
+    usuarios?: UsuarioCreateNestedManyWithoutTenantInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateInput = {
+    id?: string
+    nome: string
+    planoId: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutTenantInput
+    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutTenantInput
+    pacientes?: PacienteUncheckedCreateNestedManyWithoutTenantInput
+    procedimentos?: ProcedimentoUncheckedCreateNestedManyWithoutTenantInput
+    profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
+    usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
+  }
+
+  export type TenantUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    plano?: PlanoUpdateOneRequiredWithoutTenantsNestedInput
+    agendamentos?: AgendamentoUpdateManyWithoutTenantNestedInput
+    atendimentos?: AtendimentoUpdateManyWithoutTenantNestedInput
+    pacientes?: PacienteUpdateManyWithoutTenantNestedInput
+    procedimentos?: ProcedimentoUpdateManyWithoutTenantNestedInput
+    profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
+    usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    planoId?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUncheckedUpdateManyWithoutTenantNestedInput
+    atendimentos?: AtendimentoUncheckedUpdateManyWithoutTenantNestedInput
+    pacientes?: PacienteUncheckedUpdateManyWithoutTenantNestedInput
+    procedimentos?: ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput
+    profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
+    usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
+  }
+
+  export type TenantCreateManyInput = {
+    id?: string
+    nome: string
+    planoId: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TenantUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TenantUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    planoId?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -14149,6 +16249,13 @@ export namespace Prisma {
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
     not?: NestedStringFilter<$PrismaModel> | string
+  }
+
+  export type EnumTipoUsuarioFilter<$PrismaModel = never> = {
+    equals?: $Enums.TipoUsuario | EnumTipoUsuarioFieldRefInput<$PrismaModel>
+    in?: $Enums.TipoUsuario[] | ListEnumTipoUsuarioFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TipoUsuario[] | ListEnumTipoUsuarioFieldRefInput<$PrismaModel>
+    not?: NestedEnumTipoUsuarioFilter<$PrismaModel> | $Enums.TipoUsuario
   }
 
   export type BoolFilter<$PrismaModel = never> = {
@@ -14165,145 +16272,6 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
-  }
-
-  export type AgendamentoListRelationFilter = {
-    every?: AgendamentoWhereInput
-    some?: AgendamentoWhereInput
-    none?: AgendamentoWhereInput
-  }
-
-  export type AtendimentoListRelationFilter = {
-    every?: AtendimentoWhereInput
-    some?: AtendimentoWhereInput
-    none?: AtendimentoWhereInput
-  }
-
-  export type PacienteListRelationFilter = {
-    every?: PacienteWhereInput
-    some?: PacienteWhereInput
-    none?: PacienteWhereInput
-  }
-
-  export type ProcedimentoListRelationFilter = {
-    every?: ProcedimentoWhereInput
-    some?: ProcedimentoWhereInput
-    none?: ProcedimentoWhereInput
-  }
-
-  export type ProfissionalListRelationFilter = {
-    every?: ProfissionalWhereInput
-    some?: ProfissionalWhereInput
-    none?: ProfissionalWhereInput
-  }
-
-  export type UsuarioListRelationFilter = {
-    every?: UsuarioWhereInput
-    some?: UsuarioWhereInput
-    none?: UsuarioWhereInput
-  }
-
-  export type WhatsAppConfigNullableScalarRelationFilter = {
-    is?: WhatsAppConfigWhereInput | null
-    isNot?: WhatsAppConfigWhereInput | null
-  }
-
-  export type AgendamentoOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type AtendimentoOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type PacienteOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ProcedimentoOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ProfissionalOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type UsuarioOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type TenantCountOrderByAggregateInput = {
-    id?: SortOrder
-    nome?: SortOrder
-    plano?: SortOrder
-    ativo?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type TenantMaxOrderByAggregateInput = {
-    id?: SortOrder
-    nome?: SortOrder
-    plano?: SortOrder
-    ativo?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type TenantMinOrderByAggregateInput = {
-    id?: SortOrder
-    nome?: SortOrder
-    plano?: SortOrder
-    ativo?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type StringWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type EnumTipoUsuarioFilter<$PrismaModel = never> = {
-    equals?: $Enums.TipoUsuario | EnumTipoUsuarioFieldRefInput<$PrismaModel>
-    in?: $Enums.TipoUsuario[] | ListEnumTipoUsuarioFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TipoUsuario[] | ListEnumTipoUsuarioFieldRefInput<$PrismaModel>
-    not?: NestedEnumTipoUsuarioFilter<$PrismaModel> | $Enums.TipoUsuario
   }
 
   export type TenantScalarRelationFilter = {
@@ -14352,6 +16320,24 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type StringWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
+  }
+
   export type EnumTipoUsuarioWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.TipoUsuario | EnumTipoUsuarioFieldRefInput<$PrismaModel>
     in?: $Enums.TipoUsuario[] | ListEnumTipoUsuarioFieldRefInput<$PrismaModel>
@@ -14360,6 +16346,28 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTipoUsuarioFilter<$PrismaModel>
     _max?: NestedEnumTipoUsuarioFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type StringNullableFilter<$PrismaModel = never> = {
@@ -14377,9 +16385,39 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type AgendamentoListRelationFilter = {
+    every?: AgendamentoWhereInput
+    some?: AgendamentoWhereInput
+    none?: AgendamentoWhereInput
+  }
+
+  export type AtendimentoListRelationFilter = {
+    every?: AtendimentoWhereInput
+    some?: AtendimentoWhereInput
+    none?: AtendimentoWhereInput
+  }
+
+  export type PacienteListRelationFilter = {
+    every?: PacienteWhereInput
+    some?: PacienteWhereInput
+    none?: PacienteWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
+  }
+
+  export type AgendamentoOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AtendimentoOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PacienteOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type ProfissionalCountOrderByAggregateInput = {
@@ -14433,6 +16471,17 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type ProfissionalNullableScalarRelationFilter = {
     is?: ProfissionalWhereInput | null
     isNot?: ProfissionalWhereInput | null
@@ -14443,8 +16492,24 @@ export namespace Prisma {
     tenantId?: SortOrder
     profissionalId?: SortOrder
     nome?: SortOrder
+    cpf?: SortOrder
+    dataNascimento?: SortOrder
     telefone?: SortOrder
+    telefone2?: SortOrder
     email?: SortOrder
+    cep?: SortOrder
+    logradouro?: SortOrder
+    numero?: SortOrder
+    complemento?: SortOrder
+    bairro?: SortOrder
+    cidade?: SortOrder
+    estado?: SortOrder
+    alergias?: SortOrder
+    menorIdade?: SortOrder
+    responsavelNome?: SortOrder
+    responsavelCpf?: SortOrder
+    responsavelTelefone?: SortOrder
+    responsavelParentesco?: SortOrder
     observacoes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -14455,8 +16520,24 @@ export namespace Prisma {
     tenantId?: SortOrder
     profissionalId?: SortOrder
     nome?: SortOrder
+    cpf?: SortOrder
+    dataNascimento?: SortOrder
     telefone?: SortOrder
+    telefone2?: SortOrder
     email?: SortOrder
+    cep?: SortOrder
+    logradouro?: SortOrder
+    numero?: SortOrder
+    complemento?: SortOrder
+    bairro?: SortOrder
+    cidade?: SortOrder
+    estado?: SortOrder
+    alergias?: SortOrder
+    menorIdade?: SortOrder
+    responsavelNome?: SortOrder
+    responsavelCpf?: SortOrder
+    responsavelTelefone?: SortOrder
+    responsavelParentesco?: SortOrder
     observacoes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -14467,11 +16548,41 @@ export namespace Prisma {
     tenantId?: SortOrder
     profissionalId?: SortOrder
     nome?: SortOrder
+    cpf?: SortOrder
+    dataNascimento?: SortOrder
     telefone?: SortOrder
+    telefone2?: SortOrder
     email?: SortOrder
+    cep?: SortOrder
+    logradouro?: SortOrder
+    numero?: SortOrder
+    complemento?: SortOrder
+    bairro?: SortOrder
+    cidade?: SortOrder
+    estado?: SortOrder
+    alergias?: SortOrder
+    menorIdade?: SortOrder
+    responsavelNome?: SortOrder
+    responsavelCpf?: SortOrder
+    responsavelTelefone?: SortOrder
+    responsavelParentesco?: SortOrder
     observacoes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type DecimalNullableFilter<$PrismaModel = never> = {
@@ -14838,300 +16949,158 @@ export namespace Prisma {
     _max?: NestedEnumTipoLogFilter<$PrismaModel>
   }
 
-  export type AgendamentoCreateNestedManyWithoutTenantInput = {
-    create?: XOR<AgendamentoCreateWithoutTenantInput, AgendamentoUncheckedCreateWithoutTenantInput> | AgendamentoCreateWithoutTenantInput[] | AgendamentoUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: AgendamentoCreateOrConnectWithoutTenantInput | AgendamentoCreateOrConnectWithoutTenantInput[]
-    createMany?: AgendamentoCreateManyTenantInputEnvelope
-    connect?: AgendamentoWhereUniqueInput | AgendamentoWhereUniqueInput[]
+  export type TenantListRelationFilter = {
+    every?: TenantWhereInput
+    some?: TenantWhereInput
+    none?: TenantWhereInput
   }
 
-  export type AtendimentoCreateNestedManyWithoutTenantInput = {
-    create?: XOR<AtendimentoCreateWithoutTenantInput, AtendimentoUncheckedCreateWithoutTenantInput> | AtendimentoCreateWithoutTenantInput[] | AtendimentoUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: AtendimentoCreateOrConnectWithoutTenantInput | AtendimentoCreateOrConnectWithoutTenantInput[]
-    createMany?: AtendimentoCreateManyTenantInputEnvelope
-    connect?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
+  export type TenantOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
-  export type PacienteCreateNestedManyWithoutTenantInput = {
-    create?: XOR<PacienteCreateWithoutTenantInput, PacienteUncheckedCreateWithoutTenantInput> | PacienteCreateWithoutTenantInput[] | PacienteUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: PacienteCreateOrConnectWithoutTenantInput | PacienteCreateOrConnectWithoutTenantInput[]
-    createMany?: PacienteCreateManyTenantInputEnvelope
-    connect?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
+  export type PlanoCountOrderByAggregateInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    slug?: SortOrder
+    descricao?: SortOrder
+    profissionaisAtivos?: SortOrder
+    usuarios?: SortOrder
+    agendamentosMes?: SortOrder
+    pacientes?: SortOrder
+    armazenamentoMB?: SortOrder
+    whatsappAtivo?: SortOrder
+    googleCalendarSync?: SortOrder
+    valorMensal?: SortOrder
+    valorAnual?: SortOrder
+    ativo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
-  export type ProcedimentoCreateNestedManyWithoutTenantInput = {
-    create?: XOR<ProcedimentoCreateWithoutTenantInput, ProcedimentoUncheckedCreateWithoutTenantInput> | ProcedimentoCreateWithoutTenantInput[] | ProcedimentoUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: ProcedimentoCreateOrConnectWithoutTenantInput | ProcedimentoCreateOrConnectWithoutTenantInput[]
-    createMany?: ProcedimentoCreateManyTenantInputEnvelope
-    connect?: ProcedimentoWhereUniqueInput | ProcedimentoWhereUniqueInput[]
+  export type PlanoAvgOrderByAggregateInput = {
+    profissionaisAtivos?: SortOrder
+    usuarios?: SortOrder
+    agendamentosMes?: SortOrder
+    pacientes?: SortOrder
+    armazenamentoMB?: SortOrder
+    valorMensal?: SortOrder
+    valorAnual?: SortOrder
   }
 
-  export type ProfissionalCreateNestedManyWithoutTenantInput = {
-    create?: XOR<ProfissionalCreateWithoutTenantInput, ProfissionalUncheckedCreateWithoutTenantInput> | ProfissionalCreateWithoutTenantInput[] | ProfissionalUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: ProfissionalCreateOrConnectWithoutTenantInput | ProfissionalCreateOrConnectWithoutTenantInput[]
-    createMany?: ProfissionalCreateManyTenantInputEnvelope
-    connect?: ProfissionalWhereUniqueInput | ProfissionalWhereUniqueInput[]
+  export type PlanoMaxOrderByAggregateInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    slug?: SortOrder
+    descricao?: SortOrder
+    profissionaisAtivos?: SortOrder
+    usuarios?: SortOrder
+    agendamentosMes?: SortOrder
+    pacientes?: SortOrder
+    armazenamentoMB?: SortOrder
+    whatsappAtivo?: SortOrder
+    googleCalendarSync?: SortOrder
+    valorMensal?: SortOrder
+    valorAnual?: SortOrder
+    ativo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
-  export type UsuarioCreateNestedManyWithoutTenantInput = {
-    create?: XOR<UsuarioCreateWithoutTenantInput, UsuarioUncheckedCreateWithoutTenantInput> | UsuarioCreateWithoutTenantInput[] | UsuarioUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: UsuarioCreateOrConnectWithoutTenantInput | UsuarioCreateOrConnectWithoutTenantInput[]
-    createMany?: UsuarioCreateManyTenantInputEnvelope
-    connect?: UsuarioWhereUniqueInput | UsuarioWhereUniqueInput[]
+  export type PlanoMinOrderByAggregateInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    slug?: SortOrder
+    descricao?: SortOrder
+    profissionaisAtivos?: SortOrder
+    usuarios?: SortOrder
+    agendamentosMes?: SortOrder
+    pacientes?: SortOrder
+    armazenamentoMB?: SortOrder
+    whatsappAtivo?: SortOrder
+    googleCalendarSync?: SortOrder
+    valorMensal?: SortOrder
+    valorAnual?: SortOrder
+    ativo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
-  export type WhatsAppConfigCreateNestedOneWithoutTenantInput = {
-    create?: XOR<WhatsAppConfigCreateWithoutTenantInput, WhatsAppConfigUncheckedCreateWithoutTenantInput>
-    connectOrCreate?: WhatsAppConfigCreateOrConnectWithoutTenantInput
-    connect?: WhatsAppConfigWhereUniqueInput
+  export type PlanoSumOrderByAggregateInput = {
+    profissionaisAtivos?: SortOrder
+    usuarios?: SortOrder
+    agendamentosMes?: SortOrder
+    pacientes?: SortOrder
+    armazenamentoMB?: SortOrder
+    valorMensal?: SortOrder
+    valorAnual?: SortOrder
   }
 
-  export type AgendamentoUncheckedCreateNestedManyWithoutTenantInput = {
-    create?: XOR<AgendamentoCreateWithoutTenantInput, AgendamentoUncheckedCreateWithoutTenantInput> | AgendamentoCreateWithoutTenantInput[] | AgendamentoUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: AgendamentoCreateOrConnectWithoutTenantInput | AgendamentoCreateOrConnectWithoutTenantInput[]
-    createMany?: AgendamentoCreateManyTenantInputEnvelope
-    connect?: AgendamentoWhereUniqueInput | AgendamentoWhereUniqueInput[]
+  export type PlanoScalarRelationFilter = {
+    is?: PlanoWhereInput
+    isNot?: PlanoWhereInput
   }
 
-  export type AtendimentoUncheckedCreateNestedManyWithoutTenantInput = {
-    create?: XOR<AtendimentoCreateWithoutTenantInput, AtendimentoUncheckedCreateWithoutTenantInput> | AtendimentoCreateWithoutTenantInput[] | AtendimentoUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: AtendimentoCreateOrConnectWithoutTenantInput | AtendimentoCreateOrConnectWithoutTenantInput[]
-    createMany?: AtendimentoCreateManyTenantInputEnvelope
-    connect?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
+  export type ProcedimentoListRelationFilter = {
+    every?: ProcedimentoWhereInput
+    some?: ProcedimentoWhereInput
+    none?: ProcedimentoWhereInput
   }
 
-  export type PacienteUncheckedCreateNestedManyWithoutTenantInput = {
-    create?: XOR<PacienteCreateWithoutTenantInput, PacienteUncheckedCreateWithoutTenantInput> | PacienteCreateWithoutTenantInput[] | PacienteUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: PacienteCreateOrConnectWithoutTenantInput | PacienteCreateOrConnectWithoutTenantInput[]
-    createMany?: PacienteCreateManyTenantInputEnvelope
-    connect?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
+  export type ProfissionalListRelationFilter = {
+    every?: ProfissionalWhereInput
+    some?: ProfissionalWhereInput
+    none?: ProfissionalWhereInput
   }
 
-  export type ProcedimentoUncheckedCreateNestedManyWithoutTenantInput = {
-    create?: XOR<ProcedimentoCreateWithoutTenantInput, ProcedimentoUncheckedCreateWithoutTenantInput> | ProcedimentoCreateWithoutTenantInput[] | ProcedimentoUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: ProcedimentoCreateOrConnectWithoutTenantInput | ProcedimentoCreateOrConnectWithoutTenantInput[]
-    createMany?: ProcedimentoCreateManyTenantInputEnvelope
-    connect?: ProcedimentoWhereUniqueInput | ProcedimentoWhereUniqueInput[]
+  export type UsuarioListRelationFilter = {
+    every?: UsuarioWhereInput
+    some?: UsuarioWhereInput
+    none?: UsuarioWhereInput
   }
 
-  export type ProfissionalUncheckedCreateNestedManyWithoutTenantInput = {
-    create?: XOR<ProfissionalCreateWithoutTenantInput, ProfissionalUncheckedCreateWithoutTenantInput> | ProfissionalCreateWithoutTenantInput[] | ProfissionalUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: ProfissionalCreateOrConnectWithoutTenantInput | ProfissionalCreateOrConnectWithoutTenantInput[]
-    createMany?: ProfissionalCreateManyTenantInputEnvelope
-    connect?: ProfissionalWhereUniqueInput | ProfissionalWhereUniqueInput[]
+  export type WhatsAppConfigNullableScalarRelationFilter = {
+    is?: WhatsAppConfigWhereInput | null
+    isNot?: WhatsAppConfigWhereInput | null
   }
 
-  export type UsuarioUncheckedCreateNestedManyWithoutTenantInput = {
-    create?: XOR<UsuarioCreateWithoutTenantInput, UsuarioUncheckedCreateWithoutTenantInput> | UsuarioCreateWithoutTenantInput[] | UsuarioUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: UsuarioCreateOrConnectWithoutTenantInput | UsuarioCreateOrConnectWithoutTenantInput[]
-    createMany?: UsuarioCreateManyTenantInputEnvelope
-    connect?: UsuarioWhereUniqueInput | UsuarioWhereUniqueInput[]
+  export type ProcedimentoOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
-  export type WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput = {
-    create?: XOR<WhatsAppConfigCreateWithoutTenantInput, WhatsAppConfigUncheckedCreateWithoutTenantInput>
-    connectOrCreate?: WhatsAppConfigCreateOrConnectWithoutTenantInput
-    connect?: WhatsAppConfigWhereUniqueInput
+  export type ProfissionalOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
-  export type StringFieldUpdateOperationsInput = {
-    set?: string
+  export type UsuarioOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
+  export type TenantCountOrderByAggregateInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    planoId?: SortOrder
+    ativo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string
+  export type TenantMaxOrderByAggregateInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    planoId?: SortOrder
+    ativo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
-  export type AgendamentoUpdateManyWithoutTenantNestedInput = {
-    create?: XOR<AgendamentoCreateWithoutTenantInput, AgendamentoUncheckedCreateWithoutTenantInput> | AgendamentoCreateWithoutTenantInput[] | AgendamentoUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: AgendamentoCreateOrConnectWithoutTenantInput | AgendamentoCreateOrConnectWithoutTenantInput[]
-    upsert?: AgendamentoUpsertWithWhereUniqueWithoutTenantInput | AgendamentoUpsertWithWhereUniqueWithoutTenantInput[]
-    createMany?: AgendamentoCreateManyTenantInputEnvelope
-    set?: AgendamentoWhereUniqueInput | AgendamentoWhereUniqueInput[]
-    disconnect?: AgendamentoWhereUniqueInput | AgendamentoWhereUniqueInput[]
-    delete?: AgendamentoWhereUniqueInput | AgendamentoWhereUniqueInput[]
-    connect?: AgendamentoWhereUniqueInput | AgendamentoWhereUniqueInput[]
-    update?: AgendamentoUpdateWithWhereUniqueWithoutTenantInput | AgendamentoUpdateWithWhereUniqueWithoutTenantInput[]
-    updateMany?: AgendamentoUpdateManyWithWhereWithoutTenantInput | AgendamentoUpdateManyWithWhereWithoutTenantInput[]
-    deleteMany?: AgendamentoScalarWhereInput | AgendamentoScalarWhereInput[]
-  }
-
-  export type AtendimentoUpdateManyWithoutTenantNestedInput = {
-    create?: XOR<AtendimentoCreateWithoutTenantInput, AtendimentoUncheckedCreateWithoutTenantInput> | AtendimentoCreateWithoutTenantInput[] | AtendimentoUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: AtendimentoCreateOrConnectWithoutTenantInput | AtendimentoCreateOrConnectWithoutTenantInput[]
-    upsert?: AtendimentoUpsertWithWhereUniqueWithoutTenantInput | AtendimentoUpsertWithWhereUniqueWithoutTenantInput[]
-    createMany?: AtendimentoCreateManyTenantInputEnvelope
-    set?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
-    disconnect?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
-    delete?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
-    connect?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
-    update?: AtendimentoUpdateWithWhereUniqueWithoutTenantInput | AtendimentoUpdateWithWhereUniqueWithoutTenantInput[]
-    updateMany?: AtendimentoUpdateManyWithWhereWithoutTenantInput | AtendimentoUpdateManyWithWhereWithoutTenantInput[]
-    deleteMany?: AtendimentoScalarWhereInput | AtendimentoScalarWhereInput[]
-  }
-
-  export type PacienteUpdateManyWithoutTenantNestedInput = {
-    create?: XOR<PacienteCreateWithoutTenantInput, PacienteUncheckedCreateWithoutTenantInput> | PacienteCreateWithoutTenantInput[] | PacienteUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: PacienteCreateOrConnectWithoutTenantInput | PacienteCreateOrConnectWithoutTenantInput[]
-    upsert?: PacienteUpsertWithWhereUniqueWithoutTenantInput | PacienteUpsertWithWhereUniqueWithoutTenantInput[]
-    createMany?: PacienteCreateManyTenantInputEnvelope
-    set?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
-    disconnect?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
-    delete?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
-    connect?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
-    update?: PacienteUpdateWithWhereUniqueWithoutTenantInput | PacienteUpdateWithWhereUniqueWithoutTenantInput[]
-    updateMany?: PacienteUpdateManyWithWhereWithoutTenantInput | PacienteUpdateManyWithWhereWithoutTenantInput[]
-    deleteMany?: PacienteScalarWhereInput | PacienteScalarWhereInput[]
-  }
-
-  export type ProcedimentoUpdateManyWithoutTenantNestedInput = {
-    create?: XOR<ProcedimentoCreateWithoutTenantInput, ProcedimentoUncheckedCreateWithoutTenantInput> | ProcedimentoCreateWithoutTenantInput[] | ProcedimentoUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: ProcedimentoCreateOrConnectWithoutTenantInput | ProcedimentoCreateOrConnectWithoutTenantInput[]
-    upsert?: ProcedimentoUpsertWithWhereUniqueWithoutTenantInput | ProcedimentoUpsertWithWhereUniqueWithoutTenantInput[]
-    createMany?: ProcedimentoCreateManyTenantInputEnvelope
-    set?: ProcedimentoWhereUniqueInput | ProcedimentoWhereUniqueInput[]
-    disconnect?: ProcedimentoWhereUniqueInput | ProcedimentoWhereUniqueInput[]
-    delete?: ProcedimentoWhereUniqueInput | ProcedimentoWhereUniqueInput[]
-    connect?: ProcedimentoWhereUniqueInput | ProcedimentoWhereUniqueInput[]
-    update?: ProcedimentoUpdateWithWhereUniqueWithoutTenantInput | ProcedimentoUpdateWithWhereUniqueWithoutTenantInput[]
-    updateMany?: ProcedimentoUpdateManyWithWhereWithoutTenantInput | ProcedimentoUpdateManyWithWhereWithoutTenantInput[]
-    deleteMany?: ProcedimentoScalarWhereInput | ProcedimentoScalarWhereInput[]
-  }
-
-  export type ProfissionalUpdateManyWithoutTenantNestedInput = {
-    create?: XOR<ProfissionalCreateWithoutTenantInput, ProfissionalUncheckedCreateWithoutTenantInput> | ProfissionalCreateWithoutTenantInput[] | ProfissionalUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: ProfissionalCreateOrConnectWithoutTenantInput | ProfissionalCreateOrConnectWithoutTenantInput[]
-    upsert?: ProfissionalUpsertWithWhereUniqueWithoutTenantInput | ProfissionalUpsertWithWhereUniqueWithoutTenantInput[]
-    createMany?: ProfissionalCreateManyTenantInputEnvelope
-    set?: ProfissionalWhereUniqueInput | ProfissionalWhereUniqueInput[]
-    disconnect?: ProfissionalWhereUniqueInput | ProfissionalWhereUniqueInput[]
-    delete?: ProfissionalWhereUniqueInput | ProfissionalWhereUniqueInput[]
-    connect?: ProfissionalWhereUniqueInput | ProfissionalWhereUniqueInput[]
-    update?: ProfissionalUpdateWithWhereUniqueWithoutTenantInput | ProfissionalUpdateWithWhereUniqueWithoutTenantInput[]
-    updateMany?: ProfissionalUpdateManyWithWhereWithoutTenantInput | ProfissionalUpdateManyWithWhereWithoutTenantInput[]
-    deleteMany?: ProfissionalScalarWhereInput | ProfissionalScalarWhereInput[]
-  }
-
-  export type UsuarioUpdateManyWithoutTenantNestedInput = {
-    create?: XOR<UsuarioCreateWithoutTenantInput, UsuarioUncheckedCreateWithoutTenantInput> | UsuarioCreateWithoutTenantInput[] | UsuarioUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: UsuarioCreateOrConnectWithoutTenantInput | UsuarioCreateOrConnectWithoutTenantInput[]
-    upsert?: UsuarioUpsertWithWhereUniqueWithoutTenantInput | UsuarioUpsertWithWhereUniqueWithoutTenantInput[]
-    createMany?: UsuarioCreateManyTenantInputEnvelope
-    set?: UsuarioWhereUniqueInput | UsuarioWhereUniqueInput[]
-    disconnect?: UsuarioWhereUniqueInput | UsuarioWhereUniqueInput[]
-    delete?: UsuarioWhereUniqueInput | UsuarioWhereUniqueInput[]
-    connect?: UsuarioWhereUniqueInput | UsuarioWhereUniqueInput[]
-    update?: UsuarioUpdateWithWhereUniqueWithoutTenantInput | UsuarioUpdateWithWhereUniqueWithoutTenantInput[]
-    updateMany?: UsuarioUpdateManyWithWhereWithoutTenantInput | UsuarioUpdateManyWithWhereWithoutTenantInput[]
-    deleteMany?: UsuarioScalarWhereInput | UsuarioScalarWhereInput[]
-  }
-
-  export type WhatsAppConfigUpdateOneWithoutTenantNestedInput = {
-    create?: XOR<WhatsAppConfigCreateWithoutTenantInput, WhatsAppConfigUncheckedCreateWithoutTenantInput>
-    connectOrCreate?: WhatsAppConfigCreateOrConnectWithoutTenantInput
-    upsert?: WhatsAppConfigUpsertWithoutTenantInput
-    disconnect?: WhatsAppConfigWhereInput | boolean
-    delete?: WhatsAppConfigWhereInput | boolean
-    connect?: WhatsAppConfigWhereUniqueInput
-    update?: XOR<XOR<WhatsAppConfigUpdateToOneWithWhereWithoutTenantInput, WhatsAppConfigUpdateWithoutTenantInput>, WhatsAppConfigUncheckedUpdateWithoutTenantInput>
-  }
-
-  export type AgendamentoUncheckedUpdateManyWithoutTenantNestedInput = {
-    create?: XOR<AgendamentoCreateWithoutTenantInput, AgendamentoUncheckedCreateWithoutTenantInput> | AgendamentoCreateWithoutTenantInput[] | AgendamentoUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: AgendamentoCreateOrConnectWithoutTenantInput | AgendamentoCreateOrConnectWithoutTenantInput[]
-    upsert?: AgendamentoUpsertWithWhereUniqueWithoutTenantInput | AgendamentoUpsertWithWhereUniqueWithoutTenantInput[]
-    createMany?: AgendamentoCreateManyTenantInputEnvelope
-    set?: AgendamentoWhereUniqueInput | AgendamentoWhereUniqueInput[]
-    disconnect?: AgendamentoWhereUniqueInput | AgendamentoWhereUniqueInput[]
-    delete?: AgendamentoWhereUniqueInput | AgendamentoWhereUniqueInput[]
-    connect?: AgendamentoWhereUniqueInput | AgendamentoWhereUniqueInput[]
-    update?: AgendamentoUpdateWithWhereUniqueWithoutTenantInput | AgendamentoUpdateWithWhereUniqueWithoutTenantInput[]
-    updateMany?: AgendamentoUpdateManyWithWhereWithoutTenantInput | AgendamentoUpdateManyWithWhereWithoutTenantInput[]
-    deleteMany?: AgendamentoScalarWhereInput | AgendamentoScalarWhereInput[]
-  }
-
-  export type AtendimentoUncheckedUpdateManyWithoutTenantNestedInput = {
-    create?: XOR<AtendimentoCreateWithoutTenantInput, AtendimentoUncheckedCreateWithoutTenantInput> | AtendimentoCreateWithoutTenantInput[] | AtendimentoUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: AtendimentoCreateOrConnectWithoutTenantInput | AtendimentoCreateOrConnectWithoutTenantInput[]
-    upsert?: AtendimentoUpsertWithWhereUniqueWithoutTenantInput | AtendimentoUpsertWithWhereUniqueWithoutTenantInput[]
-    createMany?: AtendimentoCreateManyTenantInputEnvelope
-    set?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
-    disconnect?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
-    delete?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
-    connect?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
-    update?: AtendimentoUpdateWithWhereUniqueWithoutTenantInput | AtendimentoUpdateWithWhereUniqueWithoutTenantInput[]
-    updateMany?: AtendimentoUpdateManyWithWhereWithoutTenantInput | AtendimentoUpdateManyWithWhereWithoutTenantInput[]
-    deleteMany?: AtendimentoScalarWhereInput | AtendimentoScalarWhereInput[]
-  }
-
-  export type PacienteUncheckedUpdateManyWithoutTenantNestedInput = {
-    create?: XOR<PacienteCreateWithoutTenantInput, PacienteUncheckedCreateWithoutTenantInput> | PacienteCreateWithoutTenantInput[] | PacienteUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: PacienteCreateOrConnectWithoutTenantInput | PacienteCreateOrConnectWithoutTenantInput[]
-    upsert?: PacienteUpsertWithWhereUniqueWithoutTenantInput | PacienteUpsertWithWhereUniqueWithoutTenantInput[]
-    createMany?: PacienteCreateManyTenantInputEnvelope
-    set?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
-    disconnect?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
-    delete?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
-    connect?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
-    update?: PacienteUpdateWithWhereUniqueWithoutTenantInput | PacienteUpdateWithWhereUniqueWithoutTenantInput[]
-    updateMany?: PacienteUpdateManyWithWhereWithoutTenantInput | PacienteUpdateManyWithWhereWithoutTenantInput[]
-    deleteMany?: PacienteScalarWhereInput | PacienteScalarWhereInput[]
-  }
-
-  export type ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput = {
-    create?: XOR<ProcedimentoCreateWithoutTenantInput, ProcedimentoUncheckedCreateWithoutTenantInput> | ProcedimentoCreateWithoutTenantInput[] | ProcedimentoUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: ProcedimentoCreateOrConnectWithoutTenantInput | ProcedimentoCreateOrConnectWithoutTenantInput[]
-    upsert?: ProcedimentoUpsertWithWhereUniqueWithoutTenantInput | ProcedimentoUpsertWithWhereUniqueWithoutTenantInput[]
-    createMany?: ProcedimentoCreateManyTenantInputEnvelope
-    set?: ProcedimentoWhereUniqueInput | ProcedimentoWhereUniqueInput[]
-    disconnect?: ProcedimentoWhereUniqueInput | ProcedimentoWhereUniqueInput[]
-    delete?: ProcedimentoWhereUniqueInput | ProcedimentoWhereUniqueInput[]
-    connect?: ProcedimentoWhereUniqueInput | ProcedimentoWhereUniqueInput[]
-    update?: ProcedimentoUpdateWithWhereUniqueWithoutTenantInput | ProcedimentoUpdateWithWhereUniqueWithoutTenantInput[]
-    updateMany?: ProcedimentoUpdateManyWithWhereWithoutTenantInput | ProcedimentoUpdateManyWithWhereWithoutTenantInput[]
-    deleteMany?: ProcedimentoScalarWhereInput | ProcedimentoScalarWhereInput[]
-  }
-
-  export type ProfissionalUncheckedUpdateManyWithoutTenantNestedInput = {
-    create?: XOR<ProfissionalCreateWithoutTenantInput, ProfissionalUncheckedCreateWithoutTenantInput> | ProfissionalCreateWithoutTenantInput[] | ProfissionalUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: ProfissionalCreateOrConnectWithoutTenantInput | ProfissionalCreateOrConnectWithoutTenantInput[]
-    upsert?: ProfissionalUpsertWithWhereUniqueWithoutTenantInput | ProfissionalUpsertWithWhereUniqueWithoutTenantInput[]
-    createMany?: ProfissionalCreateManyTenantInputEnvelope
-    set?: ProfissionalWhereUniqueInput | ProfissionalWhereUniqueInput[]
-    disconnect?: ProfissionalWhereUniqueInput | ProfissionalWhereUniqueInput[]
-    delete?: ProfissionalWhereUniqueInput | ProfissionalWhereUniqueInput[]
-    connect?: ProfissionalWhereUniqueInput | ProfissionalWhereUniqueInput[]
-    update?: ProfissionalUpdateWithWhereUniqueWithoutTenantInput | ProfissionalUpdateWithWhereUniqueWithoutTenantInput[]
-    updateMany?: ProfissionalUpdateManyWithWhereWithoutTenantInput | ProfissionalUpdateManyWithWhereWithoutTenantInput[]
-    deleteMany?: ProfissionalScalarWhereInput | ProfissionalScalarWhereInput[]
-  }
-
-  export type UsuarioUncheckedUpdateManyWithoutTenantNestedInput = {
-    create?: XOR<UsuarioCreateWithoutTenantInput, UsuarioUncheckedCreateWithoutTenantInput> | UsuarioCreateWithoutTenantInput[] | UsuarioUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: UsuarioCreateOrConnectWithoutTenantInput | UsuarioCreateOrConnectWithoutTenantInput[]
-    upsert?: UsuarioUpsertWithWhereUniqueWithoutTenantInput | UsuarioUpsertWithWhereUniqueWithoutTenantInput[]
-    createMany?: UsuarioCreateManyTenantInputEnvelope
-    set?: UsuarioWhereUniqueInput | UsuarioWhereUniqueInput[]
-    disconnect?: UsuarioWhereUniqueInput | UsuarioWhereUniqueInput[]
-    delete?: UsuarioWhereUniqueInput | UsuarioWhereUniqueInput[]
-    connect?: UsuarioWhereUniqueInput | UsuarioWhereUniqueInput[]
-    update?: UsuarioUpdateWithWhereUniqueWithoutTenantInput | UsuarioUpdateWithWhereUniqueWithoutTenantInput[]
-    updateMany?: UsuarioUpdateManyWithWhereWithoutTenantInput | UsuarioUpdateManyWithWhereWithoutTenantInput[]
-    deleteMany?: UsuarioScalarWhereInput | UsuarioScalarWhereInput[]
-  }
-
-  export type WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput = {
-    create?: XOR<WhatsAppConfigCreateWithoutTenantInput, WhatsAppConfigUncheckedCreateWithoutTenantInput>
-    connectOrCreate?: WhatsAppConfigCreateOrConnectWithoutTenantInput
-    upsert?: WhatsAppConfigUpsertWithoutTenantInput
-    disconnect?: WhatsAppConfigWhereInput | boolean
-    delete?: WhatsAppConfigWhereInput | boolean
-    connect?: WhatsAppConfigWhereUniqueInput
-    update?: XOR<XOR<WhatsAppConfigUpdateToOneWithWhereWithoutTenantInput, WhatsAppConfigUpdateWithoutTenantInput>, WhatsAppConfigUncheckedUpdateWithoutTenantInput>
+  export type TenantMinOrderByAggregateInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    planoId?: SortOrder
+    ativo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type TenantCreateNestedOneWithoutUsuariosInput = {
@@ -15140,8 +17109,20 @@ export namespace Prisma {
     connect?: TenantWhereUniqueInput
   }
 
+  export type StringFieldUpdateOperationsInput = {
+    set?: string
+  }
+
   export type EnumTipoUsuarioFieldUpdateOperationsInput = {
     set?: $Enums.TipoUsuario
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
   }
 
   export type TenantUpdateOneRequiredWithoutUsuariosNestedInput = {
@@ -15296,6 +17277,18 @@ export namespace Prisma {
     deleteMany?: PacienteScalarWhereInput | PacienteScalarWhereInput[]
   }
 
+  export type TenantCreateNestedOneWithoutPacientesInput = {
+    create?: XOR<TenantCreateWithoutPacientesInput, TenantUncheckedCreateWithoutPacientesInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutPacientesInput
+    connect?: TenantWhereUniqueInput
+  }
+
+  export type ProfissionalCreateNestedOneWithoutPacientesInput = {
+    create?: XOR<ProfissionalCreateWithoutPacientesInput, ProfissionalUncheckedCreateWithoutPacientesInput>
+    connectOrCreate?: ProfissionalCreateOrConnectWithoutPacientesInput
+    connect?: ProfissionalWhereUniqueInput
+  }
+
   export type AgendamentoCreateNestedManyWithoutPacienteInput = {
     create?: XOR<AgendamentoCreateWithoutPacienteInput, AgendamentoUncheckedCreateWithoutPacienteInput> | AgendamentoCreateWithoutPacienteInput[] | AgendamentoUncheckedCreateWithoutPacienteInput[]
     connectOrCreate?: AgendamentoCreateOrConnectWithoutPacienteInput | AgendamentoCreateOrConnectWithoutPacienteInput[]
@@ -15310,18 +17303,6 @@ export namespace Prisma {
     connect?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
   }
 
-  export type ProfissionalCreateNestedOneWithoutPacientesInput = {
-    create?: XOR<ProfissionalCreateWithoutPacientesInput, ProfissionalUncheckedCreateWithoutPacientesInput>
-    connectOrCreate?: ProfissionalCreateOrConnectWithoutPacientesInput
-    connect?: ProfissionalWhereUniqueInput
-  }
-
-  export type TenantCreateNestedOneWithoutPacientesInput = {
-    create?: XOR<TenantCreateWithoutPacientesInput, TenantUncheckedCreateWithoutPacientesInput>
-    connectOrCreate?: TenantCreateOrConnectWithoutPacientesInput
-    connect?: TenantWhereUniqueInput
-  }
-
   export type AgendamentoUncheckedCreateNestedManyWithoutPacienteInput = {
     create?: XOR<AgendamentoCreateWithoutPacienteInput, AgendamentoUncheckedCreateWithoutPacienteInput> | AgendamentoCreateWithoutPacienteInput[] | AgendamentoUncheckedCreateWithoutPacienteInput[]
     connectOrCreate?: AgendamentoCreateOrConnectWithoutPacienteInput | AgendamentoCreateOrConnectWithoutPacienteInput[]
@@ -15334,6 +17315,28 @@ export namespace Prisma {
     connectOrCreate?: AtendimentoCreateOrConnectWithoutPacienteInput | AtendimentoCreateOrConnectWithoutPacienteInput[]
     createMany?: AtendimentoCreateManyPacienteInputEnvelope
     connect?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
+  export type TenantUpdateOneRequiredWithoutPacientesNestedInput = {
+    create?: XOR<TenantCreateWithoutPacientesInput, TenantUncheckedCreateWithoutPacientesInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutPacientesInput
+    upsert?: TenantUpsertWithoutPacientesInput
+    connect?: TenantWhereUniqueInput
+    update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutPacientesInput, TenantUpdateWithoutPacientesInput>, TenantUncheckedUpdateWithoutPacientesInput>
+  }
+
+  export type ProfissionalUpdateOneWithoutPacientesNestedInput = {
+    create?: XOR<ProfissionalCreateWithoutPacientesInput, ProfissionalUncheckedCreateWithoutPacientesInput>
+    connectOrCreate?: ProfissionalCreateOrConnectWithoutPacientesInput
+    upsert?: ProfissionalUpsertWithoutPacientesInput
+    disconnect?: ProfissionalWhereInput | boolean
+    delete?: ProfissionalWhereInput | boolean
+    connect?: ProfissionalWhereUniqueInput
+    update?: XOR<XOR<ProfissionalUpdateToOneWithWhereWithoutPacientesInput, ProfissionalUpdateWithoutPacientesInput>, ProfissionalUncheckedUpdateWithoutPacientesInput>
   }
 
   export type AgendamentoUpdateManyWithoutPacienteNestedInput = {
@@ -15362,24 +17365,6 @@ export namespace Prisma {
     update?: AtendimentoUpdateWithWhereUniqueWithoutPacienteInput | AtendimentoUpdateWithWhereUniqueWithoutPacienteInput[]
     updateMany?: AtendimentoUpdateManyWithWhereWithoutPacienteInput | AtendimentoUpdateManyWithWhereWithoutPacienteInput[]
     deleteMany?: AtendimentoScalarWhereInput | AtendimentoScalarWhereInput[]
-  }
-
-  export type ProfissionalUpdateOneWithoutPacientesNestedInput = {
-    create?: XOR<ProfissionalCreateWithoutPacientesInput, ProfissionalUncheckedCreateWithoutPacientesInput>
-    connectOrCreate?: ProfissionalCreateOrConnectWithoutPacientesInput
-    upsert?: ProfissionalUpsertWithoutPacientesInput
-    disconnect?: ProfissionalWhereInput | boolean
-    delete?: ProfissionalWhereInput | boolean
-    connect?: ProfissionalWhereUniqueInput
-    update?: XOR<XOR<ProfissionalUpdateToOneWithWhereWithoutPacientesInput, ProfissionalUpdateWithoutPacientesInput>, ProfissionalUncheckedUpdateWithoutPacientesInput>
-  }
-
-  export type TenantUpdateOneRequiredWithoutPacientesNestedInput = {
-    create?: XOR<TenantCreateWithoutPacientesInput, TenantUncheckedCreateWithoutPacientesInput>
-    connectOrCreate?: TenantCreateOrConnectWithoutPacientesInput
-    upsert?: TenantUpsertWithoutPacientesInput
-    connect?: TenantWhereUniqueInput
-    update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutPacientesInput, TenantUpdateWithoutPacientesInput>, TenantUncheckedUpdateWithoutPacientesInput>
   }
 
   export type AgendamentoUncheckedUpdateManyWithoutPacienteNestedInput = {
@@ -15706,6 +17691,346 @@ export namespace Prisma {
     set?: $Enums.TipoLog
   }
 
+  export type TenantCreateNestedManyWithoutPlanoInput = {
+    create?: XOR<TenantCreateWithoutPlanoInput, TenantUncheckedCreateWithoutPlanoInput> | TenantCreateWithoutPlanoInput[] | TenantUncheckedCreateWithoutPlanoInput[]
+    connectOrCreate?: TenantCreateOrConnectWithoutPlanoInput | TenantCreateOrConnectWithoutPlanoInput[]
+    createMany?: TenantCreateManyPlanoInputEnvelope
+    connect?: TenantWhereUniqueInput | TenantWhereUniqueInput[]
+  }
+
+  export type TenantUncheckedCreateNestedManyWithoutPlanoInput = {
+    create?: XOR<TenantCreateWithoutPlanoInput, TenantUncheckedCreateWithoutPlanoInput> | TenantCreateWithoutPlanoInput[] | TenantUncheckedCreateWithoutPlanoInput[]
+    connectOrCreate?: TenantCreateOrConnectWithoutPlanoInput | TenantCreateOrConnectWithoutPlanoInput[]
+    createMany?: TenantCreateManyPlanoInputEnvelope
+    connect?: TenantWhereUniqueInput | TenantWhereUniqueInput[]
+  }
+
+  export type TenantUpdateManyWithoutPlanoNestedInput = {
+    create?: XOR<TenantCreateWithoutPlanoInput, TenantUncheckedCreateWithoutPlanoInput> | TenantCreateWithoutPlanoInput[] | TenantUncheckedCreateWithoutPlanoInput[]
+    connectOrCreate?: TenantCreateOrConnectWithoutPlanoInput | TenantCreateOrConnectWithoutPlanoInput[]
+    upsert?: TenantUpsertWithWhereUniqueWithoutPlanoInput | TenantUpsertWithWhereUniqueWithoutPlanoInput[]
+    createMany?: TenantCreateManyPlanoInputEnvelope
+    set?: TenantWhereUniqueInput | TenantWhereUniqueInput[]
+    disconnect?: TenantWhereUniqueInput | TenantWhereUniqueInput[]
+    delete?: TenantWhereUniqueInput | TenantWhereUniqueInput[]
+    connect?: TenantWhereUniqueInput | TenantWhereUniqueInput[]
+    update?: TenantUpdateWithWhereUniqueWithoutPlanoInput | TenantUpdateWithWhereUniqueWithoutPlanoInput[]
+    updateMany?: TenantUpdateManyWithWhereWithoutPlanoInput | TenantUpdateManyWithWhereWithoutPlanoInput[]
+    deleteMany?: TenantScalarWhereInput | TenantScalarWhereInput[]
+  }
+
+  export type TenantUncheckedUpdateManyWithoutPlanoNestedInput = {
+    create?: XOR<TenantCreateWithoutPlanoInput, TenantUncheckedCreateWithoutPlanoInput> | TenantCreateWithoutPlanoInput[] | TenantUncheckedCreateWithoutPlanoInput[]
+    connectOrCreate?: TenantCreateOrConnectWithoutPlanoInput | TenantCreateOrConnectWithoutPlanoInput[]
+    upsert?: TenantUpsertWithWhereUniqueWithoutPlanoInput | TenantUpsertWithWhereUniqueWithoutPlanoInput[]
+    createMany?: TenantCreateManyPlanoInputEnvelope
+    set?: TenantWhereUniqueInput | TenantWhereUniqueInput[]
+    disconnect?: TenantWhereUniqueInput | TenantWhereUniqueInput[]
+    delete?: TenantWhereUniqueInput | TenantWhereUniqueInput[]
+    connect?: TenantWhereUniqueInput | TenantWhereUniqueInput[]
+    update?: TenantUpdateWithWhereUniqueWithoutPlanoInput | TenantUpdateWithWhereUniqueWithoutPlanoInput[]
+    updateMany?: TenantUpdateManyWithWhereWithoutPlanoInput | TenantUpdateManyWithWhereWithoutPlanoInput[]
+    deleteMany?: TenantScalarWhereInput | TenantScalarWhereInput[]
+  }
+
+  export type PlanoCreateNestedOneWithoutTenantsInput = {
+    create?: XOR<PlanoCreateWithoutTenantsInput, PlanoUncheckedCreateWithoutTenantsInput>
+    connectOrCreate?: PlanoCreateOrConnectWithoutTenantsInput
+    connect?: PlanoWhereUniqueInput
+  }
+
+  export type AgendamentoCreateNestedManyWithoutTenantInput = {
+    create?: XOR<AgendamentoCreateWithoutTenantInput, AgendamentoUncheckedCreateWithoutTenantInput> | AgendamentoCreateWithoutTenantInput[] | AgendamentoUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: AgendamentoCreateOrConnectWithoutTenantInput | AgendamentoCreateOrConnectWithoutTenantInput[]
+    createMany?: AgendamentoCreateManyTenantInputEnvelope
+    connect?: AgendamentoWhereUniqueInput | AgendamentoWhereUniqueInput[]
+  }
+
+  export type AtendimentoCreateNestedManyWithoutTenantInput = {
+    create?: XOR<AtendimentoCreateWithoutTenantInput, AtendimentoUncheckedCreateWithoutTenantInput> | AtendimentoCreateWithoutTenantInput[] | AtendimentoUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: AtendimentoCreateOrConnectWithoutTenantInput | AtendimentoCreateOrConnectWithoutTenantInput[]
+    createMany?: AtendimentoCreateManyTenantInputEnvelope
+    connect?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
+  }
+
+  export type PacienteCreateNestedManyWithoutTenantInput = {
+    create?: XOR<PacienteCreateWithoutTenantInput, PacienteUncheckedCreateWithoutTenantInput> | PacienteCreateWithoutTenantInput[] | PacienteUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: PacienteCreateOrConnectWithoutTenantInput | PacienteCreateOrConnectWithoutTenantInput[]
+    createMany?: PacienteCreateManyTenantInputEnvelope
+    connect?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
+  }
+
+  export type ProcedimentoCreateNestedManyWithoutTenantInput = {
+    create?: XOR<ProcedimentoCreateWithoutTenantInput, ProcedimentoUncheckedCreateWithoutTenantInput> | ProcedimentoCreateWithoutTenantInput[] | ProcedimentoUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: ProcedimentoCreateOrConnectWithoutTenantInput | ProcedimentoCreateOrConnectWithoutTenantInput[]
+    createMany?: ProcedimentoCreateManyTenantInputEnvelope
+    connect?: ProcedimentoWhereUniqueInput | ProcedimentoWhereUniqueInput[]
+  }
+
+  export type ProfissionalCreateNestedManyWithoutTenantInput = {
+    create?: XOR<ProfissionalCreateWithoutTenantInput, ProfissionalUncheckedCreateWithoutTenantInput> | ProfissionalCreateWithoutTenantInput[] | ProfissionalUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: ProfissionalCreateOrConnectWithoutTenantInput | ProfissionalCreateOrConnectWithoutTenantInput[]
+    createMany?: ProfissionalCreateManyTenantInputEnvelope
+    connect?: ProfissionalWhereUniqueInput | ProfissionalWhereUniqueInput[]
+  }
+
+  export type UsuarioCreateNestedManyWithoutTenantInput = {
+    create?: XOR<UsuarioCreateWithoutTenantInput, UsuarioUncheckedCreateWithoutTenantInput> | UsuarioCreateWithoutTenantInput[] | UsuarioUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: UsuarioCreateOrConnectWithoutTenantInput | UsuarioCreateOrConnectWithoutTenantInput[]
+    createMany?: UsuarioCreateManyTenantInputEnvelope
+    connect?: UsuarioWhereUniqueInput | UsuarioWhereUniqueInput[]
+  }
+
+  export type WhatsAppConfigCreateNestedOneWithoutTenantInput = {
+    create?: XOR<WhatsAppConfigCreateWithoutTenantInput, WhatsAppConfigUncheckedCreateWithoutTenantInput>
+    connectOrCreate?: WhatsAppConfigCreateOrConnectWithoutTenantInput
+    connect?: WhatsAppConfigWhereUniqueInput
+  }
+
+  export type AgendamentoUncheckedCreateNestedManyWithoutTenantInput = {
+    create?: XOR<AgendamentoCreateWithoutTenantInput, AgendamentoUncheckedCreateWithoutTenantInput> | AgendamentoCreateWithoutTenantInput[] | AgendamentoUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: AgendamentoCreateOrConnectWithoutTenantInput | AgendamentoCreateOrConnectWithoutTenantInput[]
+    createMany?: AgendamentoCreateManyTenantInputEnvelope
+    connect?: AgendamentoWhereUniqueInput | AgendamentoWhereUniqueInput[]
+  }
+
+  export type AtendimentoUncheckedCreateNestedManyWithoutTenantInput = {
+    create?: XOR<AtendimentoCreateWithoutTenantInput, AtendimentoUncheckedCreateWithoutTenantInput> | AtendimentoCreateWithoutTenantInput[] | AtendimentoUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: AtendimentoCreateOrConnectWithoutTenantInput | AtendimentoCreateOrConnectWithoutTenantInput[]
+    createMany?: AtendimentoCreateManyTenantInputEnvelope
+    connect?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
+  }
+
+  export type PacienteUncheckedCreateNestedManyWithoutTenantInput = {
+    create?: XOR<PacienteCreateWithoutTenantInput, PacienteUncheckedCreateWithoutTenantInput> | PacienteCreateWithoutTenantInput[] | PacienteUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: PacienteCreateOrConnectWithoutTenantInput | PacienteCreateOrConnectWithoutTenantInput[]
+    createMany?: PacienteCreateManyTenantInputEnvelope
+    connect?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
+  }
+
+  export type ProcedimentoUncheckedCreateNestedManyWithoutTenantInput = {
+    create?: XOR<ProcedimentoCreateWithoutTenantInput, ProcedimentoUncheckedCreateWithoutTenantInput> | ProcedimentoCreateWithoutTenantInput[] | ProcedimentoUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: ProcedimentoCreateOrConnectWithoutTenantInput | ProcedimentoCreateOrConnectWithoutTenantInput[]
+    createMany?: ProcedimentoCreateManyTenantInputEnvelope
+    connect?: ProcedimentoWhereUniqueInput | ProcedimentoWhereUniqueInput[]
+  }
+
+  export type ProfissionalUncheckedCreateNestedManyWithoutTenantInput = {
+    create?: XOR<ProfissionalCreateWithoutTenantInput, ProfissionalUncheckedCreateWithoutTenantInput> | ProfissionalCreateWithoutTenantInput[] | ProfissionalUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: ProfissionalCreateOrConnectWithoutTenantInput | ProfissionalCreateOrConnectWithoutTenantInput[]
+    createMany?: ProfissionalCreateManyTenantInputEnvelope
+    connect?: ProfissionalWhereUniqueInput | ProfissionalWhereUniqueInput[]
+  }
+
+  export type UsuarioUncheckedCreateNestedManyWithoutTenantInput = {
+    create?: XOR<UsuarioCreateWithoutTenantInput, UsuarioUncheckedCreateWithoutTenantInput> | UsuarioCreateWithoutTenantInput[] | UsuarioUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: UsuarioCreateOrConnectWithoutTenantInput | UsuarioCreateOrConnectWithoutTenantInput[]
+    createMany?: UsuarioCreateManyTenantInputEnvelope
+    connect?: UsuarioWhereUniqueInput | UsuarioWhereUniqueInput[]
+  }
+
+  export type WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput = {
+    create?: XOR<WhatsAppConfigCreateWithoutTenantInput, WhatsAppConfigUncheckedCreateWithoutTenantInput>
+    connectOrCreate?: WhatsAppConfigCreateOrConnectWithoutTenantInput
+    connect?: WhatsAppConfigWhereUniqueInput
+  }
+
+  export type PlanoUpdateOneRequiredWithoutTenantsNestedInput = {
+    create?: XOR<PlanoCreateWithoutTenantsInput, PlanoUncheckedCreateWithoutTenantsInput>
+    connectOrCreate?: PlanoCreateOrConnectWithoutTenantsInput
+    upsert?: PlanoUpsertWithoutTenantsInput
+    connect?: PlanoWhereUniqueInput
+    update?: XOR<XOR<PlanoUpdateToOneWithWhereWithoutTenantsInput, PlanoUpdateWithoutTenantsInput>, PlanoUncheckedUpdateWithoutTenantsInput>
+  }
+
+  export type AgendamentoUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<AgendamentoCreateWithoutTenantInput, AgendamentoUncheckedCreateWithoutTenantInput> | AgendamentoCreateWithoutTenantInput[] | AgendamentoUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: AgendamentoCreateOrConnectWithoutTenantInput | AgendamentoCreateOrConnectWithoutTenantInput[]
+    upsert?: AgendamentoUpsertWithWhereUniqueWithoutTenantInput | AgendamentoUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: AgendamentoCreateManyTenantInputEnvelope
+    set?: AgendamentoWhereUniqueInput | AgendamentoWhereUniqueInput[]
+    disconnect?: AgendamentoWhereUniqueInput | AgendamentoWhereUniqueInput[]
+    delete?: AgendamentoWhereUniqueInput | AgendamentoWhereUniqueInput[]
+    connect?: AgendamentoWhereUniqueInput | AgendamentoWhereUniqueInput[]
+    update?: AgendamentoUpdateWithWhereUniqueWithoutTenantInput | AgendamentoUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: AgendamentoUpdateManyWithWhereWithoutTenantInput | AgendamentoUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: AgendamentoScalarWhereInput | AgendamentoScalarWhereInput[]
+  }
+
+  export type AtendimentoUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<AtendimentoCreateWithoutTenantInput, AtendimentoUncheckedCreateWithoutTenantInput> | AtendimentoCreateWithoutTenantInput[] | AtendimentoUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: AtendimentoCreateOrConnectWithoutTenantInput | AtendimentoCreateOrConnectWithoutTenantInput[]
+    upsert?: AtendimentoUpsertWithWhereUniqueWithoutTenantInput | AtendimentoUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: AtendimentoCreateManyTenantInputEnvelope
+    set?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
+    disconnect?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
+    delete?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
+    connect?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
+    update?: AtendimentoUpdateWithWhereUniqueWithoutTenantInput | AtendimentoUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: AtendimentoUpdateManyWithWhereWithoutTenantInput | AtendimentoUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: AtendimentoScalarWhereInput | AtendimentoScalarWhereInput[]
+  }
+
+  export type PacienteUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<PacienteCreateWithoutTenantInput, PacienteUncheckedCreateWithoutTenantInput> | PacienteCreateWithoutTenantInput[] | PacienteUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: PacienteCreateOrConnectWithoutTenantInput | PacienteCreateOrConnectWithoutTenantInput[]
+    upsert?: PacienteUpsertWithWhereUniqueWithoutTenantInput | PacienteUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: PacienteCreateManyTenantInputEnvelope
+    set?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
+    disconnect?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
+    delete?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
+    connect?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
+    update?: PacienteUpdateWithWhereUniqueWithoutTenantInput | PacienteUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: PacienteUpdateManyWithWhereWithoutTenantInput | PacienteUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: PacienteScalarWhereInput | PacienteScalarWhereInput[]
+  }
+
+  export type ProcedimentoUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<ProcedimentoCreateWithoutTenantInput, ProcedimentoUncheckedCreateWithoutTenantInput> | ProcedimentoCreateWithoutTenantInput[] | ProcedimentoUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: ProcedimentoCreateOrConnectWithoutTenantInput | ProcedimentoCreateOrConnectWithoutTenantInput[]
+    upsert?: ProcedimentoUpsertWithWhereUniqueWithoutTenantInput | ProcedimentoUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: ProcedimentoCreateManyTenantInputEnvelope
+    set?: ProcedimentoWhereUniqueInput | ProcedimentoWhereUniqueInput[]
+    disconnect?: ProcedimentoWhereUniqueInput | ProcedimentoWhereUniqueInput[]
+    delete?: ProcedimentoWhereUniqueInput | ProcedimentoWhereUniqueInput[]
+    connect?: ProcedimentoWhereUniqueInput | ProcedimentoWhereUniqueInput[]
+    update?: ProcedimentoUpdateWithWhereUniqueWithoutTenantInput | ProcedimentoUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: ProcedimentoUpdateManyWithWhereWithoutTenantInput | ProcedimentoUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: ProcedimentoScalarWhereInput | ProcedimentoScalarWhereInput[]
+  }
+
+  export type ProfissionalUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<ProfissionalCreateWithoutTenantInput, ProfissionalUncheckedCreateWithoutTenantInput> | ProfissionalCreateWithoutTenantInput[] | ProfissionalUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: ProfissionalCreateOrConnectWithoutTenantInput | ProfissionalCreateOrConnectWithoutTenantInput[]
+    upsert?: ProfissionalUpsertWithWhereUniqueWithoutTenantInput | ProfissionalUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: ProfissionalCreateManyTenantInputEnvelope
+    set?: ProfissionalWhereUniqueInput | ProfissionalWhereUniqueInput[]
+    disconnect?: ProfissionalWhereUniqueInput | ProfissionalWhereUniqueInput[]
+    delete?: ProfissionalWhereUniqueInput | ProfissionalWhereUniqueInput[]
+    connect?: ProfissionalWhereUniqueInput | ProfissionalWhereUniqueInput[]
+    update?: ProfissionalUpdateWithWhereUniqueWithoutTenantInput | ProfissionalUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: ProfissionalUpdateManyWithWhereWithoutTenantInput | ProfissionalUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: ProfissionalScalarWhereInput | ProfissionalScalarWhereInput[]
+  }
+
+  export type UsuarioUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<UsuarioCreateWithoutTenantInput, UsuarioUncheckedCreateWithoutTenantInput> | UsuarioCreateWithoutTenantInput[] | UsuarioUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: UsuarioCreateOrConnectWithoutTenantInput | UsuarioCreateOrConnectWithoutTenantInput[]
+    upsert?: UsuarioUpsertWithWhereUniqueWithoutTenantInput | UsuarioUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: UsuarioCreateManyTenantInputEnvelope
+    set?: UsuarioWhereUniqueInput | UsuarioWhereUniqueInput[]
+    disconnect?: UsuarioWhereUniqueInput | UsuarioWhereUniqueInput[]
+    delete?: UsuarioWhereUniqueInput | UsuarioWhereUniqueInput[]
+    connect?: UsuarioWhereUniqueInput | UsuarioWhereUniqueInput[]
+    update?: UsuarioUpdateWithWhereUniqueWithoutTenantInput | UsuarioUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: UsuarioUpdateManyWithWhereWithoutTenantInput | UsuarioUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: UsuarioScalarWhereInput | UsuarioScalarWhereInput[]
+  }
+
+  export type WhatsAppConfigUpdateOneWithoutTenantNestedInput = {
+    create?: XOR<WhatsAppConfigCreateWithoutTenantInput, WhatsAppConfigUncheckedCreateWithoutTenantInput>
+    connectOrCreate?: WhatsAppConfigCreateOrConnectWithoutTenantInput
+    upsert?: WhatsAppConfigUpsertWithoutTenantInput
+    disconnect?: WhatsAppConfigWhereInput | boolean
+    delete?: WhatsAppConfigWhereInput | boolean
+    connect?: WhatsAppConfigWhereUniqueInput
+    update?: XOR<XOR<WhatsAppConfigUpdateToOneWithWhereWithoutTenantInput, WhatsAppConfigUpdateWithoutTenantInput>, WhatsAppConfigUncheckedUpdateWithoutTenantInput>
+  }
+
+  export type AgendamentoUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<AgendamentoCreateWithoutTenantInput, AgendamentoUncheckedCreateWithoutTenantInput> | AgendamentoCreateWithoutTenantInput[] | AgendamentoUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: AgendamentoCreateOrConnectWithoutTenantInput | AgendamentoCreateOrConnectWithoutTenantInput[]
+    upsert?: AgendamentoUpsertWithWhereUniqueWithoutTenantInput | AgendamentoUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: AgendamentoCreateManyTenantInputEnvelope
+    set?: AgendamentoWhereUniqueInput | AgendamentoWhereUniqueInput[]
+    disconnect?: AgendamentoWhereUniqueInput | AgendamentoWhereUniqueInput[]
+    delete?: AgendamentoWhereUniqueInput | AgendamentoWhereUniqueInput[]
+    connect?: AgendamentoWhereUniqueInput | AgendamentoWhereUniqueInput[]
+    update?: AgendamentoUpdateWithWhereUniqueWithoutTenantInput | AgendamentoUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: AgendamentoUpdateManyWithWhereWithoutTenantInput | AgendamentoUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: AgendamentoScalarWhereInput | AgendamentoScalarWhereInput[]
+  }
+
+  export type AtendimentoUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<AtendimentoCreateWithoutTenantInput, AtendimentoUncheckedCreateWithoutTenantInput> | AtendimentoCreateWithoutTenantInput[] | AtendimentoUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: AtendimentoCreateOrConnectWithoutTenantInput | AtendimentoCreateOrConnectWithoutTenantInput[]
+    upsert?: AtendimentoUpsertWithWhereUniqueWithoutTenantInput | AtendimentoUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: AtendimentoCreateManyTenantInputEnvelope
+    set?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
+    disconnect?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
+    delete?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
+    connect?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
+    update?: AtendimentoUpdateWithWhereUniqueWithoutTenantInput | AtendimentoUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: AtendimentoUpdateManyWithWhereWithoutTenantInput | AtendimentoUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: AtendimentoScalarWhereInput | AtendimentoScalarWhereInput[]
+  }
+
+  export type PacienteUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<PacienteCreateWithoutTenantInput, PacienteUncheckedCreateWithoutTenantInput> | PacienteCreateWithoutTenantInput[] | PacienteUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: PacienteCreateOrConnectWithoutTenantInput | PacienteCreateOrConnectWithoutTenantInput[]
+    upsert?: PacienteUpsertWithWhereUniqueWithoutTenantInput | PacienteUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: PacienteCreateManyTenantInputEnvelope
+    set?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
+    disconnect?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
+    delete?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
+    connect?: PacienteWhereUniqueInput | PacienteWhereUniqueInput[]
+    update?: PacienteUpdateWithWhereUniqueWithoutTenantInput | PacienteUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: PacienteUpdateManyWithWhereWithoutTenantInput | PacienteUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: PacienteScalarWhereInput | PacienteScalarWhereInput[]
+  }
+
+  export type ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<ProcedimentoCreateWithoutTenantInput, ProcedimentoUncheckedCreateWithoutTenantInput> | ProcedimentoCreateWithoutTenantInput[] | ProcedimentoUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: ProcedimentoCreateOrConnectWithoutTenantInput | ProcedimentoCreateOrConnectWithoutTenantInput[]
+    upsert?: ProcedimentoUpsertWithWhereUniqueWithoutTenantInput | ProcedimentoUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: ProcedimentoCreateManyTenantInputEnvelope
+    set?: ProcedimentoWhereUniqueInput | ProcedimentoWhereUniqueInput[]
+    disconnect?: ProcedimentoWhereUniqueInput | ProcedimentoWhereUniqueInput[]
+    delete?: ProcedimentoWhereUniqueInput | ProcedimentoWhereUniqueInput[]
+    connect?: ProcedimentoWhereUniqueInput | ProcedimentoWhereUniqueInput[]
+    update?: ProcedimentoUpdateWithWhereUniqueWithoutTenantInput | ProcedimentoUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: ProcedimentoUpdateManyWithWhereWithoutTenantInput | ProcedimentoUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: ProcedimentoScalarWhereInput | ProcedimentoScalarWhereInput[]
+  }
+
+  export type ProfissionalUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<ProfissionalCreateWithoutTenantInput, ProfissionalUncheckedCreateWithoutTenantInput> | ProfissionalCreateWithoutTenantInput[] | ProfissionalUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: ProfissionalCreateOrConnectWithoutTenantInput | ProfissionalCreateOrConnectWithoutTenantInput[]
+    upsert?: ProfissionalUpsertWithWhereUniqueWithoutTenantInput | ProfissionalUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: ProfissionalCreateManyTenantInputEnvelope
+    set?: ProfissionalWhereUniqueInput | ProfissionalWhereUniqueInput[]
+    disconnect?: ProfissionalWhereUniqueInput | ProfissionalWhereUniqueInput[]
+    delete?: ProfissionalWhereUniqueInput | ProfissionalWhereUniqueInput[]
+    connect?: ProfissionalWhereUniqueInput | ProfissionalWhereUniqueInput[]
+    update?: ProfissionalUpdateWithWhereUniqueWithoutTenantInput | ProfissionalUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: ProfissionalUpdateManyWithWhereWithoutTenantInput | ProfissionalUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: ProfissionalScalarWhereInput | ProfissionalScalarWhereInput[]
+  }
+
+  export type UsuarioUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<UsuarioCreateWithoutTenantInput, UsuarioUncheckedCreateWithoutTenantInput> | UsuarioCreateWithoutTenantInput[] | UsuarioUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: UsuarioCreateOrConnectWithoutTenantInput | UsuarioCreateOrConnectWithoutTenantInput[]
+    upsert?: UsuarioUpsertWithWhereUniqueWithoutTenantInput | UsuarioUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: UsuarioCreateManyTenantInputEnvelope
+    set?: UsuarioWhereUniqueInput | UsuarioWhereUniqueInput[]
+    disconnect?: UsuarioWhereUniqueInput | UsuarioWhereUniqueInput[]
+    delete?: UsuarioWhereUniqueInput | UsuarioWhereUniqueInput[]
+    connect?: UsuarioWhereUniqueInput | UsuarioWhereUniqueInput[]
+    update?: UsuarioUpdateWithWhereUniqueWithoutTenantInput | UsuarioUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: UsuarioUpdateManyWithWhereWithoutTenantInput | UsuarioUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: UsuarioScalarWhereInput | UsuarioScalarWhereInput[]
+  }
+
+  export type WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput = {
+    create?: XOR<WhatsAppConfigCreateWithoutTenantInput, WhatsAppConfigUncheckedCreateWithoutTenantInput>
+    connectOrCreate?: WhatsAppConfigCreateOrConnectWithoutTenantInput
+    upsert?: WhatsAppConfigUpsertWithoutTenantInput
+    disconnect?: WhatsAppConfigWhereInput | boolean
+    delete?: WhatsAppConfigWhereInput | boolean
+    connect?: WhatsAppConfigWhereUniqueInput
+    update?: XOR<XOR<WhatsAppConfigUpdateToOneWithWhereWithoutTenantInput, WhatsAppConfigUpdateWithoutTenantInput>, WhatsAppConfigUncheckedUpdateWithoutTenantInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -15718,6 +18043,13 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringFilter<$PrismaModel> | string
+  }
+
+  export type NestedEnumTipoUsuarioFilter<$PrismaModel = never> = {
+    equals?: $Enums.TipoUsuario | EnumTipoUsuarioFieldRefInput<$PrismaModel>
+    in?: $Enums.TipoUsuario[] | ListEnumTipoUsuarioFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TipoUsuario[] | ListEnumTipoUsuarioFieldRefInput<$PrismaModel>
+    not?: NestedEnumTipoUsuarioFilter<$PrismaModel> | $Enums.TipoUsuario
   }
 
   export type NestedBoolFilter<$PrismaModel = never> = {
@@ -15764,6 +18096,16 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
+  export type NestedEnumTipoUsuarioWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TipoUsuario | EnumTipoUsuarioFieldRefInput<$PrismaModel>
+    in?: $Enums.TipoUsuario[] | ListEnumTipoUsuarioFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TipoUsuario[] | ListEnumTipoUsuarioFieldRefInput<$PrismaModel>
+    not?: NestedEnumTipoUsuarioWithAggregatesFilter<$PrismaModel> | $Enums.TipoUsuario
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTipoUsuarioFilter<$PrismaModel>
+    _max?: NestedEnumTipoUsuarioFilter<$PrismaModel>
+  }
+
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
@@ -15784,23 +18126,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type NestedEnumTipoUsuarioFilter<$PrismaModel = never> = {
-    equals?: $Enums.TipoUsuario | EnumTipoUsuarioFieldRefInput<$PrismaModel>
-    in?: $Enums.TipoUsuario[] | ListEnumTipoUsuarioFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TipoUsuario[] | ListEnumTipoUsuarioFieldRefInput<$PrismaModel>
-    not?: NestedEnumTipoUsuarioFilter<$PrismaModel> | $Enums.TipoUsuario
-  }
-
-  export type NestedEnumTipoUsuarioWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TipoUsuario | EnumTipoUsuarioFieldRefInput<$PrismaModel>
-    in?: $Enums.TipoUsuario[] | ListEnumTipoUsuarioFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TipoUsuario[] | ListEnumTipoUsuarioFieldRefInput<$PrismaModel>
-    not?: NestedEnumTipoUsuarioWithAggregatesFilter<$PrismaModel> | $Enums.TipoUsuario
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTipoUsuarioFilter<$PrismaModel>
-    _max?: NestedEnumTipoUsuarioFilter<$PrismaModel>
   }
 
   export type NestedStringNullableFilter<$PrismaModel = never> = {
@@ -15843,6 +18168,31 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedDecimalNullableFilter<$PrismaModel = never> = {
@@ -15956,6 +18306,1844 @@ export namespace Prisma {
     _max?: NestedEnumTipoLogFilter<$PrismaModel>
   }
 
+  export type TenantCreateWithoutUsuariosInput = {
+    id?: string
+    nome: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    plano: PlanoCreateNestedOneWithoutTenantsInput
+    agendamentos?: AgendamentoCreateNestedManyWithoutTenantInput
+    atendimentos?: AtendimentoCreateNestedManyWithoutTenantInput
+    pacientes?: PacienteCreateNestedManyWithoutTenantInput
+    procedimentos?: ProcedimentoCreateNestedManyWithoutTenantInput
+    profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateWithoutUsuariosInput = {
+    id?: string
+    nome: string
+    planoId: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutTenantInput
+    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutTenantInput
+    pacientes?: PacienteUncheckedCreateNestedManyWithoutTenantInput
+    procedimentos?: ProcedimentoUncheckedCreateNestedManyWithoutTenantInput
+    profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
+  }
+
+  export type TenantCreateOrConnectWithoutUsuariosInput = {
+    where: TenantWhereUniqueInput
+    create: XOR<TenantCreateWithoutUsuariosInput, TenantUncheckedCreateWithoutUsuariosInput>
+  }
+
+  export type TenantUpsertWithoutUsuariosInput = {
+    update: XOR<TenantUpdateWithoutUsuariosInput, TenantUncheckedUpdateWithoutUsuariosInput>
+    create: XOR<TenantCreateWithoutUsuariosInput, TenantUncheckedCreateWithoutUsuariosInput>
+    where?: TenantWhereInput
+  }
+
+  export type TenantUpdateToOneWithWhereWithoutUsuariosInput = {
+    where?: TenantWhereInput
+    data: XOR<TenantUpdateWithoutUsuariosInput, TenantUncheckedUpdateWithoutUsuariosInput>
+  }
+
+  export type TenantUpdateWithoutUsuariosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    plano?: PlanoUpdateOneRequiredWithoutTenantsNestedInput
+    agendamentos?: AgendamentoUpdateManyWithoutTenantNestedInput
+    atendimentos?: AtendimentoUpdateManyWithoutTenantNestedInput
+    pacientes?: PacienteUpdateManyWithoutTenantNestedInput
+    procedimentos?: ProcedimentoUpdateManyWithoutTenantNestedInput
+    profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateWithoutUsuariosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    planoId?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUncheckedUpdateManyWithoutTenantNestedInput
+    atendimentos?: AtendimentoUncheckedUpdateManyWithoutTenantNestedInput
+    pacientes?: PacienteUncheckedUpdateManyWithoutTenantNestedInput
+    procedimentos?: ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput
+    profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
+  }
+
+  export type AgendamentoCreateWithoutProfissionalInput = {
+    id?: string
+    dataHora: Date | string
+    status?: $Enums.StatusAgendamento
+    observacoes?: string | null
+    confirmacaoEnviada?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dataHoraFim: Date | string
+    paciente?: PacienteCreateNestedOneWithoutAgendamentosInput
+    procedimento: ProcedimentoCreateNestedOneWithoutAgendamentosInput
+    tenant: TenantCreateNestedOneWithoutAgendamentosInput
+    atendimento?: AtendimentoCreateNestedOneWithoutAgendamentoInput
+  }
+
+  export type AgendamentoUncheckedCreateWithoutProfissionalInput = {
+    id?: string
+    tenantId: string
+    pacienteId?: string | null
+    procedimentoId: string
+    dataHora: Date | string
+    status?: $Enums.StatusAgendamento
+    observacoes?: string | null
+    confirmacaoEnviada?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dataHoraFim: Date | string
+    atendimento?: AtendimentoUncheckedCreateNestedOneWithoutAgendamentoInput
+  }
+
+  export type AgendamentoCreateOrConnectWithoutProfissionalInput = {
+    where: AgendamentoWhereUniqueInput
+    create: XOR<AgendamentoCreateWithoutProfissionalInput, AgendamentoUncheckedCreateWithoutProfissionalInput>
+  }
+
+  export type AgendamentoCreateManyProfissionalInputEnvelope = {
+    data: AgendamentoCreateManyProfissionalInput | AgendamentoCreateManyProfissionalInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AtendimentoCreateWithoutProfissionalInput = {
+    id?: string
+    anotacoes?: string | null
+    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamento: AgendamentoCreateNestedOneWithoutAtendimentoInput
+    paciente: PacienteCreateNestedOneWithoutAtendimentosInput
+    procedimento: ProcedimentoCreateNestedOneWithoutAtendimentosInput
+    tenant: TenantCreateNestedOneWithoutAtendimentosInput
+  }
+
+  export type AtendimentoUncheckedCreateWithoutProfissionalInput = {
+    id?: string
+    tenantId: string
+    agendamentoId: string
+    pacienteId: string
+    procedimentoId: string
+    anotacoes?: string | null
+    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AtendimentoCreateOrConnectWithoutProfissionalInput = {
+    where: AtendimentoWhereUniqueInput
+    create: XOR<AtendimentoCreateWithoutProfissionalInput, AtendimentoUncheckedCreateWithoutProfissionalInput>
+  }
+
+  export type AtendimentoCreateManyProfissionalInputEnvelope = {
+    data: AtendimentoCreateManyProfissionalInput | AtendimentoCreateManyProfissionalInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PacienteCreateWithoutProfissionalInput = {
+    id?: string
+    nome: string
+    cpf?: string | null
+    dataNascimento?: Date | string | null
+    telefone: string
+    telefone2?: string | null
+    email?: string | null
+    cep?: string | null
+    logradouro?: string | null
+    numero?: string | null
+    complemento?: string | null
+    bairro?: string | null
+    cidade?: string | null
+    estado?: string | null
+    alergias?: string | null
+    menorIdade?: boolean
+    responsavelNome?: string | null
+    responsavelCpf?: string | null
+    responsavelTelefone?: string | null
+    responsavelParentesco?: string | null
+    observacoes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutPacientesInput
+    agendamentos?: AgendamentoCreateNestedManyWithoutPacienteInput
+    atendimentos?: AtendimentoCreateNestedManyWithoutPacienteInput
+  }
+
+  export type PacienteUncheckedCreateWithoutProfissionalInput = {
+    id?: string
+    tenantId: string
+    nome: string
+    cpf?: string | null
+    dataNascimento?: Date | string | null
+    telefone: string
+    telefone2?: string | null
+    email?: string | null
+    cep?: string | null
+    logradouro?: string | null
+    numero?: string | null
+    complemento?: string | null
+    bairro?: string | null
+    cidade?: string | null
+    estado?: string | null
+    alergias?: string | null
+    menorIdade?: boolean
+    responsavelNome?: string | null
+    responsavelCpf?: string | null
+    responsavelTelefone?: string | null
+    responsavelParentesco?: string | null
+    observacoes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutPacienteInput
+    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutPacienteInput
+  }
+
+  export type PacienteCreateOrConnectWithoutProfissionalInput = {
+    where: PacienteWhereUniqueInput
+    create: XOR<PacienteCreateWithoutProfissionalInput, PacienteUncheckedCreateWithoutProfissionalInput>
+  }
+
+  export type PacienteCreateManyProfissionalInputEnvelope = {
+    data: PacienteCreateManyProfissionalInput | PacienteCreateManyProfissionalInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TenantCreateWithoutProfissionaisInput = {
+    id?: string
+    nome: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    plano: PlanoCreateNestedOneWithoutTenantsInput
+    agendamentos?: AgendamentoCreateNestedManyWithoutTenantInput
+    atendimentos?: AtendimentoCreateNestedManyWithoutTenantInput
+    pacientes?: PacienteCreateNestedManyWithoutTenantInput
+    procedimentos?: ProcedimentoCreateNestedManyWithoutTenantInput
+    usuarios?: UsuarioCreateNestedManyWithoutTenantInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateWithoutProfissionaisInput = {
+    id?: string
+    nome: string
+    planoId: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutTenantInput
+    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutTenantInput
+    pacientes?: PacienteUncheckedCreateNestedManyWithoutTenantInput
+    procedimentos?: ProcedimentoUncheckedCreateNestedManyWithoutTenantInput
+    usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
+  }
+
+  export type TenantCreateOrConnectWithoutProfissionaisInput = {
+    where: TenantWhereUniqueInput
+    create: XOR<TenantCreateWithoutProfissionaisInput, TenantUncheckedCreateWithoutProfissionaisInput>
+  }
+
+  export type AgendamentoUpsertWithWhereUniqueWithoutProfissionalInput = {
+    where: AgendamentoWhereUniqueInput
+    update: XOR<AgendamentoUpdateWithoutProfissionalInput, AgendamentoUncheckedUpdateWithoutProfissionalInput>
+    create: XOR<AgendamentoCreateWithoutProfissionalInput, AgendamentoUncheckedCreateWithoutProfissionalInput>
+  }
+
+  export type AgendamentoUpdateWithWhereUniqueWithoutProfissionalInput = {
+    where: AgendamentoWhereUniqueInput
+    data: XOR<AgendamentoUpdateWithoutProfissionalInput, AgendamentoUncheckedUpdateWithoutProfissionalInput>
+  }
+
+  export type AgendamentoUpdateManyWithWhereWithoutProfissionalInput = {
+    where: AgendamentoScalarWhereInput
+    data: XOR<AgendamentoUpdateManyMutationInput, AgendamentoUncheckedUpdateManyWithoutProfissionalInput>
+  }
+
+  export type AgendamentoScalarWhereInput = {
+    AND?: AgendamentoScalarWhereInput | AgendamentoScalarWhereInput[]
+    OR?: AgendamentoScalarWhereInput[]
+    NOT?: AgendamentoScalarWhereInput | AgendamentoScalarWhereInput[]
+    id?: StringFilter<"Agendamento"> | string
+    tenantId?: StringFilter<"Agendamento"> | string
+    pacienteId?: StringNullableFilter<"Agendamento"> | string | null
+    profissionalId?: StringFilter<"Agendamento"> | string
+    procedimentoId?: StringFilter<"Agendamento"> | string
+    dataHora?: DateTimeFilter<"Agendamento"> | Date | string
+    status?: EnumStatusAgendamentoFilter<"Agendamento"> | $Enums.StatusAgendamento
+    observacoes?: StringNullableFilter<"Agendamento"> | string | null
+    confirmacaoEnviada?: BoolFilter<"Agendamento"> | boolean
+    createdAt?: DateTimeFilter<"Agendamento"> | Date | string
+    updatedAt?: DateTimeFilter<"Agendamento"> | Date | string
+    dataHoraFim?: DateTimeFilter<"Agendamento"> | Date | string
+  }
+
+  export type AtendimentoUpsertWithWhereUniqueWithoutProfissionalInput = {
+    where: AtendimentoWhereUniqueInput
+    update: XOR<AtendimentoUpdateWithoutProfissionalInput, AtendimentoUncheckedUpdateWithoutProfissionalInput>
+    create: XOR<AtendimentoCreateWithoutProfissionalInput, AtendimentoUncheckedCreateWithoutProfissionalInput>
+  }
+
+  export type AtendimentoUpdateWithWhereUniqueWithoutProfissionalInput = {
+    where: AtendimentoWhereUniqueInput
+    data: XOR<AtendimentoUpdateWithoutProfissionalInput, AtendimentoUncheckedUpdateWithoutProfissionalInput>
+  }
+
+  export type AtendimentoUpdateManyWithWhereWithoutProfissionalInput = {
+    where: AtendimentoScalarWhereInput
+    data: XOR<AtendimentoUpdateManyMutationInput, AtendimentoUncheckedUpdateManyWithoutProfissionalInput>
+  }
+
+  export type AtendimentoScalarWhereInput = {
+    AND?: AtendimentoScalarWhereInput | AtendimentoScalarWhereInput[]
+    OR?: AtendimentoScalarWhereInput[]
+    NOT?: AtendimentoScalarWhereInput | AtendimentoScalarWhereInput[]
+    id?: StringFilter<"Atendimento"> | string
+    tenantId?: StringFilter<"Atendimento"> | string
+    agendamentoId?: StringFilter<"Atendimento"> | string
+    pacienteId?: StringFilter<"Atendimento"> | string
+    profissionalId?: StringFilter<"Atendimento"> | string
+    procedimentoId?: StringFilter<"Atendimento"> | string
+    anotacoes?: StringNullableFilter<"Atendimento"> | string | null
+    procedimentosRealizados?: JsonNullableFilter<"Atendimento">
+    createdAt?: DateTimeFilter<"Atendimento"> | Date | string
+    updatedAt?: DateTimeFilter<"Atendimento"> | Date | string
+  }
+
+  export type PacienteUpsertWithWhereUniqueWithoutProfissionalInput = {
+    where: PacienteWhereUniqueInput
+    update: XOR<PacienteUpdateWithoutProfissionalInput, PacienteUncheckedUpdateWithoutProfissionalInput>
+    create: XOR<PacienteCreateWithoutProfissionalInput, PacienteUncheckedCreateWithoutProfissionalInput>
+  }
+
+  export type PacienteUpdateWithWhereUniqueWithoutProfissionalInput = {
+    where: PacienteWhereUniqueInput
+    data: XOR<PacienteUpdateWithoutProfissionalInput, PacienteUncheckedUpdateWithoutProfissionalInput>
+  }
+
+  export type PacienteUpdateManyWithWhereWithoutProfissionalInput = {
+    where: PacienteScalarWhereInput
+    data: XOR<PacienteUpdateManyMutationInput, PacienteUncheckedUpdateManyWithoutProfissionalInput>
+  }
+
+  export type PacienteScalarWhereInput = {
+    AND?: PacienteScalarWhereInput | PacienteScalarWhereInput[]
+    OR?: PacienteScalarWhereInput[]
+    NOT?: PacienteScalarWhereInput | PacienteScalarWhereInput[]
+    id?: StringFilter<"Paciente"> | string
+    tenantId?: StringFilter<"Paciente"> | string
+    profissionalId?: StringNullableFilter<"Paciente"> | string | null
+    nome?: StringFilter<"Paciente"> | string
+    cpf?: StringNullableFilter<"Paciente"> | string | null
+    dataNascimento?: DateTimeNullableFilter<"Paciente"> | Date | string | null
+    telefone?: StringFilter<"Paciente"> | string
+    telefone2?: StringNullableFilter<"Paciente"> | string | null
+    email?: StringNullableFilter<"Paciente"> | string | null
+    cep?: StringNullableFilter<"Paciente"> | string | null
+    logradouro?: StringNullableFilter<"Paciente"> | string | null
+    numero?: StringNullableFilter<"Paciente"> | string | null
+    complemento?: StringNullableFilter<"Paciente"> | string | null
+    bairro?: StringNullableFilter<"Paciente"> | string | null
+    cidade?: StringNullableFilter<"Paciente"> | string | null
+    estado?: StringNullableFilter<"Paciente"> | string | null
+    alergias?: StringNullableFilter<"Paciente"> | string | null
+    menorIdade?: BoolFilter<"Paciente"> | boolean
+    responsavelNome?: StringNullableFilter<"Paciente"> | string | null
+    responsavelCpf?: StringNullableFilter<"Paciente"> | string | null
+    responsavelTelefone?: StringNullableFilter<"Paciente"> | string | null
+    responsavelParentesco?: StringNullableFilter<"Paciente"> | string | null
+    observacoes?: StringNullableFilter<"Paciente"> | string | null
+    createdAt?: DateTimeFilter<"Paciente"> | Date | string
+    updatedAt?: DateTimeFilter<"Paciente"> | Date | string
+  }
+
+  export type TenantUpsertWithoutProfissionaisInput = {
+    update: XOR<TenantUpdateWithoutProfissionaisInput, TenantUncheckedUpdateWithoutProfissionaisInput>
+    create: XOR<TenantCreateWithoutProfissionaisInput, TenantUncheckedCreateWithoutProfissionaisInput>
+    where?: TenantWhereInput
+  }
+
+  export type TenantUpdateToOneWithWhereWithoutProfissionaisInput = {
+    where?: TenantWhereInput
+    data: XOR<TenantUpdateWithoutProfissionaisInput, TenantUncheckedUpdateWithoutProfissionaisInput>
+  }
+
+  export type TenantUpdateWithoutProfissionaisInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    plano?: PlanoUpdateOneRequiredWithoutTenantsNestedInput
+    agendamentos?: AgendamentoUpdateManyWithoutTenantNestedInput
+    atendimentos?: AtendimentoUpdateManyWithoutTenantNestedInput
+    pacientes?: PacienteUpdateManyWithoutTenantNestedInput
+    procedimentos?: ProcedimentoUpdateManyWithoutTenantNestedInput
+    usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateWithoutProfissionaisInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    planoId?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUncheckedUpdateManyWithoutTenantNestedInput
+    atendimentos?: AtendimentoUncheckedUpdateManyWithoutTenantNestedInput
+    pacientes?: PacienteUncheckedUpdateManyWithoutTenantNestedInput
+    procedimentos?: ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput
+    usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
+  }
+
+  export type TenantCreateWithoutPacientesInput = {
+    id?: string
+    nome: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    plano: PlanoCreateNestedOneWithoutTenantsInput
+    agendamentos?: AgendamentoCreateNestedManyWithoutTenantInput
+    atendimentos?: AtendimentoCreateNestedManyWithoutTenantInput
+    procedimentos?: ProcedimentoCreateNestedManyWithoutTenantInput
+    profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
+    usuarios?: UsuarioCreateNestedManyWithoutTenantInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateWithoutPacientesInput = {
+    id?: string
+    nome: string
+    planoId: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutTenantInput
+    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutTenantInput
+    procedimentos?: ProcedimentoUncheckedCreateNestedManyWithoutTenantInput
+    profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
+    usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
+  }
+
+  export type TenantCreateOrConnectWithoutPacientesInput = {
+    where: TenantWhereUniqueInput
+    create: XOR<TenantCreateWithoutPacientesInput, TenantUncheckedCreateWithoutPacientesInput>
+  }
+
+  export type ProfissionalCreateWithoutPacientesInput = {
+    id?: string
+    nome: string
+    especialidade?: string | null
+    observacoes?: string | null
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamentos?: AgendamentoCreateNestedManyWithoutProfissionalInput
+    atendimentos?: AtendimentoCreateNestedManyWithoutProfissionalInput
+    tenant: TenantCreateNestedOneWithoutProfissionaisInput
+  }
+
+  export type ProfissionalUncheckedCreateWithoutPacientesInput = {
+    id?: string
+    tenantId: string
+    nome: string
+    especialidade?: string | null
+    observacoes?: string | null
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutProfissionalInput
+    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutProfissionalInput
+  }
+
+  export type ProfissionalCreateOrConnectWithoutPacientesInput = {
+    where: ProfissionalWhereUniqueInput
+    create: XOR<ProfissionalCreateWithoutPacientesInput, ProfissionalUncheckedCreateWithoutPacientesInput>
+  }
+
+  export type AgendamentoCreateWithoutPacienteInput = {
+    id?: string
+    dataHora: Date | string
+    status?: $Enums.StatusAgendamento
+    observacoes?: string | null
+    confirmacaoEnviada?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dataHoraFim: Date | string
+    procedimento: ProcedimentoCreateNestedOneWithoutAgendamentosInput
+    profissional: ProfissionalCreateNestedOneWithoutAgendamentosInput
+    tenant: TenantCreateNestedOneWithoutAgendamentosInput
+    atendimento?: AtendimentoCreateNestedOneWithoutAgendamentoInput
+  }
+
+  export type AgendamentoUncheckedCreateWithoutPacienteInput = {
+    id?: string
+    tenantId: string
+    profissionalId: string
+    procedimentoId: string
+    dataHora: Date | string
+    status?: $Enums.StatusAgendamento
+    observacoes?: string | null
+    confirmacaoEnviada?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dataHoraFim: Date | string
+    atendimento?: AtendimentoUncheckedCreateNestedOneWithoutAgendamentoInput
+  }
+
+  export type AgendamentoCreateOrConnectWithoutPacienteInput = {
+    where: AgendamentoWhereUniqueInput
+    create: XOR<AgendamentoCreateWithoutPacienteInput, AgendamentoUncheckedCreateWithoutPacienteInput>
+  }
+
+  export type AgendamentoCreateManyPacienteInputEnvelope = {
+    data: AgendamentoCreateManyPacienteInput | AgendamentoCreateManyPacienteInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AtendimentoCreateWithoutPacienteInput = {
+    id?: string
+    anotacoes?: string | null
+    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamento: AgendamentoCreateNestedOneWithoutAtendimentoInput
+    procedimento: ProcedimentoCreateNestedOneWithoutAtendimentosInput
+    profissional: ProfissionalCreateNestedOneWithoutAtendimentosInput
+    tenant: TenantCreateNestedOneWithoutAtendimentosInput
+  }
+
+  export type AtendimentoUncheckedCreateWithoutPacienteInput = {
+    id?: string
+    tenantId: string
+    agendamentoId: string
+    profissionalId: string
+    procedimentoId: string
+    anotacoes?: string | null
+    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AtendimentoCreateOrConnectWithoutPacienteInput = {
+    where: AtendimentoWhereUniqueInput
+    create: XOR<AtendimentoCreateWithoutPacienteInput, AtendimentoUncheckedCreateWithoutPacienteInput>
+  }
+
+  export type AtendimentoCreateManyPacienteInputEnvelope = {
+    data: AtendimentoCreateManyPacienteInput | AtendimentoCreateManyPacienteInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TenantUpsertWithoutPacientesInput = {
+    update: XOR<TenantUpdateWithoutPacientesInput, TenantUncheckedUpdateWithoutPacientesInput>
+    create: XOR<TenantCreateWithoutPacientesInput, TenantUncheckedCreateWithoutPacientesInput>
+    where?: TenantWhereInput
+  }
+
+  export type TenantUpdateToOneWithWhereWithoutPacientesInput = {
+    where?: TenantWhereInput
+    data: XOR<TenantUpdateWithoutPacientesInput, TenantUncheckedUpdateWithoutPacientesInput>
+  }
+
+  export type TenantUpdateWithoutPacientesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    plano?: PlanoUpdateOneRequiredWithoutTenantsNestedInput
+    agendamentos?: AgendamentoUpdateManyWithoutTenantNestedInput
+    atendimentos?: AtendimentoUpdateManyWithoutTenantNestedInput
+    procedimentos?: ProcedimentoUpdateManyWithoutTenantNestedInput
+    profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
+    usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateWithoutPacientesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    planoId?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUncheckedUpdateManyWithoutTenantNestedInput
+    atendimentos?: AtendimentoUncheckedUpdateManyWithoutTenantNestedInput
+    procedimentos?: ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput
+    profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
+    usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
+  }
+
+  export type ProfissionalUpsertWithoutPacientesInput = {
+    update: XOR<ProfissionalUpdateWithoutPacientesInput, ProfissionalUncheckedUpdateWithoutPacientesInput>
+    create: XOR<ProfissionalCreateWithoutPacientesInput, ProfissionalUncheckedCreateWithoutPacientesInput>
+    where?: ProfissionalWhereInput
+  }
+
+  export type ProfissionalUpdateToOneWithWhereWithoutPacientesInput = {
+    where?: ProfissionalWhereInput
+    data: XOR<ProfissionalUpdateWithoutPacientesInput, ProfissionalUncheckedUpdateWithoutPacientesInput>
+  }
+
+  export type ProfissionalUpdateWithoutPacientesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    especialidade?: NullableStringFieldUpdateOperationsInput | string | null
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUpdateManyWithoutProfissionalNestedInput
+    atendimentos?: AtendimentoUpdateManyWithoutProfissionalNestedInput
+    tenant?: TenantUpdateOneRequiredWithoutProfissionaisNestedInput
+  }
+
+  export type ProfissionalUncheckedUpdateWithoutPacientesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    especialidade?: NullableStringFieldUpdateOperationsInput | string | null
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUncheckedUpdateManyWithoutProfissionalNestedInput
+    atendimentos?: AtendimentoUncheckedUpdateManyWithoutProfissionalNestedInput
+  }
+
+  export type AgendamentoUpsertWithWhereUniqueWithoutPacienteInput = {
+    where: AgendamentoWhereUniqueInput
+    update: XOR<AgendamentoUpdateWithoutPacienteInput, AgendamentoUncheckedUpdateWithoutPacienteInput>
+    create: XOR<AgendamentoCreateWithoutPacienteInput, AgendamentoUncheckedCreateWithoutPacienteInput>
+  }
+
+  export type AgendamentoUpdateWithWhereUniqueWithoutPacienteInput = {
+    where: AgendamentoWhereUniqueInput
+    data: XOR<AgendamentoUpdateWithoutPacienteInput, AgendamentoUncheckedUpdateWithoutPacienteInput>
+  }
+
+  export type AgendamentoUpdateManyWithWhereWithoutPacienteInput = {
+    where: AgendamentoScalarWhereInput
+    data: XOR<AgendamentoUpdateManyMutationInput, AgendamentoUncheckedUpdateManyWithoutPacienteInput>
+  }
+
+  export type AtendimentoUpsertWithWhereUniqueWithoutPacienteInput = {
+    where: AtendimentoWhereUniqueInput
+    update: XOR<AtendimentoUpdateWithoutPacienteInput, AtendimentoUncheckedUpdateWithoutPacienteInput>
+    create: XOR<AtendimentoCreateWithoutPacienteInput, AtendimentoUncheckedCreateWithoutPacienteInput>
+  }
+
+  export type AtendimentoUpdateWithWhereUniqueWithoutPacienteInput = {
+    where: AtendimentoWhereUniqueInput
+    data: XOR<AtendimentoUpdateWithoutPacienteInput, AtendimentoUncheckedUpdateWithoutPacienteInput>
+  }
+
+  export type AtendimentoUpdateManyWithWhereWithoutPacienteInput = {
+    where: AtendimentoScalarWhereInput
+    data: XOR<AtendimentoUpdateManyMutationInput, AtendimentoUncheckedUpdateManyWithoutPacienteInput>
+  }
+
+  export type AgendamentoCreateWithoutProcedimentoInput = {
+    id?: string
+    dataHora: Date | string
+    status?: $Enums.StatusAgendamento
+    observacoes?: string | null
+    confirmacaoEnviada?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dataHoraFim: Date | string
+    paciente?: PacienteCreateNestedOneWithoutAgendamentosInput
+    profissional: ProfissionalCreateNestedOneWithoutAgendamentosInput
+    tenant: TenantCreateNestedOneWithoutAgendamentosInput
+    atendimento?: AtendimentoCreateNestedOneWithoutAgendamentoInput
+  }
+
+  export type AgendamentoUncheckedCreateWithoutProcedimentoInput = {
+    id?: string
+    tenantId: string
+    pacienteId?: string | null
+    profissionalId: string
+    dataHora: Date | string
+    status?: $Enums.StatusAgendamento
+    observacoes?: string | null
+    confirmacaoEnviada?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dataHoraFim: Date | string
+    atendimento?: AtendimentoUncheckedCreateNestedOneWithoutAgendamentoInput
+  }
+
+  export type AgendamentoCreateOrConnectWithoutProcedimentoInput = {
+    where: AgendamentoWhereUniqueInput
+    create: XOR<AgendamentoCreateWithoutProcedimentoInput, AgendamentoUncheckedCreateWithoutProcedimentoInput>
+  }
+
+  export type AgendamentoCreateManyProcedimentoInputEnvelope = {
+    data: AgendamentoCreateManyProcedimentoInput | AgendamentoCreateManyProcedimentoInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AtendimentoCreateWithoutProcedimentoInput = {
+    id?: string
+    anotacoes?: string | null
+    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamento: AgendamentoCreateNestedOneWithoutAtendimentoInput
+    paciente: PacienteCreateNestedOneWithoutAtendimentosInput
+    profissional: ProfissionalCreateNestedOneWithoutAtendimentosInput
+    tenant: TenantCreateNestedOneWithoutAtendimentosInput
+  }
+
+  export type AtendimentoUncheckedCreateWithoutProcedimentoInput = {
+    id?: string
+    tenantId: string
+    agendamentoId: string
+    pacienteId: string
+    profissionalId: string
+    anotacoes?: string | null
+    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AtendimentoCreateOrConnectWithoutProcedimentoInput = {
+    where: AtendimentoWhereUniqueInput
+    create: XOR<AtendimentoCreateWithoutProcedimentoInput, AtendimentoUncheckedCreateWithoutProcedimentoInput>
+  }
+
+  export type AtendimentoCreateManyProcedimentoInputEnvelope = {
+    data: AtendimentoCreateManyProcedimentoInput | AtendimentoCreateManyProcedimentoInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TenantCreateWithoutProcedimentosInput = {
+    id?: string
+    nome: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    plano: PlanoCreateNestedOneWithoutTenantsInput
+    agendamentos?: AgendamentoCreateNestedManyWithoutTenantInput
+    atendimentos?: AtendimentoCreateNestedManyWithoutTenantInput
+    pacientes?: PacienteCreateNestedManyWithoutTenantInput
+    profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
+    usuarios?: UsuarioCreateNestedManyWithoutTenantInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateWithoutProcedimentosInput = {
+    id?: string
+    nome: string
+    planoId: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutTenantInput
+    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutTenantInput
+    pacientes?: PacienteUncheckedCreateNestedManyWithoutTenantInput
+    profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
+    usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
+  }
+
+  export type TenantCreateOrConnectWithoutProcedimentosInput = {
+    where: TenantWhereUniqueInput
+    create: XOR<TenantCreateWithoutProcedimentosInput, TenantUncheckedCreateWithoutProcedimentosInput>
+  }
+
+  export type AgendamentoUpsertWithWhereUniqueWithoutProcedimentoInput = {
+    where: AgendamentoWhereUniqueInput
+    update: XOR<AgendamentoUpdateWithoutProcedimentoInput, AgendamentoUncheckedUpdateWithoutProcedimentoInput>
+    create: XOR<AgendamentoCreateWithoutProcedimentoInput, AgendamentoUncheckedCreateWithoutProcedimentoInput>
+  }
+
+  export type AgendamentoUpdateWithWhereUniqueWithoutProcedimentoInput = {
+    where: AgendamentoWhereUniqueInput
+    data: XOR<AgendamentoUpdateWithoutProcedimentoInput, AgendamentoUncheckedUpdateWithoutProcedimentoInput>
+  }
+
+  export type AgendamentoUpdateManyWithWhereWithoutProcedimentoInput = {
+    where: AgendamentoScalarWhereInput
+    data: XOR<AgendamentoUpdateManyMutationInput, AgendamentoUncheckedUpdateManyWithoutProcedimentoInput>
+  }
+
+  export type AtendimentoUpsertWithWhereUniqueWithoutProcedimentoInput = {
+    where: AtendimentoWhereUniqueInput
+    update: XOR<AtendimentoUpdateWithoutProcedimentoInput, AtendimentoUncheckedUpdateWithoutProcedimentoInput>
+    create: XOR<AtendimentoCreateWithoutProcedimentoInput, AtendimentoUncheckedCreateWithoutProcedimentoInput>
+  }
+
+  export type AtendimentoUpdateWithWhereUniqueWithoutProcedimentoInput = {
+    where: AtendimentoWhereUniqueInput
+    data: XOR<AtendimentoUpdateWithoutProcedimentoInput, AtendimentoUncheckedUpdateWithoutProcedimentoInput>
+  }
+
+  export type AtendimentoUpdateManyWithWhereWithoutProcedimentoInput = {
+    where: AtendimentoScalarWhereInput
+    data: XOR<AtendimentoUpdateManyMutationInput, AtendimentoUncheckedUpdateManyWithoutProcedimentoInput>
+  }
+
+  export type TenantUpsertWithoutProcedimentosInput = {
+    update: XOR<TenantUpdateWithoutProcedimentosInput, TenantUncheckedUpdateWithoutProcedimentosInput>
+    create: XOR<TenantCreateWithoutProcedimentosInput, TenantUncheckedCreateWithoutProcedimentosInput>
+    where?: TenantWhereInput
+  }
+
+  export type TenantUpdateToOneWithWhereWithoutProcedimentosInput = {
+    where?: TenantWhereInput
+    data: XOR<TenantUpdateWithoutProcedimentosInput, TenantUncheckedUpdateWithoutProcedimentosInput>
+  }
+
+  export type TenantUpdateWithoutProcedimentosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    plano?: PlanoUpdateOneRequiredWithoutTenantsNestedInput
+    agendamentos?: AgendamentoUpdateManyWithoutTenantNestedInput
+    atendimentos?: AtendimentoUpdateManyWithoutTenantNestedInput
+    pacientes?: PacienteUpdateManyWithoutTenantNestedInput
+    profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
+    usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateWithoutProcedimentosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    planoId?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUncheckedUpdateManyWithoutTenantNestedInput
+    atendimentos?: AtendimentoUncheckedUpdateManyWithoutTenantNestedInput
+    pacientes?: PacienteUncheckedUpdateManyWithoutTenantNestedInput
+    profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
+    usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
+  }
+
+  export type PacienteCreateWithoutAgendamentosInput = {
+    id?: string
+    nome: string
+    cpf?: string | null
+    dataNascimento?: Date | string | null
+    telefone: string
+    telefone2?: string | null
+    email?: string | null
+    cep?: string | null
+    logradouro?: string | null
+    numero?: string | null
+    complemento?: string | null
+    bairro?: string | null
+    cidade?: string | null
+    estado?: string | null
+    alergias?: string | null
+    menorIdade?: boolean
+    responsavelNome?: string | null
+    responsavelCpf?: string | null
+    responsavelTelefone?: string | null
+    responsavelParentesco?: string | null
+    observacoes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutPacientesInput
+    profissional?: ProfissionalCreateNestedOneWithoutPacientesInput
+    atendimentos?: AtendimentoCreateNestedManyWithoutPacienteInput
+  }
+
+  export type PacienteUncheckedCreateWithoutAgendamentosInput = {
+    id?: string
+    tenantId: string
+    profissionalId?: string | null
+    nome: string
+    cpf?: string | null
+    dataNascimento?: Date | string | null
+    telefone: string
+    telefone2?: string | null
+    email?: string | null
+    cep?: string | null
+    logradouro?: string | null
+    numero?: string | null
+    complemento?: string | null
+    bairro?: string | null
+    cidade?: string | null
+    estado?: string | null
+    alergias?: string | null
+    menorIdade?: boolean
+    responsavelNome?: string | null
+    responsavelCpf?: string | null
+    responsavelTelefone?: string | null
+    responsavelParentesco?: string | null
+    observacoes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutPacienteInput
+  }
+
+  export type PacienteCreateOrConnectWithoutAgendamentosInput = {
+    where: PacienteWhereUniqueInput
+    create: XOR<PacienteCreateWithoutAgendamentosInput, PacienteUncheckedCreateWithoutAgendamentosInput>
+  }
+
+  export type ProcedimentoCreateWithoutAgendamentosInput = {
+    id?: string
+    nome: string
+    valor?: Decimal | DecimalJsLike | number | string | null
+    duracaoMinutos: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    atendimentos?: AtendimentoCreateNestedManyWithoutProcedimentoInput
+    tenant: TenantCreateNestedOneWithoutProcedimentosInput
+  }
+
+  export type ProcedimentoUncheckedCreateWithoutAgendamentosInput = {
+    id?: string
+    tenantId: string
+    nome: string
+    valor?: Decimal | DecimalJsLike | number | string | null
+    duracaoMinutos: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutProcedimentoInput
+  }
+
+  export type ProcedimentoCreateOrConnectWithoutAgendamentosInput = {
+    where: ProcedimentoWhereUniqueInput
+    create: XOR<ProcedimentoCreateWithoutAgendamentosInput, ProcedimentoUncheckedCreateWithoutAgendamentosInput>
+  }
+
+  export type ProfissionalCreateWithoutAgendamentosInput = {
+    id?: string
+    nome: string
+    especialidade?: string | null
+    observacoes?: string | null
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    atendimentos?: AtendimentoCreateNestedManyWithoutProfissionalInput
+    pacientes?: PacienteCreateNestedManyWithoutProfissionalInput
+    tenant: TenantCreateNestedOneWithoutProfissionaisInput
+  }
+
+  export type ProfissionalUncheckedCreateWithoutAgendamentosInput = {
+    id?: string
+    tenantId: string
+    nome: string
+    especialidade?: string | null
+    observacoes?: string | null
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutProfissionalInput
+    pacientes?: PacienteUncheckedCreateNestedManyWithoutProfissionalInput
+  }
+
+  export type ProfissionalCreateOrConnectWithoutAgendamentosInput = {
+    where: ProfissionalWhereUniqueInput
+    create: XOR<ProfissionalCreateWithoutAgendamentosInput, ProfissionalUncheckedCreateWithoutAgendamentosInput>
+  }
+
+  export type TenantCreateWithoutAgendamentosInput = {
+    id?: string
+    nome: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    plano: PlanoCreateNestedOneWithoutTenantsInput
+    atendimentos?: AtendimentoCreateNestedManyWithoutTenantInput
+    pacientes?: PacienteCreateNestedManyWithoutTenantInput
+    procedimentos?: ProcedimentoCreateNestedManyWithoutTenantInput
+    profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
+    usuarios?: UsuarioCreateNestedManyWithoutTenantInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateWithoutAgendamentosInput = {
+    id?: string
+    nome: string
+    planoId: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutTenantInput
+    pacientes?: PacienteUncheckedCreateNestedManyWithoutTenantInput
+    procedimentos?: ProcedimentoUncheckedCreateNestedManyWithoutTenantInput
+    profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
+    usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
+  }
+
+  export type TenantCreateOrConnectWithoutAgendamentosInput = {
+    where: TenantWhereUniqueInput
+    create: XOR<TenantCreateWithoutAgendamentosInput, TenantUncheckedCreateWithoutAgendamentosInput>
+  }
+
+  export type AtendimentoCreateWithoutAgendamentoInput = {
+    id?: string
+    anotacoes?: string | null
+    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    paciente: PacienteCreateNestedOneWithoutAtendimentosInput
+    procedimento: ProcedimentoCreateNestedOneWithoutAtendimentosInput
+    profissional: ProfissionalCreateNestedOneWithoutAtendimentosInput
+    tenant: TenantCreateNestedOneWithoutAtendimentosInput
+  }
+
+  export type AtendimentoUncheckedCreateWithoutAgendamentoInput = {
+    id?: string
+    tenantId: string
+    pacienteId: string
+    profissionalId: string
+    procedimentoId: string
+    anotacoes?: string | null
+    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AtendimentoCreateOrConnectWithoutAgendamentoInput = {
+    where: AtendimentoWhereUniqueInput
+    create: XOR<AtendimentoCreateWithoutAgendamentoInput, AtendimentoUncheckedCreateWithoutAgendamentoInput>
+  }
+
+  export type PacienteUpsertWithoutAgendamentosInput = {
+    update: XOR<PacienteUpdateWithoutAgendamentosInput, PacienteUncheckedUpdateWithoutAgendamentosInput>
+    create: XOR<PacienteCreateWithoutAgendamentosInput, PacienteUncheckedCreateWithoutAgendamentosInput>
+    where?: PacienteWhereInput
+  }
+
+  export type PacienteUpdateToOneWithWhereWithoutAgendamentosInput = {
+    where?: PacienteWhereInput
+    data: XOR<PacienteUpdateWithoutAgendamentosInput, PacienteUncheckedUpdateWithoutAgendamentosInput>
+  }
+
+  export type PacienteUpdateWithoutAgendamentosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
+    dataNascimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    telefone?: StringFieldUpdateOperationsInput | string
+    telefone2?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    cep?: NullableStringFieldUpdateOperationsInput | string | null
+    logradouro?: NullableStringFieldUpdateOperationsInput | string | null
+    numero?: NullableStringFieldUpdateOperationsInput | string | null
+    complemento?: NullableStringFieldUpdateOperationsInput | string | null
+    bairro?: NullableStringFieldUpdateOperationsInput | string | null
+    cidade?: NullableStringFieldUpdateOperationsInput | string | null
+    estado?: NullableStringFieldUpdateOperationsInput | string | null
+    alergias?: NullableStringFieldUpdateOperationsInput | string | null
+    menorIdade?: BoolFieldUpdateOperationsInput | boolean
+    responsavelNome?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelCpf?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelTelefone?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelParentesco?: NullableStringFieldUpdateOperationsInput | string | null
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutPacientesNestedInput
+    profissional?: ProfissionalUpdateOneWithoutPacientesNestedInput
+    atendimentos?: AtendimentoUpdateManyWithoutPacienteNestedInput
+  }
+
+  export type PacienteUncheckedUpdateWithoutAgendamentosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    profissionalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nome?: StringFieldUpdateOperationsInput | string
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
+    dataNascimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    telefone?: StringFieldUpdateOperationsInput | string
+    telefone2?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    cep?: NullableStringFieldUpdateOperationsInput | string | null
+    logradouro?: NullableStringFieldUpdateOperationsInput | string | null
+    numero?: NullableStringFieldUpdateOperationsInput | string | null
+    complemento?: NullableStringFieldUpdateOperationsInput | string | null
+    bairro?: NullableStringFieldUpdateOperationsInput | string | null
+    cidade?: NullableStringFieldUpdateOperationsInput | string | null
+    estado?: NullableStringFieldUpdateOperationsInput | string | null
+    alergias?: NullableStringFieldUpdateOperationsInput | string | null
+    menorIdade?: BoolFieldUpdateOperationsInput | boolean
+    responsavelNome?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelCpf?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelTelefone?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelParentesco?: NullableStringFieldUpdateOperationsInput | string | null
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    atendimentos?: AtendimentoUncheckedUpdateManyWithoutPacienteNestedInput
+  }
+
+  export type ProcedimentoUpsertWithoutAgendamentosInput = {
+    update: XOR<ProcedimentoUpdateWithoutAgendamentosInput, ProcedimentoUncheckedUpdateWithoutAgendamentosInput>
+    create: XOR<ProcedimentoCreateWithoutAgendamentosInput, ProcedimentoUncheckedCreateWithoutAgendamentosInput>
+    where?: ProcedimentoWhereInput
+  }
+
+  export type ProcedimentoUpdateToOneWithWhereWithoutAgendamentosInput = {
+    where?: ProcedimentoWhereInput
+    data: XOR<ProcedimentoUpdateWithoutAgendamentosInput, ProcedimentoUncheckedUpdateWithoutAgendamentosInput>
+  }
+
+  export type ProcedimentoUpdateWithoutAgendamentosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    valor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    duracaoMinutos?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    atendimentos?: AtendimentoUpdateManyWithoutProcedimentoNestedInput
+    tenant?: TenantUpdateOneRequiredWithoutProcedimentosNestedInput
+  }
+
+  export type ProcedimentoUncheckedUpdateWithoutAgendamentosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    valor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    duracaoMinutos?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    atendimentos?: AtendimentoUncheckedUpdateManyWithoutProcedimentoNestedInput
+  }
+
+  export type ProfissionalUpsertWithoutAgendamentosInput = {
+    update: XOR<ProfissionalUpdateWithoutAgendamentosInput, ProfissionalUncheckedUpdateWithoutAgendamentosInput>
+    create: XOR<ProfissionalCreateWithoutAgendamentosInput, ProfissionalUncheckedCreateWithoutAgendamentosInput>
+    where?: ProfissionalWhereInput
+  }
+
+  export type ProfissionalUpdateToOneWithWhereWithoutAgendamentosInput = {
+    where?: ProfissionalWhereInput
+    data: XOR<ProfissionalUpdateWithoutAgendamentosInput, ProfissionalUncheckedUpdateWithoutAgendamentosInput>
+  }
+
+  export type ProfissionalUpdateWithoutAgendamentosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    especialidade?: NullableStringFieldUpdateOperationsInput | string | null
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    atendimentos?: AtendimentoUpdateManyWithoutProfissionalNestedInput
+    pacientes?: PacienteUpdateManyWithoutProfissionalNestedInput
+    tenant?: TenantUpdateOneRequiredWithoutProfissionaisNestedInput
+  }
+
+  export type ProfissionalUncheckedUpdateWithoutAgendamentosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    especialidade?: NullableStringFieldUpdateOperationsInput | string | null
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    atendimentos?: AtendimentoUncheckedUpdateManyWithoutProfissionalNestedInput
+    pacientes?: PacienteUncheckedUpdateManyWithoutProfissionalNestedInput
+  }
+
+  export type TenantUpsertWithoutAgendamentosInput = {
+    update: XOR<TenantUpdateWithoutAgendamentosInput, TenantUncheckedUpdateWithoutAgendamentosInput>
+    create: XOR<TenantCreateWithoutAgendamentosInput, TenantUncheckedCreateWithoutAgendamentosInput>
+    where?: TenantWhereInput
+  }
+
+  export type TenantUpdateToOneWithWhereWithoutAgendamentosInput = {
+    where?: TenantWhereInput
+    data: XOR<TenantUpdateWithoutAgendamentosInput, TenantUncheckedUpdateWithoutAgendamentosInput>
+  }
+
+  export type TenantUpdateWithoutAgendamentosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    plano?: PlanoUpdateOneRequiredWithoutTenantsNestedInput
+    atendimentos?: AtendimentoUpdateManyWithoutTenantNestedInput
+    pacientes?: PacienteUpdateManyWithoutTenantNestedInput
+    procedimentos?: ProcedimentoUpdateManyWithoutTenantNestedInput
+    profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
+    usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateWithoutAgendamentosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    planoId?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    atendimentos?: AtendimentoUncheckedUpdateManyWithoutTenantNestedInput
+    pacientes?: PacienteUncheckedUpdateManyWithoutTenantNestedInput
+    procedimentos?: ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput
+    profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
+    usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
+  }
+
+  export type AtendimentoUpsertWithoutAgendamentoInput = {
+    update: XOR<AtendimentoUpdateWithoutAgendamentoInput, AtendimentoUncheckedUpdateWithoutAgendamentoInput>
+    create: XOR<AtendimentoCreateWithoutAgendamentoInput, AtendimentoUncheckedCreateWithoutAgendamentoInput>
+    where?: AtendimentoWhereInput
+  }
+
+  export type AtendimentoUpdateToOneWithWhereWithoutAgendamentoInput = {
+    where?: AtendimentoWhereInput
+    data: XOR<AtendimentoUpdateWithoutAgendamentoInput, AtendimentoUncheckedUpdateWithoutAgendamentoInput>
+  }
+
+  export type AtendimentoUpdateWithoutAgendamentoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paciente?: PacienteUpdateOneRequiredWithoutAtendimentosNestedInput
+    procedimento?: ProcedimentoUpdateOneRequiredWithoutAtendimentosNestedInput
+    profissional?: ProfissionalUpdateOneRequiredWithoutAtendimentosNestedInput
+    tenant?: TenantUpdateOneRequiredWithoutAtendimentosNestedInput
+  }
+
+  export type AtendimentoUncheckedUpdateWithoutAgendamentoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    pacienteId?: StringFieldUpdateOperationsInput | string
+    profissionalId?: StringFieldUpdateOperationsInput | string
+    procedimentoId?: StringFieldUpdateOperationsInput | string
+    anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgendamentoCreateWithoutAtendimentoInput = {
+    id?: string
+    dataHora: Date | string
+    status?: $Enums.StatusAgendamento
+    observacoes?: string | null
+    confirmacaoEnviada?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dataHoraFim: Date | string
+    paciente?: PacienteCreateNestedOneWithoutAgendamentosInput
+    procedimento: ProcedimentoCreateNestedOneWithoutAgendamentosInput
+    profissional: ProfissionalCreateNestedOneWithoutAgendamentosInput
+    tenant: TenantCreateNestedOneWithoutAgendamentosInput
+  }
+
+  export type AgendamentoUncheckedCreateWithoutAtendimentoInput = {
+    id?: string
+    tenantId: string
+    pacienteId?: string | null
+    profissionalId: string
+    procedimentoId: string
+    dataHora: Date | string
+    status?: $Enums.StatusAgendamento
+    observacoes?: string | null
+    confirmacaoEnviada?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dataHoraFim: Date | string
+  }
+
+  export type AgendamentoCreateOrConnectWithoutAtendimentoInput = {
+    where: AgendamentoWhereUniqueInput
+    create: XOR<AgendamentoCreateWithoutAtendimentoInput, AgendamentoUncheckedCreateWithoutAtendimentoInput>
+  }
+
+  export type PacienteCreateWithoutAtendimentosInput = {
+    id?: string
+    nome: string
+    cpf?: string | null
+    dataNascimento?: Date | string | null
+    telefone: string
+    telefone2?: string | null
+    email?: string | null
+    cep?: string | null
+    logradouro?: string | null
+    numero?: string | null
+    complemento?: string | null
+    bairro?: string | null
+    cidade?: string | null
+    estado?: string | null
+    alergias?: string | null
+    menorIdade?: boolean
+    responsavelNome?: string | null
+    responsavelCpf?: string | null
+    responsavelTelefone?: string | null
+    responsavelParentesco?: string | null
+    observacoes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutPacientesInput
+    profissional?: ProfissionalCreateNestedOneWithoutPacientesInput
+    agendamentos?: AgendamentoCreateNestedManyWithoutPacienteInput
+  }
+
+  export type PacienteUncheckedCreateWithoutAtendimentosInput = {
+    id?: string
+    tenantId: string
+    profissionalId?: string | null
+    nome: string
+    cpf?: string | null
+    dataNascimento?: Date | string | null
+    telefone: string
+    telefone2?: string | null
+    email?: string | null
+    cep?: string | null
+    logradouro?: string | null
+    numero?: string | null
+    complemento?: string | null
+    bairro?: string | null
+    cidade?: string | null
+    estado?: string | null
+    alergias?: string | null
+    menorIdade?: boolean
+    responsavelNome?: string | null
+    responsavelCpf?: string | null
+    responsavelTelefone?: string | null
+    responsavelParentesco?: string | null
+    observacoes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutPacienteInput
+  }
+
+  export type PacienteCreateOrConnectWithoutAtendimentosInput = {
+    where: PacienteWhereUniqueInput
+    create: XOR<PacienteCreateWithoutAtendimentosInput, PacienteUncheckedCreateWithoutAtendimentosInput>
+  }
+
+  export type ProcedimentoCreateWithoutAtendimentosInput = {
+    id?: string
+    nome: string
+    valor?: Decimal | DecimalJsLike | number | string | null
+    duracaoMinutos: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamentos?: AgendamentoCreateNestedManyWithoutProcedimentoInput
+    tenant: TenantCreateNestedOneWithoutProcedimentosInput
+  }
+
+  export type ProcedimentoUncheckedCreateWithoutAtendimentosInput = {
+    id?: string
+    tenantId: string
+    nome: string
+    valor?: Decimal | DecimalJsLike | number | string | null
+    duracaoMinutos: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutProcedimentoInput
+  }
+
+  export type ProcedimentoCreateOrConnectWithoutAtendimentosInput = {
+    where: ProcedimentoWhereUniqueInput
+    create: XOR<ProcedimentoCreateWithoutAtendimentosInput, ProcedimentoUncheckedCreateWithoutAtendimentosInput>
+  }
+
+  export type ProfissionalCreateWithoutAtendimentosInput = {
+    id?: string
+    nome: string
+    especialidade?: string | null
+    observacoes?: string | null
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamentos?: AgendamentoCreateNestedManyWithoutProfissionalInput
+    pacientes?: PacienteCreateNestedManyWithoutProfissionalInput
+    tenant: TenantCreateNestedOneWithoutProfissionaisInput
+  }
+
+  export type ProfissionalUncheckedCreateWithoutAtendimentosInput = {
+    id?: string
+    tenantId: string
+    nome: string
+    especialidade?: string | null
+    observacoes?: string | null
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutProfissionalInput
+    pacientes?: PacienteUncheckedCreateNestedManyWithoutProfissionalInput
+  }
+
+  export type ProfissionalCreateOrConnectWithoutAtendimentosInput = {
+    where: ProfissionalWhereUniqueInput
+    create: XOR<ProfissionalCreateWithoutAtendimentosInput, ProfissionalUncheckedCreateWithoutAtendimentosInput>
+  }
+
+  export type TenantCreateWithoutAtendimentosInput = {
+    id?: string
+    nome: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    plano: PlanoCreateNestedOneWithoutTenantsInput
+    agendamentos?: AgendamentoCreateNestedManyWithoutTenantInput
+    pacientes?: PacienteCreateNestedManyWithoutTenantInput
+    procedimentos?: ProcedimentoCreateNestedManyWithoutTenantInput
+    profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
+    usuarios?: UsuarioCreateNestedManyWithoutTenantInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateWithoutAtendimentosInput = {
+    id?: string
+    nome: string
+    planoId: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutTenantInput
+    pacientes?: PacienteUncheckedCreateNestedManyWithoutTenantInput
+    procedimentos?: ProcedimentoUncheckedCreateNestedManyWithoutTenantInput
+    profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
+    usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
+  }
+
+  export type TenantCreateOrConnectWithoutAtendimentosInput = {
+    where: TenantWhereUniqueInput
+    create: XOR<TenantCreateWithoutAtendimentosInput, TenantUncheckedCreateWithoutAtendimentosInput>
+  }
+
+  export type AgendamentoUpsertWithoutAtendimentoInput = {
+    update: XOR<AgendamentoUpdateWithoutAtendimentoInput, AgendamentoUncheckedUpdateWithoutAtendimentoInput>
+    create: XOR<AgendamentoCreateWithoutAtendimentoInput, AgendamentoUncheckedCreateWithoutAtendimentoInput>
+    where?: AgendamentoWhereInput
+  }
+
+  export type AgendamentoUpdateToOneWithWhereWithoutAtendimentoInput = {
+    where?: AgendamentoWhereInput
+    data: XOR<AgendamentoUpdateWithoutAtendimentoInput, AgendamentoUncheckedUpdateWithoutAtendimentoInput>
+  }
+
+  export type AgendamentoUpdateWithoutAtendimentoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
+    paciente?: PacienteUpdateOneWithoutAgendamentosNestedInput
+    procedimento?: ProcedimentoUpdateOneRequiredWithoutAgendamentosNestedInput
+    profissional?: ProfissionalUpdateOneRequiredWithoutAgendamentosNestedInput
+    tenant?: TenantUpdateOneRequiredWithoutAgendamentosNestedInput
+  }
+
+  export type AgendamentoUncheckedUpdateWithoutAtendimentoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    pacienteId?: NullableStringFieldUpdateOperationsInput | string | null
+    profissionalId?: StringFieldUpdateOperationsInput | string
+    procedimentoId?: StringFieldUpdateOperationsInput | string
+    dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PacienteUpsertWithoutAtendimentosInput = {
+    update: XOR<PacienteUpdateWithoutAtendimentosInput, PacienteUncheckedUpdateWithoutAtendimentosInput>
+    create: XOR<PacienteCreateWithoutAtendimentosInput, PacienteUncheckedCreateWithoutAtendimentosInput>
+    where?: PacienteWhereInput
+  }
+
+  export type PacienteUpdateToOneWithWhereWithoutAtendimentosInput = {
+    where?: PacienteWhereInput
+    data: XOR<PacienteUpdateWithoutAtendimentosInput, PacienteUncheckedUpdateWithoutAtendimentosInput>
+  }
+
+  export type PacienteUpdateWithoutAtendimentosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
+    dataNascimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    telefone?: StringFieldUpdateOperationsInput | string
+    telefone2?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    cep?: NullableStringFieldUpdateOperationsInput | string | null
+    logradouro?: NullableStringFieldUpdateOperationsInput | string | null
+    numero?: NullableStringFieldUpdateOperationsInput | string | null
+    complemento?: NullableStringFieldUpdateOperationsInput | string | null
+    bairro?: NullableStringFieldUpdateOperationsInput | string | null
+    cidade?: NullableStringFieldUpdateOperationsInput | string | null
+    estado?: NullableStringFieldUpdateOperationsInput | string | null
+    alergias?: NullableStringFieldUpdateOperationsInput | string | null
+    menorIdade?: BoolFieldUpdateOperationsInput | boolean
+    responsavelNome?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelCpf?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelTelefone?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelParentesco?: NullableStringFieldUpdateOperationsInput | string | null
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutPacientesNestedInput
+    profissional?: ProfissionalUpdateOneWithoutPacientesNestedInput
+    agendamentos?: AgendamentoUpdateManyWithoutPacienteNestedInput
+  }
+
+  export type PacienteUncheckedUpdateWithoutAtendimentosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    profissionalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nome?: StringFieldUpdateOperationsInput | string
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
+    dataNascimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    telefone?: StringFieldUpdateOperationsInput | string
+    telefone2?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    cep?: NullableStringFieldUpdateOperationsInput | string | null
+    logradouro?: NullableStringFieldUpdateOperationsInput | string | null
+    numero?: NullableStringFieldUpdateOperationsInput | string | null
+    complemento?: NullableStringFieldUpdateOperationsInput | string | null
+    bairro?: NullableStringFieldUpdateOperationsInput | string | null
+    cidade?: NullableStringFieldUpdateOperationsInput | string | null
+    estado?: NullableStringFieldUpdateOperationsInput | string | null
+    alergias?: NullableStringFieldUpdateOperationsInput | string | null
+    menorIdade?: BoolFieldUpdateOperationsInput | boolean
+    responsavelNome?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelCpf?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelTelefone?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelParentesco?: NullableStringFieldUpdateOperationsInput | string | null
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUncheckedUpdateManyWithoutPacienteNestedInput
+  }
+
+  export type ProcedimentoUpsertWithoutAtendimentosInput = {
+    update: XOR<ProcedimentoUpdateWithoutAtendimentosInput, ProcedimentoUncheckedUpdateWithoutAtendimentosInput>
+    create: XOR<ProcedimentoCreateWithoutAtendimentosInput, ProcedimentoUncheckedCreateWithoutAtendimentosInput>
+    where?: ProcedimentoWhereInput
+  }
+
+  export type ProcedimentoUpdateToOneWithWhereWithoutAtendimentosInput = {
+    where?: ProcedimentoWhereInput
+    data: XOR<ProcedimentoUpdateWithoutAtendimentosInput, ProcedimentoUncheckedUpdateWithoutAtendimentosInput>
+  }
+
+  export type ProcedimentoUpdateWithoutAtendimentosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    valor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    duracaoMinutos?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUpdateManyWithoutProcedimentoNestedInput
+    tenant?: TenantUpdateOneRequiredWithoutProcedimentosNestedInput
+  }
+
+  export type ProcedimentoUncheckedUpdateWithoutAtendimentosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    valor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    duracaoMinutos?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUncheckedUpdateManyWithoutProcedimentoNestedInput
+  }
+
+  export type ProfissionalUpsertWithoutAtendimentosInput = {
+    update: XOR<ProfissionalUpdateWithoutAtendimentosInput, ProfissionalUncheckedUpdateWithoutAtendimentosInput>
+    create: XOR<ProfissionalCreateWithoutAtendimentosInput, ProfissionalUncheckedCreateWithoutAtendimentosInput>
+    where?: ProfissionalWhereInput
+  }
+
+  export type ProfissionalUpdateToOneWithWhereWithoutAtendimentosInput = {
+    where?: ProfissionalWhereInput
+    data: XOR<ProfissionalUpdateWithoutAtendimentosInput, ProfissionalUncheckedUpdateWithoutAtendimentosInput>
+  }
+
+  export type ProfissionalUpdateWithoutAtendimentosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    especialidade?: NullableStringFieldUpdateOperationsInput | string | null
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUpdateManyWithoutProfissionalNestedInput
+    pacientes?: PacienteUpdateManyWithoutProfissionalNestedInput
+    tenant?: TenantUpdateOneRequiredWithoutProfissionaisNestedInput
+  }
+
+  export type ProfissionalUncheckedUpdateWithoutAtendimentosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    especialidade?: NullableStringFieldUpdateOperationsInput | string | null
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUncheckedUpdateManyWithoutProfissionalNestedInput
+    pacientes?: PacienteUncheckedUpdateManyWithoutProfissionalNestedInput
+  }
+
+  export type TenantUpsertWithoutAtendimentosInput = {
+    update: XOR<TenantUpdateWithoutAtendimentosInput, TenantUncheckedUpdateWithoutAtendimentosInput>
+    create: XOR<TenantCreateWithoutAtendimentosInput, TenantUncheckedCreateWithoutAtendimentosInput>
+    where?: TenantWhereInput
+  }
+
+  export type TenantUpdateToOneWithWhereWithoutAtendimentosInput = {
+    where?: TenantWhereInput
+    data: XOR<TenantUpdateWithoutAtendimentosInput, TenantUncheckedUpdateWithoutAtendimentosInput>
+  }
+
+  export type TenantUpdateWithoutAtendimentosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    plano?: PlanoUpdateOneRequiredWithoutTenantsNestedInput
+    agendamentos?: AgendamentoUpdateManyWithoutTenantNestedInput
+    pacientes?: PacienteUpdateManyWithoutTenantNestedInput
+    procedimentos?: ProcedimentoUpdateManyWithoutTenantNestedInput
+    profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
+    usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateWithoutAtendimentosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    planoId?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUncheckedUpdateManyWithoutTenantNestedInput
+    pacientes?: PacienteUncheckedUpdateManyWithoutTenantNestedInput
+    procedimentos?: ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput
+    profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
+    usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
+  }
+
+  export type TenantCreateWithoutWhatsappConfigInput = {
+    id?: string
+    nome: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    plano: PlanoCreateNestedOneWithoutTenantsInput
+    agendamentos?: AgendamentoCreateNestedManyWithoutTenantInput
+    atendimentos?: AtendimentoCreateNestedManyWithoutTenantInput
+    pacientes?: PacienteCreateNestedManyWithoutTenantInput
+    procedimentos?: ProcedimentoCreateNestedManyWithoutTenantInput
+    profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
+    usuarios?: UsuarioCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateWithoutWhatsappConfigInput = {
+    id?: string
+    nome: string
+    planoId: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutTenantInput
+    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutTenantInput
+    pacientes?: PacienteUncheckedCreateNestedManyWithoutTenantInput
+    procedimentos?: ProcedimentoUncheckedCreateNestedManyWithoutTenantInput
+    profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
+    usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantCreateOrConnectWithoutWhatsappConfigInput = {
+    where: TenantWhereUniqueInput
+    create: XOR<TenantCreateWithoutWhatsappConfigInput, TenantUncheckedCreateWithoutWhatsappConfigInput>
+  }
+
+  export type TenantUpsertWithoutWhatsappConfigInput = {
+    update: XOR<TenantUpdateWithoutWhatsappConfigInput, TenantUncheckedUpdateWithoutWhatsappConfigInput>
+    create: XOR<TenantCreateWithoutWhatsappConfigInput, TenantUncheckedCreateWithoutWhatsappConfigInput>
+    where?: TenantWhereInput
+  }
+
+  export type TenantUpdateToOneWithWhereWithoutWhatsappConfigInput = {
+    where?: TenantWhereInput
+    data: XOR<TenantUpdateWithoutWhatsappConfigInput, TenantUncheckedUpdateWithoutWhatsappConfigInput>
+  }
+
+  export type TenantUpdateWithoutWhatsappConfigInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    plano?: PlanoUpdateOneRequiredWithoutTenantsNestedInput
+    agendamentos?: AgendamentoUpdateManyWithoutTenantNestedInput
+    atendimentos?: AtendimentoUpdateManyWithoutTenantNestedInput
+    pacientes?: PacienteUpdateManyWithoutTenantNestedInput
+    procedimentos?: ProcedimentoUpdateManyWithoutTenantNestedInput
+    profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
+    usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateWithoutWhatsappConfigInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    planoId?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUncheckedUpdateManyWithoutTenantNestedInput
+    atendimentos?: AtendimentoUncheckedUpdateManyWithoutTenantNestedInput
+    pacientes?: PacienteUncheckedUpdateManyWithoutTenantNestedInput
+    procedimentos?: ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput
+    profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
+    usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
+  }
+
+  export type TenantCreateWithoutPlanoInput = {
+    id?: string
+    nome: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamentos?: AgendamentoCreateNestedManyWithoutTenantInput
+    atendimentos?: AtendimentoCreateNestedManyWithoutTenantInput
+    pacientes?: PacienteCreateNestedManyWithoutTenantInput
+    procedimentos?: ProcedimentoCreateNestedManyWithoutTenantInput
+    profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
+    usuarios?: UsuarioCreateNestedManyWithoutTenantInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateWithoutPlanoInput = {
+    id?: string
+    nome: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutTenantInput
+    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutTenantInput
+    pacientes?: PacienteUncheckedCreateNestedManyWithoutTenantInput
+    procedimentos?: ProcedimentoUncheckedCreateNestedManyWithoutTenantInput
+    profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
+    usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
+  }
+
+  export type TenantCreateOrConnectWithoutPlanoInput = {
+    where: TenantWhereUniqueInput
+    create: XOR<TenantCreateWithoutPlanoInput, TenantUncheckedCreateWithoutPlanoInput>
+  }
+
+  export type TenantCreateManyPlanoInputEnvelope = {
+    data: TenantCreateManyPlanoInput | TenantCreateManyPlanoInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TenantUpsertWithWhereUniqueWithoutPlanoInput = {
+    where: TenantWhereUniqueInput
+    update: XOR<TenantUpdateWithoutPlanoInput, TenantUncheckedUpdateWithoutPlanoInput>
+    create: XOR<TenantCreateWithoutPlanoInput, TenantUncheckedCreateWithoutPlanoInput>
+  }
+
+  export type TenantUpdateWithWhereUniqueWithoutPlanoInput = {
+    where: TenantWhereUniqueInput
+    data: XOR<TenantUpdateWithoutPlanoInput, TenantUncheckedUpdateWithoutPlanoInput>
+  }
+
+  export type TenantUpdateManyWithWhereWithoutPlanoInput = {
+    where: TenantScalarWhereInput
+    data: XOR<TenantUpdateManyMutationInput, TenantUncheckedUpdateManyWithoutPlanoInput>
+  }
+
+  export type TenantScalarWhereInput = {
+    AND?: TenantScalarWhereInput | TenantScalarWhereInput[]
+    OR?: TenantScalarWhereInput[]
+    NOT?: TenantScalarWhereInput | TenantScalarWhereInput[]
+    id?: StringFilter<"Tenant"> | string
+    nome?: StringFilter<"Tenant"> | string
+    planoId?: StringFilter<"Tenant"> | string
+    ativo?: BoolFilter<"Tenant"> | boolean
+    createdAt?: DateTimeFilter<"Tenant"> | Date | string
+    updatedAt?: DateTimeFilter<"Tenant"> | Date | string
+  }
+
+  export type PlanoCreateWithoutTenantsInput = {
+    id?: string
+    nome: string
+    slug: string
+    descricao?: string | null
+    profissionaisAtivos: number
+    usuarios: number
+    agendamentosMes: number
+    pacientes: number
+    armazenamentoMB: number
+    whatsappAtivo?: boolean
+    googleCalendarSync?: boolean
+    valorMensal?: Decimal | DecimalJsLike | number | string | null
+    valorAnual?: Decimal | DecimalJsLike | number | string | null
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PlanoUncheckedCreateWithoutTenantsInput = {
+    id?: string
+    nome: string
+    slug: string
+    descricao?: string | null
+    profissionaisAtivos: number
+    usuarios: number
+    agendamentosMes: number
+    pacientes: number
+    armazenamentoMB: number
+    whatsappAtivo?: boolean
+    googleCalendarSync?: boolean
+    valorMensal?: Decimal | DecimalJsLike | number | string | null
+    valorAnual?: Decimal | DecimalJsLike | number | string | null
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PlanoCreateOrConnectWithoutTenantsInput = {
+    where: PlanoWhereUniqueInput
+    create: XOR<PlanoCreateWithoutTenantsInput, PlanoUncheckedCreateWithoutTenantsInput>
+  }
+
   export type AgendamentoCreateWithoutTenantInput = {
     id?: string
     dataHora: Date | string
@@ -16033,22 +20221,54 @@ export namespace Prisma {
   export type PacienteCreateWithoutTenantInput = {
     id?: string
     nome: string
+    cpf?: string | null
+    dataNascimento?: Date | string | null
     telefone: string
+    telefone2?: string | null
     email?: string | null
+    cep?: string | null
+    logradouro?: string | null
+    numero?: string | null
+    complemento?: string | null
+    bairro?: string | null
+    cidade?: string | null
+    estado?: string | null
+    alergias?: string | null
+    menorIdade?: boolean
+    responsavelNome?: string | null
+    responsavelCpf?: string | null
+    responsavelTelefone?: string | null
+    responsavelParentesco?: string | null
     observacoes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    profissional?: ProfissionalCreateNestedOneWithoutPacientesInput
     agendamentos?: AgendamentoCreateNestedManyWithoutPacienteInput
     atendimentos?: AtendimentoCreateNestedManyWithoutPacienteInput
-    profissional?: ProfissionalCreateNestedOneWithoutPacientesInput
   }
 
   export type PacienteUncheckedCreateWithoutTenantInput = {
     id?: string
     profissionalId?: string | null
     nome: string
+    cpf?: string | null
+    dataNascimento?: Date | string | null
     telefone: string
+    telefone2?: string | null
     email?: string | null
+    cep?: string | null
+    logradouro?: string | null
+    numero?: string | null
+    complemento?: string | null
+    bairro?: string | null
+    cidade?: string | null
+    estado?: string | null
+    alergias?: string | null
+    menorIdade?: boolean
+    responsavelNome?: string | null
+    responsavelCpf?: string | null
+    responsavelTelefone?: string | null
+    responsavelParentesco?: string | null
     observacoes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16195,6 +20415,55 @@ export namespace Prisma {
     create: XOR<WhatsAppConfigCreateWithoutTenantInput, WhatsAppConfigUncheckedCreateWithoutTenantInput>
   }
 
+  export type PlanoUpsertWithoutTenantsInput = {
+    update: XOR<PlanoUpdateWithoutTenantsInput, PlanoUncheckedUpdateWithoutTenantsInput>
+    create: XOR<PlanoCreateWithoutTenantsInput, PlanoUncheckedCreateWithoutTenantsInput>
+    where?: PlanoWhereInput
+  }
+
+  export type PlanoUpdateToOneWithWhereWithoutTenantsInput = {
+    where?: PlanoWhereInput
+    data: XOR<PlanoUpdateWithoutTenantsInput, PlanoUncheckedUpdateWithoutTenantsInput>
+  }
+
+  export type PlanoUpdateWithoutTenantsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    profissionaisAtivos?: IntFieldUpdateOperationsInput | number
+    usuarios?: IntFieldUpdateOperationsInput | number
+    agendamentosMes?: IntFieldUpdateOperationsInput | number
+    pacientes?: IntFieldUpdateOperationsInput | number
+    armazenamentoMB?: IntFieldUpdateOperationsInput | number
+    whatsappAtivo?: BoolFieldUpdateOperationsInput | boolean
+    googleCalendarSync?: BoolFieldUpdateOperationsInput | boolean
+    valorMensal?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    valorAnual?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlanoUncheckedUpdateWithoutTenantsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    profissionaisAtivos?: IntFieldUpdateOperationsInput | number
+    usuarios?: IntFieldUpdateOperationsInput | number
+    agendamentosMes?: IntFieldUpdateOperationsInput | number
+    pacientes?: IntFieldUpdateOperationsInput | number
+    armazenamentoMB?: IntFieldUpdateOperationsInput | number
+    whatsappAtivo?: BoolFieldUpdateOperationsInput | boolean
+    googleCalendarSync?: BoolFieldUpdateOperationsInput | boolean
+    valorMensal?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    valorAnual?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type AgendamentoUpsertWithWhereUniqueWithoutTenantInput = {
     where: AgendamentoWhereUniqueInput
     update: XOR<AgendamentoUpdateWithoutTenantInput, AgendamentoUncheckedUpdateWithoutTenantInput>
@@ -16209,24 +20478,6 @@ export namespace Prisma {
   export type AgendamentoUpdateManyWithWhereWithoutTenantInput = {
     where: AgendamentoScalarWhereInput
     data: XOR<AgendamentoUpdateManyMutationInput, AgendamentoUncheckedUpdateManyWithoutTenantInput>
-  }
-
-  export type AgendamentoScalarWhereInput = {
-    AND?: AgendamentoScalarWhereInput | AgendamentoScalarWhereInput[]
-    OR?: AgendamentoScalarWhereInput[]
-    NOT?: AgendamentoScalarWhereInput | AgendamentoScalarWhereInput[]
-    id?: StringFilter<"Agendamento"> | string
-    tenantId?: StringFilter<"Agendamento"> | string
-    pacienteId?: StringNullableFilter<"Agendamento"> | string | null
-    profissionalId?: StringFilter<"Agendamento"> | string
-    procedimentoId?: StringFilter<"Agendamento"> | string
-    dataHora?: DateTimeFilter<"Agendamento"> | Date | string
-    status?: EnumStatusAgendamentoFilter<"Agendamento"> | $Enums.StatusAgendamento
-    observacoes?: StringNullableFilter<"Agendamento"> | string | null
-    confirmacaoEnviada?: BoolFilter<"Agendamento"> | boolean
-    createdAt?: DateTimeFilter<"Agendamento"> | Date | string
-    updatedAt?: DateTimeFilter<"Agendamento"> | Date | string
-    dataHoraFim?: DateTimeFilter<"Agendamento"> | Date | string
   }
 
   export type AtendimentoUpsertWithWhereUniqueWithoutTenantInput = {
@@ -16245,22 +20496,6 @@ export namespace Prisma {
     data: XOR<AtendimentoUpdateManyMutationInput, AtendimentoUncheckedUpdateManyWithoutTenantInput>
   }
 
-  export type AtendimentoScalarWhereInput = {
-    AND?: AtendimentoScalarWhereInput | AtendimentoScalarWhereInput[]
-    OR?: AtendimentoScalarWhereInput[]
-    NOT?: AtendimentoScalarWhereInput | AtendimentoScalarWhereInput[]
-    id?: StringFilter<"Atendimento"> | string
-    tenantId?: StringFilter<"Atendimento"> | string
-    agendamentoId?: StringFilter<"Atendimento"> | string
-    pacienteId?: StringFilter<"Atendimento"> | string
-    profissionalId?: StringFilter<"Atendimento"> | string
-    procedimentoId?: StringFilter<"Atendimento"> | string
-    anotacoes?: StringNullableFilter<"Atendimento"> | string | null
-    procedimentosRealizados?: JsonNullableFilter<"Atendimento">
-    createdAt?: DateTimeFilter<"Atendimento"> | Date | string
-    updatedAt?: DateTimeFilter<"Atendimento"> | Date | string
-  }
-
   export type PacienteUpsertWithWhereUniqueWithoutTenantInput = {
     where: PacienteWhereUniqueInput
     update: XOR<PacienteUpdateWithoutTenantInput, PacienteUncheckedUpdateWithoutTenantInput>
@@ -16275,21 +20510,6 @@ export namespace Prisma {
   export type PacienteUpdateManyWithWhereWithoutTenantInput = {
     where: PacienteScalarWhereInput
     data: XOR<PacienteUpdateManyMutationInput, PacienteUncheckedUpdateManyWithoutTenantInput>
-  }
-
-  export type PacienteScalarWhereInput = {
-    AND?: PacienteScalarWhereInput | PacienteScalarWhereInput[]
-    OR?: PacienteScalarWhereInput[]
-    NOT?: PacienteScalarWhereInput | PacienteScalarWhereInput[]
-    id?: StringFilter<"Paciente"> | string
-    tenantId?: StringFilter<"Paciente"> | string
-    profissionalId?: StringNullableFilter<"Paciente"> | string | null
-    nome?: StringFilter<"Paciente"> | string
-    telefone?: StringFilter<"Paciente"> | string
-    email?: StringNullableFilter<"Paciente"> | string | null
-    observacoes?: StringNullableFilter<"Paciente"> | string | null
-    createdAt?: DateTimeFilter<"Paciente"> | Date | string
-    updatedAt?: DateTimeFilter<"Paciente"> | Date | string
   }
 
   export type ProcedimentoUpsertWithWhereUniqueWithoutTenantInput = {
@@ -16417,1792 +20637,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type TenantCreateWithoutUsuariosInput = {
-    id?: string
-    nome: string
-    plano?: string
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoCreateNestedManyWithoutTenantInput
-    atendimentos?: AtendimentoCreateNestedManyWithoutTenantInput
-    pacientes?: PacienteCreateNestedManyWithoutTenantInput
-    procedimentos?: ProcedimentoCreateNestedManyWithoutTenantInput
-    profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
-    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
-  }
-
-  export type TenantUncheckedCreateWithoutUsuariosInput = {
-    id?: string
-    nome: string
-    plano?: string
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutTenantInput
-    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutTenantInput
-    pacientes?: PacienteUncheckedCreateNestedManyWithoutTenantInput
-    procedimentos?: ProcedimentoUncheckedCreateNestedManyWithoutTenantInput
-    profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
-    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
-  }
-
-  export type TenantCreateOrConnectWithoutUsuariosInput = {
-    where: TenantWhereUniqueInput
-    create: XOR<TenantCreateWithoutUsuariosInput, TenantUncheckedCreateWithoutUsuariosInput>
-  }
-
-  export type TenantUpsertWithoutUsuariosInput = {
-    update: XOR<TenantUpdateWithoutUsuariosInput, TenantUncheckedUpdateWithoutUsuariosInput>
-    create: XOR<TenantCreateWithoutUsuariosInput, TenantUncheckedCreateWithoutUsuariosInput>
-    where?: TenantWhereInput
-  }
-
-  export type TenantUpdateToOneWithWhereWithoutUsuariosInput = {
-    where?: TenantWhereInput
-    data: XOR<TenantUpdateWithoutUsuariosInput, TenantUncheckedUpdateWithoutUsuariosInput>
-  }
-
-  export type TenantUpdateWithoutUsuariosInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    plano?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUpdateManyWithoutTenantNestedInput
-    atendimentos?: AtendimentoUpdateManyWithoutTenantNestedInput
-    pacientes?: PacienteUpdateManyWithoutTenantNestedInput
-    procedimentos?: ProcedimentoUpdateManyWithoutTenantNestedInput
-    profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
-    whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
-  }
-
-  export type TenantUncheckedUpdateWithoutUsuariosInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    plano?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUncheckedUpdateManyWithoutTenantNestedInput
-    atendimentos?: AtendimentoUncheckedUpdateManyWithoutTenantNestedInput
-    pacientes?: PacienteUncheckedUpdateManyWithoutTenantNestedInput
-    procedimentos?: ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput
-    profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
-    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
-  }
-
-  export type AgendamentoCreateWithoutProfissionalInput = {
-    id?: string
-    dataHora: Date | string
-    status?: $Enums.StatusAgendamento
-    observacoes?: string | null
-    confirmacaoEnviada?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    dataHoraFim: Date | string
-    paciente?: PacienteCreateNestedOneWithoutAgendamentosInput
-    procedimento: ProcedimentoCreateNestedOneWithoutAgendamentosInput
-    tenant: TenantCreateNestedOneWithoutAgendamentosInput
-    atendimento?: AtendimentoCreateNestedOneWithoutAgendamentoInput
-  }
-
-  export type AgendamentoUncheckedCreateWithoutProfissionalInput = {
-    id?: string
-    tenantId: string
-    pacienteId?: string | null
-    procedimentoId: string
-    dataHora: Date | string
-    status?: $Enums.StatusAgendamento
-    observacoes?: string | null
-    confirmacaoEnviada?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    dataHoraFim: Date | string
-    atendimento?: AtendimentoUncheckedCreateNestedOneWithoutAgendamentoInput
-  }
-
-  export type AgendamentoCreateOrConnectWithoutProfissionalInput = {
-    where: AgendamentoWhereUniqueInput
-    create: XOR<AgendamentoCreateWithoutProfissionalInput, AgendamentoUncheckedCreateWithoutProfissionalInput>
-  }
-
-  export type AgendamentoCreateManyProfissionalInputEnvelope = {
-    data: AgendamentoCreateManyProfissionalInput | AgendamentoCreateManyProfissionalInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type AtendimentoCreateWithoutProfissionalInput = {
-    id?: string
-    anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamento: AgendamentoCreateNestedOneWithoutAtendimentoInput
-    paciente: PacienteCreateNestedOneWithoutAtendimentosInput
-    procedimento: ProcedimentoCreateNestedOneWithoutAtendimentosInput
-    tenant: TenantCreateNestedOneWithoutAtendimentosInput
-  }
-
-  export type AtendimentoUncheckedCreateWithoutProfissionalInput = {
-    id?: string
-    tenantId: string
-    agendamentoId: string
-    pacienteId: string
-    procedimentoId: string
-    anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type AtendimentoCreateOrConnectWithoutProfissionalInput = {
-    where: AtendimentoWhereUniqueInput
-    create: XOR<AtendimentoCreateWithoutProfissionalInput, AtendimentoUncheckedCreateWithoutProfissionalInput>
-  }
-
-  export type AtendimentoCreateManyProfissionalInputEnvelope = {
-    data: AtendimentoCreateManyProfissionalInput | AtendimentoCreateManyProfissionalInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type PacienteCreateWithoutProfissionalInput = {
-    id?: string
-    nome: string
-    telefone: string
-    email?: string | null
-    observacoes?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoCreateNestedManyWithoutPacienteInput
-    atendimentos?: AtendimentoCreateNestedManyWithoutPacienteInput
-    tenant: TenantCreateNestedOneWithoutPacientesInput
-  }
-
-  export type PacienteUncheckedCreateWithoutProfissionalInput = {
-    id?: string
-    tenantId: string
-    nome: string
-    telefone: string
-    email?: string | null
-    observacoes?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutPacienteInput
-    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutPacienteInput
-  }
-
-  export type PacienteCreateOrConnectWithoutProfissionalInput = {
-    where: PacienteWhereUniqueInput
-    create: XOR<PacienteCreateWithoutProfissionalInput, PacienteUncheckedCreateWithoutProfissionalInput>
-  }
-
-  export type PacienteCreateManyProfissionalInputEnvelope = {
-    data: PacienteCreateManyProfissionalInput | PacienteCreateManyProfissionalInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type TenantCreateWithoutProfissionaisInput = {
-    id?: string
-    nome: string
-    plano?: string
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoCreateNestedManyWithoutTenantInput
-    atendimentos?: AtendimentoCreateNestedManyWithoutTenantInput
-    pacientes?: PacienteCreateNestedManyWithoutTenantInput
-    procedimentos?: ProcedimentoCreateNestedManyWithoutTenantInput
-    usuarios?: UsuarioCreateNestedManyWithoutTenantInput
-    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
-  }
-
-  export type TenantUncheckedCreateWithoutProfissionaisInput = {
-    id?: string
-    nome: string
-    plano?: string
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutTenantInput
-    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutTenantInput
-    pacientes?: PacienteUncheckedCreateNestedManyWithoutTenantInput
-    procedimentos?: ProcedimentoUncheckedCreateNestedManyWithoutTenantInput
-    usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
-    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
-  }
-
-  export type TenantCreateOrConnectWithoutProfissionaisInput = {
-    where: TenantWhereUniqueInput
-    create: XOR<TenantCreateWithoutProfissionaisInput, TenantUncheckedCreateWithoutProfissionaisInput>
-  }
-
-  export type AgendamentoUpsertWithWhereUniqueWithoutProfissionalInput = {
-    where: AgendamentoWhereUniqueInput
-    update: XOR<AgendamentoUpdateWithoutProfissionalInput, AgendamentoUncheckedUpdateWithoutProfissionalInput>
-    create: XOR<AgendamentoCreateWithoutProfissionalInput, AgendamentoUncheckedCreateWithoutProfissionalInput>
-  }
-
-  export type AgendamentoUpdateWithWhereUniqueWithoutProfissionalInput = {
-    where: AgendamentoWhereUniqueInput
-    data: XOR<AgendamentoUpdateWithoutProfissionalInput, AgendamentoUncheckedUpdateWithoutProfissionalInput>
-  }
-
-  export type AgendamentoUpdateManyWithWhereWithoutProfissionalInput = {
-    where: AgendamentoScalarWhereInput
-    data: XOR<AgendamentoUpdateManyMutationInput, AgendamentoUncheckedUpdateManyWithoutProfissionalInput>
-  }
-
-  export type AtendimentoUpsertWithWhereUniqueWithoutProfissionalInput = {
-    where: AtendimentoWhereUniqueInput
-    update: XOR<AtendimentoUpdateWithoutProfissionalInput, AtendimentoUncheckedUpdateWithoutProfissionalInput>
-    create: XOR<AtendimentoCreateWithoutProfissionalInput, AtendimentoUncheckedCreateWithoutProfissionalInput>
-  }
-
-  export type AtendimentoUpdateWithWhereUniqueWithoutProfissionalInput = {
-    where: AtendimentoWhereUniqueInput
-    data: XOR<AtendimentoUpdateWithoutProfissionalInput, AtendimentoUncheckedUpdateWithoutProfissionalInput>
-  }
-
-  export type AtendimentoUpdateManyWithWhereWithoutProfissionalInput = {
-    where: AtendimentoScalarWhereInput
-    data: XOR<AtendimentoUpdateManyMutationInput, AtendimentoUncheckedUpdateManyWithoutProfissionalInput>
-  }
-
-  export type PacienteUpsertWithWhereUniqueWithoutProfissionalInput = {
-    where: PacienteWhereUniqueInput
-    update: XOR<PacienteUpdateWithoutProfissionalInput, PacienteUncheckedUpdateWithoutProfissionalInput>
-    create: XOR<PacienteCreateWithoutProfissionalInput, PacienteUncheckedCreateWithoutProfissionalInput>
-  }
-
-  export type PacienteUpdateWithWhereUniqueWithoutProfissionalInput = {
-    where: PacienteWhereUniqueInput
-    data: XOR<PacienteUpdateWithoutProfissionalInput, PacienteUncheckedUpdateWithoutProfissionalInput>
-  }
-
-  export type PacienteUpdateManyWithWhereWithoutProfissionalInput = {
-    where: PacienteScalarWhereInput
-    data: XOR<PacienteUpdateManyMutationInput, PacienteUncheckedUpdateManyWithoutProfissionalInput>
-  }
-
-  export type TenantUpsertWithoutProfissionaisInput = {
-    update: XOR<TenantUpdateWithoutProfissionaisInput, TenantUncheckedUpdateWithoutProfissionaisInput>
-    create: XOR<TenantCreateWithoutProfissionaisInput, TenantUncheckedCreateWithoutProfissionaisInput>
-    where?: TenantWhereInput
-  }
-
-  export type TenantUpdateToOneWithWhereWithoutProfissionaisInput = {
-    where?: TenantWhereInput
-    data: XOR<TenantUpdateWithoutProfissionaisInput, TenantUncheckedUpdateWithoutProfissionaisInput>
-  }
-
-  export type TenantUpdateWithoutProfissionaisInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    plano?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUpdateManyWithoutTenantNestedInput
-    atendimentos?: AtendimentoUpdateManyWithoutTenantNestedInput
-    pacientes?: PacienteUpdateManyWithoutTenantNestedInput
-    procedimentos?: ProcedimentoUpdateManyWithoutTenantNestedInput
-    usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
-    whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
-  }
-
-  export type TenantUncheckedUpdateWithoutProfissionaisInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    plano?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUncheckedUpdateManyWithoutTenantNestedInput
-    atendimentos?: AtendimentoUncheckedUpdateManyWithoutTenantNestedInput
-    pacientes?: PacienteUncheckedUpdateManyWithoutTenantNestedInput
-    procedimentos?: ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput
-    usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
-    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
-  }
-
-  export type AgendamentoCreateWithoutPacienteInput = {
-    id?: string
-    dataHora: Date | string
-    status?: $Enums.StatusAgendamento
-    observacoes?: string | null
-    confirmacaoEnviada?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    dataHoraFim: Date | string
-    procedimento: ProcedimentoCreateNestedOneWithoutAgendamentosInput
-    profissional: ProfissionalCreateNestedOneWithoutAgendamentosInput
-    tenant: TenantCreateNestedOneWithoutAgendamentosInput
-    atendimento?: AtendimentoCreateNestedOneWithoutAgendamentoInput
-  }
-
-  export type AgendamentoUncheckedCreateWithoutPacienteInput = {
-    id?: string
-    tenantId: string
-    profissionalId: string
-    procedimentoId: string
-    dataHora: Date | string
-    status?: $Enums.StatusAgendamento
-    observacoes?: string | null
-    confirmacaoEnviada?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    dataHoraFim: Date | string
-    atendimento?: AtendimentoUncheckedCreateNestedOneWithoutAgendamentoInput
-  }
-
-  export type AgendamentoCreateOrConnectWithoutPacienteInput = {
-    where: AgendamentoWhereUniqueInput
-    create: XOR<AgendamentoCreateWithoutPacienteInput, AgendamentoUncheckedCreateWithoutPacienteInput>
-  }
-
-  export type AgendamentoCreateManyPacienteInputEnvelope = {
-    data: AgendamentoCreateManyPacienteInput | AgendamentoCreateManyPacienteInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type AtendimentoCreateWithoutPacienteInput = {
-    id?: string
-    anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamento: AgendamentoCreateNestedOneWithoutAtendimentoInput
-    procedimento: ProcedimentoCreateNestedOneWithoutAtendimentosInput
-    profissional: ProfissionalCreateNestedOneWithoutAtendimentosInput
-    tenant: TenantCreateNestedOneWithoutAtendimentosInput
-  }
-
-  export type AtendimentoUncheckedCreateWithoutPacienteInput = {
-    id?: string
-    tenantId: string
-    agendamentoId: string
-    profissionalId: string
-    procedimentoId: string
-    anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type AtendimentoCreateOrConnectWithoutPacienteInput = {
-    where: AtendimentoWhereUniqueInput
-    create: XOR<AtendimentoCreateWithoutPacienteInput, AtendimentoUncheckedCreateWithoutPacienteInput>
-  }
-
-  export type AtendimentoCreateManyPacienteInputEnvelope = {
-    data: AtendimentoCreateManyPacienteInput | AtendimentoCreateManyPacienteInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type ProfissionalCreateWithoutPacientesInput = {
-    id?: string
-    nome: string
-    especialidade?: string | null
-    observacoes?: string | null
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoCreateNestedManyWithoutProfissionalInput
-    atendimentos?: AtendimentoCreateNestedManyWithoutProfissionalInput
-    tenant: TenantCreateNestedOneWithoutProfissionaisInput
-  }
-
-  export type ProfissionalUncheckedCreateWithoutPacientesInput = {
-    id?: string
-    tenantId: string
-    nome: string
-    especialidade?: string | null
-    observacoes?: string | null
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutProfissionalInput
-    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutProfissionalInput
-  }
-
-  export type ProfissionalCreateOrConnectWithoutPacientesInput = {
-    where: ProfissionalWhereUniqueInput
-    create: XOR<ProfissionalCreateWithoutPacientesInput, ProfissionalUncheckedCreateWithoutPacientesInput>
-  }
-
-  export type TenantCreateWithoutPacientesInput = {
-    id?: string
-    nome: string
-    plano?: string
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoCreateNestedManyWithoutTenantInput
-    atendimentos?: AtendimentoCreateNestedManyWithoutTenantInput
-    procedimentos?: ProcedimentoCreateNestedManyWithoutTenantInput
-    profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
-    usuarios?: UsuarioCreateNestedManyWithoutTenantInput
-    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
-  }
-
-  export type TenantUncheckedCreateWithoutPacientesInput = {
-    id?: string
-    nome: string
-    plano?: string
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutTenantInput
-    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutTenantInput
-    procedimentos?: ProcedimentoUncheckedCreateNestedManyWithoutTenantInput
-    profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
-    usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
-    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
-  }
-
-  export type TenantCreateOrConnectWithoutPacientesInput = {
-    where: TenantWhereUniqueInput
-    create: XOR<TenantCreateWithoutPacientesInput, TenantUncheckedCreateWithoutPacientesInput>
-  }
-
-  export type AgendamentoUpsertWithWhereUniqueWithoutPacienteInput = {
-    where: AgendamentoWhereUniqueInput
-    update: XOR<AgendamentoUpdateWithoutPacienteInput, AgendamentoUncheckedUpdateWithoutPacienteInput>
-    create: XOR<AgendamentoCreateWithoutPacienteInput, AgendamentoUncheckedCreateWithoutPacienteInput>
-  }
-
-  export type AgendamentoUpdateWithWhereUniqueWithoutPacienteInput = {
-    where: AgendamentoWhereUniqueInput
-    data: XOR<AgendamentoUpdateWithoutPacienteInput, AgendamentoUncheckedUpdateWithoutPacienteInput>
-  }
-
-  export type AgendamentoUpdateManyWithWhereWithoutPacienteInput = {
-    where: AgendamentoScalarWhereInput
-    data: XOR<AgendamentoUpdateManyMutationInput, AgendamentoUncheckedUpdateManyWithoutPacienteInput>
-  }
-
-  export type AtendimentoUpsertWithWhereUniqueWithoutPacienteInput = {
-    where: AtendimentoWhereUniqueInput
-    update: XOR<AtendimentoUpdateWithoutPacienteInput, AtendimentoUncheckedUpdateWithoutPacienteInput>
-    create: XOR<AtendimentoCreateWithoutPacienteInput, AtendimentoUncheckedCreateWithoutPacienteInput>
-  }
-
-  export type AtendimentoUpdateWithWhereUniqueWithoutPacienteInput = {
-    where: AtendimentoWhereUniqueInput
-    data: XOR<AtendimentoUpdateWithoutPacienteInput, AtendimentoUncheckedUpdateWithoutPacienteInput>
-  }
-
-  export type AtendimentoUpdateManyWithWhereWithoutPacienteInput = {
-    where: AtendimentoScalarWhereInput
-    data: XOR<AtendimentoUpdateManyMutationInput, AtendimentoUncheckedUpdateManyWithoutPacienteInput>
-  }
-
-  export type ProfissionalUpsertWithoutPacientesInput = {
-    update: XOR<ProfissionalUpdateWithoutPacientesInput, ProfissionalUncheckedUpdateWithoutPacientesInput>
-    create: XOR<ProfissionalCreateWithoutPacientesInput, ProfissionalUncheckedCreateWithoutPacientesInput>
-    where?: ProfissionalWhereInput
-  }
-
-  export type ProfissionalUpdateToOneWithWhereWithoutPacientesInput = {
-    where?: ProfissionalWhereInput
-    data: XOR<ProfissionalUpdateWithoutPacientesInput, ProfissionalUncheckedUpdateWithoutPacientesInput>
-  }
-
-  export type ProfissionalUpdateWithoutPacientesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    especialidade?: NullableStringFieldUpdateOperationsInput | string | null
-    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUpdateManyWithoutProfissionalNestedInput
-    atendimentos?: AtendimentoUpdateManyWithoutProfissionalNestedInput
-    tenant?: TenantUpdateOneRequiredWithoutProfissionaisNestedInput
-  }
-
-  export type ProfissionalUncheckedUpdateWithoutPacientesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    tenantId?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    especialidade?: NullableStringFieldUpdateOperationsInput | string | null
-    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUncheckedUpdateManyWithoutProfissionalNestedInput
-    atendimentos?: AtendimentoUncheckedUpdateManyWithoutProfissionalNestedInput
-  }
-
-  export type TenantUpsertWithoutPacientesInput = {
-    update: XOR<TenantUpdateWithoutPacientesInput, TenantUncheckedUpdateWithoutPacientesInput>
-    create: XOR<TenantCreateWithoutPacientesInput, TenantUncheckedCreateWithoutPacientesInput>
-    where?: TenantWhereInput
-  }
-
-  export type TenantUpdateToOneWithWhereWithoutPacientesInput = {
-    where?: TenantWhereInput
-    data: XOR<TenantUpdateWithoutPacientesInput, TenantUncheckedUpdateWithoutPacientesInput>
-  }
-
-  export type TenantUpdateWithoutPacientesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    plano?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUpdateManyWithoutTenantNestedInput
-    atendimentos?: AtendimentoUpdateManyWithoutTenantNestedInput
-    procedimentos?: ProcedimentoUpdateManyWithoutTenantNestedInput
-    profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
-    usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
-    whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
-  }
-
-  export type TenantUncheckedUpdateWithoutPacientesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    plano?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUncheckedUpdateManyWithoutTenantNestedInput
-    atendimentos?: AtendimentoUncheckedUpdateManyWithoutTenantNestedInput
-    procedimentos?: ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput
-    profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
-    usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
-    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
-  }
-
-  export type AgendamentoCreateWithoutProcedimentoInput = {
-    id?: string
-    dataHora: Date | string
-    status?: $Enums.StatusAgendamento
-    observacoes?: string | null
-    confirmacaoEnviada?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    dataHoraFim: Date | string
-    paciente?: PacienteCreateNestedOneWithoutAgendamentosInput
-    profissional: ProfissionalCreateNestedOneWithoutAgendamentosInput
-    tenant: TenantCreateNestedOneWithoutAgendamentosInput
-    atendimento?: AtendimentoCreateNestedOneWithoutAgendamentoInput
-  }
-
-  export type AgendamentoUncheckedCreateWithoutProcedimentoInput = {
-    id?: string
-    tenantId: string
-    pacienteId?: string | null
-    profissionalId: string
-    dataHora: Date | string
-    status?: $Enums.StatusAgendamento
-    observacoes?: string | null
-    confirmacaoEnviada?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    dataHoraFim: Date | string
-    atendimento?: AtendimentoUncheckedCreateNestedOneWithoutAgendamentoInput
-  }
-
-  export type AgendamentoCreateOrConnectWithoutProcedimentoInput = {
-    where: AgendamentoWhereUniqueInput
-    create: XOR<AgendamentoCreateWithoutProcedimentoInput, AgendamentoUncheckedCreateWithoutProcedimentoInput>
-  }
-
-  export type AgendamentoCreateManyProcedimentoInputEnvelope = {
-    data: AgendamentoCreateManyProcedimentoInput | AgendamentoCreateManyProcedimentoInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type AtendimentoCreateWithoutProcedimentoInput = {
-    id?: string
-    anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamento: AgendamentoCreateNestedOneWithoutAtendimentoInput
-    paciente: PacienteCreateNestedOneWithoutAtendimentosInput
-    profissional: ProfissionalCreateNestedOneWithoutAtendimentosInput
-    tenant: TenantCreateNestedOneWithoutAtendimentosInput
-  }
-
-  export type AtendimentoUncheckedCreateWithoutProcedimentoInput = {
-    id?: string
-    tenantId: string
-    agendamentoId: string
-    pacienteId: string
-    profissionalId: string
-    anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type AtendimentoCreateOrConnectWithoutProcedimentoInput = {
-    where: AtendimentoWhereUniqueInput
-    create: XOR<AtendimentoCreateWithoutProcedimentoInput, AtendimentoUncheckedCreateWithoutProcedimentoInput>
-  }
-
-  export type AtendimentoCreateManyProcedimentoInputEnvelope = {
-    data: AtendimentoCreateManyProcedimentoInput | AtendimentoCreateManyProcedimentoInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type TenantCreateWithoutProcedimentosInput = {
-    id?: string
-    nome: string
-    plano?: string
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoCreateNestedManyWithoutTenantInput
-    atendimentos?: AtendimentoCreateNestedManyWithoutTenantInput
-    pacientes?: PacienteCreateNestedManyWithoutTenantInput
-    profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
-    usuarios?: UsuarioCreateNestedManyWithoutTenantInput
-    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
-  }
-
-  export type TenantUncheckedCreateWithoutProcedimentosInput = {
-    id?: string
-    nome: string
-    plano?: string
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutTenantInput
-    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutTenantInput
-    pacientes?: PacienteUncheckedCreateNestedManyWithoutTenantInput
-    profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
-    usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
-    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
-  }
-
-  export type TenantCreateOrConnectWithoutProcedimentosInput = {
-    where: TenantWhereUniqueInput
-    create: XOR<TenantCreateWithoutProcedimentosInput, TenantUncheckedCreateWithoutProcedimentosInput>
-  }
-
-  export type AgendamentoUpsertWithWhereUniqueWithoutProcedimentoInput = {
-    where: AgendamentoWhereUniqueInput
-    update: XOR<AgendamentoUpdateWithoutProcedimentoInput, AgendamentoUncheckedUpdateWithoutProcedimentoInput>
-    create: XOR<AgendamentoCreateWithoutProcedimentoInput, AgendamentoUncheckedCreateWithoutProcedimentoInput>
-  }
-
-  export type AgendamentoUpdateWithWhereUniqueWithoutProcedimentoInput = {
-    where: AgendamentoWhereUniqueInput
-    data: XOR<AgendamentoUpdateWithoutProcedimentoInput, AgendamentoUncheckedUpdateWithoutProcedimentoInput>
-  }
-
-  export type AgendamentoUpdateManyWithWhereWithoutProcedimentoInput = {
-    where: AgendamentoScalarWhereInput
-    data: XOR<AgendamentoUpdateManyMutationInput, AgendamentoUncheckedUpdateManyWithoutProcedimentoInput>
-  }
-
-  export type AtendimentoUpsertWithWhereUniqueWithoutProcedimentoInput = {
-    where: AtendimentoWhereUniqueInput
-    update: XOR<AtendimentoUpdateWithoutProcedimentoInput, AtendimentoUncheckedUpdateWithoutProcedimentoInput>
-    create: XOR<AtendimentoCreateWithoutProcedimentoInput, AtendimentoUncheckedCreateWithoutProcedimentoInput>
-  }
-
-  export type AtendimentoUpdateWithWhereUniqueWithoutProcedimentoInput = {
-    where: AtendimentoWhereUniqueInput
-    data: XOR<AtendimentoUpdateWithoutProcedimentoInput, AtendimentoUncheckedUpdateWithoutProcedimentoInput>
-  }
-
-  export type AtendimentoUpdateManyWithWhereWithoutProcedimentoInput = {
-    where: AtendimentoScalarWhereInput
-    data: XOR<AtendimentoUpdateManyMutationInput, AtendimentoUncheckedUpdateManyWithoutProcedimentoInput>
-  }
-
-  export type TenantUpsertWithoutProcedimentosInput = {
-    update: XOR<TenantUpdateWithoutProcedimentosInput, TenantUncheckedUpdateWithoutProcedimentosInput>
-    create: XOR<TenantCreateWithoutProcedimentosInput, TenantUncheckedCreateWithoutProcedimentosInput>
-    where?: TenantWhereInput
-  }
-
-  export type TenantUpdateToOneWithWhereWithoutProcedimentosInput = {
-    where?: TenantWhereInput
-    data: XOR<TenantUpdateWithoutProcedimentosInput, TenantUncheckedUpdateWithoutProcedimentosInput>
-  }
-
-  export type TenantUpdateWithoutProcedimentosInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    plano?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUpdateManyWithoutTenantNestedInput
-    atendimentos?: AtendimentoUpdateManyWithoutTenantNestedInput
-    pacientes?: PacienteUpdateManyWithoutTenantNestedInput
-    profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
-    usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
-    whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
-  }
-
-  export type TenantUncheckedUpdateWithoutProcedimentosInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    plano?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUncheckedUpdateManyWithoutTenantNestedInput
-    atendimentos?: AtendimentoUncheckedUpdateManyWithoutTenantNestedInput
-    pacientes?: PacienteUncheckedUpdateManyWithoutTenantNestedInput
-    profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
-    usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
-    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
-  }
-
-  export type PacienteCreateWithoutAgendamentosInput = {
-    id?: string
-    nome: string
-    telefone: string
-    email?: string | null
-    observacoes?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    atendimentos?: AtendimentoCreateNestedManyWithoutPacienteInput
-    profissional?: ProfissionalCreateNestedOneWithoutPacientesInput
-    tenant: TenantCreateNestedOneWithoutPacientesInput
-  }
-
-  export type PacienteUncheckedCreateWithoutAgendamentosInput = {
-    id?: string
-    tenantId: string
-    profissionalId?: string | null
-    nome: string
-    telefone: string
-    email?: string | null
-    observacoes?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutPacienteInput
-  }
-
-  export type PacienteCreateOrConnectWithoutAgendamentosInput = {
-    where: PacienteWhereUniqueInput
-    create: XOR<PacienteCreateWithoutAgendamentosInput, PacienteUncheckedCreateWithoutAgendamentosInput>
-  }
-
-  export type ProcedimentoCreateWithoutAgendamentosInput = {
-    id?: string
-    nome: string
-    valor?: Decimal | DecimalJsLike | number | string | null
-    duracaoMinutos: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    atendimentos?: AtendimentoCreateNestedManyWithoutProcedimentoInput
-    tenant: TenantCreateNestedOneWithoutProcedimentosInput
-  }
-
-  export type ProcedimentoUncheckedCreateWithoutAgendamentosInput = {
-    id?: string
-    tenantId: string
-    nome: string
-    valor?: Decimal | DecimalJsLike | number | string | null
-    duracaoMinutos: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutProcedimentoInput
-  }
-
-  export type ProcedimentoCreateOrConnectWithoutAgendamentosInput = {
-    where: ProcedimentoWhereUniqueInput
-    create: XOR<ProcedimentoCreateWithoutAgendamentosInput, ProcedimentoUncheckedCreateWithoutAgendamentosInput>
-  }
-
-  export type ProfissionalCreateWithoutAgendamentosInput = {
-    id?: string
-    nome: string
-    especialidade?: string | null
-    observacoes?: string | null
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    atendimentos?: AtendimentoCreateNestedManyWithoutProfissionalInput
-    pacientes?: PacienteCreateNestedManyWithoutProfissionalInput
-    tenant: TenantCreateNestedOneWithoutProfissionaisInput
-  }
-
-  export type ProfissionalUncheckedCreateWithoutAgendamentosInput = {
-    id?: string
-    tenantId: string
-    nome: string
-    especialidade?: string | null
-    observacoes?: string | null
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutProfissionalInput
-    pacientes?: PacienteUncheckedCreateNestedManyWithoutProfissionalInput
-  }
-
-  export type ProfissionalCreateOrConnectWithoutAgendamentosInput = {
-    where: ProfissionalWhereUniqueInput
-    create: XOR<ProfissionalCreateWithoutAgendamentosInput, ProfissionalUncheckedCreateWithoutAgendamentosInput>
-  }
-
-  export type TenantCreateWithoutAgendamentosInput = {
-    id?: string
-    nome: string
-    plano?: string
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    atendimentos?: AtendimentoCreateNestedManyWithoutTenantInput
-    pacientes?: PacienteCreateNestedManyWithoutTenantInput
-    procedimentos?: ProcedimentoCreateNestedManyWithoutTenantInput
-    profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
-    usuarios?: UsuarioCreateNestedManyWithoutTenantInput
-    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
-  }
-
-  export type TenantUncheckedCreateWithoutAgendamentosInput = {
-    id?: string
-    nome: string
-    plano?: string
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutTenantInput
-    pacientes?: PacienteUncheckedCreateNestedManyWithoutTenantInput
-    procedimentos?: ProcedimentoUncheckedCreateNestedManyWithoutTenantInput
-    profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
-    usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
-    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
-  }
-
-  export type TenantCreateOrConnectWithoutAgendamentosInput = {
-    where: TenantWhereUniqueInput
-    create: XOR<TenantCreateWithoutAgendamentosInput, TenantUncheckedCreateWithoutAgendamentosInput>
-  }
-
-  export type AtendimentoCreateWithoutAgendamentoInput = {
-    id?: string
-    anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    paciente: PacienteCreateNestedOneWithoutAtendimentosInput
-    procedimento: ProcedimentoCreateNestedOneWithoutAtendimentosInput
-    profissional: ProfissionalCreateNestedOneWithoutAtendimentosInput
-    tenant: TenantCreateNestedOneWithoutAtendimentosInput
-  }
-
-  export type AtendimentoUncheckedCreateWithoutAgendamentoInput = {
-    id?: string
-    tenantId: string
-    pacienteId: string
-    profissionalId: string
-    procedimentoId: string
-    anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type AtendimentoCreateOrConnectWithoutAgendamentoInput = {
-    where: AtendimentoWhereUniqueInput
-    create: XOR<AtendimentoCreateWithoutAgendamentoInput, AtendimentoUncheckedCreateWithoutAgendamentoInput>
-  }
-
-  export type PacienteUpsertWithoutAgendamentosInput = {
-    update: XOR<PacienteUpdateWithoutAgendamentosInput, PacienteUncheckedUpdateWithoutAgendamentosInput>
-    create: XOR<PacienteCreateWithoutAgendamentosInput, PacienteUncheckedCreateWithoutAgendamentosInput>
-    where?: PacienteWhereInput
-  }
-
-  export type PacienteUpdateToOneWithWhereWithoutAgendamentosInput = {
-    where?: PacienteWhereInput
-    data: XOR<PacienteUpdateWithoutAgendamentosInput, PacienteUncheckedUpdateWithoutAgendamentosInput>
-  }
-
-  export type PacienteUpdateWithoutAgendamentosInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    telefone?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    atendimentos?: AtendimentoUpdateManyWithoutPacienteNestedInput
-    profissional?: ProfissionalUpdateOneWithoutPacientesNestedInput
-    tenant?: TenantUpdateOneRequiredWithoutPacientesNestedInput
-  }
-
-  export type PacienteUncheckedUpdateWithoutAgendamentosInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    tenantId?: StringFieldUpdateOperationsInput | string
-    profissionalId?: NullableStringFieldUpdateOperationsInput | string | null
-    nome?: StringFieldUpdateOperationsInput | string
-    telefone?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    atendimentos?: AtendimentoUncheckedUpdateManyWithoutPacienteNestedInput
-  }
-
-  export type ProcedimentoUpsertWithoutAgendamentosInput = {
-    update: XOR<ProcedimentoUpdateWithoutAgendamentosInput, ProcedimentoUncheckedUpdateWithoutAgendamentosInput>
-    create: XOR<ProcedimentoCreateWithoutAgendamentosInput, ProcedimentoUncheckedCreateWithoutAgendamentosInput>
-    where?: ProcedimentoWhereInput
-  }
-
-  export type ProcedimentoUpdateToOneWithWhereWithoutAgendamentosInput = {
-    where?: ProcedimentoWhereInput
-    data: XOR<ProcedimentoUpdateWithoutAgendamentosInput, ProcedimentoUncheckedUpdateWithoutAgendamentosInput>
-  }
-
-  export type ProcedimentoUpdateWithoutAgendamentosInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    valor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    duracaoMinutos?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    atendimentos?: AtendimentoUpdateManyWithoutProcedimentoNestedInput
-    tenant?: TenantUpdateOneRequiredWithoutProcedimentosNestedInput
-  }
-
-  export type ProcedimentoUncheckedUpdateWithoutAgendamentosInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    tenantId?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    valor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    duracaoMinutos?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    atendimentos?: AtendimentoUncheckedUpdateManyWithoutProcedimentoNestedInput
-  }
-
-  export type ProfissionalUpsertWithoutAgendamentosInput = {
-    update: XOR<ProfissionalUpdateWithoutAgendamentosInput, ProfissionalUncheckedUpdateWithoutAgendamentosInput>
-    create: XOR<ProfissionalCreateWithoutAgendamentosInput, ProfissionalUncheckedCreateWithoutAgendamentosInput>
-    where?: ProfissionalWhereInput
-  }
-
-  export type ProfissionalUpdateToOneWithWhereWithoutAgendamentosInput = {
-    where?: ProfissionalWhereInput
-    data: XOR<ProfissionalUpdateWithoutAgendamentosInput, ProfissionalUncheckedUpdateWithoutAgendamentosInput>
-  }
-
-  export type ProfissionalUpdateWithoutAgendamentosInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    especialidade?: NullableStringFieldUpdateOperationsInput | string | null
-    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    atendimentos?: AtendimentoUpdateManyWithoutProfissionalNestedInput
-    pacientes?: PacienteUpdateManyWithoutProfissionalNestedInput
-    tenant?: TenantUpdateOneRequiredWithoutProfissionaisNestedInput
-  }
-
-  export type ProfissionalUncheckedUpdateWithoutAgendamentosInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    tenantId?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    especialidade?: NullableStringFieldUpdateOperationsInput | string | null
-    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    atendimentos?: AtendimentoUncheckedUpdateManyWithoutProfissionalNestedInput
-    pacientes?: PacienteUncheckedUpdateManyWithoutProfissionalNestedInput
-  }
-
-  export type TenantUpsertWithoutAgendamentosInput = {
-    update: XOR<TenantUpdateWithoutAgendamentosInput, TenantUncheckedUpdateWithoutAgendamentosInput>
-    create: XOR<TenantCreateWithoutAgendamentosInput, TenantUncheckedCreateWithoutAgendamentosInput>
-    where?: TenantWhereInput
-  }
-
-  export type TenantUpdateToOneWithWhereWithoutAgendamentosInput = {
-    where?: TenantWhereInput
-    data: XOR<TenantUpdateWithoutAgendamentosInput, TenantUncheckedUpdateWithoutAgendamentosInput>
-  }
-
-  export type TenantUpdateWithoutAgendamentosInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    plano?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    atendimentos?: AtendimentoUpdateManyWithoutTenantNestedInput
-    pacientes?: PacienteUpdateManyWithoutTenantNestedInput
-    procedimentos?: ProcedimentoUpdateManyWithoutTenantNestedInput
-    profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
-    usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
-    whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
-  }
-
-  export type TenantUncheckedUpdateWithoutAgendamentosInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    plano?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    atendimentos?: AtendimentoUncheckedUpdateManyWithoutTenantNestedInput
-    pacientes?: PacienteUncheckedUpdateManyWithoutTenantNestedInput
-    procedimentos?: ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput
-    profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
-    usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
-    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
-  }
-
-  export type AtendimentoUpsertWithoutAgendamentoInput = {
-    update: XOR<AtendimentoUpdateWithoutAgendamentoInput, AtendimentoUncheckedUpdateWithoutAgendamentoInput>
-    create: XOR<AtendimentoCreateWithoutAgendamentoInput, AtendimentoUncheckedCreateWithoutAgendamentoInput>
-    where?: AtendimentoWhereInput
-  }
-
-  export type AtendimentoUpdateToOneWithWhereWithoutAgendamentoInput = {
-    where?: AtendimentoWhereInput
-    data: XOR<AtendimentoUpdateWithoutAgendamentoInput, AtendimentoUncheckedUpdateWithoutAgendamentoInput>
-  }
-
-  export type AtendimentoUpdateWithoutAgendamentoInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    paciente?: PacienteUpdateOneRequiredWithoutAtendimentosNestedInput
-    procedimento?: ProcedimentoUpdateOneRequiredWithoutAtendimentosNestedInput
-    profissional?: ProfissionalUpdateOneRequiredWithoutAtendimentosNestedInput
-    tenant?: TenantUpdateOneRequiredWithoutAtendimentosNestedInput
-  }
-
-  export type AtendimentoUncheckedUpdateWithoutAgendamentoInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    tenantId?: StringFieldUpdateOperationsInput | string
-    pacienteId?: StringFieldUpdateOperationsInput | string
-    profissionalId?: StringFieldUpdateOperationsInput | string
-    procedimentoId?: StringFieldUpdateOperationsInput | string
-    anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AgendamentoCreateWithoutAtendimentoInput = {
-    id?: string
-    dataHora: Date | string
-    status?: $Enums.StatusAgendamento
-    observacoes?: string | null
-    confirmacaoEnviada?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    dataHoraFim: Date | string
-    paciente?: PacienteCreateNestedOneWithoutAgendamentosInput
-    procedimento: ProcedimentoCreateNestedOneWithoutAgendamentosInput
-    profissional: ProfissionalCreateNestedOneWithoutAgendamentosInput
-    tenant: TenantCreateNestedOneWithoutAgendamentosInput
-  }
-
-  export type AgendamentoUncheckedCreateWithoutAtendimentoInput = {
-    id?: string
-    tenantId: string
-    pacienteId?: string | null
-    profissionalId: string
-    procedimentoId: string
-    dataHora: Date | string
-    status?: $Enums.StatusAgendamento
-    observacoes?: string | null
-    confirmacaoEnviada?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    dataHoraFim: Date | string
-  }
-
-  export type AgendamentoCreateOrConnectWithoutAtendimentoInput = {
-    where: AgendamentoWhereUniqueInput
-    create: XOR<AgendamentoCreateWithoutAtendimentoInput, AgendamentoUncheckedCreateWithoutAtendimentoInput>
-  }
-
-  export type PacienteCreateWithoutAtendimentosInput = {
-    id?: string
-    nome: string
-    telefone: string
-    email?: string | null
-    observacoes?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoCreateNestedManyWithoutPacienteInput
-    profissional?: ProfissionalCreateNestedOneWithoutPacientesInput
-    tenant: TenantCreateNestedOneWithoutPacientesInput
-  }
-
-  export type PacienteUncheckedCreateWithoutAtendimentosInput = {
-    id?: string
-    tenantId: string
-    profissionalId?: string | null
-    nome: string
-    telefone: string
-    email?: string | null
-    observacoes?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutPacienteInput
-  }
-
-  export type PacienteCreateOrConnectWithoutAtendimentosInput = {
-    where: PacienteWhereUniqueInput
-    create: XOR<PacienteCreateWithoutAtendimentosInput, PacienteUncheckedCreateWithoutAtendimentosInput>
-  }
-
-  export type ProcedimentoCreateWithoutAtendimentosInput = {
-    id?: string
-    nome: string
-    valor?: Decimal | DecimalJsLike | number | string | null
-    duracaoMinutos: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoCreateNestedManyWithoutProcedimentoInput
-    tenant: TenantCreateNestedOneWithoutProcedimentosInput
-  }
-
-  export type ProcedimentoUncheckedCreateWithoutAtendimentosInput = {
-    id?: string
-    tenantId: string
-    nome: string
-    valor?: Decimal | DecimalJsLike | number | string | null
-    duracaoMinutos: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutProcedimentoInput
-  }
-
-  export type ProcedimentoCreateOrConnectWithoutAtendimentosInput = {
-    where: ProcedimentoWhereUniqueInput
-    create: XOR<ProcedimentoCreateWithoutAtendimentosInput, ProcedimentoUncheckedCreateWithoutAtendimentosInput>
-  }
-
-  export type ProfissionalCreateWithoutAtendimentosInput = {
-    id?: string
-    nome: string
-    especialidade?: string | null
-    observacoes?: string | null
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoCreateNestedManyWithoutProfissionalInput
-    pacientes?: PacienteCreateNestedManyWithoutProfissionalInput
-    tenant: TenantCreateNestedOneWithoutProfissionaisInput
-  }
-
-  export type ProfissionalUncheckedCreateWithoutAtendimentosInput = {
-    id?: string
-    tenantId: string
-    nome: string
-    especialidade?: string | null
-    observacoes?: string | null
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutProfissionalInput
-    pacientes?: PacienteUncheckedCreateNestedManyWithoutProfissionalInput
-  }
-
-  export type ProfissionalCreateOrConnectWithoutAtendimentosInput = {
-    where: ProfissionalWhereUniqueInput
-    create: XOR<ProfissionalCreateWithoutAtendimentosInput, ProfissionalUncheckedCreateWithoutAtendimentosInput>
-  }
-
-  export type TenantCreateWithoutAtendimentosInput = {
-    id?: string
-    nome: string
-    plano?: string
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoCreateNestedManyWithoutTenantInput
-    pacientes?: PacienteCreateNestedManyWithoutTenantInput
-    procedimentos?: ProcedimentoCreateNestedManyWithoutTenantInput
-    profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
-    usuarios?: UsuarioCreateNestedManyWithoutTenantInput
-    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
-  }
-
-  export type TenantUncheckedCreateWithoutAtendimentosInput = {
-    id?: string
-    nome: string
-    plano?: string
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutTenantInput
-    pacientes?: PacienteUncheckedCreateNestedManyWithoutTenantInput
-    procedimentos?: ProcedimentoUncheckedCreateNestedManyWithoutTenantInput
-    profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
-    usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
-    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
-  }
-
-  export type TenantCreateOrConnectWithoutAtendimentosInput = {
-    where: TenantWhereUniqueInput
-    create: XOR<TenantCreateWithoutAtendimentosInput, TenantUncheckedCreateWithoutAtendimentosInput>
-  }
-
-  export type AgendamentoUpsertWithoutAtendimentoInput = {
-    update: XOR<AgendamentoUpdateWithoutAtendimentoInput, AgendamentoUncheckedUpdateWithoutAtendimentoInput>
-    create: XOR<AgendamentoCreateWithoutAtendimentoInput, AgendamentoUncheckedCreateWithoutAtendimentoInput>
-    where?: AgendamentoWhereInput
-  }
-
-  export type AgendamentoUpdateToOneWithWhereWithoutAtendimentoInput = {
-    where?: AgendamentoWhereInput
-    data: XOR<AgendamentoUpdateWithoutAtendimentoInput, AgendamentoUncheckedUpdateWithoutAtendimentoInput>
-  }
-
-  export type AgendamentoUpdateWithoutAtendimentoInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
-    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
-    paciente?: PacienteUpdateOneWithoutAgendamentosNestedInput
-    procedimento?: ProcedimentoUpdateOneRequiredWithoutAgendamentosNestedInput
-    profissional?: ProfissionalUpdateOneRequiredWithoutAgendamentosNestedInput
-    tenant?: TenantUpdateOneRequiredWithoutAgendamentosNestedInput
-  }
-
-  export type AgendamentoUncheckedUpdateWithoutAtendimentoInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    tenantId?: StringFieldUpdateOperationsInput | string
-    pacienteId?: NullableStringFieldUpdateOperationsInput | string | null
-    profissionalId?: StringFieldUpdateOperationsInput | string
-    procedimentoId?: StringFieldUpdateOperationsInput | string
-    dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
-    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type PacienteUpsertWithoutAtendimentosInput = {
-    update: XOR<PacienteUpdateWithoutAtendimentosInput, PacienteUncheckedUpdateWithoutAtendimentosInput>
-    create: XOR<PacienteCreateWithoutAtendimentosInput, PacienteUncheckedCreateWithoutAtendimentosInput>
-    where?: PacienteWhereInput
-  }
-
-  export type PacienteUpdateToOneWithWhereWithoutAtendimentosInput = {
-    where?: PacienteWhereInput
-    data: XOR<PacienteUpdateWithoutAtendimentosInput, PacienteUncheckedUpdateWithoutAtendimentosInput>
-  }
-
-  export type PacienteUpdateWithoutAtendimentosInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    telefone?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUpdateManyWithoutPacienteNestedInput
-    profissional?: ProfissionalUpdateOneWithoutPacientesNestedInput
-    tenant?: TenantUpdateOneRequiredWithoutPacientesNestedInput
-  }
-
-  export type PacienteUncheckedUpdateWithoutAtendimentosInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    tenantId?: StringFieldUpdateOperationsInput | string
-    profissionalId?: NullableStringFieldUpdateOperationsInput | string | null
-    nome?: StringFieldUpdateOperationsInput | string
-    telefone?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUncheckedUpdateManyWithoutPacienteNestedInput
-  }
-
-  export type ProcedimentoUpsertWithoutAtendimentosInput = {
-    update: XOR<ProcedimentoUpdateWithoutAtendimentosInput, ProcedimentoUncheckedUpdateWithoutAtendimentosInput>
-    create: XOR<ProcedimentoCreateWithoutAtendimentosInput, ProcedimentoUncheckedCreateWithoutAtendimentosInput>
-    where?: ProcedimentoWhereInput
-  }
-
-  export type ProcedimentoUpdateToOneWithWhereWithoutAtendimentosInput = {
-    where?: ProcedimentoWhereInput
-    data: XOR<ProcedimentoUpdateWithoutAtendimentosInput, ProcedimentoUncheckedUpdateWithoutAtendimentosInput>
-  }
-
-  export type ProcedimentoUpdateWithoutAtendimentosInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    valor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    duracaoMinutos?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUpdateManyWithoutProcedimentoNestedInput
-    tenant?: TenantUpdateOneRequiredWithoutProcedimentosNestedInput
-  }
-
-  export type ProcedimentoUncheckedUpdateWithoutAtendimentosInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    tenantId?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    valor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    duracaoMinutos?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUncheckedUpdateManyWithoutProcedimentoNestedInput
-  }
-
-  export type ProfissionalUpsertWithoutAtendimentosInput = {
-    update: XOR<ProfissionalUpdateWithoutAtendimentosInput, ProfissionalUncheckedUpdateWithoutAtendimentosInput>
-    create: XOR<ProfissionalCreateWithoutAtendimentosInput, ProfissionalUncheckedCreateWithoutAtendimentosInput>
-    where?: ProfissionalWhereInput
-  }
-
-  export type ProfissionalUpdateToOneWithWhereWithoutAtendimentosInput = {
-    where?: ProfissionalWhereInput
-    data: XOR<ProfissionalUpdateWithoutAtendimentosInput, ProfissionalUncheckedUpdateWithoutAtendimentosInput>
-  }
-
-  export type ProfissionalUpdateWithoutAtendimentosInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    especialidade?: NullableStringFieldUpdateOperationsInput | string | null
-    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUpdateManyWithoutProfissionalNestedInput
-    pacientes?: PacienteUpdateManyWithoutProfissionalNestedInput
-    tenant?: TenantUpdateOneRequiredWithoutProfissionaisNestedInput
-  }
-
-  export type ProfissionalUncheckedUpdateWithoutAtendimentosInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    tenantId?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    especialidade?: NullableStringFieldUpdateOperationsInput | string | null
-    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUncheckedUpdateManyWithoutProfissionalNestedInput
-    pacientes?: PacienteUncheckedUpdateManyWithoutProfissionalNestedInput
-  }
-
-  export type TenantUpsertWithoutAtendimentosInput = {
-    update: XOR<TenantUpdateWithoutAtendimentosInput, TenantUncheckedUpdateWithoutAtendimentosInput>
-    create: XOR<TenantCreateWithoutAtendimentosInput, TenantUncheckedCreateWithoutAtendimentosInput>
-    where?: TenantWhereInput
-  }
-
-  export type TenantUpdateToOneWithWhereWithoutAtendimentosInput = {
-    where?: TenantWhereInput
-    data: XOR<TenantUpdateWithoutAtendimentosInput, TenantUncheckedUpdateWithoutAtendimentosInput>
-  }
-
-  export type TenantUpdateWithoutAtendimentosInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    plano?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUpdateManyWithoutTenantNestedInput
-    pacientes?: PacienteUpdateManyWithoutTenantNestedInput
-    procedimentos?: ProcedimentoUpdateManyWithoutTenantNestedInput
-    profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
-    usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
-    whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
-  }
-
-  export type TenantUncheckedUpdateWithoutAtendimentosInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    plano?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUncheckedUpdateManyWithoutTenantNestedInput
-    pacientes?: PacienteUncheckedUpdateManyWithoutTenantNestedInput
-    procedimentos?: ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput
-    profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
-    usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
-    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
-  }
-
-  export type TenantCreateWithoutWhatsappConfigInput = {
-    id?: string
-    nome: string
-    plano?: string
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoCreateNestedManyWithoutTenantInput
-    atendimentos?: AtendimentoCreateNestedManyWithoutTenantInput
-    pacientes?: PacienteCreateNestedManyWithoutTenantInput
-    procedimentos?: ProcedimentoCreateNestedManyWithoutTenantInput
-    profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
-    usuarios?: UsuarioCreateNestedManyWithoutTenantInput
-  }
-
-  export type TenantUncheckedCreateWithoutWhatsappConfigInput = {
-    id?: string
-    nome: string
-    plano?: string
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutTenantInput
-    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutTenantInput
-    pacientes?: PacienteUncheckedCreateNestedManyWithoutTenantInput
-    procedimentos?: ProcedimentoUncheckedCreateNestedManyWithoutTenantInput
-    profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
-    usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
-  }
-
-  export type TenantCreateOrConnectWithoutWhatsappConfigInput = {
-    where: TenantWhereUniqueInput
-    create: XOR<TenantCreateWithoutWhatsappConfigInput, TenantUncheckedCreateWithoutWhatsappConfigInput>
-  }
-
-  export type TenantUpsertWithoutWhatsappConfigInput = {
-    update: XOR<TenantUpdateWithoutWhatsappConfigInput, TenantUncheckedUpdateWithoutWhatsappConfigInput>
-    create: XOR<TenantCreateWithoutWhatsappConfigInput, TenantUncheckedCreateWithoutWhatsappConfigInput>
-    where?: TenantWhereInput
-  }
-
-  export type TenantUpdateToOneWithWhereWithoutWhatsappConfigInput = {
-    where?: TenantWhereInput
-    data: XOR<TenantUpdateWithoutWhatsappConfigInput, TenantUncheckedUpdateWithoutWhatsappConfigInput>
-  }
-
-  export type TenantUpdateWithoutWhatsappConfigInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    plano?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUpdateManyWithoutTenantNestedInput
-    atendimentos?: AtendimentoUpdateManyWithoutTenantNestedInput
-    pacientes?: PacienteUpdateManyWithoutTenantNestedInput
-    procedimentos?: ProcedimentoUpdateManyWithoutTenantNestedInput
-    profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
-    usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
-  }
-
-  export type TenantUncheckedUpdateWithoutWhatsappConfigInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    plano?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUncheckedUpdateManyWithoutTenantNestedInput
-    atendimentos?: AtendimentoUncheckedUpdateManyWithoutTenantNestedInput
-    pacientes?: PacienteUncheckedUpdateManyWithoutTenantNestedInput
-    procedimentos?: ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput
-    profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
-    usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
-  }
-
-  export type AgendamentoCreateManyTenantInput = {
-    id?: string
-    pacienteId?: string | null
-    profissionalId: string
-    procedimentoId: string
-    dataHora: Date | string
-    status?: $Enums.StatusAgendamento
-    observacoes?: string | null
-    confirmacaoEnviada?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    dataHoraFim: Date | string
-  }
-
-  export type AtendimentoCreateManyTenantInput = {
-    id?: string
-    agendamentoId: string
-    pacienteId: string
-    profissionalId: string
-    procedimentoId: string
-    anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type PacienteCreateManyTenantInput = {
-    id?: string
-    profissionalId?: string | null
-    nome: string
-    telefone: string
-    email?: string | null
-    observacoes?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type ProcedimentoCreateManyTenantInput = {
-    id?: string
-    nome: string
-    valor?: Decimal | DecimalJsLike | number | string | null
-    duracaoMinutos: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type ProfissionalCreateManyTenantInput = {
-    id?: string
-    nome: string
-    especialidade?: string | null
-    observacoes?: string | null
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type UsuarioCreateManyTenantInput = {
-    id?: string
-    nome: string
-    email: string
-    senha: string
-    tipo?: $Enums.TipoUsuario
-    ativo?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type AgendamentoUpdateWithoutTenantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
-    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
-    paciente?: PacienteUpdateOneWithoutAgendamentosNestedInput
-    procedimento?: ProcedimentoUpdateOneRequiredWithoutAgendamentosNestedInput
-    profissional?: ProfissionalUpdateOneRequiredWithoutAgendamentosNestedInput
-    atendimento?: AtendimentoUpdateOneWithoutAgendamentoNestedInput
-  }
-
-  export type AgendamentoUncheckedUpdateWithoutTenantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    pacienteId?: NullableStringFieldUpdateOperationsInput | string | null
-    profissionalId?: StringFieldUpdateOperationsInput | string
-    procedimentoId?: StringFieldUpdateOperationsInput | string
-    dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
-    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
-    atendimento?: AtendimentoUncheckedUpdateOneWithoutAgendamentoNestedInput
-  }
-
-  export type AgendamentoUncheckedUpdateManyWithoutTenantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    pacienteId?: NullableStringFieldUpdateOperationsInput | string | null
-    profissionalId?: StringFieldUpdateOperationsInput | string
-    procedimentoId?: StringFieldUpdateOperationsInput | string
-    dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
-    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AtendimentoUpdateWithoutTenantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamento?: AgendamentoUpdateOneRequiredWithoutAtendimentoNestedInput
-    paciente?: PacienteUpdateOneRequiredWithoutAtendimentosNestedInput
-    procedimento?: ProcedimentoUpdateOneRequiredWithoutAtendimentosNestedInput
-    profissional?: ProfissionalUpdateOneRequiredWithoutAtendimentosNestedInput
-  }
-
-  export type AtendimentoUncheckedUpdateWithoutTenantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    agendamentoId?: StringFieldUpdateOperationsInput | string
-    pacienteId?: StringFieldUpdateOperationsInput | string
-    profissionalId?: StringFieldUpdateOperationsInput | string
-    procedimentoId?: StringFieldUpdateOperationsInput | string
-    anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AtendimentoUncheckedUpdateManyWithoutTenantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    agendamentoId?: StringFieldUpdateOperationsInput | string
-    pacienteId?: StringFieldUpdateOperationsInput | string
-    profissionalId?: StringFieldUpdateOperationsInput | string
-    procedimentoId?: StringFieldUpdateOperationsInput | string
-    anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type PacienteUpdateWithoutTenantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    telefone?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUpdateManyWithoutPacienteNestedInput
-    atendimentos?: AtendimentoUpdateManyWithoutPacienteNestedInput
-    profissional?: ProfissionalUpdateOneWithoutPacientesNestedInput
-  }
-
-  export type PacienteUncheckedUpdateWithoutTenantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    profissionalId?: NullableStringFieldUpdateOperationsInput | string | null
-    nome?: StringFieldUpdateOperationsInput | string
-    telefone?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUncheckedUpdateManyWithoutPacienteNestedInput
-    atendimentos?: AtendimentoUncheckedUpdateManyWithoutPacienteNestedInput
-  }
-
-  export type PacienteUncheckedUpdateManyWithoutTenantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    profissionalId?: NullableStringFieldUpdateOperationsInput | string | null
-    nome?: StringFieldUpdateOperationsInput | string
-    telefone?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ProcedimentoUpdateWithoutTenantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    valor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    duracaoMinutos?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUpdateManyWithoutProcedimentoNestedInput
-    atendimentos?: AtendimentoUpdateManyWithoutProcedimentoNestedInput
-  }
-
-  export type ProcedimentoUncheckedUpdateWithoutTenantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    valor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    duracaoMinutos?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUncheckedUpdateManyWithoutProcedimentoNestedInput
-    atendimentos?: AtendimentoUncheckedUpdateManyWithoutProcedimentoNestedInput
-  }
-
-  export type ProcedimentoUncheckedUpdateManyWithoutTenantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    valor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    duracaoMinutos?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ProfissionalUpdateWithoutTenantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    especialidade?: NullableStringFieldUpdateOperationsInput | string | null
-    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUpdateManyWithoutProfissionalNestedInput
-    atendimentos?: AtendimentoUpdateManyWithoutProfissionalNestedInput
-    pacientes?: PacienteUpdateManyWithoutProfissionalNestedInput
-  }
-
-  export type ProfissionalUncheckedUpdateWithoutTenantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    especialidade?: NullableStringFieldUpdateOperationsInput | string | null
-    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUncheckedUpdateManyWithoutProfissionalNestedInput
-    atendimentos?: AtendimentoUncheckedUpdateManyWithoutProfissionalNestedInput
-    pacientes?: PacienteUncheckedUpdateManyWithoutProfissionalNestedInput
-  }
-
-  export type ProfissionalUncheckedUpdateManyWithoutTenantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    especialidade?: NullableStringFieldUpdateOperationsInput | string | null
-    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type UsuarioUpdateWithoutTenantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    senha?: StringFieldUpdateOperationsInput | string
-    tipo?: EnumTipoUsuarioFieldUpdateOperationsInput | $Enums.TipoUsuario
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type UsuarioUncheckedUpdateWithoutTenantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    senha?: StringFieldUpdateOperationsInput | string
-    tipo?: EnumTipoUsuarioFieldUpdateOperationsInput | $Enums.TipoUsuario
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type UsuarioUncheckedUpdateManyWithoutTenantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    senha?: StringFieldUpdateOperationsInput | string
-    tipo?: EnumTipoUsuarioFieldUpdateOperationsInput | $Enums.TipoUsuario
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type AgendamentoCreateManyProfissionalInput = {
     id?: string
     tenantId: string
@@ -18233,8 +20667,24 @@ export namespace Prisma {
     id?: string
     tenantId: string
     nome: string
+    cpf?: string | null
+    dataNascimento?: Date | string | null
     telefone: string
+    telefone2?: string | null
     email?: string | null
+    cep?: string | null
+    logradouro?: string | null
+    numero?: string | null
+    complemento?: string | null
+    bairro?: string | null
+    cidade?: string | null
+    estado?: string | null
+    alergias?: string | null
+    menorIdade?: boolean
+    responsavelNome?: string | null
+    responsavelCpf?: string | null
+    responsavelTelefone?: string | null
+    responsavelParentesco?: string | null
     observacoes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -18323,22 +20773,54 @@ export namespace Prisma {
   export type PacienteUpdateWithoutProfissionalInput = {
     id?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
+    dataNascimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     telefone?: StringFieldUpdateOperationsInput | string
+    telefone2?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    cep?: NullableStringFieldUpdateOperationsInput | string | null
+    logradouro?: NullableStringFieldUpdateOperationsInput | string | null
+    numero?: NullableStringFieldUpdateOperationsInput | string | null
+    complemento?: NullableStringFieldUpdateOperationsInput | string | null
+    bairro?: NullableStringFieldUpdateOperationsInput | string | null
+    cidade?: NullableStringFieldUpdateOperationsInput | string | null
+    estado?: NullableStringFieldUpdateOperationsInput | string | null
+    alergias?: NullableStringFieldUpdateOperationsInput | string | null
+    menorIdade?: BoolFieldUpdateOperationsInput | boolean
+    responsavelNome?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelCpf?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelTelefone?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelParentesco?: NullableStringFieldUpdateOperationsInput | string | null
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutPacientesNestedInput
     agendamentos?: AgendamentoUpdateManyWithoutPacienteNestedInput
     atendimentos?: AtendimentoUpdateManyWithoutPacienteNestedInput
-    tenant?: TenantUpdateOneRequiredWithoutPacientesNestedInput
   }
 
   export type PacienteUncheckedUpdateWithoutProfissionalInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
+    dataNascimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     telefone?: StringFieldUpdateOperationsInput | string
+    telefone2?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    cep?: NullableStringFieldUpdateOperationsInput | string | null
+    logradouro?: NullableStringFieldUpdateOperationsInput | string | null
+    numero?: NullableStringFieldUpdateOperationsInput | string | null
+    complemento?: NullableStringFieldUpdateOperationsInput | string | null
+    bairro?: NullableStringFieldUpdateOperationsInput | string | null
+    cidade?: NullableStringFieldUpdateOperationsInput | string | null
+    estado?: NullableStringFieldUpdateOperationsInput | string | null
+    alergias?: NullableStringFieldUpdateOperationsInput | string | null
+    menorIdade?: BoolFieldUpdateOperationsInput | boolean
+    responsavelNome?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelCpf?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelTelefone?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelParentesco?: NullableStringFieldUpdateOperationsInput | string | null
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18350,8 +20832,24 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
+    dataNascimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     telefone?: StringFieldUpdateOperationsInput | string
+    telefone2?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    cep?: NullableStringFieldUpdateOperationsInput | string | null
+    logradouro?: NullableStringFieldUpdateOperationsInput | string | null
+    numero?: NullableStringFieldUpdateOperationsInput | string | null
+    complemento?: NullableStringFieldUpdateOperationsInput | string | null
+    bairro?: NullableStringFieldUpdateOperationsInput | string | null
+    cidade?: NullableStringFieldUpdateOperationsInput | string | null
+    estado?: NullableStringFieldUpdateOperationsInput | string | null
+    alergias?: NullableStringFieldUpdateOperationsInput | string | null
+    menorIdade?: BoolFieldUpdateOperationsInput | boolean
+    responsavelNome?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelCpf?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelTelefone?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelParentesco?: NullableStringFieldUpdateOperationsInput | string | null
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18565,6 +21063,400 @@ export namespace Prisma {
     profissionalId?: StringFieldUpdateOperationsInput | string
     anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
     procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TenantCreateManyPlanoInput = {
+    id?: string
+    nome: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TenantUpdateWithoutPlanoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUpdateManyWithoutTenantNestedInput
+    atendimentos?: AtendimentoUpdateManyWithoutTenantNestedInput
+    pacientes?: PacienteUpdateManyWithoutTenantNestedInput
+    procedimentos?: ProcedimentoUpdateManyWithoutTenantNestedInput
+    profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
+    usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateWithoutPlanoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUncheckedUpdateManyWithoutTenantNestedInput
+    atendimentos?: AtendimentoUncheckedUpdateManyWithoutTenantNestedInput
+    pacientes?: PacienteUncheckedUpdateManyWithoutTenantNestedInput
+    procedimentos?: ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput
+    profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
+    usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateManyWithoutPlanoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgendamentoCreateManyTenantInput = {
+    id?: string
+    pacienteId?: string | null
+    profissionalId: string
+    procedimentoId: string
+    dataHora: Date | string
+    status?: $Enums.StatusAgendamento
+    observacoes?: string | null
+    confirmacaoEnviada?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dataHoraFim: Date | string
+  }
+
+  export type AtendimentoCreateManyTenantInput = {
+    id?: string
+    agendamentoId: string
+    pacienteId: string
+    profissionalId: string
+    procedimentoId: string
+    anotacoes?: string | null
+    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PacienteCreateManyTenantInput = {
+    id?: string
+    profissionalId?: string | null
+    nome: string
+    cpf?: string | null
+    dataNascimento?: Date | string | null
+    telefone: string
+    telefone2?: string | null
+    email?: string | null
+    cep?: string | null
+    logradouro?: string | null
+    numero?: string | null
+    complemento?: string | null
+    bairro?: string | null
+    cidade?: string | null
+    estado?: string | null
+    alergias?: string | null
+    menorIdade?: boolean
+    responsavelNome?: string | null
+    responsavelCpf?: string | null
+    responsavelTelefone?: string | null
+    responsavelParentesco?: string | null
+    observacoes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProcedimentoCreateManyTenantInput = {
+    id?: string
+    nome: string
+    valor?: Decimal | DecimalJsLike | number | string | null
+    duracaoMinutos: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProfissionalCreateManyTenantInput = {
+    id?: string
+    nome: string
+    especialidade?: string | null
+    observacoes?: string | null
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UsuarioCreateManyTenantInput = {
+    id?: string
+    nome: string
+    email: string
+    senha: string
+    tipo?: $Enums.TipoUsuario
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AgendamentoUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
+    paciente?: PacienteUpdateOneWithoutAgendamentosNestedInput
+    procedimento?: ProcedimentoUpdateOneRequiredWithoutAgendamentosNestedInput
+    profissional?: ProfissionalUpdateOneRequiredWithoutAgendamentosNestedInput
+    atendimento?: AtendimentoUpdateOneWithoutAgendamentoNestedInput
+  }
+
+  export type AgendamentoUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    pacienteId?: NullableStringFieldUpdateOperationsInput | string | null
+    profissionalId?: StringFieldUpdateOperationsInput | string
+    procedimentoId?: StringFieldUpdateOperationsInput | string
+    dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
+    atendimento?: AtendimentoUncheckedUpdateOneWithoutAgendamentoNestedInput
+  }
+
+  export type AgendamentoUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    pacienteId?: NullableStringFieldUpdateOperationsInput | string | null
+    profissionalId?: StringFieldUpdateOperationsInput | string
+    procedimentoId?: StringFieldUpdateOperationsInput | string
+    dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AtendimentoUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamento?: AgendamentoUpdateOneRequiredWithoutAtendimentoNestedInput
+    paciente?: PacienteUpdateOneRequiredWithoutAtendimentosNestedInput
+    procedimento?: ProcedimentoUpdateOneRequiredWithoutAtendimentosNestedInput
+    profissional?: ProfissionalUpdateOneRequiredWithoutAtendimentosNestedInput
+  }
+
+  export type AtendimentoUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    agendamentoId?: StringFieldUpdateOperationsInput | string
+    pacienteId?: StringFieldUpdateOperationsInput | string
+    profissionalId?: StringFieldUpdateOperationsInput | string
+    procedimentoId?: StringFieldUpdateOperationsInput | string
+    anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AtendimentoUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    agendamentoId?: StringFieldUpdateOperationsInput | string
+    pacienteId?: StringFieldUpdateOperationsInput | string
+    profissionalId?: StringFieldUpdateOperationsInput | string
+    procedimentoId?: StringFieldUpdateOperationsInput | string
+    anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PacienteUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
+    dataNascimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    telefone?: StringFieldUpdateOperationsInput | string
+    telefone2?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    cep?: NullableStringFieldUpdateOperationsInput | string | null
+    logradouro?: NullableStringFieldUpdateOperationsInput | string | null
+    numero?: NullableStringFieldUpdateOperationsInput | string | null
+    complemento?: NullableStringFieldUpdateOperationsInput | string | null
+    bairro?: NullableStringFieldUpdateOperationsInput | string | null
+    cidade?: NullableStringFieldUpdateOperationsInput | string | null
+    estado?: NullableStringFieldUpdateOperationsInput | string | null
+    alergias?: NullableStringFieldUpdateOperationsInput | string | null
+    menorIdade?: BoolFieldUpdateOperationsInput | boolean
+    responsavelNome?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelCpf?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelTelefone?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelParentesco?: NullableStringFieldUpdateOperationsInput | string | null
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profissional?: ProfissionalUpdateOneWithoutPacientesNestedInput
+    agendamentos?: AgendamentoUpdateManyWithoutPacienteNestedInput
+    atendimentos?: AtendimentoUpdateManyWithoutPacienteNestedInput
+  }
+
+  export type PacienteUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    profissionalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nome?: StringFieldUpdateOperationsInput | string
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
+    dataNascimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    telefone?: StringFieldUpdateOperationsInput | string
+    telefone2?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    cep?: NullableStringFieldUpdateOperationsInput | string | null
+    logradouro?: NullableStringFieldUpdateOperationsInput | string | null
+    numero?: NullableStringFieldUpdateOperationsInput | string | null
+    complemento?: NullableStringFieldUpdateOperationsInput | string | null
+    bairro?: NullableStringFieldUpdateOperationsInput | string | null
+    cidade?: NullableStringFieldUpdateOperationsInput | string | null
+    estado?: NullableStringFieldUpdateOperationsInput | string | null
+    alergias?: NullableStringFieldUpdateOperationsInput | string | null
+    menorIdade?: BoolFieldUpdateOperationsInput | boolean
+    responsavelNome?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelCpf?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelTelefone?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelParentesco?: NullableStringFieldUpdateOperationsInput | string | null
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUncheckedUpdateManyWithoutPacienteNestedInput
+    atendimentos?: AtendimentoUncheckedUpdateManyWithoutPacienteNestedInput
+  }
+
+  export type PacienteUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    profissionalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nome?: StringFieldUpdateOperationsInput | string
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
+    dataNascimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    telefone?: StringFieldUpdateOperationsInput | string
+    telefone2?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    cep?: NullableStringFieldUpdateOperationsInput | string | null
+    logradouro?: NullableStringFieldUpdateOperationsInput | string | null
+    numero?: NullableStringFieldUpdateOperationsInput | string | null
+    complemento?: NullableStringFieldUpdateOperationsInput | string | null
+    bairro?: NullableStringFieldUpdateOperationsInput | string | null
+    cidade?: NullableStringFieldUpdateOperationsInput | string | null
+    estado?: NullableStringFieldUpdateOperationsInput | string | null
+    alergias?: NullableStringFieldUpdateOperationsInput | string | null
+    menorIdade?: BoolFieldUpdateOperationsInput | boolean
+    responsavelNome?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelCpf?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelTelefone?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelParentesco?: NullableStringFieldUpdateOperationsInput | string | null
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProcedimentoUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    valor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    duracaoMinutos?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUpdateManyWithoutProcedimentoNestedInput
+    atendimentos?: AtendimentoUpdateManyWithoutProcedimentoNestedInput
+  }
+
+  export type ProcedimentoUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    valor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    duracaoMinutos?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUncheckedUpdateManyWithoutProcedimentoNestedInput
+    atendimentos?: AtendimentoUncheckedUpdateManyWithoutProcedimentoNestedInput
+  }
+
+  export type ProcedimentoUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    valor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    duracaoMinutos?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProfissionalUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    especialidade?: NullableStringFieldUpdateOperationsInput | string | null
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUpdateManyWithoutProfissionalNestedInput
+    atendimentos?: AtendimentoUpdateManyWithoutProfissionalNestedInput
+    pacientes?: PacienteUpdateManyWithoutProfissionalNestedInput
+  }
+
+  export type ProfissionalUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    especialidade?: NullableStringFieldUpdateOperationsInput | string | null
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUncheckedUpdateManyWithoutProfissionalNestedInput
+    atendimentos?: AtendimentoUncheckedUpdateManyWithoutProfissionalNestedInput
+    pacientes?: PacienteUncheckedUpdateManyWithoutProfissionalNestedInput
+  }
+
+  export type ProfissionalUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    especialidade?: NullableStringFieldUpdateOperationsInput | string | null
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UsuarioUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    senha?: StringFieldUpdateOperationsInput | string
+    tipo?: EnumTipoUsuarioFieldUpdateOperationsInput | $Enums.TipoUsuario
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UsuarioUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    senha?: StringFieldUpdateOperationsInput | string
+    tipo?: EnumTipoUsuarioFieldUpdateOperationsInput | $Enums.TipoUsuario
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UsuarioUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    senha?: StringFieldUpdateOperationsInput | string
+    tipo?: EnumTipoUsuarioFieldUpdateOperationsInput | $Enums.TipoUsuario
+    ativo?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

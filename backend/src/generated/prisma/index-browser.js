@@ -120,15 +120,6 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.TenantScalarFieldEnum = {
-  id: 'id',
-  nome: 'nome',
-  plano: 'plano',
-  ativo: 'ativo',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
 exports.Prisma.UsuarioScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -157,8 +148,24 @@ exports.Prisma.PacienteScalarFieldEnum = {
   tenantId: 'tenantId',
   profissionalId: 'profissionalId',
   nome: 'nome',
+  cpf: 'cpf',
+  dataNascimento: 'dataNascimento',
   telefone: 'telefone',
+  telefone2: 'telefone2',
   email: 'email',
+  cep: 'cep',
+  logradouro: 'logradouro',
+  numero: 'numero',
+  complemento: 'complemento',
+  bairro: 'bairro',
+  cidade: 'cidade',
+  estado: 'estado',
+  alergias: 'alergias',
+  menorIdade: 'menorIdade',
+  responsavelNome: 'responsavelNome',
+  responsavelCpf: 'responsavelCpf',
+  responsavelTelefone: 'responsavelTelefone',
+  responsavelParentesco: 'responsavelParentesco',
   observacoes: 'observacoes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -225,6 +232,34 @@ exports.Prisma.LogSistemaScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.PlanoScalarFieldEnum = {
+  id: 'id',
+  nome: 'nome',
+  slug: 'slug',
+  descricao: 'descricao',
+  profissionaisAtivos: 'profissionaisAtivos',
+  usuarios: 'usuarios',
+  agendamentosMes: 'agendamentosMes',
+  pacientes: 'pacientes',
+  armazenamentoMB: 'armazenamentoMB',
+  whatsappAtivo: 'whatsappAtivo',
+  googleCalendarSync: 'googleCalendarSync',
+  valorMensal: 'valorMensal',
+  valorAnual: 'valorAnual',
+  ativo: 'ativo',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TenantScalarFieldEnum = {
+  id: 'id',
+  nome: 'nome',
+  planoId: 'planoId',
+  ativo: 'ativo',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -279,7 +314,6 @@ exports.TipoLog = exports.$Enums.TipoLog = {
 };
 
 exports.Prisma.ModelName = {
-  Tenant: 'Tenant',
   Usuario: 'Usuario',
   Profissional: 'Profissional',
   Paciente: 'Paciente',
@@ -287,7 +321,9 @@ exports.Prisma.ModelName = {
   Agendamento: 'Agendamento',
   Atendimento: 'Atendimento',
   WhatsAppConfig: 'WhatsAppConfig',
-  LogSistema: 'LogSistema'
+  LogSistema: 'LogSistema',
+  Plano: 'Plano',
+  Tenant: 'Tenant'
 };
 
 /**
