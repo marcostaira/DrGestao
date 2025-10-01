@@ -7,6 +7,11 @@ import {
   updateAgendamento,
   deleteAgendamento,
   updateStatus,
+  createBatchAgendamento,
+  batchUpdateAgendamentos,
+  batchDeleteAgendamentos,
+  deleteRecorrencia,
+  updateRecorrencia,
 } from "@/services/agendamentoService";
 import { getProfissionais, Profissional } from "@/services/profissionalService";
 import { getPacientes, Paciente } from "@/services/pacienteService";
@@ -189,6 +194,88 @@ export const useAgenda = () => {
     [loadAgendamentos, showSuccess, showError]
   );
 
+  const handleBatchCreate = useCallback(
+    async (data: any) => {
+      try {
+        const result = await createBatchAgendamento(data);
+        const count = Array.isArray(result) ? result.length : 1;
+        showSuccess(`${count} agendamento(s) criado(s) com sucesso!`);
+        await loadAgendamentos();
+        return true;
+      } catch (err: any) {
+        showError(err.response?.data?.error || "Erro ao criar agendamentos");
+        return false;
+      }
+    },
+    [loadAgendamentos, showSuccess, showError]
+  );
+
+  const handleBatchUpdate = useCallback(
+    async (ids: string[], data: any) => {
+      try {
+        const result = await batchUpdateAgendamentos(ids, data);
+        showSuccess(`${result.updated} agendamento(s) atualizado(s)!`);
+        await loadAgendamentos();
+        return true;
+      } catch (err: any) {
+        showError(
+          err.response?.data?.error || "Erro ao atualizar agendamentos"
+        );
+        return false;
+      }
+    },
+    [loadAgendamentos, showSuccess, showError]
+  );
+
+  const handleBatchDelete = useCallback(
+    async (ids: string[]) => {
+      try {
+        const result = await batchDeleteAgendamentos(ids);
+        showSuccess(`${result.deleted} agendamento(s) excluído(s)!`);
+        await loadAgendamentos();
+        return true;
+      } catch (err: any) {
+        showError(err.response?.data?.error || "Erro ao excluir agendamentos");
+        return false;
+      }
+    },
+    [loadAgendamentos, showSuccess, showError]
+  );
+
+  const handleUpdateRecorrencia = useCallback(
+    async (recorrenciaId: string, data: any) => {
+      try {
+        const result = await updateRecorrencia(recorrenciaId, data);
+        showSuccess(
+          `${result.updated} agendamento(s) da recorrência atualizado(s)!`
+        );
+        await loadAgendamentos();
+        return true;
+      } catch (err: any) {
+        showError(err.response?.data?.error || "Erro ao atualizar recorrência");
+        return false;
+      }
+    },
+    [loadAgendamentos, showSuccess, showError]
+  );
+
+  const handleDeleteRecorrencia = useCallback(
+    async (recorrenciaId: string) => {
+      try {
+        const result = await deleteRecorrencia(recorrenciaId);
+        showSuccess(
+          `${result.deleted} agendamento(s) da recorrência excluído(s)!`
+        );
+        await loadAgendamentos();
+        return true;
+      } catch (err: any) {
+        showError(err.response?.data?.error || "Erro ao excluir recorrência");
+        return false;
+      }
+    },
+    [loadAgendamentos, showSuccess, showError]
+  );
+
   // Carrega dados iniciais apenas uma vez
   useEffect(() => {
     loadInitialData();
@@ -226,5 +313,10 @@ export const useAgenda = () => {
     handleDeleteAgendamento,
     handleUpdateStatus,
     loadAgendamentos,
+    handleBatchCreate,
+    handleBatchUpdate,
+    handleBatchDelete,
+    handleUpdateRecorrencia, // ADICIONAR AQUI
+    handleDeleteRecorrencia, // ADICIONAR AQUI
   };
 };

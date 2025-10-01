@@ -30,19 +30,6 @@ const startServer = async (): Promise<void> => {
         `📖 API Documentation available at http://localhost:${PORT}/health`
       );
       console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
-
-      if (process.env.NODE_ENV === "development") {
-        console.log("\n📋 Available Routes:");
-        console.log("   GET  /health                    - Health check");
-        console.log("   POST /api/auth/login            - User login");
-        console.log("   POST /api/auth/register-tenant  - Register new tenant");
-        console.log("   GET  /api/auth/profile          - Get user profile");
-        console.log("   GET  /api/pacientes             - List patients");
-        console.log("   POST /api/pacientes             - Create patient");
-        console.log("   GET  /api/pacientes/:id         - Get patient by ID");
-        console.log("   PUT  /api/pacientes/:id         - Update patient");
-        console.log("   DEL  /api/pacientes/:id         - Delete patient");
-      }
     });
 
     // Handle server errors

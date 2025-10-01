@@ -262,6 +262,12 @@ export interface UpdateProcedimentoData {
 // ============================================================================
 // AGENDAMENTO TYPES
 // ============================================================================
+export interface RecorrenciaData {
+  tipo: "DIARIA" | "SEMANAL" | "MENSAL";
+  dataFim: string;
+  quantidade: number;
+  diasSemana?: number[];
+}
 
 export interface CreateAgendamentoData {
   pacienteId?: string;
@@ -269,11 +275,7 @@ export interface CreateAgendamentoData {
   procedimentoId: string;
   dataHora: Date | string;
   observacoes?: string;
-  recorrencia?: {
-    tipo: "DIARIO" | "SEMANAL" | "MENSAL";
-    quantidade: number;
-    diasSemana?: number[];
-  };
+  recorrencia?: RecorrenciaData;
 }
 
 export interface UpdateAgendamentoData {

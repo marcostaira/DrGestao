@@ -32,6 +32,8 @@ interface WeekViewProps {
     isSlotHighlighted: (day: Date, hour: number, minute: number) => boolean;
     canDropInSlot: (day: Date, hour: number, minute: number) => boolean;
   };
+  selectedIds?: string[];
+  onSelectAgendamento?: (id: string) => void;
 }
 
 export const WeekView: React.FC<WeekViewProps> = ({
@@ -40,6 +42,8 @@ export const WeekView: React.FC<WeekViewProps> = ({
   onAddAgendamento,
   onAgendamentoClick,
   dragHandlers,
+  selectedIds = [],
+  onSelectAgendamento,
 }) => {
   const weekDays = getWeekDays(currentDate);
   const timeSlots = generateTimeSlots();
@@ -135,6 +139,8 @@ export const WeekView: React.FC<WeekViewProps> = ({
                   )}
                   draggedAgendamento={dragHandlers.draggedAgendamento}
                   showTimeInCards={false}
+                  selectedIds={selectedIds}
+                  onSelectAgendamento={onSelectAgendamento}
                 />
               );
             })}

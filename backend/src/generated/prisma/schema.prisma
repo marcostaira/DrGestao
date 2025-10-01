@@ -122,14 +122,16 @@ model Agendamento {
   status             StatusAgendamento @default(MARCADO)
   observacoes        String?
   confirmacaoEnviada Boolean           @default(false) @map("confirmacao_enviada")
-  createdAt          DateTime          @default(now()) @map("created_at")
-  updatedAt          DateTime          @updatedAt @map("updated_at")
-  dataHoraFim        DateTime          @map("data_hora_fim")
-  paciente           Paciente?         @relation(fields: [pacienteId], references: [id])
-  procedimento       Procedimento      @relation(fields: [procedimentoId], references: [id], onDelete: Cascade)
-  profissional       Profissional      @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
-  tenant             Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  atendimento        Atendimento?
+  recorrenciaId      String?           @map("recorrencia_id") // NOVO CAMPO
+
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+  dataHoraFim  DateTime     @map("data_hora_fim")
+  paciente     Paciente?    @relation(fields: [pacienteId], references: [id])
+  procedimento Procedimento @relation(fields: [procedimentoId], references: [id], onDelete: Cascade)
+  profissional Profissional @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
+  tenant       Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  atendimento  Atendimento?
 
   @@index([tenantId, dataHora])
   @@index([tenantId, profissionalId])

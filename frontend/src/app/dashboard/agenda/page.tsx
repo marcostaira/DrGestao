@@ -14,6 +14,9 @@ import { MonthView } from "@/components/agenda/MonthView";
 import { AgendamentoFormModal } from "@/components/agenda/AgendamentoFormModal";
 import { AgendamentoDetailModal } from "@/components/agenda/AgendamentoDetailModal";
 import { DeleteConfirmModal } from "@/components/agenda/DeleteConfirmModal";
+import { BatchCreateModal } from "@/components/agenda/BatchCreateModal";
+import { BatchEditModal } from "@/components/agenda/BatchEditModal";
+import { BatchDeleteModal } from "@/components/agenda/BatchDeleteModal";
 
 export default function AgendaPage() {
   const {
@@ -35,6 +38,9 @@ export default function AgendaPage() {
     handleUpdateAgendamento,
     handleDeleteAgendamento,
     handleUpdateStatus,
+    handleBatchCreate,
+    handleBatchUpdate,
+    handleBatchDelete,
     loadAgendamentos,
   } = useAgenda();
 
@@ -49,6 +55,12 @@ export default function AgendaPage() {
   const [deletingAgendamento, setDeletingAgendamento] =
     useState<Agendamento | null>(null);
   const [initialDateTime, setInitialDateTime] = useState<Date | undefined>();
+
+  // Batch operation states
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [isBatchCreateOpen, setIsBatchCreateOpen] = useState(false);
+  const [isBatchEditOpen, setIsBatchEditOpen] = useState(false);
+  const [isBatchDeleteOpen, setIsBatchDeleteOpen] = useState(false);
 
   // Drag and drop handler
   const handleDropAgendamento = async (
@@ -79,6 +91,21 @@ export default function AgendaPage() {
 
   const dragHandlers = useDragAndDrop(agendamentos, handleDropAgendamento);
 
+  // Selection handlers
+  const handleSelectAll = () => {
+    if (selectedIds.length === agendamentos.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(agendamentos.map((a) => a.id));
+    }
+  };
+
+  const handleSelectAgendamento = (id: string) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  };
+
   // Modal handlers
   const handleOpenFormModal = (agendamento?: Agendamento, dateTime?: Date) => {
     if (agendamento) {
@@ -96,14 +123,6 @@ export default function AgendaPage() {
     setInitialDateTime(undefined);
   };
 
-  const handleSubmitForm = async (data: any) => {
-    if (editingAgendamento) {
-      return await handleUpdateAgendamento(editingAgendamento.id, data);
-    } else {
-      return await handleCreateAgendamento(data);
-    }
-  };
-
   const handleOpenDetailModal = (agendamento: Agendamento) => {
     setSelectedAgendamento(agendamento);
     setIsDetailModalOpen(true);
@@ -119,7 +138,34 @@ export default function AgendaPage() {
     setIsDeleteModalOpen(true);
   };
 
-  const handleConfirmDelete = async () => {
+  const handleSubmitForm = async (data: any) => {
+    // Se for edição de recorrência
+    if (data.isRecorrencia && data.recorrenciaId) {
+      return await handleUpdateRecorrencia(data.recorrenciaId, data.data);
+    }
+
+    // Se for edição normal
+    if (editingAgendamento) {
+      return await handleUpdateAgendamento(editingAgendamento.id, data);
+    }
+
+    // Se for criação
+    return await handleCreateAgendamento(data);
+  };
+
+  // Substituir a função handleConfirmDelete existente por:
+
+  const handleConfirmDelete = async (recorrenciaId?: string) => {
+    if (recorrenciaId) {
+      // Deletar toda a recorrência
+      const success = await handleDeleteRecorrencia(recorrenciaId);
+      if (success) {
+        setDeletingAgendamento(null);
+      }
+      return success;
+    }
+
+    // Deletar apenas o agendamento individual
     if (deletingAgendamento) {
       const success = await handleDeleteAgendamento(deletingAgendamento.id);
       if (success) {
@@ -127,7 +173,32 @@ export default function AgendaPage() {
       }
       return success;
     }
+
     return false;
+  };
+
+  // Batch handlers
+  const handleBatchCreateSubmit = async (data: any) => {
+    const success = await handleBatchCreate(data);
+    if (success) {
+      setIsBatchCreateOpen(false);
+    }
+  };
+
+  const handleBatchUpdateSubmit = async (data: any) => {
+    const success = await handleBatchUpdate(data.ids, data.data);
+    if (success) {
+      setIsBatchEditOpen(false);
+      setSelectedIds([]);
+    }
+  };
+
+  const handleBatchDeleteSubmit = async (ids: string[]) => {
+    const success = await handleBatchDelete(ids);
+    if (success) {
+      setIsBatchDeleteOpen(false);
+      setSelectedIds([]);
+    }
   };
 
   // Navigation handlers
@@ -234,14 +305,13 @@ export default function AgendaPage() {
           }
         }
 
-        /* Garante que as linhas da grid tenham altura fixa */
         .grid > div {
           position: relative;
         }
       `}</style>
 
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center flex-wrap gap-3">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Agenda</h1>
           <p className="text-gray-600 mt-1">
@@ -249,22 +319,99 @@ export default function AgendaPage() {
           </p>
         </div>
 
-        <Button onClick={() => handleOpenFormModal()}>
-          <svg
-            className="w-5 h-5 mr-2"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+        <div className="flex items-center space-x-3 flex-wrap gap-2">
+          {selectedIds.length > 0 && (
+            <>
+              <span className="text-sm text-gray-600 font-medium">
+                {selectedIds.length} selecionado(s)
+              </span>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setIsBatchEditOpen(true)}
+              >
+                <svg
+                  className="w-4 h-4 mr-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  />
+                </svg>
+                Editar
+              </Button>
+              <Button
+                variant="danger"
+                size="sm"
+                onClick={() => setIsBatchDeleteOpen(true)}
+              >
+                <svg
+                  className="w-4 h-4 mr-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
+                Excluir
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setSelectedIds([])}
+              >
+                Limpar
+              </Button>
+            </>
+          )}
+
+          <Button onClick={() => handleOpenFormModal()}>
+            <svg
+              className="w-5 h-5 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              />
+            </svg>
+            Novo Agendamento
+          </Button>
+
+          <Button
+            variant="secondary"
+            onClick={() => setIsBatchCreateOpen(true)}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-            />
-          </svg>
-          Novo Agendamento
-        </Button>
+            <svg
+              className="w-5 h-5 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+            Criar em Lote
+          </Button>
+        </div>
       </div>
 
       {/* Alerts */}
@@ -303,6 +450,28 @@ export default function AgendaPage() {
         }
       />
 
+      {/* Selection Bar */}
+      {viewMode !== "month" && agendamentos.length > 0 && (
+        <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <input
+              type="checkbox"
+              checked={selectedIds.length === agendamentos.length}
+              onChange={handleSelectAll}
+              className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+            />
+            <span className="text-sm text-gray-700">
+              Selecionar todos ({agendamentos.length})
+            </span>
+          </div>
+          {selectedIds.length > 0 && (
+            <span className="text-sm text-primary-600 font-medium">
+              {selectedIds.length} de {agendamentos.length} selecionados
+            </span>
+          )}
+        </div>
+      )}
+
       {/* Views */}
       {viewMode === "week" && (
         <WeekView
@@ -315,6 +484,8 @@ export default function AgendaPage() {
           }}
           onAgendamentoClick={handleOpenDetailModal}
           dragHandlers={dragHandlers}
+          selectedIds={selectedIds}
+          onSelectAgendamento={handleSelectAgendamento}
         />
       )}
 
@@ -329,6 +500,8 @@ export default function AgendaPage() {
           }}
           onAgendamentoClick={handleOpenDetailModal}
           dragHandlers={dragHandlers}
+          selectedIds={selectedIds}
+          onSelectAgendamento={handleSelectAgendamento}
         />
       )}
 
@@ -368,6 +541,34 @@ export default function AgendaPage() {
           setDeletingAgendamento(null);
         }}
         onConfirm={handleConfirmDelete}
+        agendamento={deletingAgendamento}
+      />
+
+      {/* Batch Modals */}
+      <BatchCreateModal
+        isOpen={isBatchCreateOpen}
+        onClose={() => setIsBatchCreateOpen(false)}
+        onSubmit={handleBatchCreateSubmit}
+        profissionais={profissionais}
+        pacientes={pacientes}
+        procedimentos={procedimentos}
+      />
+
+      <BatchEditModal
+        isOpen={isBatchEditOpen}
+        onClose={() => setIsBatchEditOpen(false)}
+        onSubmit={handleBatchUpdateSubmit}
+        selectedIds={selectedIds}
+        profissionais={profissionais}
+        procedimentos={procedimentos}
+      />
+
+      <BatchDeleteModal
+        isOpen={isBatchDeleteOpen}
+        onClose={() => setIsBatchDeleteOpen(false)}
+        onConfirm={handleBatchDeleteSubmit}
+        selectedIds={selectedIds}
+        agendamentos={agendamentos}
       />
     </div>
   );

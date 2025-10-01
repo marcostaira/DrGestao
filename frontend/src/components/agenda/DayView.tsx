@@ -31,6 +31,8 @@ interface DayViewProps {
     isSlotHighlighted: (day: Date, hour: number, minute: number) => boolean;
     canDropInSlot: (day: Date, hour: number, minute: number) => boolean;
   };
+  selectedIds?: string[];
+  onSelectAgendamento?: (id: string) => void;
 }
 
 export const DayView: React.FC<DayViewProps> = ({

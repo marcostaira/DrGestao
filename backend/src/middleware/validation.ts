@@ -184,15 +184,24 @@ export const updateProcedimentoSchema = Joi.object({
 // ============================================================================
 
 export const createAgendamentoSchema = Joi.object({
-  pacienteId: Joi.string().optional(),
+  pacienteId: Joi.string().optional().allow(null),
   profissionalId: Joi.string().required(),
-  procedimentoId: Joi.string().required(),
-  dataHora: Joi.date().iso().greater("now").required(),
-  observacoes: Joi.string().max(500).allow(""),
+  procedimentoId: Joi.string().optional().allow(null),
+  dataHora: Joi.date().iso().required(),
+  observacoes: Joi.string().optional().allow("", null),
+
+  // Validação de recorrência
   recorrencia: Joi.object({
-    tipo: Joi.string().valid("DIARIO", "SEMANAL", "MENSAL").required(),
-    quantidade: Joi.number().integer().min(1).max(30).required(),
-    diasSemana: Joi.array().items(Joi.number().integer().min(0).max(6)),
+    tipo: Joi.string().valid("DIARIA", "SEMANAL", "MENSAL").required(),
+    dataFim: Joi.date().iso().required(), // Mudança aqui
+    diasSemana: Joi.array()
+      .items(Joi.number().min(0).max(6))
+      .optional()
+      .when("tipo", {
+        is: "SEMANAL",
+        then: Joi.array().min(1).required(),
+        otherwise: Joi.array().optional(),
+      }),
   }).optional(),
 });
 

@@ -6877,6 +6877,7 @@ export namespace Prisma {
     status: $Enums.StatusAgendamento | null
     observacoes: string | null
     confirmacaoEnviada: boolean | null
+    recorrenciaId: string | null
     createdAt: Date | null
     updatedAt: Date | null
     dataHoraFim: Date | null
@@ -6892,6 +6893,7 @@ export namespace Prisma {
     status: $Enums.StatusAgendamento | null
     observacoes: string | null
     confirmacaoEnviada: boolean | null
+    recorrenciaId: string | null
     createdAt: Date | null
     updatedAt: Date | null
     dataHoraFim: Date | null
@@ -6907,6 +6909,7 @@ export namespace Prisma {
     status: number
     observacoes: number
     confirmacaoEnviada: number
+    recorrenciaId: number
     createdAt: number
     updatedAt: number
     dataHoraFim: number
@@ -6924,6 +6927,7 @@ export namespace Prisma {
     status?: true
     observacoes?: true
     confirmacaoEnviada?: true
+    recorrenciaId?: true
     createdAt?: true
     updatedAt?: true
     dataHoraFim?: true
@@ -6939,6 +6943,7 @@ export namespace Prisma {
     status?: true
     observacoes?: true
     confirmacaoEnviada?: true
+    recorrenciaId?: true
     createdAt?: true
     updatedAt?: true
     dataHoraFim?: true
@@ -6954,6 +6959,7 @@ export namespace Prisma {
     status?: true
     observacoes?: true
     confirmacaoEnviada?: true
+    recorrenciaId?: true
     createdAt?: true
     updatedAt?: true
     dataHoraFim?: true
@@ -7042,6 +7048,7 @@ export namespace Prisma {
     status: $Enums.StatusAgendamento
     observacoes: string | null
     confirmacaoEnviada: boolean
+    recorrenciaId: string | null
     createdAt: Date
     updatedAt: Date
     dataHoraFim: Date
@@ -7074,6 +7081,7 @@ export namespace Prisma {
     status?: boolean
     observacoes?: boolean
     confirmacaoEnviada?: boolean
+    recorrenciaId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     dataHoraFim?: boolean
@@ -7094,6 +7102,7 @@ export namespace Prisma {
     status?: boolean
     observacoes?: boolean
     confirmacaoEnviada?: boolean
+    recorrenciaId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     dataHoraFim?: boolean
@@ -7113,6 +7122,7 @@ export namespace Prisma {
     status?: boolean
     observacoes?: boolean
     confirmacaoEnviada?: boolean
+    recorrenciaId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     dataHoraFim?: boolean
@@ -7132,12 +7142,13 @@ export namespace Prisma {
     status?: boolean
     observacoes?: boolean
     confirmacaoEnviada?: boolean
+    recorrenciaId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     dataHoraFim?: boolean
   }
 
-  export type AgendamentoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "pacienteId" | "profissionalId" | "procedimentoId" | "dataHora" | "status" | "observacoes" | "confirmacaoEnviada" | "createdAt" | "updatedAt" | "dataHoraFim", ExtArgs["result"]["agendamento"]>
+  export type AgendamentoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "pacienteId" | "profissionalId" | "procedimentoId" | "dataHora" | "status" | "observacoes" | "confirmacaoEnviada" | "recorrenciaId" | "createdAt" | "updatedAt" | "dataHoraFim", ExtArgs["result"]["agendamento"]>
   export type AgendamentoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     paciente?: boolean | Agendamento$pacienteArgs<ExtArgs>
     procedimento?: boolean | ProcedimentoDefaultArgs<ExtArgs>
@@ -7177,6 +7188,7 @@ export namespace Prisma {
       status: $Enums.StatusAgendamento
       observacoes: string | null
       confirmacaoEnviada: boolean
+      recorrenciaId: string | null
       createdAt: Date
       updatedAt: Date
       dataHoraFim: Date
@@ -7617,6 +7629,7 @@ export namespace Prisma {
     readonly status: FieldRef<"Agendamento", 'StatusAgendamento'>
     readonly observacoes: FieldRef<"Agendamento", 'String'>
     readonly confirmacaoEnviada: FieldRef<"Agendamento", 'Boolean'>
+    readonly recorrenciaId: FieldRef<"Agendamento", 'String'>
     readonly createdAt: FieldRef<"Agendamento", 'DateTime'>
     readonly updatedAt: FieldRef<"Agendamento", 'DateTime'>
     readonly dataHoraFim: FieldRef<"Agendamento", 'DateTime'>
@@ -14030,6 +14043,7 @@ export namespace Prisma {
     status: 'status',
     observacoes: 'observacoes',
     confirmacaoEnviada: 'confirmacaoEnviada',
+    recorrenciaId: 'recorrenciaId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     dataHoraFim: 'dataHoraFim'
@@ -14709,6 +14723,7 @@ export namespace Prisma {
     status?: EnumStatusAgendamentoFilter<"Agendamento"> | $Enums.StatusAgendamento
     observacoes?: StringNullableFilter<"Agendamento"> | string | null
     confirmacaoEnviada?: BoolFilter<"Agendamento"> | boolean
+    recorrenciaId?: StringNullableFilter<"Agendamento"> | string | null
     createdAt?: DateTimeFilter<"Agendamento"> | Date | string
     updatedAt?: DateTimeFilter<"Agendamento"> | Date | string
     dataHoraFim?: DateTimeFilter<"Agendamento"> | Date | string
@@ -14729,6 +14744,7 @@ export namespace Prisma {
     status?: SortOrder
     observacoes?: SortOrderInput | SortOrder
     confirmacaoEnviada?: SortOrder
+    recorrenciaId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     dataHoraFim?: SortOrder
@@ -14752,6 +14768,7 @@ export namespace Prisma {
     status?: EnumStatusAgendamentoFilter<"Agendamento"> | $Enums.StatusAgendamento
     observacoes?: StringNullableFilter<"Agendamento"> | string | null
     confirmacaoEnviada?: BoolFilter<"Agendamento"> | boolean
+    recorrenciaId?: StringNullableFilter<"Agendamento"> | string | null
     createdAt?: DateTimeFilter<"Agendamento"> | Date | string
     updatedAt?: DateTimeFilter<"Agendamento"> | Date | string
     dataHoraFim?: DateTimeFilter<"Agendamento"> | Date | string
@@ -14772,6 +14789,7 @@ export namespace Prisma {
     status?: SortOrder
     observacoes?: SortOrderInput | SortOrder
     confirmacaoEnviada?: SortOrder
+    recorrenciaId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     dataHoraFim?: SortOrder
@@ -14793,6 +14811,7 @@ export namespace Prisma {
     status?: EnumStatusAgendamentoWithAggregatesFilter<"Agendamento"> | $Enums.StatusAgendamento
     observacoes?: StringNullableWithAggregatesFilter<"Agendamento"> | string | null
     confirmacaoEnviada?: BoolWithAggregatesFilter<"Agendamento"> | boolean
+    recorrenciaId?: StringNullableWithAggregatesFilter<"Agendamento"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Agendamento"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Agendamento"> | Date | string
     dataHoraFim?: DateTimeWithAggregatesFilter<"Agendamento"> | Date | string
@@ -15690,6 +15709,7 @@ export namespace Prisma {
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
+    recorrenciaId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     dataHoraFim: Date | string
@@ -15710,6 +15730,7 @@ export namespace Prisma {
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
+    recorrenciaId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     dataHoraFim: Date | string
@@ -15722,6 +15743,7 @@ export namespace Prisma {
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    recorrenciaId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15742,6 +15764,7 @@ export namespace Prisma {
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    recorrenciaId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15758,6 +15781,7 @@ export namespace Prisma {
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
+    recorrenciaId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     dataHoraFim: Date | string
@@ -15769,6 +15793,7 @@ export namespace Prisma {
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    recorrenciaId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15784,6 +15809,7 @@ export namespace Prisma {
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    recorrenciaId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16745,6 +16771,7 @@ export namespace Prisma {
     status?: SortOrder
     observacoes?: SortOrder
     confirmacaoEnviada?: SortOrder
+    recorrenciaId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     dataHoraFim?: SortOrder
@@ -16760,6 +16787,7 @@ export namespace Prisma {
     status?: SortOrder
     observacoes?: SortOrder
     confirmacaoEnviada?: SortOrder
+    recorrenciaId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     dataHoraFim?: SortOrder
@@ -16775,6 +16803,7 @@ export namespace Prisma {
     status?: SortOrder
     observacoes?: SortOrder
     confirmacaoEnviada?: SortOrder
+    recorrenciaId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     dataHoraFim?: SortOrder
@@ -18520,6 +18549,7 @@ export namespace Prisma {
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
+    recorrenciaId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     dataHoraFim: Date | string
@@ -18538,6 +18568,7 @@ export namespace Prisma {
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
+    recorrenciaId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     dataHoraFim: Date | string
@@ -18705,6 +18736,7 @@ export namespace Prisma {
     status?: EnumStatusAgendamentoFilter<"Agendamento"> | $Enums.StatusAgendamento
     observacoes?: StringNullableFilter<"Agendamento"> | string | null
     confirmacaoEnviada?: BoolFilter<"Agendamento"> | boolean
+    recorrenciaId?: StringNullableFilter<"Agendamento"> | string | null
     createdAt?: DateTimeFilter<"Agendamento"> | Date | string
     updatedAt?: DateTimeFilter<"Agendamento"> | Date | string
     dataHoraFim?: DateTimeFilter<"Agendamento"> | Date | string
@@ -18816,6 +18848,7 @@ export namespace Prisma {
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
+    recorrenciaId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     dataHoraFim: Date | string
@@ -18834,6 +18867,7 @@ export namespace Prisma {
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
+    recorrenciaId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     dataHoraFim: Date | string
@@ -19002,6 +19036,7 @@ export namespace Prisma {
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
+    recorrenciaId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     dataHoraFim: Date | string
@@ -19020,6 +19055,7 @@ export namespace Prisma {
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
+    recorrenciaId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     dataHoraFim: Date | string
@@ -19588,6 +19624,7 @@ export namespace Prisma {
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
+    recorrenciaId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     dataHoraFim: Date | string
@@ -19607,6 +19644,7 @@ export namespace Prisma {
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
+    recorrenciaId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     dataHoraFim: Date | string
@@ -19792,6 +19830,7 @@ export namespace Prisma {
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    recorrenciaId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19811,6 +19850,7 @@ export namespace Prisma {
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    recorrenciaId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20191,6 +20231,7 @@ export namespace Prisma {
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
+    recorrenciaId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     dataHoraFim: Date | string
@@ -20209,6 +20250,7 @@ export namespace Prisma {
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
+    recorrenciaId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     dataHoraFim: Date | string
@@ -20717,6 +20759,7 @@ export namespace Prisma {
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
+    recorrenciaId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     dataHoraFim: Date | string
@@ -20825,6 +20868,7 @@ export namespace Prisma {
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    recorrenciaId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20843,6 +20887,7 @@ export namespace Prisma {
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    recorrenciaId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20858,6 +20903,7 @@ export namespace Prisma {
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    recorrenciaId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20908,6 +20954,7 @@ export namespace Prisma {
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
+    recorrenciaId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     dataHoraFim: Date | string
@@ -20931,6 +20978,7 @@ export namespace Prisma {
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    recorrenciaId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20949,6 +20997,7 @@ export namespace Prisma {
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    recorrenciaId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20964,6 +21013,7 @@ export namespace Prisma {
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    recorrenciaId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21014,6 +21064,7 @@ export namespace Prisma {
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
+    recorrenciaId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     dataHoraFim: Date | string
@@ -21037,6 +21088,7 @@ export namespace Prisma {
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    recorrenciaId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21055,6 +21107,7 @@ export namespace Prisma {
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    recorrenciaId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21070,6 +21123,7 @@ export namespace Prisma {
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    recorrenciaId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21166,6 +21220,7 @@ export namespace Prisma {
     status?: $Enums.StatusAgendamento
     observacoes?: string | null
     confirmacaoEnviada?: boolean
+    recorrenciaId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     dataHoraFim: Date | string
@@ -21247,6 +21302,7 @@ export namespace Prisma {
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    recorrenciaId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21265,6 +21321,7 @@ export namespace Prisma {
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    recorrenciaId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21280,6 +21337,7 @@ export namespace Prisma {
     status?: EnumStatusAgendamentoFieldUpdateOperationsInput | $Enums.StatusAgendamento
     observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     confirmacaoEnviada?: BoolFieldUpdateOperationsInput | boolean
+    recorrenciaId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dataHoraFim?: DateTimeFieldUpdateOperationsInput | Date | string

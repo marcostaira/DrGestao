@@ -149,6 +149,40 @@ export class AgendamentoController {
   }
 
   // ==========================================================================
+  // UPDATE RECORRENCIA
+  // ==========================================================================
+
+  static async updateRecorrencia(
+    req: AuthenticatedRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      const tenantId = req.user!.tenantId;
+      const { recorrenciaId } = req.params;
+
+      const result = await AgendamentoService.updateRecorrencia(
+        tenantId,
+        recorrenciaId,
+        req.body
+      );
+
+      const response: ApiResponse = {
+        success: true,
+        data: result,
+        message: `${result.updated} agendamento(s) da recorrência atualizado(s)`,
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao atualizar recorrência",
+      };
+      res.status(error.statusCode || 500).json(response);
+    }
+  }
+
+  // ==========================================================================
   // BATCH UPDATE
   // ==========================================================================
 
@@ -205,6 +239,39 @@ export class AgendamentoController {
   }
 
   // ==========================================================================
+  // DELETE RECORRENCIA
+  // ==========================================================================
+
+  static async deleteRecorrencia(
+    req: AuthenticatedRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      const tenantId = req.user!.tenantId;
+      const { recorrenciaId } = req.params;
+
+      const result = await AgendamentoService.deleteRecorrencia(
+        tenantId,
+        recorrenciaId
+      );
+
+      const response: ApiResponse = {
+        success: true,
+        data: result,
+        message: `${result.deleted} agendamento(s) da recorrência excluído(s)`,
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao excluir recorrência",
+      };
+      res.status(error.statusCode || 500).json(response);
+    }
+  }
+
+  // ==========================================================================
   // BATCH DELETE
   // ==========================================================================
 
@@ -229,6 +296,38 @@ export class AgendamentoController {
       const response: ApiResponse = {
         success: false,
         error: error.message || "Erro ao excluir agendamentos",
+      };
+      res.status(error.statusCode || 500).json(response);
+    }
+  }
+
+  // ==========================================================================
+  // COUNT RECORRENCIA
+  // ==========================================================================
+
+  static async countRecorrencia(
+    req: AuthenticatedRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      const tenantId = req.user!.tenantId;
+      const { recorrenciaId } = req.params;
+
+      const count = await AgendamentoService.countRecorrencia(
+        tenantId,
+        recorrenciaId
+      );
+
+      const response: ApiResponse = {
+        success: true,
+        data: { count },
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao contar recorrência",
       };
       res.status(error.statusCode || 500).json(response);
     }
@@ -278,7 +377,7 @@ export class AgendamentoController {
   }
 
   // ==========================================================================
-  // UPDATE STATUS (Substituir o método toggleStatus existente)
+  // UPDATE STATUS
   // ==========================================================================
 
   static async updateStatus(

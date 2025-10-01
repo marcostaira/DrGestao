@@ -192,6 +192,7 @@ exports.Prisma.AgendamentoScalarFieldEnum = {
   status: 'status',
   observacoes: 'observacoes',
   confirmacaoEnviada: 'confirmacaoEnviada',
+  recorrenciaId: 'recorrenciaId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   dataHoraFim: 'dataHoraFim'

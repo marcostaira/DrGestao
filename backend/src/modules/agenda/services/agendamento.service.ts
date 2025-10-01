@@ -4,6 +4,7 @@ import {
   UpdateAgendamentoData,
   AppError,
 } from "../../../types";
+import { randomUUID } from "crypto";
 
 // ============================================================================
 // AGENDAMENTO SERVICE
@@ -14,7 +15,11 @@ export class AgendamentoService {
   // CREATE AGENDAMENTO
   // ==========================================================================
 
-  static async create(tenantId: string, data: CreateAgendamentoData) {
+  static async create(
+    tenantId: string,
+    data: CreateAgendamentoData,
+    recorrenciaId?: string
+  ) {
     // Verificar se profissional existe e está ativo
     const profissional = await prisma.profissional.findFirst({
       where: { id: data.profissionalId, tenantId, ativo: true },
@@ -44,16 +49,11 @@ export class AgendamentoService {
       }
     }
 
-    // Converter string para Date (sem conversão de timezone)
-    // A string vem como "2025-09-30T12:00" e deve ser interpretada como horário local
     const dataHora = new Date(data.dataHora);
-
-    // Calcular horário de término baseado na duração
     const dataHoraFim = new Date(
       dataHora.getTime() + procedimento.duracaoMinutos * 60000
     );
 
-    // VALIDAÇÃO: Garantir que dataHoraFim é maior que dataHora
     if (dataHoraFim <= dataHora) {
       throw new AppError(
         "Data/hora de término deve ser posterior à data/hora de início",
@@ -61,37 +61,26 @@ export class AgendamentoService {
       );
     }
 
-    console.log("=".repeat(80));
-    console.log("DEBUG BACKEND - Criando agendamento:");
-    console.log("- dataHora string recebida:", data.dataHora);
-    console.log("- dataHora convertida:", dataHora.toISOString());
-    console.log("- dataHoraFim calculada:", dataHoraFim.toISOString());
-    console.log("- duração (minutos):", procedimento.duracaoMinutos);
-
-    // Verificar conflitos de horário para o profissional
-    // Apenas agendamentos não cancelados E com datas válidas
+    // Verificar conflitos de horário
     const conflito = await prisma.agendamento.findFirst({
       where: {
         tenantId,
         profissionalId: data.profissionalId,
         status: { notIn: ["CANCELADO"] },
-        dataHoraFim: { gt: prisma.agendamento.fields.dataHora }, // dataHoraFim deve ser maior que dataHora
+        dataHoraFim: { gt: prisma.agendamento.fields.dataHora },
         OR: [
-          // Novo agendamento inicia durante um agendamento existente
           {
             AND: [
               { dataHora: { lte: dataHora } },
               { dataHoraFim: { gt: dataHora } },
             ],
           },
-          // Novo agendamento termina durante um agendamento existente
           {
             AND: [
               { dataHora: { lt: dataHoraFim } },
               { dataHoraFim: { gte: dataHoraFim } },
             ],
           },
-          // Novo agendamento engloba um agendamento existente
           {
             AND: [
               { dataHora: { gte: dataHora } },
@@ -103,22 +92,11 @@ export class AgendamentoService {
     });
 
     if (conflito) {
-      console.log("❌ CONFLITO ENCONTRADO:");
-      console.log("- Agendamento conflitante:", {
-        id: conflito.id,
-        dataHora: conflito.dataHora.toISOString(),
-        dataHoraFim: conflito.dataHoraFim.toISOString(),
-      });
-      console.log("=".repeat(80));
-
       throw new AppError(
         "Já existe um agendamento neste horário para este profissional",
         400
       );
     }
-
-    console.log("✅ Nenhum conflito encontrado. Criando agendamento...");
-    console.log("=".repeat(80));
 
     // Criar agendamento
     const agendamento = await prisma.agendamento.create({
@@ -131,6 +109,7 @@ export class AgendamentoService {
         dataHoraFim,
         status: "MARCADO",
         observacoes: data.observacoes?.trim() || null,
+        recorrenciaId: recorrenciaId || null,
       },
       include: {
         paciente: {
@@ -145,6 +124,7 @@ export class AgendamentoService {
             id: true,
             nome: true,
             especialidade: true,
+            cor: true,
           },
         },
         procedimento: {
@@ -170,43 +150,104 @@ export class AgendamentoService {
       throw new AppError("Dados de recorrência não fornecidos", 400);
     }
 
-    const { tipo, quantidade, diasSemana } = data.recorrencia;
+    const { tipo, dataFim, diasSemana } = data.recorrencia;
     const agendamentos: any[] = [];
     const dataInicial = new Date(data.dataHora);
+    const dataFinal = new Date(dataFim);
 
-    for (let i = 0; i < quantidade; i++) {
-      let novaData = new Date(dataInicial);
+    // Gerar ID único para esta recorrência
+    const recorrenciaId = randomUUID();
 
-      if (tipo === "DIARIO") {
-        novaData.setDate(dataInicial.getDate() + i);
-      } else if (tipo === "SEMANAL") {
-        novaData.setDate(dataInicial.getDate() + i * 7);
-      } else if (tipo === "MENSAL") {
-        novaData.setMonth(dataInicial.getMonth() + i);
+    console.log("=== CREATE BATCH ===");
+    console.log("Recorrência ID:", recorrenciaId);
+    console.log("Data inicial:", dataInicial.toISOString());
+    console.log("Data final:", dataFinal.toISOString());
+    console.log("Tipo:", tipo);
+    console.log("Dias da semana:", diasSemana);
+
+    let dataAtual = new Date(dataInicial);
+    let contador = 0;
+    const MAX_AGENDAMENTOS = 365;
+
+    while (dataAtual <= dataFinal && contador < MAX_AGENDAMENTOS) {
+      let deveCriar = true;
+
+      // Para recorrência semanal, verificar se o dia da semana está na lista
+      if (tipo === "SEMANAL" && diasSemana && diasSemana.length > 0) {
+        const diaSemana = dataAtual.getDay();
+        deveCriar = diasSemana.includes(diaSemana);
       }
 
-      // Se tem dias da semana específicos (para semanal)
-      if (tipo === "SEMANAL" && diasSemana && diasSemana.length > 0) {
-        const diaSemana = novaData.getDay();
-        if (!diasSemana.includes(diaSemana)) {
-          continue;
+      if (deveCriar) {
+        try {
+          console.log(
+            `Tentando criar agendamento para:`,
+            dataAtual.toISOString()
+          );
+
+          const agendamento = await this.create(
+            tenantId,
+            {
+              ...data,
+              dataHora: dataAtual.toISOString(),
+              recorrencia: undefined,
+            },
+            recorrenciaId
+          );
+
+          agendamentos.push(agendamento);
+          console.log(`✅ Agendamento criado com sucesso`);
+        } catch (error: any) {
+          console.log(`❌ Erro ao criar agendamento:`, error.message);
+          // Continuar mesmo com erro (pode ser conflito de horário)
         }
       }
 
-      try {
-        const agendamento = await this.create(tenantId, {
-          ...data,
-          dataHora: novaData.toISOString(),
-        });
-        agendamentos.push(agendamento);
-      } catch (error) {
-        console.log(`Erro ao criar agendamento ${i + 1}:`, error);
+      // CORREÇÃO: Incrementar data conforme o tipo de recorrência
+      if (tipo === "DIARIA") {
+        dataAtual.setDate(dataAtual.getDate() + 1);
+      } else if (tipo === "SEMANAL") {
+        // Para semanal, avançar para o próximo dia válido
+        dataAtual.setDate(dataAtual.getDate() + 1);
+
+        // Se temos dias específicos da semana, pular até o próximo dia válido
+        if (diasSemana && diasSemana.length > 0) {
+          let tentativas = 0;
+          while (
+            !diasSemana.includes(dataAtual.getDay()) &&
+            dataAtual <= dataFinal &&
+            tentativas < 7
+          ) {
+            dataAtual.setDate(dataAtual.getDate() + 1);
+            tentativas++;
+          }
+        }
+      } else if (tipo === "MENSAL") {
+        dataAtual.setMonth(dataAtual.getMonth() + 1);
       }
+
+      contador++;
+
+      // Log de debug para detectar loops
+      if (contador % 10 === 0) {
+        console.log(
+          `Progresso: ${contador} iterações, ${agendamentos.length} agendamentos criados`
+        );
+      }
+    }
+
+    console.log(`Total de agendamentos criados: ${agendamentos.length}`);
+    console.log("====================");
+
+    if (agendamentos.length === 0) {
+      throw new AppError(
+        "Nenhum agendamento foi criado. Verifique os parâmetros de recorrência.",
+        400
+      );
     }
 
     return agendamentos;
   }
-
   // ==========================================================================
   // GET AGENDAMENTO BY ID
   // ==========================================================================
@@ -228,6 +269,7 @@ export class AgendamentoService {
             id: true,
             nome: true,
             especialidade: true,
+            cor: true,
           },
         },
         procedimento: {
@@ -382,28 +424,30 @@ export class AgendamentoService {
       updateData.profissionalId = data.profissionalId;
     }
 
-    if (data.procedimentoId) {
-      const procedimento = await prisma.procedimento.findFirst({
-        where: { id: data.procedimentoId, tenantId },
-      });
-      if (!procedimento) {
-        throw new AppError("Procedimento não encontrado", 404);
-      }
-      updateData.procedimentoId = data.procedimentoId;
+    if (data.procedimentoId !== undefined) {
+      if (data.procedimentoId) {
+        const procedimento = await prisma.procedimento.findFirst({
+          where: { id: data.procedimentoId, tenantId },
+        });
+        if (!procedimento) {
+          throw new AppError("Procedimento não encontrado", 404);
+        }
+        updateData.procedimentoId = data.procedimentoId;
 
-      // Recalcular horário de término
-      const dataHora = data.dataHora
-        ? new Date(data.dataHora)
-        : existingAgendamento.dataHora;
-      updateData.dataHoraFim = new Date(
-        dataHora.getTime() + procedimento.duracaoMinutos * 60000
-      );
+        const dataHora = data.dataHora
+          ? new Date(data.dataHora)
+          : existingAgendamento.dataHora;
+        updateData.dataHoraFim = new Date(
+          dataHora.getTime() + procedimento.duracaoMinutos * 60000
+        );
+      } else {
+        updateData.procedimentoId = null;
+      }
     }
 
     if (data.dataHora) {
       updateData.dataHora = new Date(data.dataHora);
 
-      // Recalcular dataHoraFim se não foi recalculado pelo procedimento
       if (!updateData.dataHoraFim) {
         const duracaoMinutos =
           existingAgendamento.procedimento?.duracaoMinutos || 30;
@@ -438,6 +482,7 @@ export class AgendamentoService {
           select: {
             id: true,
             nome: true,
+            cor: true,
           },
         },
         procedimento: {
@@ -451,6 +496,60 @@ export class AgendamentoService {
     });
 
     return agendamento;
+  }
+
+  // ==========================================================================
+  // UPDATE RECORRENCIA
+  // ==========================================================================
+
+  static async updateRecorrencia(
+    tenantId: string,
+    recorrenciaId: string,
+    data: UpdateAgendamentoData
+  ) {
+    const updateData: any = {};
+
+    if (data.profissionalId) {
+      const profissional = await prisma.profissional.findFirst({
+        where: { id: data.profissionalId, tenantId, ativo: true },
+      });
+      if (!profissional) {
+        throw new AppError("Profissional não encontrado ou inativo", 404);
+      }
+      updateData.profissionalId = data.profissionalId;
+    }
+
+    if (data.procedimentoId !== undefined) {
+      if (data.procedimentoId) {
+        const procedimento = await prisma.procedimento.findFirst({
+          where: { id: data.procedimentoId, tenantId },
+        });
+        if (!procedimento) {
+          throw new AppError("Procedimento não encontrado", 404);
+        }
+      }
+      updateData.procedimentoId = data.procedimentoId;
+    }
+
+    if (data.status) {
+      updateData.status = data.status;
+    }
+
+    if (data.observacoes !== undefined) {
+      updateData.observacoes = data.observacoes
+        ? data.observacoes.trim()
+        : null;
+    }
+
+    const result = await prisma.agendamento.updateMany({
+      where: {
+        tenantId,
+        recorrenciaId,
+      },
+      data: updateData,
+    });
+
+    return { updated: result.count };
   }
 
   // ==========================================================================
@@ -509,11 +608,40 @@ export class AgendamentoService {
   }
 
   // ==========================================================================
+  // DELETE RECORRENCIA
+  // ==========================================================================
+
+  static async deleteRecorrencia(tenantId: string, recorrenciaId: string) {
+    const comAtendimento = await prisma.agendamento.count({
+      where: {
+        tenantId,
+        recorrenciaId,
+        atendimento: { isNot: null },
+      },
+    });
+
+    if (comAtendimento > 0) {
+      throw new AppError(
+        `${comAtendimento} agendamento(s) da recorrência possui(em) atendimento e não podem ser excluídos`,
+        400
+      );
+    }
+
+    const result = await prisma.agendamento.deleteMany({
+      where: {
+        tenantId,
+        recorrenciaId,
+      },
+    });
+
+    return { deleted: result.count };
+  }
+
+  // ==========================================================================
   // DELETE BATCH
   // ==========================================================================
 
   static async deleteBatch(tenantId: string, ids: string[]) {
-    // Verificar se algum tem atendimento
     const comAtendimento = await prisma.agendamento.count({
       where: {
         id: { in: ids },
@@ -537,6 +665,21 @@ export class AgendamentoService {
     });
 
     return { deleted: result.count };
+  }
+
+  // ==========================================================================
+  // COUNT RECORRENCIA
+  // ==========================================================================
+
+  static async countRecorrencia(tenantId: string, recorrenciaId: string) {
+    const count = await prisma.agendamento.count({
+      where: {
+        tenantId,
+        recorrenciaId,
+      },
+    });
+
+    return count;
   }
 
   // ==========================================================================
@@ -574,6 +717,7 @@ export class AgendamentoService {
           select: {
             id: true,
             nome: true,
+            cor: true,
           },
         },
         procedimento: {
@@ -606,7 +750,6 @@ export class AgendamentoService {
       throw new AppError("Agendamento não encontrado", 404);
     }
 
-    // Validar se o status é válido
     const validStatuses = [
       "MARCADO",
       "CONFIRMADO",
@@ -618,7 +761,6 @@ export class AgendamentoService {
       throw new AppError("Status inválido", 400);
     }
 
-    // Verificar se o agendamento pode ter o status alterado
     if (agendamento.status === "CANCELADO" && status !== "MARCADO") {
       throw new AppError(
         "Agendamentos cancelados só podem voltar para MARCADO",
@@ -641,6 +783,7 @@ export class AgendamentoService {
           select: {
             id: true,
             nome: true,
+            cor: true,
           },
         },
         procedimento: {

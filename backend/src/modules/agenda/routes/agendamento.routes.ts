@@ -154,4 +154,50 @@ router.patch(
   AgendamentoController.updateStatus // Mudou de toggleStatus para updateStatus
 );
 
+/**
+ * @route   PUT /agendamentos/recorrencia/:recorrenciaId
+ * @desc    Atualizar todos agendamentos de uma recorrência
+ * @access  Private
+ */
+router.put(
+  "/recorrencia/:recorrenciaId",
+  validate({
+    params: Joi.object({
+      recorrenciaId: Joi.string().required(),
+    }),
+    body: updateAgendamentoSchema,
+  }),
+  AgendamentoController.updateRecorrencia
+);
+
+/**
+ * @route   DELETE /agendamentos/recorrencia/:recorrenciaId
+ * @desc    Excluir todos agendamentos de uma recorrência
+ * @access  Private
+ */
+router.delete(
+  "/recorrencia/:recorrenciaId",
+  validate({
+    params: Joi.object({
+      recorrenciaId: Joi.string().required(),
+    }),
+  }),
+  AgendamentoController.deleteRecorrencia
+);
+
+/**
+ * @route   GET /agendamentos/recorrencia/:recorrenciaId/count
+ * @desc    Contar agendamentos de uma recorrência
+ * @access  Private
+ */
+router.get(
+  "/recorrencia/:recorrenciaId/count",
+  validate({
+    params: Joi.object({
+      recorrenciaId: Joi.string().required(),
+    }),
+  }),
+  AgendamentoController.countRecorrencia
+);
+
 export default router;

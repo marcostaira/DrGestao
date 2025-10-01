@@ -38,7 +38,7 @@ yarn-error.log*
 lerna-debug.log*
 
 # Prisma
-/src/generated/
+**/generated/prisma
 /prisma/migrations/*_
 *.db
 *.db-journal
@@ -55,4 +55,4 @@ Thumbs.db
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-frontend/.next/cache/*
+**/.next/

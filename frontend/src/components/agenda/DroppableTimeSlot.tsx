@@ -24,6 +24,8 @@ interface DroppableTimeSlotProps {
   canDrop: boolean;
   draggedAgendamento: Agendamento | null;
   showTimeInCards?: boolean;
+  selectedIds?: string[];
+  onSelectAgendamento?: (id: string) => void;
 }
 
 export function DroppableTimeSlot({
@@ -42,6 +44,8 @@ export function DroppableTimeSlot({
   canDrop,
   draggedAgendamento,
   showTimeInCards = true,
+  selectedIds = [],
+  onSelectAgendamento,
 }: DroppableTimeSlotProps) {
   const isOccupied = agendamentos.length > 0;
 
@@ -65,30 +69,43 @@ export function DroppableTimeSlot({
       title={isOccupied ? "Ocupado" : "Clique para adicionar agendamento"}
     >
       {/* Renderiza agendamentos empilhados */}
-      {agendamentos.map((ag, index) => (
-        <div
-          key={ag.id}
-          style={{
-            position: "absolute",
-            top: 0,
-            left: `${index * 8}px`, // Empilha deslocando 8px para direita
-            right: 0,
-            zIndex: 10 + index, // Cada um fica acima do anterior
-          }}
-        >
-          <DraggableAgendamento
-            agendamento={ag}
-            onClick={(e) => {
-              if (e) e.stopPropagation();
-              onAgendamentoClick(ag);
+      {agendamentos.map((ag, index) => {
+        const isSelected = selectedIds.includes(ag.id);
+
+        return (
+          <div
+            key={ag.id}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: `${index * 8}px`, // Empilha deslocando 8px para direita
+              right: 0,
+              zIndex: 10 + index, // Cada um fica acima do anterior
             }}
-            onDragStart={onDragStart}
-            onDragEnd={onDragEnd}
-            isDragging={draggedAgendamento?.id === ag.id}
-            showTime={showTimeInCards}
-          />
-        </div>
-      ))}
+          >
+            <DraggableAgendamento
+              agendamento={ag}
+              onClick={(e) => {
+                if (e) e.stopPropagation();
+                onAgendamentoClick(ag);
+              }}
+              onDragStart={onDragStart}
+              onDragEnd={onDragEnd}
+              isDragging={draggedAgendamento?.id === ag.id}
+              showTime={showTimeInCards}
+              isSelected={isSelected}
+              onSelect={
+                onSelectAgendamento
+                  ? (e) => {
+                      e.stopPropagation();
+                      onSelectAgendamento(ag.id);
+                    }
+                  : undefined
+              }
+            />
+          </div>
+        );
+      })}
 
       {/* Contador quando há múltiplos */}
       {agendamentos.length > 1 && (

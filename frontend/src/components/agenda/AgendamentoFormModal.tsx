@@ -9,11 +9,12 @@ import { Procedimento } from "@/services/procedimentoService";
 import Modal from "@/components/ui/Modal";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
+import { countRecorrencia } from "@/services/agendamentoService";
 
 interface AgendamentoFormModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: CreateAgendamentoData) => Promise<boolean>;
+  onSubmit: (data: any) => Promise<boolean>;
   editingAgendamento?: Agendamento | null;
   initialDateTime?: Date;
   profissionais: Profissional[];
@@ -21,7 +22,6 @@ interface AgendamentoFormModalProps {
   procedimentos: Procedimento[];
 }
 
-// Função auxiliar para converter Date local para string datetime-local
 const toLocalISOString = (date: Date): string => {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -42,6 +42,9 @@ export const AgendamentoFormModal: React.FC<AgendamentoFormModalProps> = ({
   procedimentos,
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [editarRecorrencia, setEditarRecorrencia] = useState(false);
+  const [recorrenciaCount, setRecorrenciaCount] = useState(0);
+
   const [formData, setFormData] = useState<CreateAgendamentoData>({
     pacienteId: "",
     profissionalId: "",
@@ -49,6 +52,30 @@ export const AgendamentoFormModal: React.FC<AgendamentoFormModalProps> = ({
     dataHora: "",
     observacoes: "",
   });
+
+  // Carregar contagem de recorrência
+  useEffect(() => {
+    const loadRecorrenciaCount = async () => {
+      if (editingAgendamento?.recorrenciaId) {
+        try {
+          const count = await countRecorrencia(
+            editingAgendamento.recorrenciaId
+          );
+          setRecorrenciaCount(count);
+        } catch (error) {
+          console.error("Erro ao carregar contagem de recorrência:", error);
+          setRecorrenciaCount(0);
+        }
+      } else {
+        setRecorrenciaCount(0);
+        setEditarRecorrencia(false);
+      }
+    };
+
+    if (isOpen) {
+      loadRecorrenciaCount();
+    }
+  }, [editingAgendamento, isOpen]);
 
   useEffect(() => {
     if (editingAgendamento) {
@@ -76,24 +103,45 @@ export const AgendamentoFormModal: React.FC<AgendamentoFormModalProps> = ({
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Enviar data/hora local SEM conversão para UTC
-    // O backend vai receber e interpretar como está
-    console.log("DEBUG Frontend - Enviando agendamento:");
-    console.log("- Data/hora local (input):", formData.dataHora);
+    try {
+      let success = false;
 
-    const data = {
-      ...formData,
-      dataHora: formData.dataHora, // Enviar como está
-      pacienteId: formData.pacienteId || undefined,
-      procedimentoId: formData.procedimentoId || undefined,
-      observacoes: formData.observacoes || undefined,
-    };
+      const data = {
+        ...formData,
+        dataHora: formData.dataHora,
+        pacienteId: formData.pacienteId || undefined,
+        procedimentoId: formData.procedimentoId || undefined,
+        observacoes: formData.observacoes || undefined,
+      };
 
-    const success = await onSubmit(data);
-    setIsSubmitting(false);
+      if (
+        editingAgendamento &&
+        editarRecorrencia &&
+        editingAgendamento.recorrenciaId
+      ) {
+        // Editar toda a recorrência
+        success = await onSubmit({
+          recorrenciaId: editingAgendamento.recorrenciaId,
+          data: {
+            profissionalId: data.profissionalId,
+            procedimentoId: data.procedimentoId,
+            observacoes: data.observacoes,
+          },
+          isRecorrencia: true,
+        });
+      } else {
+        // Criar ou editar apenas este agendamento
+        success = await onSubmit(data);
+      }
 
-    if (success) {
-      onClose();
+      if (success) {
+        onClose();
+        setEditarRecorrencia(false);
+      }
+    } catch (error) {
+      console.error("Erro ao salvar agendamento:", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -104,6 +152,48 @@ export const AgendamentoFormModal: React.FC<AgendamentoFormModalProps> = ({
       title={editingAgendamento ? "Editar Agendamento" : "Novo Agendamento"}
     >
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Alerta de Recorrência */}
+        {editingAgendamento?.recorrenciaId && recorrenciaCount > 1 && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="flex items-start">
+              <svg
+                className="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <div className="ml-3 flex-1">
+                <h3 className="text-sm font-medium text-blue-800">
+                  Este agendamento faz parte de uma recorrência
+                </h3>
+                <p className="mt-2 text-sm text-blue-700">
+                  Existem <strong>{recorrenciaCount}</strong> agendamentos
+                  vinculados a esta recorrência.
+                </p>
+                <div className="mt-3">
+                  <label className="flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={editarRecorrencia}
+                      onChange={(e) => setEditarRecorrencia(e.target.checked)}
+                      className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                    />
+                    <span className="ml-2 text-sm text-blue-800 font-medium">
+                      Aplicar alterações a todos os {recorrenciaCount}{" "}
+                      agendamentos desta recorrência
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Paciente{" "}
@@ -117,6 +207,7 @@ export const AgendamentoFormModal: React.FC<AgendamentoFormModalProps> = ({
               setFormData({ ...formData, pacienteId: e.target.value })
             }
             className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+            disabled={editarRecorrencia}
           >
             <option value="">Sem paciente (bloqueio de horário)</option>
             {pacientes.map((pac) => (
@@ -125,6 +216,11 @@ export const AgendamentoFormModal: React.FC<AgendamentoFormModalProps> = ({
               </option>
             ))}
           </select>
+          {editarRecorrencia && (
+            <p className="mt-1 text-xs text-gray-500">
+              Paciente não pode ser alterado em edição de recorrência
+            </p>
+          )}
         </div>
 
         <div>
@@ -169,15 +265,23 @@ export const AgendamentoFormModal: React.FC<AgendamentoFormModalProps> = ({
           </select>
         </div>
 
-        <Input
-          label="Data e Hora"
-          type="datetime-local"
-          value={formData.dataHora}
-          onChange={(e) =>
-            setFormData({ ...formData, dataHora: e.target.value })
-          }
-          required
-        />
+        <div>
+          <Input
+            label="Data e Hora"
+            type="datetime-local"
+            value={formData.dataHora}
+            onChange={(e) =>
+              setFormData({ ...formData, dataHora: e.target.value })
+            }
+            required
+            disabled={editarRecorrencia}
+          />
+          {editarRecorrencia && (
+            <p className="mt-1 text-xs text-gray-500">
+              Data/hora não pode ser alterada em edição de recorrência
+            </p>
+          )}
+        </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -204,7 +308,11 @@ export const AgendamentoFormModal: React.FC<AgendamentoFormModalProps> = ({
             Cancelar
           </Button>
           <Button type="submit" isLoading={isSubmitting}>
-            {editingAgendamento ? "Atualizar" : "Criar"}
+            {editingAgendamento
+              ? editarRecorrencia
+                ? `Atualizar ${recorrenciaCount} Agendamentos`
+                : "Atualizar"
+              : "Criar"}
           </Button>
         </div>
       </form>

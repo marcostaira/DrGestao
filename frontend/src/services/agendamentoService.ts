@@ -17,6 +17,7 @@ export interface Agendamento {
   dataHora: string;
   status: StatusAgendamento;
   observacoes?: string;
+  recorrenciaId?: string;
   paciente?: {
     id: string;
     nome: string;
@@ -105,4 +106,76 @@ export async function updateStatus(
 ): Promise<Agendamento> {
   const response = await api.patch(`/agendamentos/${id}/status`, { status });
   return response.data.data;
+}
+
+// ============================================================================
+// BATCH OPERATIONS
+// ============================================================================
+
+export interface RecorrenciaData {
+  tipo: "DIARIA" | "SEMANAL" | "MENSAL";
+  dataFim: string;
+  diasSemana?: number[]; // 0=Domingo, 1=Segunda, etc
+}
+
+export interface CreateBatchAgendamentoData extends CreateAgendamentoData {
+  recorrencia?: RecorrenciaData;
+}
+
+export interface BatchUpdateData {
+  profissionalId?: string;
+  procedimentoId?: string;
+  status?: StatusAgendamento;
+  observacoes?: string;
+}
+
+export async function createBatchAgendamento(
+  data: CreateBatchAgendamentoData
+): Promise<Agendamento[]> {
+  const response = await api.post("/agendamentos", data);
+  return response.data.data;
+}
+
+export async function batchUpdateAgendamentos(
+  ids: string[],
+  data: BatchUpdateData
+): Promise<{ updated: number }> {
+  const response = await api.put("/agendamentos/batch", { ids, data });
+  return response.data.data;
+}
+
+export async function batchDeleteAgendamentos(
+  ids: string[]
+): Promise<{ deleted: number }> {
+  const response = await api.delete("/agendamentos/batch", { data: { ids } });
+  return response.data.data;
+}
+
+// Adicionar ao final do arquivo existente
+
+export async function updateRecorrencia(
+  recorrenciaId: string,
+  data: UpdateAgendamentoData
+): Promise<{ updated: number }> {
+  const response = await api.put(
+    `/agendamentos/recorrencia/${recorrenciaId}`,
+    data
+  );
+  return response.data.data;
+}
+
+export async function deleteRecorrencia(
+  recorrenciaId: string
+): Promise<{ deleted: number }> {
+  const response = await api.delete(
+    `/agendamentos/recorrencia/${recorrenciaId}`
+  );
+  return response.data.data;
+}
+
+export async function countRecorrencia(recorrenciaId: string): Promise<number> {
+  const response = await api.get(
+    `/agendamentos/recorrencia/${recorrenciaId}/count`
+  );
+  return response.data.data.count;
 }
