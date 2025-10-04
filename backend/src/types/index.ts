@@ -372,12 +372,14 @@ export enum Modulo {
 export interface Permissao {
   visualizar: boolean;
   criarAlterar: boolean;
+  cancelar: boolean;
 }
 
 export interface AutorizacaoData {
   modulo: Modulo;
   visualizar: boolean;
   criarAlterar: boolean;
+  cancelar: boolean;
 }
 
 export interface AutorizacoesUsuario {

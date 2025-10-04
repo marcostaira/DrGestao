@@ -1,507 +1,296 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useAuth } from "@/contexts/AuthContext";
-import { useRouter } from "next/navigation";
-import {
-  Usuario,
-  CreateUsuarioData,
-  UpdateUsuarioData,
-  TipoUsuario,
-} from "@/types";
-import * as userService from "@/services/userService";
-import Button from "@/components/ui/Button";
-import Card from "@/components/ui/Card";
-import Table from "@/components/ui/Table";
-import Modal from "@/components/ui/Modal";
-import Input from "@/components/ui/Input";
-import Badge from "@/components/ui/Badge";
-import Alert from "@/components/ui/Alert";
+import { ModalEditarPermissoes } from "@/components/autorizacoes/ModalEditarPermissoes";
+import { UsuarioPermissoesCard } from "@/components/autorizacoes/UsuarioPermissoesCard";
+import { useAutorizacoes } from "@/hooks/useAutorizacoes";
+import { UsuarioComAutorizacoes } from "@/types/autorizacao.types";
+import React, { useState } from "react";
 
-export default function UsuariosPage() {
-  const { isAdmin, user: loggedUser } = useAuth();
-  const router = useRouter();
+// ============================================================================
+// PÁGINA - GESTÃO DE AUTORIZAÇÕES
+// ============================================================================
 
-  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [firstAdminId, setFirstAdminId] = useState<string | null>(null);
+export default function AutorizacoesPage() {
+  const {
+    usuarios,
+    loading,
+    error,
+    meta,
+    carregarUsuarios,
+    atualizarAutorizacoes,
+  } = useAutorizacoes();
+  const [usuarioSelecionado, setUsuarioSelecionado] =
+    useState<UsuarioComAutorizacoes | null>(null);
+  const [modalAberto, setModalAberto] = useState(false);
+  const [filtroTipo, setFiltroTipo] = useState<
+    "TODOS" | "ADMIN" | "SECRETARIA"
+  >("TODOS");
+  const [filtroAtivo, setFiltroAtivo] = useState<"TODOS" | "ATIVO" | "INATIVO">(
+    "ATIVO"
+  );
+  const [busca, setBusca] = useState("");
 
-  // Modal states
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [editingUser, setEditingUser] = useState<Usuario | null>(null);
-  const [deletingUser, setDeletingUser] = useState<Usuario | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // Abrir modal de edição
+  const handleEditarPermissoes = (usuario: UsuarioComAutorizacoes) => {
+    setUsuarioSelecionado(usuario);
+    setModalAberto(true);
+  };
 
-  // Form states
-  const [formData, setFormData] = useState<CreateUsuarioData>({
-    nome: "",
-    email: "",
-    senha: "",
-    tipo: TipoUsuario.SECRETARIA,
+  // Fechar modal
+  const handleFecharModal = () => {
+    setModalAberto(false);
+    setUsuarioSelecionado(null);
+  };
+
+  // Salvar permissões
+  const handleSalvarPermissoes = async (
+    usuarioId: string,
+    autorizacoes: any[]
+  ) => {
+    const resultado = await atualizarAutorizacoes(usuarioId, { autorizacoes });
+
+    if (resultado.success) {
+      // Sucesso - modal será fechado automaticamente
+    } else {
+      throw new Error(resultado.error);
+    }
+  };
+
+  // Aplicar filtros
+  const usuariosFiltrados = usuarios.filter((usuario) => {
+    // Filtro de tipo
+    if (filtroTipo !== "TODOS" && usuario.tipo !== filtroTipo) {
+      return false;
+    }
+
+    // Filtro de status
+    if (filtroAtivo === "ATIVO" && !usuario.ativo) return false;
+    if (filtroAtivo === "INATIVO" && usuario.ativo) return false;
+
+    // Filtro de busca
+    if (busca) {
+      const termoBusca = busca.toLowerCase();
+      return (
+        usuario.nome.toLowerCase().includes(termoBusca) ||
+        usuario.email.toLowerCase().includes(termoBusca)
+      );
+    }
+
+    return true;
   });
 
-  useEffect(() => {
-    if (!isAdmin) {
-      router.push("/dashboard");
-      return;
-    }
-    loadUsuarios();
-  }, [isAdmin, router]);
-
-  const loadUsuarios = async () => {
-    try {
-      setIsLoading(true);
-      const data = await userService.getUsers();
-      setUsuarios(data);
-
-      // Identificar o primeiro admin (criador do tenant)
-      const admins = data
-        .filter((u: Usuario) => u.tipo === TipoUsuario.ADMIN)
-        .sort(
-          (a: Usuario, b: Usuario) =>
-            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        );
-
-      if (admins.length > 0) {
-        setFirstAdminId(admins[0].id);
-      }
-    } catch (err: any) {
-      setError(err.response?.data?.error || "Erro ao carregar usuários");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleOpenModal = (user?: Usuario) => {
-    if (user) {
-      setEditingUser(user);
-      setFormData({
-        nome: user.nome,
-        email: user.email,
-        senha: "",
-        tipo: user.tipo,
-      });
-    } else {
-      setEditingUser(null);
-      setFormData({
-        nome: "",
-        email: "",
-        senha: "",
-        tipo: TipoUsuario.SECRETARIA,
-      });
-    }
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setEditingUser(null);
-    setFormData({
-      nome: "",
-      email: "",
-      senha: "",
-      tipo: TipoUsuario.SECRETARIA,
-    });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setError("");
-
-    try {
-      if (editingUser) {
-        const updateData: UpdateUsuarioData = {
-          nome: formData.nome,
-          email: formData.email,
-          tipo: formData.tipo,
-        };
-        if (formData.senha) {
-          updateData.senha = formData.senha;
-        }
-        await userService.updateUser(editingUser.id, updateData);
-        setSuccess("Usuário atualizado com sucesso!");
-      } else {
-        await userService.createUser(formData);
-        setSuccess("Usuário criado com sucesso!");
-      }
-
-      handleCloseModal();
-      loadUsuarios();
-
-      setTimeout(() => setSuccess(""), 3000);
-    } catch (err: any) {
-      setError(err.response?.data?.error || "Erro ao salvar usuário");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleDelete = async () => {
-    if (!deletingUser) return;
-
-    setIsSubmitting(true);
-    try {
-      await userService.deleteUser(deletingUser.id);
-      setSuccess("Usuário excluído com sucesso!");
-      setIsDeleteModalOpen(false);
-      setDeletingUser(null);
-      loadUsuarios();
-
-      setTimeout(() => setSuccess(""), 3000);
-    } catch (err: any) {
-      setError(err.response?.data?.error || "Erro ao excluir usuário");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleToggleStatus = async (user: Usuario) => {
-    // Validações no frontend
-    if (user.id === loggedUser?.id) {
-      setError("Você não pode desativar seu próprio usuário");
-      setTimeout(() => setError(""), 3000);
-      return;
-    }
-
-    if (user.id === firstAdminId) {
-      setError("Não é possível desativar o administrador principal");
-      setTimeout(() => setError(""), 3000);
-      return;
-    }
-
-    try {
-      await userService.toggleUserStatus(user.id, !user.ativo);
-      setSuccess(
-        `Usuário ${!user.ativo ? "ativado" : "desativado"} com sucesso!`
-      );
-      loadUsuarios();
-
-      setTimeout(() => setSuccess(""), 3000);
-    } catch (err: any) {
-      setError(err.response?.data?.error || "Erro ao alterar status");
-      setTimeout(() => setError(""), 3000);
-    }
-  };
-
-  const columns = [
-    {
-      key: "nome",
-      header: "Nome",
-    },
-    {
-      key: "email",
-      header: "E-mail",
-    },
-    {
-      key: "tipo",
-      header: "Tipo",
-      render: (user: Usuario) => (
-        <Badge
-          variant={user.tipo === TipoUsuario.ADMIN ? "success" : "default"}
-        >
-          {user.tipo === TipoUsuario.ADMIN ? "Administrador" : "Secretária"}
-        </Badge>
-      ),
-    },
-    {
-      key: "ativo",
-      header: "Status",
-      render: (user: Usuario) => (
-        <Badge variant={user.ativo ? "success" : "danger"}>
-          {user.ativo ? "Ativo" : "Inativo"}
-        </Badge>
-      ),
-    },
-    {
-      key: "actions",
-      header: "Ações",
-      render: (user: Usuario) => {
-        const isCurrentUser = user.id === loggedUser?.id;
-        const isFirstAdmin = user.id === firstAdminId;
-        const cannotToggle = isCurrentUser || isFirstAdmin;
-
-        return (
-          <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-            <button
-              onClick={() => handleOpenModal(user)}
-              className="text-primary-600 hover:text-primary-800"
-              title="Editar"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                />
-              </svg>
-            </button>
-
-            <button
-              onClick={() => handleToggleStatus(user)}
-              disabled={cannotToggle}
-              className={`transition-colors ${
-                cannotToggle
-                  ? "text-gray-300 cursor-not-allowed"
-                  : user.ativo
-                  ? "text-yellow-600 hover:text-yellow-800"
-                  : "text-green-600 hover:text-green-800"
-              }`}
-              title={
-                isCurrentUser
-                  ? "Você não pode desativar seu próprio usuário"
-                  : isFirstAdmin
-                  ? "Administrador principal não pode ser desativado"
-                  : user.ativo
-                  ? "Desativar"
-                  : "Ativar"
-              }
-            >
-              {user.ativo ? (
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              )}
-            </button>
-
-            <button
-              onClick={() => {
-                setDeletingUser(user);
-                setIsDeleteModalOpen(true);
-              }}
-              disabled={isFirstAdmin}
-              className={`transition-colors ${
-                isFirstAdmin
-                  ? "text-gray-300 cursor-not-allowed"
-                  : "text-red-600 hover:text-red-800"
-              }`}
-              title={
-                isFirstAdmin
-                  ? "Administrador principal não pode ser excluído"
-                  : "Excluir"
-              }
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                />
-              </svg>
-            </button>
-          </div>
-        );
-      },
-    },
-  ];
-
-  if (!isAdmin) {
-    return null;
-  }
-
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-secondary-900">Usuários</h1>
-          <p className="text-secondary-600 mt-1">
-            Gerencie os usuários do sistema
-          </p>
-        </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">
+                Gestão de Autorizações
+              </h1>
+              <p className="mt-2 text-sm text-gray-600">
+                Configure as permissões de acesso para cada usuário do sistema
+              </p>
+            </div>
 
-        <Button onClick={() => handleOpenModal()}>
-          <svg
-            className="w-5 h-5 mr-2"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-            />
-          </svg>
-          Novo Usuário
-        </Button>
+            <div className="flex items-center gap-4">
+              <div className="text-right">
+                <p className="text-sm font-medium text-gray-900">
+                  {meta.total}
+                </p>
+                <p className="text-xs text-gray-500">Usuários</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {error && (
-        <Alert type="error" onClose={() => setError("")}>
-          {error}
-        </Alert>
-      )}
+      {/* Filtros e Busca */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {/* Busca */}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Buscar
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Nome ou email..."
+                  value={busca}
+                  onChange={(e) => setBusca(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <svg
+                  className="absolute left-3 top-2.5 h-5 w-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              </div>
+            </div>
 
-      {success && (
-        <Alert type="success" onClose={() => setSuccess("")}>
-          {success}
-        </Alert>
-      )}
+            {/* Filtro Tipo */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Tipo de Usuário
+              </label>
+              <select
+                value={filtroTipo}
+                onChange={(e) => setFiltroTipo(e.target.value as any)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="TODOS">Todos</option>
+                <option value="ADMIN">Administradores</option>
+                <option value="SECRETARIA">Secretárias</option>
+              </select>
+            </div>
 
-      <Card>
-        {isLoading ? (
-          <div className="flex justify-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
-          </div>
-        ) : (
-          <Table
-            data={usuarios}
-            columns={columns}
-            onRowClick={(usuario) => handleOpenModal(usuario)}
-          />
-        )}
-      </Card>
-
-      {/* Modal Criar/Editar */}
-      <Modal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        title={editingUser ? "Editar Usuário" : "Novo Usuário"}
-      >
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            label="Nome"
-            value={formData.nome}
-            onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
-            required
-          />
-
-          <Input
-            label="E-mail"
-            type="email"
-            value={formData.email}
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
-            }
-            required
-          />
-
-          <Input
-            label={
-              editingUser ? "Nova Senha (deixe em branco para manter)" : "Senha"
-            }
-            type="password"
-            value={formData.senha}
-            onChange={(e) =>
-              setFormData({ ...formData, senha: e.target.value })
-            }
-            required={!editingUser}
-          />
-
-          <div>
-            <label className="block text-sm font-medium text-secondary-700 mb-1">
-              Tipo de Usuário <span className="text-red-500">*</span>
-            </label>
-            <select
-              value={formData.tipo}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  tipo: e.target.value as TipoUsuario,
-                })
-              }
-              className="block w-full px-3 py-2 border border-secondary-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              required
-            >
-              <option value={TipoUsuario.SECRETARIA}>Secretária</option>
-              <option value={TipoUsuario.ADMIN}>Administrador</option>
-            </select>
+            {/* Filtro Status */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Status
+              </label>
+              <select
+                value={filtroAtivo}
+                onChange={(e) => setFiltroAtivo(e.target.value as any)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="TODOS">Todos</option>
+                <option value="ATIVO">Ativos</option>
+                <option value="INATIVO">Inativos</option>
+              </select>
+            </div>
           </div>
 
-          <div className="flex justify-end gap-3 pt-4">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={handleCloseModal}
-              disabled={isSubmitting}
-            >
-              Cancelar
-            </Button>
-            <Button type="submit" isLoading={isSubmitting}>
-              {editingUser ? "Atualizar" : "Criar"}
-            </Button>
-          </div>
-        </form>
-      </Modal>
-
-      {/* Modal Confirmar Exclusão */}
-      <Modal
-        isOpen={isDeleteModalOpen}
-        onClose={() => {
-          setIsDeleteModalOpen(false);
-          setDeletingUser(null);
-        }}
-        title="Confirmar Exclusão"
-        size="sm"
-      >
-        <div className="space-y-4">
-          <p className="text-secondary-600">
-            Tem certeza que deseja excluir o usuário{" "}
-            <strong>{deletingUser?.nome}</strong>? Esta ação não pode ser
-            desfeita.
-          </p>
-
-          <div className="flex justify-end gap-3">
-            <Button
-              variant="secondary"
-              onClick={() => {
-                setIsDeleteModalOpen(false);
-                setDeletingUser(null);
-              }}
-              disabled={isSubmitting}
-            >
-              Cancelar
-            </Button>
-            <Button
-              variant="danger"
-              onClick={handleDelete}
-              isLoading={isSubmitting}
-            >
-              Excluir
-            </Button>
+          {/* Contador de resultados */}
+          <div className="mt-4 pt-4 border-t border-gray-200">
+            <p className="text-sm text-gray-600">
+              Exibindo{" "}
+              <span className="font-semibold">{usuariosFiltrados.length}</span>{" "}
+              de <span className="font-semibold">{meta.total}</span> usuários
+            </p>
           </div>
         </div>
-      </Modal>
+      </div>
+
+      {/* Conteúdo Principal */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+        {/* Loading */}
+        {loading && (
+          <div className="flex items-center justify-center py-12">
+            <div className="flex flex-col items-center gap-3">
+              <svg
+                className="animate-spin h-8 w-8 text-blue-600"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
+              </svg>
+              <p className="text-sm text-gray-600">Carregando usuários...</p>
+            </div>
+          </div>
+        )}
+
+        {/* Erro */}
+        {error && !loading && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+            <div className="flex items-start gap-3">
+              <svg
+                className="w-5 h-5 text-red-600 mt-0.5"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <div>
+                <p className="text-sm font-medium text-red-800">
+                  Erro ao carregar usuários
+                </p>
+                <p className="text-sm text-red-700 mt-1">{error}</p>
+                <button
+                  onClick={() => carregarUsuarios()}
+                  className="mt-3 text-sm font-medium text-red-600 hover:text-red-700"
+                >
+                  Tentar novamente
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Lista de Usuários */}
+        {!loading && !error && (
+          <>
+            {usuariosFiltrados.length === 0 ? (
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+                <svg
+                  className="mx-auto h-12 w-12 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                  />
+                </svg>
+                <h3 className="mt-4 text-lg font-medium text-gray-900">
+                  Nenhum usuário encontrado
+                </h3>
+                <p className="mt-2 text-sm text-gray-500">
+                  Tente ajustar os filtros de busca
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {usuariosFiltrados.map((usuario) => (
+                  <UsuarioPermissoesCard
+                    key={usuario.id}
+                    usuario={usuario}
+                    onEdit={handleEditarPermissoes}
+                  />
+                ))}
+              </div>
+            )}
+          </>
+        )}
+      </div>
+
+      {/* Modal de Edição */}
+      <ModalEditarPermissoes
+        usuario={usuarioSelecionado}
+        isOpen={modalAberto}
+        onClose={handleFecharModal}
+        onSave={handleSalvarPermissoes}
+      />
     </div>
   );
 }

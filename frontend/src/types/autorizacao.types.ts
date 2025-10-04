@@ -16,6 +16,7 @@ export enum Modulo {
 export interface Permissao {
   visualizar: boolean;
   criarAlterar: boolean;
+  cancelar: boolean; 
 }
 
 export interface Autorizacao {
@@ -24,6 +25,7 @@ export interface Autorizacao {
   modulo: Modulo;
   visualizar: boolean;
   criarAlterar: boolean;
+  cancelar: boolean; 
   createdAt: string;
   updatedAt: string;
 }
@@ -51,6 +53,7 @@ export interface UpdateAutorizacoesPayload {
     modulo: Modulo;
     visualizar: boolean;
     criarAlterar: boolean;
+    cancelar: boolean; 
   }[];
 }
 

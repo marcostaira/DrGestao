@@ -9,11 +9,11 @@ import { AutorizacaoService } from "../modules/autorizacoes/services/autorizacao
 /**
  * Middleware para verificar se o usuário tem permissão para acessar um módulo
  * @param modulo - Módulo a ser verificado
- * @param tipo - Tipo de permissão: 'visualizar' ou 'criarAlterar'
+ * @param tipo - Tipo de permissão: 'visualizar', 'criarAlterar' ou 'cancelar'
  */
 export const autorizar = (
   modulo: Modulo,
-  tipo: "visualizar" | "criarAlterar"
+  tipo: "visualizar" | "criarAlterar" | "cancelar" // ⬅️ ATUALIZADO
 ) => {
   return async (
     req: AuthenticatedRequest,
@@ -54,7 +54,12 @@ export const autorizar = (
 
       // Verificar o tipo de permissão solicitado
       if (!permissaoModulo[tipo]) {
-        const acao = tipo === "visualizar" ? "visualizar" : "criar/alterar";
+        const acao =
+          tipo === "visualizar"
+            ? "visualizar"
+            : tipo === "criarAlterar"
+            ? "criar/alterar"
+            : "cancelar"; // ⬅️ ADICIONADO
         res.status(403).json({
           success: false,
           error: `Sem permissão para ${acao} no módulo ${modulo}`,
@@ -122,7 +127,7 @@ export const carregarPermissoes = async (
 export const temPermissao = async (
   req: AuthenticatedRequest,
   modulo: Modulo,
-  tipo: "visualizar" | "criarAlterar"
+  tipo: "visualizar" | "criarAlterar" | "cancelar" // ⬅️ ATUALIZADO
 ): Promise<boolean> => {
   if (!req.user) {
     return false;

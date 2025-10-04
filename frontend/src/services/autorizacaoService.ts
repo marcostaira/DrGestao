@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "@/lib/api";
 import {
   UsuarioComAutorizacoes,
   UpdateAutorizacoesPayload,
@@ -9,28 +9,13 @@ import {
 // AUTORIZACAO SERVICE
 // ============================================================================
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
-
-// Configurar interceptor para adicionar token
-const api = axios.create({
-  baseURL: API_URL,
-});
-
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
 export class AutorizacaoService {
   // ==========================================================================
   // BUSCAR MINHAS AUTORIZAÇÕES
   // ==========================================================================
 
   static async getMinhasAutorizacoes(): Promise<MinhasAutorizacoesResponse> {
-    const response = await api.get("/api/autorizacoes/minhas");
+    const response = await api.get("/autorizacoes/minhas");
     return response.data.data;
   }
 
@@ -52,7 +37,7 @@ export class AutorizacaoService {
       totalPages: number;
     };
   }> {
-    const response = await api.get("/api/autorizacoes/usuarios", { params });
+    const response = await api.get("/autorizacoes/usuarios", { params });
     return {
       usuarios: response.data.data,
       meta: response.data.meta,
@@ -72,7 +57,7 @@ export class AutorizacaoService {
     };
     autorizacoes: any[];
   }> {
-    const response = await api.get(`/api/autorizacoes/usuarios/${usuarioId}`);
+    const response = await api.get(`/autorizacoes/usuarios/${usuarioId}`);
     return response.data.data;
   }
 
@@ -84,7 +69,7 @@ export class AutorizacaoService {
     usuarioId: string,
     payload: UpdateAutorizacoesPayload
   ): Promise<void> {
-    await api.put(`/api/autorizacoes/usuarios/${usuarioId}`, payload);
+    await api.put(`/autorizacoes/usuarios/${usuarioId}`, payload);
   }
 
   // ==========================================================================
@@ -94,7 +79,7 @@ export class AutorizacaoService {
   static temPermissao(
     autorizacoes: MinhasAutorizacoesResponse | null,
     modulo: string,
-    tipo: "visualizar" | "criarAlterar"
+    tipo: "visualizar" | "criarAlterar" | "cancelar"
   ): boolean {
     if (!autorizacoes) return false;
 

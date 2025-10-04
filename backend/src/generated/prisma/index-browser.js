@@ -270,6 +270,7 @@ exports.Prisma.AutorizacaoScalarFieldEnum = {
   modulo: 'modulo',
   visualizar: 'visualizar',
   criarAlterar: 'criarAlterar',
+  cancelar: 'cancelar',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

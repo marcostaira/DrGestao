@@ -14176,6 +14176,7 @@ export namespace Prisma {
     modulo: $Enums.Modulo | null
     visualizar: boolean | null
     criarAlterar: boolean | null
+    cancelar: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -14186,6 +14187,7 @@ export namespace Prisma {
     modulo: $Enums.Modulo | null
     visualizar: boolean | null
     criarAlterar: boolean | null
+    cancelar: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -14196,6 +14198,7 @@ export namespace Prisma {
     modulo: number
     visualizar: number
     criarAlterar: number
+    cancelar: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -14208,6 +14211,7 @@ export namespace Prisma {
     modulo?: true
     visualizar?: true
     criarAlterar?: true
+    cancelar?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -14218,6 +14222,7 @@ export namespace Prisma {
     modulo?: true
     visualizar?: true
     criarAlterar?: true
+    cancelar?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -14228,6 +14233,7 @@ export namespace Prisma {
     modulo?: true
     visualizar?: true
     criarAlterar?: true
+    cancelar?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -14311,6 +14317,7 @@ export namespace Prisma {
     modulo: $Enums.Modulo
     visualizar: boolean
     criarAlterar: boolean
+    cancelar: boolean
     createdAt: Date
     updatedAt: Date
     _count: AutorizacaoCountAggregateOutputType | null
@@ -14338,6 +14345,7 @@ export namespace Prisma {
     modulo?: boolean
     visualizar?: boolean
     criarAlterar?: boolean
+    cancelar?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
@@ -14349,6 +14357,7 @@ export namespace Prisma {
     modulo?: boolean
     visualizar?: boolean
     criarAlterar?: boolean
+    cancelar?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
@@ -14360,6 +14369,7 @@ export namespace Prisma {
     modulo?: boolean
     visualizar?: boolean
     criarAlterar?: boolean
+    cancelar?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
@@ -14371,11 +14381,12 @@ export namespace Prisma {
     modulo?: boolean
     visualizar?: boolean
     criarAlterar?: boolean
+    cancelar?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type AutorizacaoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "usuarioId" | "modulo" | "visualizar" | "criarAlterar" | "createdAt" | "updatedAt", ExtArgs["result"]["autorizacao"]>
+  export type AutorizacaoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "usuarioId" | "modulo" | "visualizar" | "criarAlterar" | "cancelar" | "createdAt" | "updatedAt", ExtArgs["result"]["autorizacao"]>
   export type AutorizacaoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
   }
@@ -14397,6 +14408,7 @@ export namespace Prisma {
       modulo: $Enums.Modulo
       visualizar: boolean
       criarAlterar: boolean
+      cancelar: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["autorizacao"]>
@@ -14828,6 +14840,7 @@ export namespace Prisma {
     readonly modulo: FieldRef<"Autorizacao", 'Modulo'>
     readonly visualizar: FieldRef<"Autorizacao", 'Boolean'>
     readonly criarAlterar: FieldRef<"Autorizacao", 'Boolean'>
+    readonly cancelar: FieldRef<"Autorizacao", 'Boolean'>
     readonly createdAt: FieldRef<"Autorizacao", 'DateTime'>
     readonly updatedAt: FieldRef<"Autorizacao", 'DateTime'>
   }
@@ -15438,6 +15451,7 @@ export namespace Prisma {
     modulo: 'modulo',
     visualizar: 'visualizar',
     criarAlterar: 'criarAlterar',
+    cancelar: 'cancelar',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -16603,6 +16617,7 @@ export namespace Prisma {
     modulo?: EnumModuloFilter<"Autorizacao"> | $Enums.Modulo
     visualizar?: BoolFilter<"Autorizacao"> | boolean
     criarAlterar?: BoolFilter<"Autorizacao"> | boolean
+    cancelar?: BoolFilter<"Autorizacao"> | boolean
     createdAt?: DateTimeFilter<"Autorizacao"> | Date | string
     updatedAt?: DateTimeFilter<"Autorizacao"> | Date | string
     usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
@@ -16614,6 +16629,7 @@ export namespace Prisma {
     modulo?: SortOrder
     visualizar?: SortOrder
     criarAlterar?: SortOrder
+    cancelar?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     usuario?: UsuarioOrderByWithRelationInput
@@ -16629,6 +16645,7 @@ export namespace Prisma {
     modulo?: EnumModuloFilter<"Autorizacao"> | $Enums.Modulo
     visualizar?: BoolFilter<"Autorizacao"> | boolean
     criarAlterar?: BoolFilter<"Autorizacao"> | boolean
+    cancelar?: BoolFilter<"Autorizacao"> | boolean
     createdAt?: DateTimeFilter<"Autorizacao"> | Date | string
     updatedAt?: DateTimeFilter<"Autorizacao"> | Date | string
     usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
@@ -16640,6 +16657,7 @@ export namespace Prisma {
     modulo?: SortOrder
     visualizar?: SortOrder
     criarAlterar?: SortOrder
+    cancelar?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: AutorizacaoCountOrderByAggregateInput
@@ -16656,6 +16674,7 @@ export namespace Prisma {
     modulo?: EnumModuloWithAggregatesFilter<"Autorizacao"> | $Enums.Modulo
     visualizar?: BoolWithAggregatesFilter<"Autorizacao"> | boolean
     criarAlterar?: BoolWithAggregatesFilter<"Autorizacao"> | boolean
+    cancelar?: BoolWithAggregatesFilter<"Autorizacao"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Autorizacao"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Autorizacao"> | Date | string
   }
@@ -17725,6 +17744,7 @@ export namespace Prisma {
     modulo: $Enums.Modulo
     visualizar?: boolean
     criarAlterar?: boolean
+    cancelar?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     usuario: UsuarioCreateNestedOneWithoutAutorizacoesInput
@@ -17736,6 +17756,7 @@ export namespace Prisma {
     modulo: $Enums.Modulo
     visualizar?: boolean
     criarAlterar?: boolean
+    cancelar?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -17745,6 +17766,7 @@ export namespace Prisma {
     modulo?: EnumModuloFieldUpdateOperationsInput | $Enums.Modulo
     visualizar?: BoolFieldUpdateOperationsInput | boolean
     criarAlterar?: BoolFieldUpdateOperationsInput | boolean
+    cancelar?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     usuario?: UsuarioUpdateOneRequiredWithoutAutorizacoesNestedInput
@@ -17756,6 +17778,7 @@ export namespace Prisma {
     modulo?: EnumModuloFieldUpdateOperationsInput | $Enums.Modulo
     visualizar?: BoolFieldUpdateOperationsInput | boolean
     criarAlterar?: BoolFieldUpdateOperationsInput | boolean
+    cancelar?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17766,6 +17789,7 @@ export namespace Prisma {
     modulo: $Enums.Modulo
     visualizar?: boolean
     criarAlterar?: boolean
+    cancelar?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -17775,6 +17799,7 @@ export namespace Prisma {
     modulo?: EnumModuloFieldUpdateOperationsInput | $Enums.Modulo
     visualizar?: BoolFieldUpdateOperationsInput | boolean
     criarAlterar?: BoolFieldUpdateOperationsInput | boolean
+    cancelar?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17785,6 +17810,7 @@ export namespace Prisma {
     modulo?: EnumModuloFieldUpdateOperationsInput | $Enums.Modulo
     visualizar?: BoolFieldUpdateOperationsInput | boolean
     criarAlterar?: BoolFieldUpdateOperationsInput | boolean
+    cancelar?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18755,6 +18781,7 @@ export namespace Prisma {
     modulo?: SortOrder
     visualizar?: SortOrder
     criarAlterar?: SortOrder
+    cancelar?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -18765,6 +18792,7 @@ export namespace Prisma {
     modulo?: SortOrder
     visualizar?: SortOrder
     criarAlterar?: SortOrder
+    cancelar?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -18775,6 +18803,7 @@ export namespace Prisma {
     modulo?: SortOrder
     visualizar?: SortOrder
     criarAlterar?: SortOrder
+    cancelar?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -20134,6 +20163,7 @@ export namespace Prisma {
     modulo: $Enums.Modulo
     visualizar?: boolean
     criarAlterar?: boolean
+    cancelar?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -20143,6 +20173,7 @@ export namespace Prisma {
     modulo: $Enums.Modulo
     visualizar?: boolean
     criarAlterar?: boolean
+    cancelar?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -20223,6 +20254,7 @@ export namespace Prisma {
     modulo?: EnumModuloFilter<"Autorizacao"> | $Enums.Modulo
     visualizar?: BoolFilter<"Autorizacao"> | boolean
     criarAlterar?: BoolFilter<"Autorizacao"> | boolean
+    cancelar?: BoolFilter<"Autorizacao"> | boolean
     createdAt?: DateTimeFilter<"Autorizacao"> | Date | string
     updatedAt?: DateTimeFilter<"Autorizacao"> | Date | string
   }
@@ -22607,6 +22639,7 @@ export namespace Prisma {
     modulo: $Enums.Modulo
     visualizar?: boolean
     criarAlterar?: boolean
+    cancelar?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -22616,6 +22649,7 @@ export namespace Prisma {
     modulo?: EnumModuloFieldUpdateOperationsInput | $Enums.Modulo
     visualizar?: BoolFieldUpdateOperationsInput | boolean
     criarAlterar?: BoolFieldUpdateOperationsInput | boolean
+    cancelar?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -22625,6 +22659,7 @@ export namespace Prisma {
     modulo?: EnumModuloFieldUpdateOperationsInput | $Enums.Modulo
     visualizar?: BoolFieldUpdateOperationsInput | boolean
     criarAlterar?: BoolFieldUpdateOperationsInput | boolean
+    cancelar?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -22634,6 +22669,7 @@ export namespace Prisma {
     modulo?: EnumModuloFieldUpdateOperationsInput | $Enums.Modulo
     visualizar?: BoolFieldUpdateOperationsInput | boolean
     criarAlterar?: BoolFieldUpdateOperationsInput | boolean
+    cancelar?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

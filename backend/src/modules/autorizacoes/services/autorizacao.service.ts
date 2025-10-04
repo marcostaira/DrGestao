@@ -35,6 +35,7 @@ export class AutorizacaoService {
       modulo,
       visualizar: isAdmin,
       criarAlterar: isAdmin,
+      cancelar: isAdmin, // ⬅️ ADICIONADO
     }));
 
     await prisma.autorizacao.createMany({
@@ -58,16 +59,18 @@ export class AutorizacaoService {
         modulo: true,
         visualizar: true,
         criarAlterar: true,
+        cancelar: true, // ⬅️ ADICIONADO
       },
     });
 
-    // Transformar em objeto { MODULO: { visualizar, criarAlterar } }
+    // Transformar em objeto { MODULO: { visualizar, criarAlterar, cancelar } }
     const permissoes: AutorizacoesUsuario = {};
 
     autorizacoes.forEach((auth) => {
       permissoes[auth.modulo] = {
         visualizar: auth.visualizar,
         criarAlterar: auth.criarAlterar,
+        cancelar: auth.cancelar, // ⬅️ ADICIONADO
       };
     });
 
@@ -146,12 +149,14 @@ export class AutorizacaoService {
           update: {
             visualizar: true,
             criarAlterar: true,
+            cancelar: true, // ⬅️ ADICIONADO
           },
           create: {
             usuarioId,
             modulo,
             visualizar: true,
             criarAlterar: true,
+            cancelar: true, // ⬅️ ADICIONADO
           },
         });
       }
@@ -168,12 +173,14 @@ export class AutorizacaoService {
           update: {
             visualizar: auth.visualizar,
             criarAlterar: auth.criarAlterar,
+            cancelar: auth.cancelar, // ⬅️ ADICIONADO
           },
           create: {
             usuarioId,
             modulo: auth.modulo,
             visualizar: auth.visualizar,
             criarAlterar: auth.criarAlterar,
+            cancelar: auth.cancelar, // ⬅️ ADICIONADO
           },
         });
       }
@@ -216,6 +223,7 @@ export class AutorizacaoService {
               modulo: true,
               visualizar: true,
               criarAlterar: true,
+              cancelar: true, // ⬅️ ADICIONADO
             },
             orderBy: { modulo: "asc" },
           },
@@ -245,7 +253,7 @@ export class AutorizacaoService {
   static async verificarPermissao(
     usuarioId: string,
     modulo: Modulo,
-    tipo: "visualizar" | "criarAlterar"
+    tipo: "visualizar" | "criarAlterar" | "cancelar" // ⬅️ ATUALIZADO
   ): Promise<boolean> {
     const autorizacao = await prisma.autorizacao.findUnique({
       where: {
