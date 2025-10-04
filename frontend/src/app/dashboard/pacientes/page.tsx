@@ -10,6 +10,9 @@ import {
 } from "@/services/pacienteService";
 import { getProfissionais, Profissional } from "@/services/profissionalService";
 import { calcularIdade } from "@/services/cepService";
+import { usePermissoes } from "@/hooks/usePermissoes";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { Modulo } from "@/types/autorizacao.types";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Table from "@/components/ui/Table";
@@ -19,7 +22,8 @@ import Alert from "@/components/ui/Alert";
 export default function PacientesPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const successParam = searchParams.get("success");
+  const successParam = searchParams?.get("success");
+  const { pacientes: permissoesPacientes } = usePermissoes();
 
   const [pacientes, setPacientes] = useState<Paciente[]>([]);
   const [profissionais, setProfissionais] = useState<Profissional[]>([]);
@@ -71,7 +75,11 @@ export default function PacientesPage() {
       setPacientes(pacientesData);
       setProfissionais(profissionaisData);
     } catch (err: any) {
-      setError(err.response?.data?.error || "Erro ao carregar dados");
+      if (err.response?.status === 403) {
+        setError("Você não tem permissão para visualizar pacientes");
+      } else {
+        setError(err.response?.data?.error || "Erro ao carregar dados");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -85,7 +93,11 @@ export default function PacientesPage() {
       });
       setPacientes(data);
     } catch (err: any) {
-      setError(err.response?.data?.error || "Erro ao carregar pacientes");
+      if (err.response?.status === 403) {
+        setError("Você não tem permissão para visualizar pacientes");
+      } else {
+        setError(err.response?.data?.error || "Erro ao carregar pacientes");
+      }
     }
   };
 
@@ -102,7 +114,11 @@ export default function PacientesPage() {
 
       setTimeout(() => setSuccess(""), 3000);
     } catch (err: any) {
-      setError(err.response?.data?.error || "Erro ao excluir paciente");
+      if (err.response?.status === 403) {
+        setError("Você não tem permissão para excluir pacientes");
+      } else {
+        setError(err.response?.data?.error || "Erro ao excluir paciente");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -121,7 +137,11 @@ export default function PacientesPage() {
 
       setTimeout(() => setSuccess(""), 3000);
     } catch (err: any) {
-      setError(err.response?.data?.error || "Erro ao excluir pacientes");
+      if (err.response?.status === 403) {
+        setError("Você não tem permissão para excluir pacientes");
+      } else {
+        setError(err.response?.data?.error || "Erro ao excluir pacientes");
+      }
     }
   };
 
@@ -150,30 +170,36 @@ export default function PacientesPage() {
   };
 
   const columns = [
-    {
-      key: "select",
-      header: (
-        <input
-          type="checkbox"
-          checked={
-            selectedIds.length === pacientes.length && pacientes.length > 0
-          }
-          onChange={toggleSelectAll}
-          className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
-        />
-      ),
-      render: (pac: Paciente) => (
-        <input
-          type="checkbox"
-          checked={selectedIds.includes(pac.id)}
-          onChange={(e) => {
-            e.stopPropagation();
-            toggleSelect(pac.id);
-          }}
-          className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
-        />
-      ),
-    },
+    // Checkbox de seleção - só aparece se tiver permissão para excluir
+    ...(permissoesPacientes.criarAlterar
+      ? [
+          {
+            key: "select",
+            header: (
+              <input
+                type="checkbox"
+                checked={
+                  selectedIds.length === pacientes.length &&
+                  pacientes.length > 0
+                }
+                onChange={toggleSelectAll}
+                className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+              />
+            ),
+            render: (pac: Paciente) => (
+              <input
+                type="checkbox"
+                checked={selectedIds.includes(pac.id)}
+                onChange={(e) => {
+                  e.stopPropagation();
+                  toggleSelect(pac.id);
+                }}
+                className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+              />
+            ),
+          },
+        ]
+      : []),
     {
       key: "nome",
       header: "Nome",
@@ -207,186 +233,207 @@ export default function PacientesPage() {
       header: "Profissional",
       render: (pac: Paciente) => pac.profissional?.nome || "-",
     },
-    {
-      key: "actions",
-      header: "Ações",
-      render: (pac: Paciente) => (
-        <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-          <button
-            onClick={() => router.push(`/dashboard/pacientes/${pac.id}/editar`)}
-            className="text-primary-600 hover:text-primary-800"
-            title="Editar"
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-              />
-            </svg>
-          </button>
+    // Coluna de ações - só aparece se tiver permissão
+    ...(permissoesPacientes.criarAlterar
+      ? [
+          {
+            key: "actions",
+            header: "Ações",
+            render: (pac: Paciente) => (
+              <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
+                <button
+                  onClick={() =>
+                    router.push(`/dashboard/pacientes/${pac.id}/editar`)
+                  }
+                  className="text-primary-600 hover:text-primary-800"
+                  title="Editar"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                    />
+                  </svg>
+                </button>
 
-          <button
-            onClick={() => {
-              setDeletingPaciente(pac);
-              setIsDeleteModalOpen(true);
-            }}
-            className="text-red-600 hover:text-red-800"
-            title="Excluir"
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-              />
-            </svg>
-          </button>
-        </div>
-      ),
-    },
+                <button
+                  onClick={() => {
+                    setDeletingPaciente(pac);
+                    setIsDeleteModalOpen(true);
+                  }}
+                  className="text-red-600 hover:text-red-800"
+                  title="Excluir"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                </button>
+              </div>
+            ),
+          },
+        ]
+      : []),
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Pacientes</h1>
-          <p className="text-gray-600 mt-1">Gerencie o cadastro de pacientes</p>
-        </div>
-
-        <Button onClick={() => router.push("/dashboard/pacientes/novo")}>
-          <svg
-            className="w-5 h-5 mr-2"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-            />
-          </svg>
-          Novo Paciente
-        </Button>
-      </div>
-
-      {error && (
-        <Alert type="error" onClose={() => setError("")}>
-          {error}
-        </Alert>
-      )}
-
-      {success && (
-        <Alert type="success" onClose={() => setSuccess("")}>
-          {success}
-        </Alert>
-      )}
-
-      {/* Filtros */}
-      <Card>
-        <div className="flex gap-4 items-center">
-          <div className="flex-1">
-            <input
-              type="text"
-              placeholder="Buscar paciente..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-            />
+    <ProtectedRoute modulo={Modulo.PACIENTES} tipo="visualizar">
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Pacientes</h1>
+            <p className="text-gray-600 mt-1">
+              Gerencie o cadastro de pacientes
+            </p>
           </div>
 
-          <select
-            value={selectedProfissional}
-            onChange={(e) => setSelectedProfissional(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-          >
-            <option value="">Todos os profissionais</option>
-            {profissionais.map((prof) => (
-              <option key={prof.id} value={prof.id}>
-                {prof.nome}
-              </option>
-            ))}
-          </select>
-
-          {selectedIds.length > 0 && (
-            <Button variant="danger" onClick={handleBatchDelete}>
-              Excluir Selecionados ({selectedIds.length})
+          {/* Botão de novo paciente - só aparece se tiver permissão */}
+          {permissoesPacientes.criarAlterar && (
+            <Button onClick={() => router.push("/dashboard/pacientes/novo")}>
+              <svg
+                className="w-5 h-5 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
+              </svg>
+              Novo Paciente
             </Button>
           )}
         </div>
-      </Card>
 
-      {/* Tabela */}
-      <Card>
-        {isLoading ? (
-          <div className="flex justify-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
-          </div>
-        ) : (
-          <Table
-            data={pacientes}
-            columns={columns}
-            onRowClick={(paciente) => {
-              router.push(`/dashboard/pacientes/${paciente.id}/editar`);
-            }}
-            emptyMessage="Nenhum paciente cadastrado"
-          />
+        {error && (
+          <Alert type="error" onClose={() => setError("")}>
+            {error}
+          </Alert>
         )}
-      </Card>
 
-      {/* Modal Confirmar Exclusão */}
-      <Modal
-        isOpen={isDeleteModalOpen}
-        onClose={() => {
-          setIsDeleteModalOpen(false);
-          setDeletingPaciente(null);
-        }}
-        title="Confirmar Exclusão"
-        size="sm"
-      >
-        <div className="space-y-4">
-          <p className="text-gray-600">
-            Tem certeza que deseja excluir o paciente{" "}
-            <strong>{deletingPaciente?.nome}</strong>? Esta ação não pode ser
-            desfeita.
-          </p>
+        {success && (
+          <Alert type="success" onClose={() => setSuccess("")}>
+            {success}
+          </Alert>
+        )}
 
-          <div className="flex justify-end gap-3">
-            <Button
-              variant="secondary"
-              onClick={() => {
-                setIsDeleteModalOpen(false);
-                setDeletingPaciente(null);
-              }}
-              disabled={isSubmitting}
+        {/* Filtros */}
+        <Card>
+          <div className="flex gap-4 items-center">
+            <div className="flex-1">
+              <input
+                type="text"
+                placeholder="Buscar paciente..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              />
+            </div>
+
+            <select
+              value={selectedProfissional}
+              onChange={(e) => setSelectedProfissional(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
-              Cancelar
-            </Button>
-            <Button
-              variant="danger"
-              onClick={handleDelete}
-              isLoading={isSubmitting}
-            >
-              Excluir
-            </Button>
+              <option value="">Todos os profissionais</option>
+              {profissionais.map((prof) => (
+                <option key={prof.id} value={prof.id}>
+                  {prof.nome}
+                </option>
+              ))}
+            </select>
+
+            {/* Botão de excluir em lote - só aparece se tiver permissão e itens selecionados */}
+            {permissoesPacientes.criarAlterar && selectedIds.length > 0 && (
+              <Button variant="danger" onClick={handleBatchDelete}>
+                Excluir Selecionados ({selectedIds.length})
+              </Button>
+            )}
           </div>
-        </div>
-      </Modal>
-    </div>
+        </Card>
+
+        {/* Tabela */}
+        <Card>
+          {isLoading ? (
+            <div className="flex justify-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+            </div>
+          ) : (
+            <Table
+              data={pacientes}
+              columns={columns}
+              onRowClick={
+                permissoesPacientes.criarAlterar
+                  ? (paciente) => {
+                      router.push(`/dashboard/pacientes/${paciente.id}/editar`);
+                    }
+                  : undefined
+              }
+              emptyMessage="Nenhum paciente cadastrado"
+            />
+          )}
+        </Card>
+
+        {/* Modal Confirmar Exclusão - só renderiza se tiver permissão */}
+        {permissoesPacientes.criarAlterar && (
+          <Modal
+            isOpen={isDeleteModalOpen}
+            onClose={() => {
+              setIsDeleteModalOpen(false);
+              setDeletingPaciente(null);
+            }}
+            title="Confirmar Exclusão"
+            size="sm"
+          >
+            <div className="space-y-4">
+              <p className="text-gray-600">
+                Tem certeza que deseja excluir o paciente{" "}
+                <strong>{deletingPaciente?.nome}</strong>? Esta ação não pode
+                ser desfeita.
+              </p>
+
+              <div className="flex justify-end gap-3">
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    setIsDeleteModalOpen(false);
+                    setDeletingPaciente(null);
+                  }}
+                  disabled={isSubmitting}
+                >
+                  Cancelar
+                </Button>
+                <Button
+                  variant="danger"
+                  onClick={handleDelete}
+                  isLoading={isSubmitting}
+                >
+                  Excluir
+                </Button>
+              </div>
+            </div>
+          </Modal>
+        )}
+      </div>
+    </ProtectedRoute>
   );
 }

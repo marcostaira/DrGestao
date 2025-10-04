@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { AgendamentoController } from "../controllers/agendamento.controller";
 import { authenticate } from "../../../middleware/auth";
+import { autorizar } from "../../../middleware/autorizar";
+import { Modulo } from "../../../types";
 import { validateTenant } from "../../../middleware/tenant";
 import { validate } from "../../../middleware/validation";
 import {
@@ -13,36 +15,27 @@ import {
 import Joi from "joi";
 
 // ============================================================================
-// AGENDAMENTO ROUTES
+// AGENDAMENTO ROUTES COM AUTORIZAÇÕES GRANULARES
 // ============================================================================
 
 const router = Router();
 
+// Aplicar autenticação e validação de tenant a todas as rotas
 router.use(authenticate);
 router.use(validateTenant);
 
 // ==========================================================================
-// ROUTES
+// ROTAS DE LEITURA - REQUER PERMISSÃO DE VISUALIZAR
 // ==========================================================================
-
-/**
- * @route   POST /agendamentos
- * @desc    Criar agendamento (individual ou lote)
- * @access  Private
- */
-router.post(
-  "/",
-  validate({ body: createAgendamentoSchema }),
-  AgendamentoController.create
-);
 
 /**
  * @route   GET /agendamentos
  * @desc    Listar agendamentos
- * @access  Private
+ * @access  Private (Requer permissão: AGENDA.visualizar)
  */
 router.get(
   "/",
+  autorizar(Modulo.AGENDA, "visualizar"),
   validate({
     query: paginationSchema.keys({
       dataInicio: Joi.date().iso().optional(),
@@ -60,10 +53,11 @@ router.get(
 /**
  * @route   GET /agendamentos/calendar
  * @desc    Visualização de calendário
- * @access  Private
+ * @access  Private (Requer permissão: AGENDA.visualizar)
  */
 router.get(
   "/calendar",
+  autorizar(Modulo.AGENDA, "visualizar"),
   validate({
     query: Joi.object({
       dataInicio: Joi.date().iso().required(),
@@ -75,49 +69,69 @@ router.get(
 );
 
 /**
- * @route   PUT /agendamentos/batch
- * @desc    Atualizar múltiplos agendamentos
- * @access  Private
- */
-router.put(
-  "/batch",
-  validate({ body: batchAgendamentoSchema }),
-  AgendamentoController.batchUpdate
-);
-
-/**
- * @route   DELETE /agendamentos/batch
- * @desc    Excluir múltiplos agendamentos
- * @access  Private
- */
-router.delete(
-  "/batch",
-  validate({
-    body: Joi.object({
-      ids: Joi.array().items(Joi.string()).min(1).required(),
-    }),
-  }),
-  AgendamentoController.batchDelete
-);
-
-/**
  * @route   GET /agendamentos/:id
  * @desc    Obter agendamento por ID
- * @access  Private
+ * @access  Private (Requer permissão: AGENDA.visualizar)
  */
 router.get(
   "/:id",
+  autorizar(Modulo.AGENDA, "visualizar"),
   validate({ params: Joi.object({ id: idSchema }) }),
   AgendamentoController.getById
 );
 
 /**
+ * @route   GET /agendamentos/recorrencia/:recorrenciaId/count
+ * @desc    Contar agendamentos de uma recorrência
+ * @access  Private (Requer permissão: AGENDA.visualizar)
+ */
+router.get(
+  "/recorrencia/:recorrenciaId/count",
+  autorizar(Modulo.AGENDA, "visualizar"),
+  validate({
+    params: Joi.object({
+      recorrenciaId: Joi.string().required(),
+    }),
+  }),
+  AgendamentoController.countRecorrencia
+);
+
+// ==========================================================================
+// ROTAS DE ESCRITA - REQUER PERMISSÃO DE CRIAR/ALTERAR
+// ==========================================================================
+
+/**
+ * @route   POST /agendamentos
+ * @desc    Criar agendamento (individual ou lote)
+ * @access  Private (Requer permissão: AGENDA.criarAlterar)
+ */
+router.post(
+  "/",
+  autorizar(Modulo.AGENDA, "criarAlterar"),
+  validate({ body: createAgendamentoSchema }),
+  AgendamentoController.create
+);
+
+/**
+ * @route   PUT /agendamentos/batch
+ * @desc    Atualizar múltiplos agendamentos
+ * @access  Private (Requer permissão: AGENDA.criarAlterar)
+ */
+router.put(
+  "/batch",
+  autorizar(Modulo.AGENDA, "criarAlterar"),
+  validate({ body: batchAgendamentoSchema }),
+  AgendamentoController.batchUpdate
+);
+
+/**
  * @route   PUT /agendamentos/:id
  * @desc    Atualizar agendamento
- * @access  Private
+ * @access  Private (Requer permissão: AGENDA.criarAlterar)
  */
 router.put(
   "/:id",
+  autorizar(Modulo.AGENDA, "criarAlterar"),
   validate({
     params: Joi.object({ id: idSchema }),
     body: updateAgendamentoSchema,
@@ -126,23 +140,13 @@ router.put(
 );
 
 /**
- * @route   DELETE /agendamentos/:id
- * @desc    Excluir agendamento
- * @access  Private
- */
-router.delete(
-  "/:id",
-  validate({ params: Joi.object({ id: idSchema }) }),
-  AgendamentoController.delete
-);
-
-/**
  * @route   PATCH /agendamentos/:id/status
  * @desc    Atualizar status do agendamento
- * @access  Private
+ * @access  Private (Requer permissão: AGENDA.criarAlterar)
  */
 router.patch(
   "/:id/status",
+  autorizar(Modulo.AGENDA, "criarAlterar"),
   validate({
     params: Joi.object({ id: idSchema }),
     body: Joi.object({
@@ -151,16 +155,17 @@ router.patch(
         .required(),
     }),
   }),
-  AgendamentoController.updateStatus // Mudou de toggleStatus para updateStatus
+  AgendamentoController.updateStatus
 );
 
 /**
  * @route   PUT /agendamentos/recorrencia/:recorrenciaId
  * @desc    Atualizar todos agendamentos de uma recorrência
- * @access  Private
+ * @access  Private (Requer permissão: AGENDA.criarAlterar)
  */
 router.put(
   "/recorrencia/:recorrenciaId",
+  autorizar(Modulo.AGENDA, "criarAlterar"),
   validate({
     params: Joi.object({
       recorrenciaId: Joi.string().required(),
@@ -170,34 +175,52 @@ router.put(
   AgendamentoController.updateRecorrencia
 );
 
+// ==========================================================================
+// ROTAS DE CANCELAMENTO - REQUER PERMISSÃO DE CANCELAR
+// ==========================================================================
+
+/**
+ * @route   DELETE /agendamentos/:id
+ * @desc    Excluir/Cancelar agendamento
+ * @access  Private (Requer permissão: AGENDA.cancelar)
+ */
+router.delete(
+  "/:id",
+  autorizar(Modulo.AGENDA, "cancelar"),
+  validate({ params: Joi.object({ id: idSchema }) }),
+  AgendamentoController.delete
+);
+
+/**
+ * @route   DELETE /agendamentos/batch
+ * @desc    Excluir/Cancelar múltiplos agendamentos
+ * @access  Private (Requer permissão: AGENDA.cancelar)
+ */
+router.delete(
+  "/batch",
+  autorizar(Modulo.AGENDA, "cancelar"),
+  validate({
+    body: Joi.object({
+      ids: Joi.array().items(Joi.string()).min(1).required(),
+    }),
+  }),
+  AgendamentoController.batchDelete
+);
+
 /**
  * @route   DELETE /agendamentos/recorrencia/:recorrenciaId
  * @desc    Excluir todos agendamentos de uma recorrência
- * @access  Private
+ * @access  Private (Requer permissão: AGENDA.cancelar)
  */
 router.delete(
   "/recorrencia/:recorrenciaId",
+  autorizar(Modulo.AGENDA, "cancelar"),
   validate({
     params: Joi.object({
       recorrenciaId: Joi.string().required(),
     }),
   }),
   AgendamentoController.deleteRecorrencia
-);
-
-/**
- * @route   GET /agendamentos/recorrencia/:recorrenciaId/count
- * @desc    Contar agendamentos de uma recorrência
- * @access  Private
- */
-router.get(
-  "/recorrencia/:recorrenciaId/count",
-  validate({
-    params: Joi.object({
-      recorrenciaId: Joi.string().required(),
-    }),
-  }),
-  AgendamentoController.countRecorrencia
 );
 
 export default router;

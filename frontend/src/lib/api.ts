@@ -21,7 +21,7 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor - handle refresh token
+// Response interceptor - handle refresh token e erros
 api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
@@ -29,6 +29,7 @@ api.interceptors.response.use(
       _retry?: boolean;
     };
 
+    // Erro 401 - Token expirado
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
@@ -59,6 +60,12 @@ api.interceptors.response.use(
         window.location.href = "/login";
         return Promise.reject(refreshError);
       }
+    }
+
+    // Erro 403 - Sem permissão
+    if (error.response?.status === 403) {
+      console.error("Sem permissão para realizar esta ação");
+      // Você pode adicionar um toast aqui se tiver configurado
     }
 
     return Promise.reject(error);
