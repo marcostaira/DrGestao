@@ -5,6 +5,7 @@ import {
   createAtendimento,
   updateAtendimento,
   deleteAtendimento,
+  cancelAtendimento,
 } from "@/services/atendimentoService";
 import {
   Agendamento,
@@ -209,6 +210,22 @@ export const useAtendimentos = () => {
     }
   }, []);
 
+  const handleCancelAtendimento = useCallback(
+    async (id: string) => {
+      try {
+        await cancelAtendimento(id);
+        showSuccess("Atendimento cancelado com sucesso!");
+        await loadAtendimentosDoDia();
+        await loadAgendamentosCancelados();
+        return true;
+      } catch (err: any) {
+        showError(err.response?.data?.error || "Erro ao cancelar atendimento");
+        return false;
+      }
+    },
+    [loadAtendimentosDoDia, loadAgendamentosCancelados, showSuccess, showError]
+  );
+
   useEffect(() => {
     if (!isLoading) {
       loadAtendimentosDoDia();
@@ -241,6 +258,7 @@ export const useAtendimentos = () => {
     handleDeleteAtendimento,
     handleUpdateStatus,
     loadAtendimentosDoDia,
+    handleCancelAtendimento,
 
     // Navegação
     previousDay,

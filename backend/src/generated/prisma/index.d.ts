@@ -8103,6 +8103,8 @@ export namespace Prisma {
     profissionalId: string | null
     procedimentoId: string | null
     anotacoes: string | null
+    cancelado: boolean | null
+    canceladoEm: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -8115,6 +8117,8 @@ export namespace Prisma {
     profissionalId: string | null
     procedimentoId: string | null
     anotacoes: string | null
+    cancelado: boolean | null
+    canceladoEm: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -8128,6 +8132,8 @@ export namespace Prisma {
     procedimentoId: number
     anotacoes: number
     procedimentosRealizados: number
+    cancelado: number
+    canceladoEm: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -8142,6 +8148,8 @@ export namespace Prisma {
     profissionalId?: true
     procedimentoId?: true
     anotacoes?: true
+    cancelado?: true
+    canceladoEm?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -8154,6 +8162,8 @@ export namespace Prisma {
     profissionalId?: true
     procedimentoId?: true
     anotacoes?: true
+    cancelado?: true
+    canceladoEm?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -8167,6 +8177,8 @@ export namespace Prisma {
     procedimentoId?: true
     anotacoes?: true
     procedimentosRealizados?: true
+    cancelado?: true
+    canceladoEm?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -8250,9 +8262,11 @@ export namespace Prisma {
     agendamentoId: string
     pacienteId: string
     profissionalId: string
-    procedimentoId: string
+    procedimentoId: string | null
     anotacoes: string | null
-    procedimentosRealizados: JsonValue | null
+    procedimentosRealizados: JsonValue
+    cancelado: boolean
+    canceladoEm: Date | null
     createdAt: Date
     updatedAt: Date
     _count: AtendimentoCountAggregateOutputType | null
@@ -8283,13 +8297,15 @@ export namespace Prisma {
     procedimentoId?: boolean
     anotacoes?: boolean
     procedimentosRealizados?: boolean
+    cancelado?: boolean
+    canceladoEm?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     agendamento?: boolean | AgendamentoDefaultArgs<ExtArgs>
     paciente?: boolean | PacienteDefaultArgs<ExtArgs>
-    procedimento?: boolean | ProcedimentoDefaultArgs<ExtArgs>
     profissional?: boolean | ProfissionalDefaultArgs<ExtArgs>
-    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    procedimento?: boolean | Atendimento$procedimentoArgs<ExtArgs>
   }, ExtArgs["result"]["atendimento"]>
 
   export type AtendimentoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -8301,13 +8317,15 @@ export namespace Prisma {
     procedimentoId?: boolean
     anotacoes?: boolean
     procedimentosRealizados?: boolean
+    cancelado?: boolean
+    canceladoEm?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     agendamento?: boolean | AgendamentoDefaultArgs<ExtArgs>
     paciente?: boolean | PacienteDefaultArgs<ExtArgs>
-    procedimento?: boolean | ProcedimentoDefaultArgs<ExtArgs>
     profissional?: boolean | ProfissionalDefaultArgs<ExtArgs>
-    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    procedimento?: boolean | Atendimento$procedimentoArgs<ExtArgs>
   }, ExtArgs["result"]["atendimento"]>
 
   export type AtendimentoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -8319,13 +8337,15 @@ export namespace Prisma {
     procedimentoId?: boolean
     anotacoes?: boolean
     procedimentosRealizados?: boolean
+    cancelado?: boolean
+    canceladoEm?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     agendamento?: boolean | AgendamentoDefaultArgs<ExtArgs>
     paciente?: boolean | PacienteDefaultArgs<ExtArgs>
-    procedimento?: boolean | ProcedimentoDefaultArgs<ExtArgs>
     profissional?: boolean | ProfissionalDefaultArgs<ExtArgs>
-    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    procedimento?: boolean | Atendimento$procedimentoArgs<ExtArgs>
   }, ExtArgs["result"]["atendimento"]>
 
   export type AtendimentoSelectScalar = {
@@ -8337,41 +8357,43 @@ export namespace Prisma {
     procedimentoId?: boolean
     anotacoes?: boolean
     procedimentosRealizados?: boolean
+    cancelado?: boolean
+    canceladoEm?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type AtendimentoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "agendamentoId" | "pacienteId" | "profissionalId" | "procedimentoId" | "anotacoes" | "procedimentosRealizados" | "createdAt" | "updatedAt", ExtArgs["result"]["atendimento"]>
+  export type AtendimentoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "agendamentoId" | "pacienteId" | "profissionalId" | "procedimentoId" | "anotacoes" | "procedimentosRealizados" | "cancelado" | "canceladoEm" | "createdAt" | "updatedAt", ExtArgs["result"]["atendimento"]>
   export type AtendimentoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     agendamento?: boolean | AgendamentoDefaultArgs<ExtArgs>
     paciente?: boolean | PacienteDefaultArgs<ExtArgs>
-    procedimento?: boolean | ProcedimentoDefaultArgs<ExtArgs>
     profissional?: boolean | ProfissionalDefaultArgs<ExtArgs>
-    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    procedimento?: boolean | Atendimento$procedimentoArgs<ExtArgs>
   }
   export type AtendimentoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     agendamento?: boolean | AgendamentoDefaultArgs<ExtArgs>
     paciente?: boolean | PacienteDefaultArgs<ExtArgs>
-    procedimento?: boolean | ProcedimentoDefaultArgs<ExtArgs>
     profissional?: boolean | ProfissionalDefaultArgs<ExtArgs>
-    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    procedimento?: boolean | Atendimento$procedimentoArgs<ExtArgs>
   }
   export type AtendimentoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     agendamento?: boolean | AgendamentoDefaultArgs<ExtArgs>
     paciente?: boolean | PacienteDefaultArgs<ExtArgs>
-    procedimento?: boolean | ProcedimentoDefaultArgs<ExtArgs>
     profissional?: boolean | ProfissionalDefaultArgs<ExtArgs>
-    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    procedimento?: boolean | Atendimento$procedimentoArgs<ExtArgs>
   }
 
   export type $AtendimentoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Atendimento"
     objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>
       agendamento: Prisma.$AgendamentoPayload<ExtArgs>
       paciente: Prisma.$PacientePayload<ExtArgs>
-      procedimento: Prisma.$ProcedimentoPayload<ExtArgs>
       profissional: Prisma.$ProfissionalPayload<ExtArgs>
-      tenant: Prisma.$TenantPayload<ExtArgs>
+      procedimento: Prisma.$ProcedimentoPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8379,9 +8401,11 @@ export namespace Prisma {
       agendamentoId: string
       pacienteId: string
       profissionalId: string
-      procedimentoId: string
+      procedimentoId: string | null
       anotacoes: string | null
-      procedimentosRealizados: Prisma.JsonValue | null
+      procedimentosRealizados: Prisma.JsonValue
+      cancelado: boolean
+      canceladoEm: Date | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["atendimento"]>
@@ -8778,11 +8802,11 @@ export namespace Prisma {
    */
   export interface Prisma__AtendimentoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TenantDefaultArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     agendamento<T extends AgendamentoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AgendamentoDefaultArgs<ExtArgs>>): Prisma__AgendamentoClient<$Result.GetResult<Prisma.$AgendamentoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     paciente<T extends PacienteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PacienteDefaultArgs<ExtArgs>>): Prisma__PacienteClient<$Result.GetResult<Prisma.$PacientePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    procedimento<T extends ProcedimentoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProcedimentoDefaultArgs<ExtArgs>>): Prisma__ProcedimentoClient<$Result.GetResult<Prisma.$ProcedimentoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     profissional<T extends ProfissionalDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProfissionalDefaultArgs<ExtArgs>>): Prisma__ProfissionalClient<$Result.GetResult<Prisma.$ProfissionalPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TenantDefaultArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    procedimento<T extends Atendimento$procedimentoArgs<ExtArgs> = {}>(args?: Subset<T, Atendimento$procedimentoArgs<ExtArgs>>): Prisma__ProcedimentoClient<$Result.GetResult<Prisma.$ProcedimentoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8820,6 +8844,8 @@ export namespace Prisma {
     readonly procedimentoId: FieldRef<"Atendimento", 'String'>
     readonly anotacoes: FieldRef<"Atendimento", 'String'>
     readonly procedimentosRealizados: FieldRef<"Atendimento", 'Json'>
+    readonly cancelado: FieldRef<"Atendimento", 'Boolean'>
+    readonly canceladoEm: FieldRef<"Atendimento", 'DateTime'>
     readonly createdAt: FieldRef<"Atendimento", 'DateTime'>
     readonly updatedAt: FieldRef<"Atendimento", 'DateTime'>
   }
@@ -9215,6 +9241,25 @@ export namespace Prisma {
      * Limit how many Atendimentos to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Atendimento.procedimento
+   */
+  export type Atendimento$procedimentoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Procedimento
+     */
+    select?: ProcedimentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Procedimento
+     */
+    omit?: ProcedimentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedimentoInclude<ExtArgs> | null
+    where?: ProcedimentoWhereInput
   }
 
   /**
@@ -14061,6 +14106,8 @@ export namespace Prisma {
     procedimentoId: 'procedimentoId',
     anotacoes: 'anotacoes',
     procedimentosRealizados: 'procedimentosRealizados',
+    cancelado: 'cancelado',
+    canceladoEm: 'canceladoEm',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -14137,6 +14184,13 @@ export namespace Prisma {
   };
 
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+  export const JsonNullValueInput: {
+    JsonNull: typeof JsonNull
+  };
+
+  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
   export const NullableJsonNullValueInput: {
@@ -14826,16 +14880,18 @@ export namespace Prisma {
     agendamentoId?: StringFilter<"Atendimento"> | string
     pacienteId?: StringFilter<"Atendimento"> | string
     profissionalId?: StringFilter<"Atendimento"> | string
-    procedimentoId?: StringFilter<"Atendimento"> | string
+    procedimentoId?: StringNullableFilter<"Atendimento"> | string | null
     anotacoes?: StringNullableFilter<"Atendimento"> | string | null
-    procedimentosRealizados?: JsonNullableFilter<"Atendimento">
+    procedimentosRealizados?: JsonFilter<"Atendimento">
+    cancelado?: BoolFilter<"Atendimento"> | boolean
+    canceladoEm?: DateTimeNullableFilter<"Atendimento"> | Date | string | null
     createdAt?: DateTimeFilter<"Atendimento"> | Date | string
     updatedAt?: DateTimeFilter<"Atendimento"> | Date | string
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     agendamento?: XOR<AgendamentoScalarRelationFilter, AgendamentoWhereInput>
     paciente?: XOR<PacienteScalarRelationFilter, PacienteWhereInput>
-    procedimento?: XOR<ProcedimentoScalarRelationFilter, ProcedimentoWhereInput>
     profissional?: XOR<ProfissionalScalarRelationFilter, ProfissionalWhereInput>
-    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
+    procedimento?: XOR<ProcedimentoNullableScalarRelationFilter, ProcedimentoWhereInput> | null
   }
 
   export type AtendimentoOrderByWithRelationInput = {
@@ -14844,16 +14900,18 @@ export namespace Prisma {
     agendamentoId?: SortOrder
     pacienteId?: SortOrder
     profissionalId?: SortOrder
-    procedimentoId?: SortOrder
+    procedimentoId?: SortOrderInput | SortOrder
     anotacoes?: SortOrderInput | SortOrder
-    procedimentosRealizados?: SortOrderInput | SortOrder
+    procedimentosRealizados?: SortOrder
+    cancelado?: SortOrder
+    canceladoEm?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    tenant?: TenantOrderByWithRelationInput
     agendamento?: AgendamentoOrderByWithRelationInput
     paciente?: PacienteOrderByWithRelationInput
-    procedimento?: ProcedimentoOrderByWithRelationInput
     profissional?: ProfissionalOrderByWithRelationInput
-    tenant?: TenantOrderByWithRelationInput
+    procedimento?: ProcedimentoOrderByWithRelationInput
   }
 
   export type AtendimentoWhereUniqueInput = Prisma.AtLeast<{
@@ -14865,16 +14923,18 @@ export namespace Prisma {
     tenantId?: StringFilter<"Atendimento"> | string
     pacienteId?: StringFilter<"Atendimento"> | string
     profissionalId?: StringFilter<"Atendimento"> | string
-    procedimentoId?: StringFilter<"Atendimento"> | string
+    procedimentoId?: StringNullableFilter<"Atendimento"> | string | null
     anotacoes?: StringNullableFilter<"Atendimento"> | string | null
-    procedimentosRealizados?: JsonNullableFilter<"Atendimento">
+    procedimentosRealizados?: JsonFilter<"Atendimento">
+    cancelado?: BoolFilter<"Atendimento"> | boolean
+    canceladoEm?: DateTimeNullableFilter<"Atendimento"> | Date | string | null
     createdAt?: DateTimeFilter<"Atendimento"> | Date | string
     updatedAt?: DateTimeFilter<"Atendimento"> | Date | string
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     agendamento?: XOR<AgendamentoScalarRelationFilter, AgendamentoWhereInput>
     paciente?: XOR<PacienteScalarRelationFilter, PacienteWhereInput>
-    procedimento?: XOR<ProcedimentoScalarRelationFilter, ProcedimentoWhereInput>
     profissional?: XOR<ProfissionalScalarRelationFilter, ProfissionalWhereInput>
-    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
+    procedimento?: XOR<ProcedimentoNullableScalarRelationFilter, ProcedimentoWhereInput> | null
   }, "id" | "agendamentoId">
 
   export type AtendimentoOrderByWithAggregationInput = {
@@ -14883,9 +14943,11 @@ export namespace Prisma {
     agendamentoId?: SortOrder
     pacienteId?: SortOrder
     profissionalId?: SortOrder
-    procedimentoId?: SortOrder
+    procedimentoId?: SortOrderInput | SortOrder
     anotacoes?: SortOrderInput | SortOrder
-    procedimentosRealizados?: SortOrderInput | SortOrder
+    procedimentosRealizados?: SortOrder
+    cancelado?: SortOrder
+    canceladoEm?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: AtendimentoCountOrderByAggregateInput
@@ -14902,9 +14964,11 @@ export namespace Prisma {
     agendamentoId?: StringWithAggregatesFilter<"Atendimento"> | string
     pacienteId?: StringWithAggregatesFilter<"Atendimento"> | string
     profissionalId?: StringWithAggregatesFilter<"Atendimento"> | string
-    procedimentoId?: StringWithAggregatesFilter<"Atendimento"> | string
+    procedimentoId?: StringNullableWithAggregatesFilter<"Atendimento"> | string | null
     anotacoes?: StringNullableWithAggregatesFilter<"Atendimento"> | string | null
-    procedimentosRealizados?: JsonNullableWithAggregatesFilter<"Atendimento">
+    procedimentosRealizados?: JsonWithAggregatesFilter<"Atendimento">
+    cancelado?: BoolWithAggregatesFilter<"Atendimento"> | boolean
+    canceladoEm?: DateTimeNullableWithAggregatesFilter<"Atendimento"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Atendimento"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Atendimento"> | Date | string
   }
@@ -15818,14 +15882,16 @@ export namespace Prisma {
   export type AtendimentoCreateInput = {
     id?: string
     anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: boolean
+    canceladoEm?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutAtendimentosInput
     agendamento: AgendamentoCreateNestedOneWithoutAtendimentoInput
     paciente: PacienteCreateNestedOneWithoutAtendimentosInput
-    procedimento: ProcedimentoCreateNestedOneWithoutAtendimentosInput
     profissional: ProfissionalCreateNestedOneWithoutAtendimentosInput
-    tenant: TenantCreateNestedOneWithoutAtendimentosInput
+    procedimento?: ProcedimentoCreateNestedOneWithoutAtendimentosInput
   }
 
   export type AtendimentoUncheckedCreateInput = {
@@ -15834,9 +15900,11 @@ export namespace Prisma {
     agendamentoId: string
     pacienteId: string
     profissionalId: string
-    procedimentoId: string
+    procedimentoId?: string | null
     anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: boolean
+    canceladoEm?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -15844,14 +15912,16 @@ export namespace Prisma {
   export type AtendimentoUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: BoolFieldUpdateOperationsInput | boolean
+    canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutAtendimentosNestedInput
     agendamento?: AgendamentoUpdateOneRequiredWithoutAtendimentoNestedInput
     paciente?: PacienteUpdateOneRequiredWithoutAtendimentosNestedInput
-    procedimento?: ProcedimentoUpdateOneRequiredWithoutAtendimentosNestedInput
     profissional?: ProfissionalUpdateOneRequiredWithoutAtendimentosNestedInput
-    tenant?: TenantUpdateOneRequiredWithoutAtendimentosNestedInput
+    procedimento?: ProcedimentoUpdateOneWithoutAtendimentosNestedInput
   }
 
   export type AtendimentoUncheckedUpdateInput = {
@@ -15860,9 +15930,11 @@ export namespace Prisma {
     agendamentoId?: StringFieldUpdateOperationsInput | string
     pacienteId?: StringFieldUpdateOperationsInput | string
     profissionalId?: StringFieldUpdateOperationsInput | string
-    procedimentoId?: StringFieldUpdateOperationsInput | string
+    procedimentoId?: NullableStringFieldUpdateOperationsInput | string | null
     anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: BoolFieldUpdateOperationsInput | boolean
+    canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15873,9 +15945,11 @@ export namespace Prisma {
     agendamentoId: string
     pacienteId: string
     profissionalId: string
-    procedimentoId: string
+    procedimentoId?: string | null
     anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: boolean
+    canceladoEm?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -15883,7 +15957,9 @@ export namespace Prisma {
   export type AtendimentoUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: BoolFieldUpdateOperationsInput | boolean
+    canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15894,9 +15970,11 @@ export namespace Prisma {
     agendamentoId?: StringFieldUpdateOperationsInput | string
     pacienteId?: StringFieldUpdateOperationsInput | string
     profissionalId?: StringFieldUpdateOperationsInput | string
-    procedimentoId?: StringFieldUpdateOperationsInput | string
+    procedimentoId?: NullableStringFieldUpdateOperationsInput | string | null
     anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: BoolFieldUpdateOperationsInput | boolean
+    canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16818,14 +16896,14 @@ export namespace Prisma {
     _min?: NestedEnumStatusAgendamentoFilter<$PrismaModel>
     _max?: NestedEnumStatusAgendamentoFilter<$PrismaModel>
   }
-  export type JsonNullableFilter<$PrismaModel = never> =
+  export type JsonFilter<$PrismaModel = never> =
     | PatchUndefined<
-        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableFilterBase<$PrismaModel>>
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
       >
-    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
 
-  export type JsonNullableFilterBase<$PrismaModel = never> = {
+  export type JsonFilterBase<$PrismaModel = never> = {
     equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
     path?: string[]
     mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
@@ -16852,6 +16930,11 @@ export namespace Prisma {
     isNot?: PacienteWhereInput
   }
 
+  export type ProcedimentoNullableScalarRelationFilter = {
+    is?: ProcedimentoWhereInput | null
+    isNot?: ProcedimentoWhereInput | null
+  }
+
   export type AtendimentoCountOrderByAggregateInput = {
     id?: SortOrder
     tenantId?: SortOrder
@@ -16861,6 +16944,8 @@ export namespace Prisma {
     procedimentoId?: SortOrder
     anotacoes?: SortOrder
     procedimentosRealizados?: SortOrder
+    cancelado?: SortOrder
+    canceladoEm?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16873,6 +16958,8 @@ export namespace Prisma {
     profissionalId?: SortOrder
     procedimentoId?: SortOrder
     anotacoes?: SortOrder
+    cancelado?: SortOrder
+    canceladoEm?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16885,17 +16972,19 @@ export namespace Prisma {
     profissionalId?: SortOrder
     procedimentoId?: SortOrder
     anotacoes?: SortOrder
+    cancelado?: SortOrder
+    canceladoEm?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
-  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+  export type JsonWithAggregatesFilter<$PrismaModel = never> =
     | PatchUndefined<
-        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
       >
-    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
 
-  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
     equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
     path?: string[]
     mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
@@ -16910,9 +16999,9 @@ export namespace Prisma {
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedJsonNullableFilter<$PrismaModel>
-    _max?: NestedJsonNullableFilter<$PrismaModel>
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
   }
 
   export type WhatsAppConfigCountOrderByAggregateInput = {
@@ -16968,6 +17057,29 @@ export namespace Prisma {
     notIn?: $Enums.TipoLog[] | ListEnumTipoLogFieldRefInput<$PrismaModel>
     not?: NestedEnumTipoLogFilter<$PrismaModel> | $Enums.TipoLog
   }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type LogSistemaCountOrderByAggregateInput = {
     id?: SortOrder
@@ -17005,6 +17117,32 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTipoLogFilter<$PrismaModel>
     _max?: NestedEnumTipoLogFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type TenantListRelationFilter = {
@@ -17661,6 +17799,12 @@ export namespace Prisma {
     update?: XOR<XOR<AtendimentoUpdateToOneWithWhereWithoutAgendamentoInput, AtendimentoUpdateWithoutAgendamentoInput>, AtendimentoUncheckedUpdateWithoutAgendamentoInput>
   }
 
+  export type TenantCreateNestedOneWithoutAtendimentosInput = {
+    create?: XOR<TenantCreateWithoutAtendimentosInput, TenantUncheckedCreateWithoutAtendimentosInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutAtendimentosInput
+    connect?: TenantWhereUniqueInput
+  }
+
   export type AgendamentoCreateNestedOneWithoutAtendimentoInput = {
     create?: XOR<AgendamentoCreateWithoutAtendimentoInput, AgendamentoUncheckedCreateWithoutAtendimentoInput>
     connectOrCreate?: AgendamentoCreateOrConnectWithoutAtendimentoInput
@@ -17673,22 +17817,24 @@ export namespace Prisma {
     connect?: PacienteWhereUniqueInput
   }
 
-  export type ProcedimentoCreateNestedOneWithoutAtendimentosInput = {
-    create?: XOR<ProcedimentoCreateWithoutAtendimentosInput, ProcedimentoUncheckedCreateWithoutAtendimentosInput>
-    connectOrCreate?: ProcedimentoCreateOrConnectWithoutAtendimentosInput
-    connect?: ProcedimentoWhereUniqueInput
-  }
-
   export type ProfissionalCreateNestedOneWithoutAtendimentosInput = {
     create?: XOR<ProfissionalCreateWithoutAtendimentosInput, ProfissionalUncheckedCreateWithoutAtendimentosInput>
     connectOrCreate?: ProfissionalCreateOrConnectWithoutAtendimentosInput
     connect?: ProfissionalWhereUniqueInput
   }
 
-  export type TenantCreateNestedOneWithoutAtendimentosInput = {
+  export type ProcedimentoCreateNestedOneWithoutAtendimentosInput = {
+    create?: XOR<ProcedimentoCreateWithoutAtendimentosInput, ProcedimentoUncheckedCreateWithoutAtendimentosInput>
+    connectOrCreate?: ProcedimentoCreateOrConnectWithoutAtendimentosInput
+    connect?: ProcedimentoWhereUniqueInput
+  }
+
+  export type TenantUpdateOneRequiredWithoutAtendimentosNestedInput = {
     create?: XOR<TenantCreateWithoutAtendimentosInput, TenantUncheckedCreateWithoutAtendimentosInput>
     connectOrCreate?: TenantCreateOrConnectWithoutAtendimentosInput
+    upsert?: TenantUpsertWithoutAtendimentosInput
     connect?: TenantWhereUniqueInput
+    update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutAtendimentosInput, TenantUpdateWithoutAtendimentosInput>, TenantUncheckedUpdateWithoutAtendimentosInput>
   }
 
   export type AgendamentoUpdateOneRequiredWithoutAtendimentoNestedInput = {
@@ -17707,14 +17853,6 @@ export namespace Prisma {
     update?: XOR<XOR<PacienteUpdateToOneWithWhereWithoutAtendimentosInput, PacienteUpdateWithoutAtendimentosInput>, PacienteUncheckedUpdateWithoutAtendimentosInput>
   }
 
-  export type ProcedimentoUpdateOneRequiredWithoutAtendimentosNestedInput = {
-    create?: XOR<ProcedimentoCreateWithoutAtendimentosInput, ProcedimentoUncheckedCreateWithoutAtendimentosInput>
-    connectOrCreate?: ProcedimentoCreateOrConnectWithoutAtendimentosInput
-    upsert?: ProcedimentoUpsertWithoutAtendimentosInput
-    connect?: ProcedimentoWhereUniqueInput
-    update?: XOR<XOR<ProcedimentoUpdateToOneWithWhereWithoutAtendimentosInput, ProcedimentoUpdateWithoutAtendimentosInput>, ProcedimentoUncheckedUpdateWithoutAtendimentosInput>
-  }
-
   export type ProfissionalUpdateOneRequiredWithoutAtendimentosNestedInput = {
     create?: XOR<ProfissionalCreateWithoutAtendimentosInput, ProfissionalUncheckedCreateWithoutAtendimentosInput>
     connectOrCreate?: ProfissionalCreateOrConnectWithoutAtendimentosInput
@@ -17723,12 +17861,14 @@ export namespace Prisma {
     update?: XOR<XOR<ProfissionalUpdateToOneWithWhereWithoutAtendimentosInput, ProfissionalUpdateWithoutAtendimentosInput>, ProfissionalUncheckedUpdateWithoutAtendimentosInput>
   }
 
-  export type TenantUpdateOneRequiredWithoutAtendimentosNestedInput = {
-    create?: XOR<TenantCreateWithoutAtendimentosInput, TenantUncheckedCreateWithoutAtendimentosInput>
-    connectOrCreate?: TenantCreateOrConnectWithoutAtendimentosInput
-    upsert?: TenantUpsertWithoutAtendimentosInput
-    connect?: TenantWhereUniqueInput
-    update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutAtendimentosInput, TenantUpdateWithoutAtendimentosInput>, TenantUncheckedUpdateWithoutAtendimentosInput>
+  export type ProcedimentoUpdateOneWithoutAtendimentosNestedInput = {
+    create?: XOR<ProcedimentoCreateWithoutAtendimentosInput, ProcedimentoUncheckedCreateWithoutAtendimentosInput>
+    connectOrCreate?: ProcedimentoCreateOrConnectWithoutAtendimentosInput
+    upsert?: ProcedimentoUpsertWithoutAtendimentosInput
+    disconnect?: ProcedimentoWhereInput | boolean
+    delete?: ProcedimentoWhereInput | boolean
+    connect?: ProcedimentoWhereUniqueInput
+    update?: XOR<XOR<ProcedimentoUpdateToOneWithWhereWithoutAtendimentosInput, ProcedimentoUpdateWithoutAtendimentosInput>, ProcedimentoUncheckedUpdateWithoutAtendimentosInput>
   }
 
   export type TenantCreateNestedOneWithoutWhatsappConfigInput = {
@@ -18323,14 +18463,14 @@ export namespace Prisma {
     _min?: NestedEnumStatusAgendamentoFilter<$PrismaModel>
     _max?: NestedEnumStatusAgendamentoFilter<$PrismaModel>
   }
-  export type NestedJsonNullableFilter<$PrismaModel = never> =
+  export type NestedJsonFilter<$PrismaModel = never> =
     | PatchUndefined<
-        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonFilterBase<$PrismaModel>>
       >
-    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
 
-  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+  export type NestedJsonFilterBase<$PrismaModel = never> = {
     equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
     path?: string[]
     mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
@@ -18362,6 +18502,29 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTipoLogFilter<$PrismaModel>
     _max?: NestedEnumTipoLogFilter<$PrismaModel>
+  }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type TenantCreateWithoutUsuariosInput = {
@@ -18588,13 +18751,15 @@ export namespace Prisma {
   export type AtendimentoCreateWithoutProfissionalInput = {
     id?: string
     anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: boolean
+    canceladoEm?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutAtendimentosInput
     agendamento: AgendamentoCreateNestedOneWithoutAtendimentoInput
     paciente: PacienteCreateNestedOneWithoutAtendimentosInput
-    procedimento: ProcedimentoCreateNestedOneWithoutAtendimentosInput
-    tenant: TenantCreateNestedOneWithoutAtendimentosInput
+    procedimento?: ProcedimentoCreateNestedOneWithoutAtendimentosInput
   }
 
   export type AtendimentoUncheckedCreateWithoutProfissionalInput = {
@@ -18602,9 +18767,11 @@ export namespace Prisma {
     tenantId: string
     agendamentoId: string
     pacienteId: string
-    procedimentoId: string
+    procedimentoId?: string | null
     anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: boolean
+    canceladoEm?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18767,9 +18934,11 @@ export namespace Prisma {
     agendamentoId?: StringFilter<"Atendimento"> | string
     pacienteId?: StringFilter<"Atendimento"> | string
     profissionalId?: StringFilter<"Atendimento"> | string
-    procedimentoId?: StringFilter<"Atendimento"> | string
+    procedimentoId?: StringNullableFilter<"Atendimento"> | string | null
     anotacoes?: StringNullableFilter<"Atendimento"> | string | null
-    procedimentosRealizados?: JsonNullableFilter<"Atendimento">
+    procedimentosRealizados?: JsonFilter<"Atendimento">
+    cancelado?: BoolFilter<"Atendimento"> | boolean
+    canceladoEm?: DateTimeNullableFilter<"Atendimento"> | Date | string | null
     createdAt?: DateTimeFilter<"Atendimento"> | Date | string
     updatedAt?: DateTimeFilter<"Atendimento"> | Date | string
   }
@@ -18887,13 +19056,15 @@ export namespace Prisma {
   export type AtendimentoCreateWithoutPacienteInput = {
     id?: string
     anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: boolean
+    canceladoEm?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    agendamento: AgendamentoCreateNestedOneWithoutAtendimentoInput
-    procedimento: ProcedimentoCreateNestedOneWithoutAtendimentosInput
-    profissional: ProfissionalCreateNestedOneWithoutAtendimentosInput
     tenant: TenantCreateNestedOneWithoutAtendimentosInput
+    agendamento: AgendamentoCreateNestedOneWithoutAtendimentoInput
+    profissional: ProfissionalCreateNestedOneWithoutAtendimentosInput
+    procedimento?: ProcedimentoCreateNestedOneWithoutAtendimentosInput
   }
 
   export type AtendimentoUncheckedCreateWithoutPacienteInput = {
@@ -18901,9 +19072,11 @@ export namespace Prisma {
     tenantId: string
     agendamentoId: string
     profissionalId: string
-    procedimentoId: string
+    procedimentoId?: string | null
     anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: boolean
+    canceladoEm?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -19075,13 +19248,15 @@ export namespace Prisma {
   export type AtendimentoCreateWithoutProcedimentoInput = {
     id?: string
     anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: boolean
+    canceladoEm?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutAtendimentosInput
     agendamento: AgendamentoCreateNestedOneWithoutAtendimentoInput
     paciente: PacienteCreateNestedOneWithoutAtendimentosInput
     profissional: ProfissionalCreateNestedOneWithoutAtendimentosInput
-    tenant: TenantCreateNestedOneWithoutAtendimentosInput
   }
 
   export type AtendimentoUncheckedCreateWithoutProcedimentoInput = {
@@ -19091,7 +19266,9 @@ export namespace Prisma {
     pacienteId: string
     profissionalId: string
     anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: boolean
+    canceladoEm?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -19375,13 +19552,15 @@ export namespace Prisma {
   export type AtendimentoCreateWithoutAgendamentoInput = {
     id?: string
     anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: boolean
+    canceladoEm?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    paciente: PacienteCreateNestedOneWithoutAtendimentosInput
-    procedimento: ProcedimentoCreateNestedOneWithoutAtendimentosInput
-    profissional: ProfissionalCreateNestedOneWithoutAtendimentosInput
     tenant: TenantCreateNestedOneWithoutAtendimentosInput
+    paciente: PacienteCreateNestedOneWithoutAtendimentosInput
+    profissional: ProfissionalCreateNestedOneWithoutAtendimentosInput
+    procedimento?: ProcedimentoCreateNestedOneWithoutAtendimentosInput
   }
 
   export type AtendimentoUncheckedCreateWithoutAgendamentoInput = {
@@ -19389,9 +19568,11 @@ export namespace Prisma {
     tenantId: string
     pacienteId: string
     profissionalId: string
-    procedimentoId: string
+    procedimentoId?: string | null
     anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: boolean
+    canceladoEm?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -19597,13 +19778,15 @@ export namespace Prisma {
   export type AtendimentoUpdateWithoutAgendamentoInput = {
     id?: StringFieldUpdateOperationsInput | string
     anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: BoolFieldUpdateOperationsInput | boolean
+    canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    paciente?: PacienteUpdateOneRequiredWithoutAtendimentosNestedInput
-    procedimento?: ProcedimentoUpdateOneRequiredWithoutAtendimentosNestedInput
-    profissional?: ProfissionalUpdateOneRequiredWithoutAtendimentosNestedInput
     tenant?: TenantUpdateOneRequiredWithoutAtendimentosNestedInput
+    paciente?: PacienteUpdateOneRequiredWithoutAtendimentosNestedInput
+    profissional?: ProfissionalUpdateOneRequiredWithoutAtendimentosNestedInput
+    procedimento?: ProcedimentoUpdateOneWithoutAtendimentosNestedInput
   }
 
   export type AtendimentoUncheckedUpdateWithoutAgendamentoInput = {
@@ -19611,11 +19794,48 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     pacienteId?: StringFieldUpdateOperationsInput | string
     profissionalId?: StringFieldUpdateOperationsInput | string
-    procedimentoId?: StringFieldUpdateOperationsInput | string
+    procedimentoId?: NullableStringFieldUpdateOperationsInput | string | null
     anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: BoolFieldUpdateOperationsInput | boolean
+    canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TenantCreateWithoutAtendimentosInput = {
+    id?: string
+    nome: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    plano: PlanoCreateNestedOneWithoutTenantsInput
+    agendamentos?: AgendamentoCreateNestedManyWithoutTenantInput
+    pacientes?: PacienteCreateNestedManyWithoutTenantInput
+    procedimentos?: ProcedimentoCreateNestedManyWithoutTenantInput
+    profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
+    usuarios?: UsuarioCreateNestedManyWithoutTenantInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateWithoutAtendimentosInput = {
+    id?: string
+    nome: string
+    planoId: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutTenantInput
+    pacientes?: PacienteUncheckedCreateNestedManyWithoutTenantInput
+    procedimentos?: ProcedimentoUncheckedCreateNestedManyWithoutTenantInput
+    profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
+    usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
+  }
+
+  export type TenantCreateOrConnectWithoutAtendimentosInput = {
+    where: TenantWhereUniqueInput
+    create: XOR<TenantCreateWithoutAtendimentosInput, TenantUncheckedCreateWithoutAtendimentosInput>
   }
 
   export type AgendamentoCreateWithoutAtendimentoInput = {
@@ -19718,33 +19938,6 @@ export namespace Prisma {
     create: XOR<PacienteCreateWithoutAtendimentosInput, PacienteUncheckedCreateWithoutAtendimentosInput>
   }
 
-  export type ProcedimentoCreateWithoutAtendimentosInput = {
-    id?: string
-    nome: string
-    valor?: Decimal | DecimalJsLike | number | string | null
-    duracaoMinutos: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoCreateNestedManyWithoutProcedimentoInput
-    tenant: TenantCreateNestedOneWithoutProcedimentosInput
-  }
-
-  export type ProcedimentoUncheckedCreateWithoutAtendimentosInput = {
-    id?: string
-    tenantId: string
-    nome: string
-    valor?: Decimal | DecimalJsLike | number | string | null
-    duracaoMinutos: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutProcedimentoInput
-  }
-
-  export type ProcedimentoCreateOrConnectWithoutAtendimentosInput = {
-    where: ProcedimentoWhereUniqueInput
-    create: XOR<ProcedimentoCreateWithoutAtendimentosInput, ProcedimentoUncheckedCreateWithoutAtendimentosInput>
-  }
-
   export type ProfissionalCreateWithoutAtendimentosInput = {
     id?: string
     nome: string
@@ -19778,39 +19971,72 @@ export namespace Prisma {
     create: XOR<ProfissionalCreateWithoutAtendimentosInput, ProfissionalUncheckedCreateWithoutAtendimentosInput>
   }
 
-  export type TenantCreateWithoutAtendimentosInput = {
+  export type ProcedimentoCreateWithoutAtendimentosInput = {
     id?: string
     nome: string
-    ativo?: boolean
+    valor?: Decimal | DecimalJsLike | number | string | null
+    duracaoMinutos: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    plano: PlanoCreateNestedOneWithoutTenantsInput
-    agendamentos?: AgendamentoCreateNestedManyWithoutTenantInput
-    pacientes?: PacienteCreateNestedManyWithoutTenantInput
-    procedimentos?: ProcedimentoCreateNestedManyWithoutTenantInput
-    profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
-    usuarios?: UsuarioCreateNestedManyWithoutTenantInput
-    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
+    agendamentos?: AgendamentoCreateNestedManyWithoutProcedimentoInput
+    tenant: TenantCreateNestedOneWithoutProcedimentosInput
   }
 
-  export type TenantUncheckedCreateWithoutAtendimentosInput = {
+  export type ProcedimentoUncheckedCreateWithoutAtendimentosInput = {
     id?: string
+    tenantId: string
     nome: string
-    planoId: string
-    ativo?: boolean
+    valor?: Decimal | DecimalJsLike | number | string | null
+    duracaoMinutos: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutTenantInput
-    pacientes?: PacienteUncheckedCreateNestedManyWithoutTenantInput
-    procedimentos?: ProcedimentoUncheckedCreateNestedManyWithoutTenantInput
-    profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
-    usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
-    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
+    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutProcedimentoInput
   }
 
-  export type TenantCreateOrConnectWithoutAtendimentosInput = {
-    where: TenantWhereUniqueInput
+  export type ProcedimentoCreateOrConnectWithoutAtendimentosInput = {
+    where: ProcedimentoWhereUniqueInput
+    create: XOR<ProcedimentoCreateWithoutAtendimentosInput, ProcedimentoUncheckedCreateWithoutAtendimentosInput>
+  }
+
+  export type TenantUpsertWithoutAtendimentosInput = {
+    update: XOR<TenantUpdateWithoutAtendimentosInput, TenantUncheckedUpdateWithoutAtendimentosInput>
     create: XOR<TenantCreateWithoutAtendimentosInput, TenantUncheckedCreateWithoutAtendimentosInput>
+    where?: TenantWhereInput
+  }
+
+  export type TenantUpdateToOneWithWhereWithoutAtendimentosInput = {
+    where?: TenantWhereInput
+    data: XOR<TenantUpdateWithoutAtendimentosInput, TenantUncheckedUpdateWithoutAtendimentosInput>
+  }
+
+  export type TenantUpdateWithoutAtendimentosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    plano?: PlanoUpdateOneRequiredWithoutTenantsNestedInput
+    agendamentos?: AgendamentoUpdateManyWithoutTenantNestedInput
+    pacientes?: PacienteUpdateManyWithoutTenantNestedInput
+    procedimentos?: ProcedimentoUpdateManyWithoutTenantNestedInput
+    profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
+    usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateWithoutAtendimentosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    planoId?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUncheckedUpdateManyWithoutTenantNestedInput
+    pacientes?: PacienteUncheckedUpdateManyWithoutTenantNestedInput
+    procedimentos?: ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput
+    profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
+    usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
   }
 
   export type AgendamentoUpsertWithoutAtendimentoInput = {
@@ -19925,39 +20151,6 @@ export namespace Prisma {
     agendamentos?: AgendamentoUncheckedUpdateManyWithoutPacienteNestedInput
   }
 
-  export type ProcedimentoUpsertWithoutAtendimentosInput = {
-    update: XOR<ProcedimentoUpdateWithoutAtendimentosInput, ProcedimentoUncheckedUpdateWithoutAtendimentosInput>
-    create: XOR<ProcedimentoCreateWithoutAtendimentosInput, ProcedimentoUncheckedCreateWithoutAtendimentosInput>
-    where?: ProcedimentoWhereInput
-  }
-
-  export type ProcedimentoUpdateToOneWithWhereWithoutAtendimentosInput = {
-    where?: ProcedimentoWhereInput
-    data: XOR<ProcedimentoUpdateWithoutAtendimentosInput, ProcedimentoUncheckedUpdateWithoutAtendimentosInput>
-  }
-
-  export type ProcedimentoUpdateWithoutAtendimentosInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    valor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    duracaoMinutos?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUpdateManyWithoutProcedimentoNestedInput
-    tenant?: TenantUpdateOneRequiredWithoutProcedimentosNestedInput
-  }
-
-  export type ProcedimentoUncheckedUpdateWithoutAtendimentosInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    tenantId?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    valor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    duracaoMinutos?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUncheckedUpdateManyWithoutProcedimentoNestedInput
-  }
-
   export type ProfissionalUpsertWithoutAtendimentosInput = {
     update: XOR<ProfissionalUpdateWithoutAtendimentosInput, ProfissionalUncheckedUpdateWithoutAtendimentosInput>
     create: XOR<ProfissionalCreateWithoutAtendimentosInput, ProfissionalUncheckedCreateWithoutAtendimentosInput>
@@ -19997,45 +20190,37 @@ export namespace Prisma {
     agendamentos?: AgendamentoUncheckedUpdateManyWithoutProfissionalNestedInput
   }
 
-  export type TenantUpsertWithoutAtendimentosInput = {
-    update: XOR<TenantUpdateWithoutAtendimentosInput, TenantUncheckedUpdateWithoutAtendimentosInput>
-    create: XOR<TenantCreateWithoutAtendimentosInput, TenantUncheckedCreateWithoutAtendimentosInput>
-    where?: TenantWhereInput
+  export type ProcedimentoUpsertWithoutAtendimentosInput = {
+    update: XOR<ProcedimentoUpdateWithoutAtendimentosInput, ProcedimentoUncheckedUpdateWithoutAtendimentosInput>
+    create: XOR<ProcedimentoCreateWithoutAtendimentosInput, ProcedimentoUncheckedCreateWithoutAtendimentosInput>
+    where?: ProcedimentoWhereInput
   }
 
-  export type TenantUpdateToOneWithWhereWithoutAtendimentosInput = {
-    where?: TenantWhereInput
-    data: XOR<TenantUpdateWithoutAtendimentosInput, TenantUncheckedUpdateWithoutAtendimentosInput>
+  export type ProcedimentoUpdateToOneWithWhereWithoutAtendimentosInput = {
+    where?: ProcedimentoWhereInput
+    data: XOR<ProcedimentoUpdateWithoutAtendimentosInput, ProcedimentoUncheckedUpdateWithoutAtendimentosInput>
   }
 
-  export type TenantUpdateWithoutAtendimentosInput = {
+  export type ProcedimentoUpdateWithoutAtendimentosInput = {
     id?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
+    valor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    duracaoMinutos?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    plano?: PlanoUpdateOneRequiredWithoutTenantsNestedInput
-    agendamentos?: AgendamentoUpdateManyWithoutTenantNestedInput
-    pacientes?: PacienteUpdateManyWithoutTenantNestedInput
-    procedimentos?: ProcedimentoUpdateManyWithoutTenantNestedInput
-    profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
-    usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
-    whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
+    agendamentos?: AgendamentoUpdateManyWithoutProcedimentoNestedInput
+    tenant?: TenantUpdateOneRequiredWithoutProcedimentosNestedInput
   }
 
-  export type TenantUncheckedUpdateWithoutAtendimentosInput = {
+  export type ProcedimentoUncheckedUpdateWithoutAtendimentosInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
-    planoId?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
+    valor?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    duracaoMinutos?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamentos?: AgendamentoUncheckedUpdateManyWithoutTenantNestedInput
-    pacientes?: PacienteUncheckedUpdateManyWithoutTenantNestedInput
-    procedimentos?: ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput
-    profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
-    usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
-    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
+    agendamentos?: AgendamentoUncheckedUpdateManyWithoutProcedimentoNestedInput
   }
 
   export type TenantCreateWithoutWhatsappConfigInput = {
@@ -20270,13 +20455,15 @@ export namespace Prisma {
   export type AtendimentoCreateWithoutTenantInput = {
     id?: string
     anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: boolean
+    canceladoEm?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     agendamento: AgendamentoCreateNestedOneWithoutAtendimentoInput
     paciente: PacienteCreateNestedOneWithoutAtendimentosInput
-    procedimento: ProcedimentoCreateNestedOneWithoutAtendimentosInput
     profissional: ProfissionalCreateNestedOneWithoutAtendimentosInput
+    procedimento?: ProcedimentoCreateNestedOneWithoutAtendimentosInput
   }
 
   export type AtendimentoUncheckedCreateWithoutTenantInput = {
@@ -20284,9 +20471,11 @@ export namespace Prisma {
     agendamentoId: string
     pacienteId: string
     profissionalId: string
-    procedimentoId: string
+    procedimentoId?: string | null
     anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: boolean
+    canceladoEm?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -20770,9 +20959,11 @@ export namespace Prisma {
     tenantId: string
     agendamentoId: string
     pacienteId: string
-    procedimentoId: string
+    procedimentoId?: string | null
     anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: boolean
+    canceladoEm?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -20912,13 +21103,15 @@ export namespace Prisma {
   export type AtendimentoUpdateWithoutProfissionalInput = {
     id?: StringFieldUpdateOperationsInput | string
     anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: BoolFieldUpdateOperationsInput | boolean
+    canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutAtendimentosNestedInput
     agendamento?: AgendamentoUpdateOneRequiredWithoutAtendimentoNestedInput
     paciente?: PacienteUpdateOneRequiredWithoutAtendimentosNestedInput
-    procedimento?: ProcedimentoUpdateOneRequiredWithoutAtendimentosNestedInput
-    tenant?: TenantUpdateOneRequiredWithoutAtendimentosNestedInput
+    procedimento?: ProcedimentoUpdateOneWithoutAtendimentosNestedInput
   }
 
   export type AtendimentoUncheckedUpdateWithoutProfissionalInput = {
@@ -20926,9 +21119,11 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     agendamentoId?: StringFieldUpdateOperationsInput | string
     pacienteId?: StringFieldUpdateOperationsInput | string
-    procedimentoId?: StringFieldUpdateOperationsInput | string
+    procedimentoId?: NullableStringFieldUpdateOperationsInput | string | null
     anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: BoolFieldUpdateOperationsInput | boolean
+    canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -20938,9 +21133,11 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     agendamentoId?: StringFieldUpdateOperationsInput | string
     pacienteId?: StringFieldUpdateOperationsInput | string
-    procedimentoId?: StringFieldUpdateOperationsInput | string
+    procedimentoId?: NullableStringFieldUpdateOperationsInput | string | null
     anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: BoolFieldUpdateOperationsInput | boolean
+    canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -20965,9 +21162,11 @@ export namespace Prisma {
     tenantId: string
     agendamentoId: string
     profissionalId: string
-    procedimentoId: string
+    procedimentoId?: string | null
     anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: boolean
+    canceladoEm?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -21022,13 +21221,15 @@ export namespace Prisma {
   export type AtendimentoUpdateWithoutPacienteInput = {
     id?: StringFieldUpdateOperationsInput | string
     anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: BoolFieldUpdateOperationsInput | boolean
+    canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    agendamento?: AgendamentoUpdateOneRequiredWithoutAtendimentoNestedInput
-    procedimento?: ProcedimentoUpdateOneRequiredWithoutAtendimentosNestedInput
-    profissional?: ProfissionalUpdateOneRequiredWithoutAtendimentosNestedInput
     tenant?: TenantUpdateOneRequiredWithoutAtendimentosNestedInput
+    agendamento?: AgendamentoUpdateOneRequiredWithoutAtendimentoNestedInput
+    profissional?: ProfissionalUpdateOneRequiredWithoutAtendimentosNestedInput
+    procedimento?: ProcedimentoUpdateOneWithoutAtendimentosNestedInput
   }
 
   export type AtendimentoUncheckedUpdateWithoutPacienteInput = {
@@ -21036,9 +21237,11 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     agendamentoId?: StringFieldUpdateOperationsInput | string
     profissionalId?: StringFieldUpdateOperationsInput | string
-    procedimentoId?: StringFieldUpdateOperationsInput | string
+    procedimentoId?: NullableStringFieldUpdateOperationsInput | string | null
     anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: BoolFieldUpdateOperationsInput | boolean
+    canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -21048,9 +21251,11 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     agendamentoId?: StringFieldUpdateOperationsInput | string
     profissionalId?: StringFieldUpdateOperationsInput | string
-    procedimentoId?: StringFieldUpdateOperationsInput | string
+    procedimentoId?: NullableStringFieldUpdateOperationsInput | string | null
     anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: BoolFieldUpdateOperationsInput | boolean
+    canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -21077,7 +21282,9 @@ export namespace Prisma {
     pacienteId: string
     profissionalId: string
     anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: boolean
+    canceladoEm?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -21132,13 +21339,15 @@ export namespace Prisma {
   export type AtendimentoUpdateWithoutProcedimentoInput = {
     id?: StringFieldUpdateOperationsInput | string
     anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: BoolFieldUpdateOperationsInput | boolean
+    canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutAtendimentosNestedInput
     agendamento?: AgendamentoUpdateOneRequiredWithoutAtendimentoNestedInput
     paciente?: PacienteUpdateOneRequiredWithoutAtendimentosNestedInput
     profissional?: ProfissionalUpdateOneRequiredWithoutAtendimentosNestedInput
-    tenant?: TenantUpdateOneRequiredWithoutAtendimentosNestedInput
   }
 
   export type AtendimentoUncheckedUpdateWithoutProcedimentoInput = {
@@ -21148,7 +21357,9 @@ export namespace Prisma {
     pacienteId?: StringFieldUpdateOperationsInput | string
     profissionalId?: StringFieldUpdateOperationsInput | string
     anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: BoolFieldUpdateOperationsInput | boolean
+    canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -21160,7 +21371,9 @@ export namespace Prisma {
     pacienteId?: StringFieldUpdateOperationsInput | string
     profissionalId?: StringFieldUpdateOperationsInput | string
     anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: BoolFieldUpdateOperationsInput | boolean
+    canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -21231,9 +21444,11 @@ export namespace Prisma {
     agendamentoId: string
     pacienteId: string
     profissionalId: string
-    procedimentoId: string
+    procedimentoId?: string | null
     anotacoes?: string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: boolean
+    canceladoEm?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -21346,13 +21561,15 @@ export namespace Prisma {
   export type AtendimentoUpdateWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string
     anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: BoolFieldUpdateOperationsInput | boolean
+    canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     agendamento?: AgendamentoUpdateOneRequiredWithoutAtendimentoNestedInput
     paciente?: PacienteUpdateOneRequiredWithoutAtendimentosNestedInput
-    procedimento?: ProcedimentoUpdateOneRequiredWithoutAtendimentosNestedInput
     profissional?: ProfissionalUpdateOneRequiredWithoutAtendimentosNestedInput
+    procedimento?: ProcedimentoUpdateOneWithoutAtendimentosNestedInput
   }
 
   export type AtendimentoUncheckedUpdateWithoutTenantInput = {
@@ -21360,9 +21577,11 @@ export namespace Prisma {
     agendamentoId?: StringFieldUpdateOperationsInput | string
     pacienteId?: StringFieldUpdateOperationsInput | string
     profissionalId?: StringFieldUpdateOperationsInput | string
-    procedimentoId?: StringFieldUpdateOperationsInput | string
+    procedimentoId?: NullableStringFieldUpdateOperationsInput | string | null
     anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: BoolFieldUpdateOperationsInput | boolean
+    canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -21372,9 +21591,11 @@ export namespace Prisma {
     agendamentoId?: StringFieldUpdateOperationsInput | string
     pacienteId?: StringFieldUpdateOperationsInput | string
     profissionalId?: StringFieldUpdateOperationsInput | string
-    procedimentoId?: StringFieldUpdateOperationsInput | string
+    procedimentoId?: NullableStringFieldUpdateOperationsInput | string | null
     anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
-    procedimentosRealizados?: NullableJsonNullValueInput | InputJsonValue
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: BoolFieldUpdateOperationsInput | boolean
+    canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

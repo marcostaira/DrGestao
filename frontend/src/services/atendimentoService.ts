@@ -69,6 +69,14 @@ export async function getAtendimentoById(id: string): Promise<Atendimento> {
   return response.data.data;
 }
 
+export interface AtendimentoFilters {
+  pacienteId?: string;
+  profissionalId?: string;
+  dataInicio?: string;
+  dataFim?: string;
+  incluirCancelados?: boolean; // ADICIONAR ESTA LINHA
+}
+
 export async function getAtendimentoByAgendamentoId(
   agendamentoId: string
 ): Promise<Atendimento | null> {
@@ -100,4 +108,9 @@ export async function updateAtendimento(
 
 export async function deleteAtendimento(id: string): Promise<void> {
   await api.delete(`/atendimentos/${id}`);
+}
+
+export async function cancelAtendimento(id: string): Promise<Atendimento> {
+  const response = await api.patch(`/atendimentos/${id}/cancel`);
+  return response.data.data;
 }

@@ -583,28 +583,31 @@ export class AgendamentoService {
   // DELETE AGENDAMENTO
   // ==========================================================================
 
-  static async delete(tenantId: string, agendamentoId: string) {
-    const existingAgendamento = await prisma.agendamento.findFirst({
-      where: { id: agendamentoId, tenantId },
+  static async delete(tenantId: string, id: string) {
+    const agendamento = await prisma.agendamento.findFirst({
+      where: { id, tenantId },
       include: {
         atendimento: true,
       },
     });
 
-    if (!existingAgendamento) {
+    if (!agendamento) {
       throw new AppError("Agendamento não encontrado", 404);
     }
 
-    if (existingAgendamento.atendimento) {
+    // VALIDAÇÃO: Não permitir exclusão se existe atendimento
+    if (agendamento.atendimento) {
       throw new AppError(
-        "Não é possível excluir agendamento com atendimento realizado",
+        "Não é possível excluir este agendamento pois já existe um atendimento registrado",
         400
       );
     }
 
     await prisma.agendamento.delete({
-      where: { id: agendamentoId },
+      where: { id },
     });
+
+    return { message: "Agendamento excluído com sucesso" };
   }
 
   // ==========================================================================
@@ -612,55 +615,78 @@ export class AgendamentoService {
   // ==========================================================================
 
   static async deleteRecorrencia(tenantId: string, recorrenciaId: string) {
-    const comAtendimento = await prisma.agendamento.count({
+    // Buscar todos os agendamentos da recorrência
+    const agendamentos = await prisma.agendamento.findMany({
       where: {
         tenantId,
         recorrenciaId,
-        atendimento: { isNot: null },
+      },
+      include: {
+        atendimento: true,
       },
     });
 
-    if (comAtendimento > 0) {
+    if (agendamentos.length === 0) {
       throw new AppError(
-        `${comAtendimento} agendamento(s) da recorrência possui(em) atendimento e não podem ser excluídos`,
+        "Nenhum agendamento encontrado para esta recorrência",
+        404
+      );
+    }
+
+    // Separar os que podem e não podem ser excluídos
+    const comAtendimento = agendamentos.filter((ag) => ag.atendimento !== null);
+    const semAtendimento = agendamentos.filter((ag) => ag.atendimento === null);
+
+    if (comAtendimento.length > 0) {
+      throw new AppError(
+        `${comAtendimento.length} agendamento(s) da recorrência possui(em) atendimento realizado e não podem ser excluídos. Apenas ${semAtendimento.length} agendamento(s) sem atendimento podem ser excluídos.`,
         400
       );
     }
 
+    // Excluir apenas os sem atendimento
     const result = await prisma.agendamento.deleteMany({
       where: {
         tenantId,
         recorrenciaId,
+        atendimento: null,
       },
     });
 
     return { deleted: result.count };
   }
-
   // ==========================================================================
   // DELETE BATCH
   // ==========================================================================
 
   static async deleteBatch(tenantId: string, ids: string[]) {
-    const comAtendimento = await prisma.agendamento.count({
+    // Buscar todos os agendamentos com atendimentos
+    const agendamentos = await prisma.agendamento.findMany({
       where: {
-        id: { in: ids },
         tenantId,
-        atendimento: { isNot: null },
+        id: { in: ids },
+      },
+      include: {
+        atendimento: true,
       },
     });
 
-    if (comAtendimento > 0) {
+    // Separar os que podem e não podem ser excluídos
+    const comAtendimento = agendamentos.filter((ag) => ag.atendimento !== null);
+    const semAtendimento = agendamentos.filter((ag) => ag.atendimento === null);
+
+    if (comAtendimento.length > 0) {
       throw new AppError(
-        `${comAtendimento} agendamento(s) possui(em) atendimento e não podem ser excluídos`,
+        `${comAtendimento.length} agendamento(s) possui(em) atendimento registrado e não pode(m) ser excluído(s). Apenas ${semAtendimento.length} agendamento(s) sem atendimento podem ser excluídos.`,
         400
       );
     }
 
+    // Excluir apenas os sem atendimento
     const result = await prisma.agendamento.deleteMany({
       where: {
-        id: { in: ids },
         tenantId,
+        id: { in: semAtendimento.map((ag) => ag.id) },
       },
     });
 

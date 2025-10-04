@@ -5,7 +5,6 @@ import { validateTenant } from "../../../middleware/tenant";
 import { validate } from "../../../middleware/validation";
 import {
   createAtendimentoSchema,
-  updateAtendimentoSchema,
   paginationSchema,
   idSchema,
 } from "../../../middleware/validation";
@@ -19,10 +18,6 @@ const router = Router();
 
 router.use(authenticate);
 router.use(validateTenant);
-
-// ==========================================================================
-// ROUTES
-// ==========================================================================
 
 /**
  * @route   POST /atendimentos
@@ -48,6 +43,7 @@ router.get(
       profissionalId: Joi.string().optional(),
       dataInicio: Joi.date().iso().optional(),
       dataFim: Joi.date().iso().optional(),
+      incluirCancelados: Joi.boolean().optional(),
     }),
   }),
   AtendimentoController.list
@@ -60,8 +56,28 @@ router.get(
  */
 router.get(
   "/paciente/:pacienteId",
-  validate({ params: Joi.object({ pacienteId: idSchema }) }),
+  validate({
+    params: Joi.object({ pacienteId: idSchema }),
+    query: Joi.object({
+      incluirCancelados: Joi.boolean().optional(),
+    }),
+  }),
   AtendimentoController.getByPaciente
+);
+
+/**
+ * @route   GET /atendimentos/agendamento/:agendamentoId
+ * @desc    Obter atendimento por ID do agendamento
+ * @access  Private
+ */
+router.get(
+  "/agendamento/:agendamentoId",
+  validate({
+    params: Joi.object({
+      agendamentoId: Joi.string().required(),
+    }),
+  }),
+  AtendimentoController.getByAgendamento
 );
 
 /**
@@ -76,39 +92,19 @@ router.get(
 );
 
 /**
- * @route   PUT /atendimentos/:id
- * @desc    Atualizar atendimento
- * @access  Private
- */
-router.put(
-  "/:id",
-  validate({
-    params: Joi.object({ id: idSchema }),
-    body: updateAtendimentoSchema,
-  }),
-  AtendimentoController.update
-);
-
-/**
- * @route   DELETE /atendimentos/:id
- * @desc    Excluir atendimento
- * @access  Private
- */
-router.delete(
-  "/:id",
-  validate({ params: Joi.object({ id: idSchema }) }),
-  AtendimentoController.delete
-);
-
-/**
- * @route   PATCH /atendimentos/:id/status
- * @desc    Alternar status do agendamento relacionado
+ * @route   PATCH /atendimentos/:id/cancel
+ * @desc    Cancelar atendimento
  * @access  Private
  */
 router.patch(
-  "/:id/status",
+  "/:id/cancel",
   validate({ params: Joi.object({ id: idSchema }) }),
-  AtendimentoController.toggleStatus
+  AtendimentoController.cancel
 );
+
+// ROTAS REMOVIDAS (atendimento não é editável nem deletável):
+// PUT /atendimentos/:id - update
+// DELETE /atendimentos/:id - delete
+// PATCH /atendimentos/:id/status - toggleStatus
 
 export default router;

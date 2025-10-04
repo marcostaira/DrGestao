@@ -29,6 +29,13 @@ export class AtendimentoService {
       throw new AppError("Agendamento não encontrado", 404);
     }
 
+    if (!agendamento.pacienteId) {
+      throw new AppError(
+        "Não é possível criar atendimento para bloqueio de horário",
+        400
+      );
+    }
+
     // Verificar se já existe atendimento para este agendamento
     const atendimentoExistente = await prisma.atendimento.findFirst({
       where: { agendamentoId: data.agendamentoId, tenantId },
@@ -43,7 +50,7 @@ export class AtendimentoService {
       data: {
         tenantId,
         agendamentoId: data.agendamentoId,
-        pacienteId: agendamento.pacienteId!,
+        pacienteId: agendamento.pacienteId,
         profissionalId: agendamento.profissionalId,
         procedimentoId: agendamento.procedimentoId,
         anotacoes: data.anotacoes?.trim() || null,
@@ -51,34 +58,16 @@ export class AtendimentoService {
       },
       include: {
         agendamento: {
-          include: {
-            paciente: {
-              select: {
-                id: true,
-                nome: true,
-                telefone: true,
-              },
-            },
-            profissional: {
-              select: {
-                id: true,
-                nome: true,
-                especialidade: true,
-              },
-            },
-            procedimento: {
-              select: {
-                id: true,
-                nome: true,
-                duracaoMinutos: true,
-              },
-            },
+          select: {
+            id: true,
+            dataHora: true,
           },
         },
         paciente: {
           select: {
             id: true,
             nome: true,
+            telefone: true,
           },
         },
         profissional: {
@@ -105,6 +94,39 @@ export class AtendimentoService {
     return atendimento;
   }
 
+  // Adicionar este método após o método create
+
+  static async cancel(tenantId: string, id: string) {
+    const atendimento = await prisma.atendimento.findFirst({
+      where: { id, tenantId },
+      include: {
+        agendamento: true,
+      },
+    });
+
+    if (!atendimento) {
+      throw new AppError("Atendimento não encontrado", 404);
+    }
+
+    // Marcar atendimento como cancelado
+    const atendimentoCancelado = await prisma.atendimento.update({
+      where: { id },
+      data: {
+        cancelado: true,
+        canceladoEm: new Date(),
+      },
+    });
+
+    // Atualizar status do agendamento para CANCELADO
+    await prisma.agendamento.update({
+      where: { id: atendimento.agendamentoId },
+      data: { status: "CANCELADO" },
+    });
+
+    return atendimentoCancelado;
+  }
+
+  // Remover ou comentar os métodos update e delete
   // ==========================================================================
   // GET ATENDIMENTO BY ID
   // ==========================================================================
@@ -417,5 +439,40 @@ export class AtendimentoService {
     });
 
     return atendimentoAtualizado;
+  }
+
+  static async getByAgendamento(tenantId: string, agendamentoId: string) {
+    const atendimento = await prisma.atendimento.findFirst({
+      where: { agendamentoId, tenantId },
+      include: {
+        agendamento: {
+          select: {
+            id: true,
+            dataHora: true,
+          },
+        },
+        paciente: {
+          select: {
+            id: true,
+            nome: true,
+            telefone: true,
+          },
+        },
+        profissional: {
+          select: {
+            id: true,
+            nome: true,
+          },
+        },
+        procedimento: {
+          select: {
+            id: true,
+            nome: true,
+          },
+        },
+      },
+    });
+
+    return atendimento;
   }
 }

@@ -42,6 +42,8 @@ export default function AgendaPage() {
     handleBatchUpdate,
     handleBatchDelete,
     loadAgendamentos,
+    handleUpdateRecorrencia, // ADICIONAR
+    handleDeleteRecorrencia,
   } = useAgenda();
 
   // Modal states

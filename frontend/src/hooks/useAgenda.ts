@@ -275,7 +275,6 @@ export const useAgenda = () => {
     },
     [loadAgendamentos, showSuccess, showError]
   );
-
   // Carrega dados iniciais apenas uma vez
   useEffect(() => {
     loadInitialData();

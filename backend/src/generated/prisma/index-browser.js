@@ -207,6 +207,8 @@ exports.Prisma.AtendimentoScalarFieldEnum = {
   procedimentoId: 'procedimentoId',
   anotacoes: 'anotacoes',
   procedimentosRealizados: 'procedimentosRealizados',
+  cancelado: 'cancelado',
+  canceladoEm: 'canceladoEm',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -265,6 +267,10 @@ exports.Prisma.TenantScalarFieldEnum = {
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.NullableJsonNullValueInput = {

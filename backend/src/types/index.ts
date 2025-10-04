@@ -316,20 +316,16 @@ export interface CreateAtendimentoData {
   agendamentoId: string;
   anotacoes?: string;
   procedimentosRealizados?: {
-    id: string;
-    nome: string;
-    valor?: number;
-    observacoes?: string;
+    procedimentoId: string;
+    observacao?: string;
   }[];
 }
 
 export interface UpdateAtendimentoData {
   anotacoes?: string;
   procedimentosRealizados?: {
-    id: string;
-    nome: string;
-    valor?: number;
-    observacoes?: string;
+    procedimentoId: string;
+    observacao?: string;
   }[];
 }
 

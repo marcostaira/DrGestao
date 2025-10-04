@@ -217,4 +217,66 @@ export class AtendimentoController {
       res.status(error.statusCode || 500).json(response);
     }
   }
+
+  static async getByAgendamento(
+    req: AuthenticatedRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      const tenantId = req.user!.tenantId;
+      const { agendamentoId } = req.params;
+
+      const atendimento = await AtendimentoService.getByAgendamento(
+        tenantId,
+        agendamentoId
+      );
+
+      if (!atendimento) {
+        const response: ApiResponse = {
+          success: false,
+          error: "Atendimento não encontrado",
+        };
+        res.status(404).json(response);
+        return;
+      }
+
+      const response: ApiResponse = {
+        success: true,
+        data: atendimento,
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao buscar atendimento",
+      };
+      res.status(error.statusCode || 500).json(response);
+    }
+  }
+
+  // Adicionar este método
+
+  static async cancel(req: AuthenticatedRequest, res: Response): Promise<void> {
+    try {
+      const tenantId = req.user!.tenantId;
+      const { id } = req.params;
+
+      const atendimento = await AtendimentoService.cancel(tenantId, id);
+
+      const response: ApiResponse = {
+        success: true,
+        data: atendimento,
+        message: "Atendimento cancelado com sucesso",
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao cancelar atendimento",
+      };
+      res.status(error.statusCode || 500).json(response);
+    }
+  }
 }

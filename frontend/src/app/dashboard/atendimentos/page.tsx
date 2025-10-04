@@ -10,6 +10,7 @@ import { DayNavigation } from "@/components/atendimentos/DayNavigation";
 import { AgendamentosDoDia } from "@/components/atendimentos/AgendamentosDoDia";
 import { AgendamentosCancelados } from "@/components/atendimentos/AgendamentosCancelados";
 import { StatusConfirmModal } from "@/components/atendimentos/StatusConfirmModal";
+import { AtendimentoFormModal } from "@/components/atendimentos/AtendimentoFormModal";
 
 export default function AtendimentosPage() {
   const searchParams = useSearchParams();
@@ -31,6 +32,8 @@ export default function AtendimentosPage() {
     setSelectedProfissional,
     setSelectedPaciente,
     clearMessages,
+    handleCreateAtendimento,
+    handleCancelAtendimento,
     handleUpdateStatus,
     previousDay,
     nextDay,
@@ -38,7 +41,10 @@ export default function AtendimentosPage() {
   } = useAtendimentos();
 
   // Modal states
+  const [isAtendimentoModalOpen, setIsAtendimentoModalOpen] = useState(false);
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+  const [selectedAgendamento, setSelectedAgendamento] = useState<any>(null);
+  const [viewingAtendimento, setViewingAtendimento] = useState<any>(null);
   const [changingStatusAgendamento, setChangingStatusAgendamento] =
     useState<any>(null);
   const [newStatus, setNewStatus] = useState<StatusAgendamento | null>(null);
@@ -57,16 +63,40 @@ export default function AtendimentosPage() {
       );
 
       if (existingAtendimento) {
-        // TODO: Abrir modal de detalhes do atendimento
+        const agendamento = agendamentos.find((ag) => ag.id === agendamentoId);
+        setViewingAtendimento(existingAtendimento);
+        setSelectedAgendamento(agendamento);
+        setIsAtendimentoModalOpen(true);
       } else {
         const agendamento = agendamentos.find((ag) => ag.id === agendamentoId);
         if (agendamento) {
-          // TODO: Abrir modal de criar atendimento
+          setSelectedAgendamento(agendamento);
+          setViewingAtendimento(null);
+          setIsAtendimentoModalOpen(true);
         }
       }
     } catch (err: any) {
       console.error("Erro ao verificar atendimento:", err);
     }
+  };
+
+  const handleRegistrarAtendimento = (agendamento: any) => {
+    setSelectedAgendamento(agendamento);
+    setViewingAtendimento(null);
+    setIsAtendimentoModalOpen(true);
+  };
+
+  const handleVerAtendimento = (atendimento: any) => {
+    setViewingAtendimento(atendimento);
+    const agendamento = agendamentos.find(
+      (ag) => ag.id === atendimento.agendamentoId
+    );
+    setSelectedAgendamento(agendamento);
+    setIsAtendimentoModalOpen(true);
+  };
+
+  const handleAtendimentoSubmit = async (data: any) => {
+    return await handleCreateAtendimento(data);
   };
 
   const handleOpenStatusModal = (
@@ -146,20 +176,29 @@ export default function AtendimentosPage() {
       <AgendamentosDoDia
         agendamentos={agendamentos}
         atendimentos={atendimentos}
-        onRegistrarAtendimento={(ag) => {
-          // TODO: Abrir modal de criar atendimento
-          console.log("Registrar atendimento para:", ag);
-        }}
-        onVerAtendimento={(at) => {
-          // TODO: Abrir modal de detalhes
-          console.log("Ver atendimento:", at);
-        }}
+        onRegistrarAtendimento={handleRegistrarAtendimento}
+        onVerAtendimento={handleVerAtendimento}
         onUpdateStatus={(id, status) => handleUpdateStatus(id, status)}
         onOpenStatusModal={handleOpenStatusModal}
       />
 
-      {/* Agendamentos Cancelados - Últimos 7 dias */}
+      {/* Agendamentos Cancelados */}
       <AgendamentosCancelados agendamentos={agendamentosCancelados} />
+
+      {/* Modal de Atendimento */}
+      <AtendimentoFormModal
+        isOpen={isAtendimentoModalOpen}
+        onClose={() => {
+          setIsAtendimentoModalOpen(false);
+          setSelectedAgendamento(null);
+          setViewingAtendimento(null);
+        }}
+        onSubmit={!viewingAtendimento ? handleAtendimentoSubmit : undefined} 
+        onCancel={handleCancelAtendimento}
+        agendamento={selectedAgendamento}
+        procedimentos={procedimentos}
+        atendimento={viewingAtendimento}
+      />
 
       {/* Modal de Confirmação de Status */}
       <StatusConfirmModal

@@ -233,30 +233,29 @@ export const batchAgendamentoSchema = Joi.object({
 // ============================================================================
 // ATENDIMENTO VALIDATION SCHEMAS
 // ============================================================================
-
 export const createAtendimentoSchema = Joi.object({
   agendamentoId: Joi.string().required(),
   anotacoes: Joi.string().max(2000).allow(""),
-  procedimentosRealizados: Joi.array().items(
-    Joi.object({
-      id: Joi.string().required(),
-      nome: Joi.string().required(),
-      valor: Joi.number().min(0).optional(),
-      observacoes: Joi.string().max(500).optional(),
-    })
-  ),
+  procedimentosRealizados: Joi.array()
+    .items(
+      Joi.object({
+        procedimentoId: Joi.string().required(),
+        observacao: Joi.string().max(500).optional().allow(""),
+      })
+    )
+    .optional(),
 });
 
 export const updateAtendimentoSchema = Joi.object({
   anotacoes: Joi.string().max(2000).allow(""),
-  procedimentosRealizados: Joi.array().items(
-    Joi.object({
-      id: Joi.string().required(),
-      nome: Joi.string().required(),
-      valor: Joi.number().min(0).optional(),
-      observacoes: Joi.string().max(500).optional(),
-    })
-  ),
+  procedimentosRealizados: Joi.array()
+    .items(
+      Joi.object({
+        procedimentoId: Joi.string().required(),
+        observacao: Joi.string().max(500).optional().allow(""),
+      })
+    )
+    .optional(),
 });
 
 // ============================================================================
