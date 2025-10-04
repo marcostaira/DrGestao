@@ -92,7 +92,7 @@ export const UsuarioPermissoesCard: React.FC<UsuarioPermissoesCardProps> = ({
           />
         </div>
 
-        {/* Grid de Módulos */}
+        {/* Grid de Módulos - 🔥 ADICIONADO KEY PROP */}
         <div className="grid grid-cols-4 gap-2">
           {usuario.autorizacoes.map((autorizacao) => {
             const temAlgumaPermissao =
@@ -102,7 +102,7 @@ export const UsuarioPermissoesCard: React.FC<UsuarioPermissoesCardProps> = ({
 
             return (
               <div
-                key={autorizacao.id}
+                key={`${usuario.id}-${autorizacao.modulo}`} // 🔥 KEY ÚNICA ADICIONADA
                 className={`
                   flex flex-col items-center justify-center p-2 rounded-lg border
                   ${

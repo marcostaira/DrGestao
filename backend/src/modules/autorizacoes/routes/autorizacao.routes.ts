@@ -31,7 +31,7 @@ const autorizacaoSchema = Joi.object({
     .required(),
   visualizar: Joi.boolean().required(),
   criarAlterar: Joi.boolean().required(),
-});
+}).unknown(false); // 🔥 IMPORTANTE: Rejeita campos extras como "cancelar"
 
 const updateAutorizacoesSchema = Joi.object({
   autorizacoes: Joi.array().items(autorizacaoSchema).min(1).required(),

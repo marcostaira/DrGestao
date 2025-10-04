@@ -14,7 +14,7 @@ import { AtendimentoFormModal } from "@/components/atendimentos/AtendimentoFormM
 
 export default function AtendimentosPage() {
   const searchParams = useSearchParams();
-  const agendamentoIdFromUrl = searchParams.get("agendamentoId");
+  const agendamentoIdFromUrl = searchParams?.get("agendamentoId") || null; // 🔥 TRATAMENTO DE NULL
 
   const {
     atendimentos,
@@ -193,7 +193,7 @@ export default function AtendimentosPage() {
           setSelectedAgendamento(null);
           setViewingAtendimento(null);
         }}
-        onSubmit={!viewingAtendimento ? handleAtendimentoSubmit : undefined} 
+        onSubmit={!viewingAtendimento ? handleAtendimentoSubmit : undefined}
         onCancel={handleCancelAtendimento}
         agendamento={selectedAgendamento}
         procedimentos={procedimentos}

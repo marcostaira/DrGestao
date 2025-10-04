@@ -25,11 +25,8 @@ export const ModalEditarPermissoes: React.FC<ModalEditarPermissoesProps> = ({
   onClose,
   onSave,
 }) => {
-  const [permissoes, setPermissoes] = useState<
-    Record<
-      string,
-      { visualizar: boolean; criarAlterar: boolean; cancelar: boolean }
-    >
+  const [permissoes, setPermissoes] = useState
+    Record<string, { visualizar: boolean; criarAlterar: boolean }>
   >({});
   const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
@@ -37,16 +34,15 @@ export const ModalEditarPermissoes: React.FC<ModalEditarPermissoesProps> = ({
   // Inicializar permissões quando o usuário mudar
   useEffect(() => {
     if (usuario) {
-      const perms: Record<
+      const perms: Record
         string,
-        { visualizar: boolean; criarAlterar: boolean; cancelar: boolean }
+        { visualizar: boolean; criarAlterar: boolean }
       > = {};
 
       usuario.autorizacoes.forEach((auth) => {
         perms[auth.modulo] = {
           visualizar: auth.visualizar,
           criarAlterar: auth.criarAlterar,
-          cancelar: auth.cancelar || false, // ⬅️ ADICIONAR
         };
       });
 
@@ -58,7 +54,7 @@ export const ModalEditarPermissoes: React.FC<ModalEditarPermissoesProps> = ({
 
   const handleToggle = (
     modulo: Modulo,
-    tipo: "visualizar" | "criarAlterar" | "cancelar",
+    tipo: "visualizar" | "criarAlterar",
     valor: boolean
   ) => {
     setPermissoes((prev) => ({
@@ -70,9 +66,7 @@ export const ModalEditarPermissoes: React.FC<ModalEditarPermissoesProps> = ({
     }));
   };
 
-  const handleSelectAll = (
-    tipo: "visualizar" | "criarAlterar" | "cancelar"
-  ) => {
+  const handleSelectAll = (tipo: "visualizar" | "criarAlterar") => {
     const novasPermissoes = { ...permissoes };
     Object.keys(novasPermissoes).forEach((modulo) => {
       novasPermissoes[modulo] = {
@@ -83,9 +77,7 @@ export const ModalEditarPermissoes: React.FC<ModalEditarPermissoesProps> = ({
     setPermissoes(novasPermissoes);
   };
 
-  const handleDeselectAll = (
-    tipo: "visualizar" | "criarAlterar" | "cancelar"
-  ) => {
+  const handleDeselectAll = (tipo: "visualizar" | "criarAlterar") => {
     const novasPermissoes = { ...permissoes };
     Object.keys(novasPermissoes).forEach((modulo) => {
       novasPermissoes[modulo] = {
@@ -101,12 +93,12 @@ export const ModalEditarPermissoes: React.FC<ModalEditarPermissoesProps> = ({
       setSalvando(true);
       setErro(null);
 
+      // 🔥 APENAS visualizar e criarAlterar (sem cancelar)
       const autorizacoes = Object.entries(permissoes).map(
         ([modulo, perms]) => ({
           modulo: modulo as Modulo,
           visualizar: perms.visualizar,
           criarAlterar: perms.criarAlterar,
-          cancelar: perms.cancelar, // ⬅️ ADICIONAR
         })
       );
 
@@ -172,7 +164,7 @@ export const ModalEditarPermissoes: React.FC<ModalEditarPermissoesProps> = ({
               <h3 className="text-sm font-semibold text-gray-700 mb-3">
                 Ações Rápidas
               </h3>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-xs text-gray-600 mb-2 font-medium">
                     Visualizar
@@ -211,25 +203,6 @@ export const ModalEditarPermissoes: React.FC<ModalEditarPermissoesProps> = ({
                     </button>
                   </div>
                 </div>
-                <div>
-                  <p className="text-xs text-gray-600 mb-2 font-medium">
-                    Cancelar
-                  </p>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => handleSelectAll("cancelar")}
-                      className="flex-1 px-3 py-1.5 text-xs font-medium text-red-700 bg-red-50 rounded hover:bg-red-100 transition-colors"
-                    >
-                      Marcar Todos
-                    </button>
-                    <button
-                      onClick={() => handleDeselectAll("cancelar")}
-                      className="flex-1 px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-200 rounded hover:bg-gray-300 transition-colors"
-                    >
-                      Desmarcar
-                    </button>
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -239,14 +212,13 @@ export const ModalEditarPermissoes: React.FC<ModalEditarPermissoesProps> = ({
                 const perm = permissoes[modulo] || {
                   visualizar: false,
                   criarAlterar: false,
-                  cancelar: false,
                 };
                 const color = MODULO_COLORS[modulo];
 
                 return (
                   <div
                     key={modulo}
-                    className={`border-2 rounded-lg p-4 bg-${color}-50 border-${color}-200`}
+                    className="border-2 rounded-lg p-4 hover:border-gray-300 transition-colors"
                   >
                     <div className="flex items-center gap-3 mb-3">
                       <span className="text-2xl">{MODULO_ICONS[modulo]}</span>
@@ -255,7 +227,7 @@ export const ModalEditarPermissoes: React.FC<ModalEditarPermissoesProps> = ({
                       </h4>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="grid grid-cols-2 gap-4">
                       <PermissaoToggle
                         label="Visualizar"
                         checked={perm.visualizar}
@@ -272,17 +244,6 @@ export const ModalEditarPermissoes: React.FC<ModalEditarPermissoesProps> = ({
                         }
                         description="Criar, editar e excluir"
                       />
-                      {/* CANCELAR - apenas para ATENDIMENTOS */}
-                      {modulo === Modulo.ATENDIMENTOS && (
-                        <PermissaoToggle
-                          label="Cancelar"
-                          checked={perm.cancelar}
-                          onChange={(val) =>
-                            handleToggle(modulo, "cancelar", val)
-                          }
-                          description="Cancelar registros"
-                        />
-                      )}
                     </div>
                   </div>
                 );
@@ -291,7 +252,7 @@ export const ModalEditarPermissoes: React.FC<ModalEditarPermissoesProps> = ({
 
             {/* Erro */}
             {erro && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mt-4">
                 <div className="flex items-start gap-3">
                   <svg
                     className="w-5 h-5 text-red-600 mt-0.5"

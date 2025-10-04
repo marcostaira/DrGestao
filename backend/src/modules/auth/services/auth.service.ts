@@ -658,7 +658,7 @@ export class AuthService {
         select: {
           id: true,
           nome: true,
-          email: true,
+          email: true, 
           tipo: true,
           ativo: true,
           createdAt: true,
