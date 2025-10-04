@@ -1,6 +1,6 @@
 import Joi from "joi";
 import { Request, Response, NextFunction } from "express";
-import { AppError } from "../types";
+import { ApiResponse, AppError } from "../types";
 
 // ============================================================================
 // VALIDATION MIDDLEWARE
@@ -409,3 +409,100 @@ export const updatePacienteSchema = Joi.object({
   profissionalId: Joi.string().allow("", null),
   observacoes: Joi.string().max(1000).allow("", null),
 });
+
+// ============================================================================
+// VALIDATE REQUEST MIDDLEWARE
+// ============================================================================
+
+export const validateRequest = (schema: Joi.ObjectSchema) => {
+  return (req: Request, res: Response, next: NextFunction): void => {
+    const { error, value } = schema.validate(req.body, {
+      abortEarly: false,
+      stripUnknown: true,
+    });
+
+    if (error) {
+      const errors = error.details.map((detail) => ({
+        field: detail.path.join("."),
+        message: detail.message,
+      }));
+
+      const response: ApiResponse = {
+        success: false,
+        error: "Erro de validação",
+        data: errors,
+      };
+
+      res.status(400).json(response);
+      return;
+    }
+
+    // Substituir body pelos valores validados e sanitizados
+    req.body = value;
+    next();
+  };
+};
+
+// ============================================================================
+// VALIDATE QUERY MIDDLEWARE
+// ============================================================================
+
+export const validateQuery = (schema: Joi.ObjectSchema) => {
+  return (req: Request, res: Response, next: NextFunction): void => {
+    const { error, value } = schema.validate(req.query, {
+      abortEarly: false,
+      stripUnknown: true,
+    });
+
+    if (error) {
+      const errors = error.details.map((detail) => ({
+        field: detail.path.join("."),
+        message: detail.message,
+      }));
+
+      const response: ApiResponse = {
+        success: false,
+        error: "Erro de validação",
+        data: errors,
+      };
+
+      res.status(400).json(response);
+      return;
+    }
+
+    req.query = value;
+    next();
+  };
+};
+
+// ============================================================================
+// VALIDATE PARAMS MIDDLEWARE
+// ============================================================================
+
+export const validateParams = (schema: Joi.ObjectSchema) => {
+  return (req: Request, res: Response, next: NextFunction): void => {
+    const { error, value } = schema.validate(req.params, {
+      abortEarly: false,
+      stripUnknown: true,
+    });
+
+    if (error) {
+      const errors = error.details.map((detail) => ({
+        field: detail.path.join("."),
+        message: detail.message,
+      }));
+
+      const response: ApiResponse = {
+        success: false,
+        error: "Erro de validação",
+        data: errors,
+      };
+
+      res.status(400).json(response);
+      return;
+    }
+
+    req.params = value;
+    next();
+  };
+};

@@ -19,6 +19,8 @@ import agendamentoRoutes from "./modules/agenda/routes/agendamento.routes";
 import usuarioRoutes from "./modules/usuarios/routes/usuario.routes";
 import cepRoutes from "./modules/cep/routes/cep.routes";
 import autorizacaoRoutes from "./modules/autorizacoes/routes/autorizacao.routes";
+import formularioRoutes from "./modules/anamnese/routes/formulario.routes";
+import anamneseRoutes from "./modules/anamnese/routes/anamnese.routes";
 
 // Load environment variables
 dotenv.config();
@@ -79,7 +81,7 @@ class App {
     // Rate limiting
     const limiter = rateLimit({
       windowMs: 15 * 60 * 1000, // 15 minutes
-      max: 100, // limit each IP to 100 requests per windowMs
+      max: 10000, // limit each IP to 100 requests per windowMs
       message: {
         success: false,
         error: "Muitas requisições, tente novamente em 15 minutos",
@@ -123,8 +125,9 @@ class App {
     this.app.use("/api/agendamentos", agendamentoRoutes);
     this.app.use("/api/usuarios", usuarioRoutes);
     this.app.use("/api/cep", cepRoutes);
-    this.app.use("/api/autorizacoes", autorizacaoRoutes); // ⬅️ NOVA ROTA
-
+    this.app.use("/api/autorizacoes", autorizacaoRoutes);
+    this.app.use("/api/formularios", formularioRoutes);
+    this.app.use("/api/anamneses", anamneseRoutes);
     // 404 handler
     this.app.use("*", (req: Request, res: Response) => {
       const response: ApiResponse = {

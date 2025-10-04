@@ -41,6 +41,7 @@ model Profissional {
   pacientes    Paciente[]
   agendamentos Agendamento[]
   atendimentos Atendimento[]
+  Formulario   Formulario[]
 
   @@index([tenantId, ativo])
   @@map("profissionais")
@@ -89,6 +90,7 @@ model Paciente {
   profissional Profissional? @relation(fields: [profissionalId], references: [id], onDelete: SetNull)
   agendamentos Agendamento[]
   atendimentos Atendimento[]
+  Anamnese     Anamnese[]
 
   @@index([tenantId])
   @@index([tenantId, nome])
@@ -159,6 +161,7 @@ model Atendimento {
   paciente     Paciente      @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
   profissional Profissional  @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
   procedimento Procedimento? @relation(fields: [procedimentoId], references: [id], onDelete: SetNull)
+  Anamnese     Anamnese[]
 
   @@index([tenantId, pacienteId])
   @@index([tenantId, profissionalId])
@@ -271,6 +274,8 @@ model Tenant {
   profissionais  Profissional[]
   usuarios       Usuario[]
   whatsappConfig WhatsAppConfig?
+  Formulario     Formulario[]
+  Anamnese       Anamnese[]
 
   @@index([planoId])
   @@map("tenants")
@@ -307,4 +312,55 @@ model Autorizacao {
   @@unique([usuarioId, modulo])
   @@index([usuarioId])
   @@map("autorizacoes")
+}
+
+// ============================================================================
+// ANAMNESE E FORMULÁRIOS
+// ============================================================================
+
+model Formulario {
+  id             String  @id @default(cuid())
+  tenantId       String  @map("tenant_id")
+  profissionalId String? @map("profissional_id")
+
+  nome      String
+  descricao String? @db.Text
+  campos    Json // Array de objetos com configuração dos campos
+  ativo     Boolean @default(true)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  profissional Profissional? @relation(fields: [profissionalId], references: [id], onDelete: SetNull)
+  anamneses    Anamnese[]
+
+  @@index([tenantId])
+  @@index([tenantId, profissionalId])
+  @@index([tenantId, ativo])
+  @@map("formularios")
+}
+
+model Anamnese {
+  id            String  @id @default(cuid())
+  tenantId      String  @map("tenant_id")
+  pacienteId    String  @map("paciente_id")
+  formularioId  String  @map("formulario_id")
+  atendimentoId String? @map("atendimento_id")
+
+  respostas   Json // Objeto com as respostas do formulário
+  observacoes String? @db.Text
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tenant      Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  paciente    Paciente     @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
+  formulario  Formulario   @relation(fields: [formularioId], references: [id], onDelete: Restrict)
+  atendimento Atendimento? @relation(fields: [atendimentoId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, pacienteId])
+  @@index([tenantId, formularioId])
+  @@index([tenantId, atendimentoId])
+  @@map("anamneses")
 }

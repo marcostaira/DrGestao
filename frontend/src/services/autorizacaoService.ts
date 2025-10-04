@@ -81,12 +81,27 @@ export class AutorizacaoService {
     modulo: string,
     tipo: "visualizar" | "criarAlterar" | "cancelar"
   ): boolean {
-    if (!autorizacoes) return false;
+    console.log("🔍 temPermissao chamado com:", { autorizacoes, modulo, tipo });
+
+    if (!autorizacoes) {
+      console.log("❌ autorizacoes é null");
+      return false;
+    }
 
     // ADMIN sempre tem permissão
-    if (autorizacoes.tipo === "ADMIN") return true;
+    if (autorizacoes.tipo === "ADMIN") {
+      console.log("✅ É ADMIN");
+      return true;
+    }
+
+    console.log("📋 Autorizações disponíveis:", autorizacoes.autorizacoes);
 
     const permissao = autorizacoes.autorizacoes[modulo];
-    return permissao ? permissao[tipo] : false;
+    console.log(`📌 Permissão para ${modulo}:`, permissao);
+
+    const resultado = permissao ? permissao[tipo] : false;
+    console.log(`✅/❌ Resultado final para ${modulo}.${tipo}:`, resultado);
+
+    return resultado;
   }
 }

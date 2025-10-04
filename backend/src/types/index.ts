@@ -401,3 +401,96 @@ declare module "./index" {
     permissoes?: AutorizacoesUsuario;
   }
 }
+
+// ============================================================================
+// FORMULÁRIO TYPES
+// ============================================================================
+
+export enum TipoCampoFormulario {
+  TEXTO = "TEXTO",
+  TEXTO_LONGO = "TEXTO_LONGO",
+  NUMERO = "NUMERO",
+  DATA = "DATA",
+  SELECAO = "SELECAO",
+  MULTIPLA_ESCOLHA = "MULTIPLA_ESCOLHA",
+  RADIO = "RADIO",
+  CHECKBOX = "CHECKBOX",
+  EMAIL = "EMAIL",
+  TELEFONE = "TELEFONE",
+  SIM_NAO = "SIM_NAO",
+}
+
+export interface CampoFormulario {
+  id: string;
+  label: string;
+  tipo: TipoCampoFormulario;
+  obrigatorio: boolean;
+  ordem: number;
+  opcoes?: string[]; // Para SELECAO, MULTIPLA_ESCOLHA, RADIO
+  placeholder?: string;
+  valorPadrao?: any;
+  validacao?: {
+    min?: number;
+    max?: number;
+    regex?: string;
+    mensagem?: string;
+  };
+}
+
+export interface CreateFormularioData {
+  nome: string;
+  descricao?: string;
+  profissionalId?: string;
+  campos: CampoFormulario[];
+  ativo?: boolean;
+}
+
+export interface UpdateFormularioData {
+  nome?: string;
+  descricao?: string;
+  profissionalId?: string;
+  campos?: CampoFormulario[];
+  ativo?: boolean;
+}
+
+// ============================================================================
+// ANAMNESE TYPES
+// ============================================================================
+
+export interface RespostaAnamnese {
+  [campoId: string]: any;
+}
+
+export interface CreateAnamneseData {
+  pacienteId: string;
+  formularioId: string;
+  atendimentoId?: string;
+  respostas: RespostaAnamnese;
+  observacoes?: string;
+}
+
+export interface UpdateAnamneseData {
+  respostas?: RespostaAnamnese;
+  observacoes?: string;
+}
+
+export interface AnamneseComFormulario {
+  id: string;
+  pacienteId: string;
+  formularioId: string;
+  atendimentoId?: string;
+  respostas: RespostaAnamnese;
+  observacoes?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  formulario: {
+    id: string;
+    nome: string;
+    descricao?: string;
+    campos: CampoFormulario[];
+  };
+  paciente: {
+    id: string;
+    nome: string;
+  };
+}

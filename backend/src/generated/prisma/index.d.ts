@@ -68,6 +68,16 @@ export type Tenant = $Result.DefaultSelection<Prisma.$TenantPayload>
  * 
  */
 export type Autorizacao = $Result.DefaultSelection<Prisma.$AutorizacaoPayload>
+/**
+ * Model Formulario
+ * 
+ */
+export type Formulario = $Result.DefaultSelection<Prisma.$FormularioPayload>
+/**
+ * Model Anamnese
+ * 
+ */
+export type Anamnese = $Result.DefaultSelection<Prisma.$AnamnesePayload>
 
 /**
  * Enums
@@ -368,6 +378,26 @@ export class PrismaClient<
     * ```
     */
   get autorizacao(): Prisma.AutorizacaoDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.formulario`: Exposes CRUD operations for the **Formulario** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Formularios
+    * const formularios = await prisma.formulario.findMany()
+    * ```
+    */
+  get formulario(): Prisma.FormularioDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.anamnese`: Exposes CRUD operations for the **Anamnese** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Anamnese
+    * const anamnese = await prisma.anamnese.findMany()
+    * ```
+    */
+  get anamnese(): Prisma.AnamneseDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -818,7 +848,9 @@ export namespace Prisma {
     LogSistema: 'LogSistema',
     Plano: 'Plano',
     Tenant: 'Tenant',
-    Autorizacao: 'Autorizacao'
+    Autorizacao: 'Autorizacao',
+    Formulario: 'Formulario',
+    Anamnese: 'Anamnese'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -837,7 +869,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "usuario" | "profissional" | "paciente" | "procedimento" | "agendamento" | "atendimento" | "whatsAppConfig" | "logSistema" | "plano" | "tenant" | "autorizacao"
+      modelProps: "usuario" | "profissional" | "paciente" | "procedimento" | "agendamento" | "atendimento" | "whatsAppConfig" | "logSistema" | "plano" | "tenant" | "autorizacao" | "formulario" | "anamnese"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1655,6 +1687,154 @@ export namespace Prisma {
           }
         }
       }
+      Formulario: {
+        payload: Prisma.$FormularioPayload<ExtArgs>
+        fields: Prisma.FormularioFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FormularioFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormularioPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FormularioFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormularioPayload>
+          }
+          findFirst: {
+            args: Prisma.FormularioFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormularioPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FormularioFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormularioPayload>
+          }
+          findMany: {
+            args: Prisma.FormularioFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormularioPayload>[]
+          }
+          create: {
+            args: Prisma.FormularioCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormularioPayload>
+          }
+          createMany: {
+            args: Prisma.FormularioCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FormularioCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormularioPayload>[]
+          }
+          delete: {
+            args: Prisma.FormularioDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormularioPayload>
+          }
+          update: {
+            args: Prisma.FormularioUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormularioPayload>
+          }
+          deleteMany: {
+            args: Prisma.FormularioDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FormularioUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FormularioUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormularioPayload>[]
+          }
+          upsert: {
+            args: Prisma.FormularioUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormularioPayload>
+          }
+          aggregate: {
+            args: Prisma.FormularioAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFormulario>
+          }
+          groupBy: {
+            args: Prisma.FormularioGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FormularioGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FormularioCountArgs<ExtArgs>
+            result: $Utils.Optional<FormularioCountAggregateOutputType> | number
+          }
+        }
+      }
+      Anamnese: {
+        payload: Prisma.$AnamnesePayload<ExtArgs>
+        fields: Prisma.AnamneseFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AnamneseFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnamnesePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AnamneseFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnamnesePayload>
+          }
+          findFirst: {
+            args: Prisma.AnamneseFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnamnesePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AnamneseFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnamnesePayload>
+          }
+          findMany: {
+            args: Prisma.AnamneseFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnamnesePayload>[]
+          }
+          create: {
+            args: Prisma.AnamneseCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnamnesePayload>
+          }
+          createMany: {
+            args: Prisma.AnamneseCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AnamneseCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnamnesePayload>[]
+          }
+          delete: {
+            args: Prisma.AnamneseDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnamnesePayload>
+          }
+          update: {
+            args: Prisma.AnamneseUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnamnesePayload>
+          }
+          deleteMany: {
+            args: Prisma.AnamneseDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AnamneseUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AnamneseUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnamnesePayload>[]
+          }
+          upsert: {
+            args: Prisma.AnamneseUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnamnesePayload>
+          }
+          aggregate: {
+            args: Prisma.AnamneseAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAnamnese>
+          }
+          groupBy: {
+            args: Prisma.AnamneseGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AnamneseGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AnamneseCountArgs<ExtArgs>
+            result: $Utils.Optional<AnamneseCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1762,6 +1942,8 @@ export namespace Prisma {
     plano?: PlanoOmit
     tenant?: TenantOmit
     autorizacao?: AutorizacaoOmit
+    formulario?: FormularioOmit
+    anamnese?: AnamneseOmit
   }
 
   /* Types for Logging */
@@ -1876,12 +2058,14 @@ export namespace Prisma {
     pacientes: number
     agendamentos: number
     atendimentos: number
+    Formulario: number
   }
 
   export type ProfissionalCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     pacientes?: boolean | ProfissionalCountOutputTypeCountPacientesArgs
     agendamentos?: boolean | ProfissionalCountOutputTypeCountAgendamentosArgs
     atendimentos?: boolean | ProfissionalCountOutputTypeCountAtendimentosArgs
+    Formulario?: boolean | ProfissionalCountOutputTypeCountFormularioArgs
   }
 
   // Custom InputTypes
@@ -1916,6 +2100,13 @@ export namespace Prisma {
     where?: AtendimentoWhereInput
   }
 
+  /**
+   * ProfissionalCountOutputType without action
+   */
+  export type ProfissionalCountOutputTypeCountFormularioArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FormularioWhereInput
+  }
+
 
   /**
    * Count Type PacienteCountOutputType
@@ -1924,11 +2115,13 @@ export namespace Prisma {
   export type PacienteCountOutputType = {
     agendamentos: number
     atendimentos: number
+    Anamnese: number
   }
 
   export type PacienteCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     agendamentos?: boolean | PacienteCountOutputTypeCountAgendamentosArgs
     atendimentos?: boolean | PacienteCountOutputTypeCountAtendimentosArgs
+    Anamnese?: boolean | PacienteCountOutputTypeCountAnamneseArgs
   }
 
   // Custom InputTypes
@@ -1954,6 +2147,13 @@ export namespace Prisma {
    */
   export type PacienteCountOutputTypeCountAtendimentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AtendimentoWhereInput
+  }
+
+  /**
+   * PacienteCountOutputType without action
+   */
+  export type PacienteCountOutputTypeCountAnamneseArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AnamneseWhereInput
   }
 
 
@@ -1994,6 +2194,37 @@ export namespace Prisma {
    */
   export type ProcedimentoCountOutputTypeCountAtendimentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AtendimentoWhereInput
+  }
+
+
+  /**
+   * Count Type AtendimentoCountOutputType
+   */
+
+  export type AtendimentoCountOutputType = {
+    Anamnese: number
+  }
+
+  export type AtendimentoCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Anamnese?: boolean | AtendimentoCountOutputTypeCountAnamneseArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * AtendimentoCountOutputType without action
+   */
+  export type AtendimentoCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AtendimentoCountOutputType
+     */
+    select?: AtendimentoCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * AtendimentoCountOutputType without action
+   */
+  export type AtendimentoCountOutputTypeCountAnamneseArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AnamneseWhereInput
   }
 
 
@@ -2039,6 +2270,8 @@ export namespace Prisma {
     procedimentos: number
     profissionais: number
     usuarios: number
+    Formulario: number
+    Anamnese: number
   }
 
   export type TenantCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2048,6 +2281,8 @@ export namespace Prisma {
     procedimentos?: boolean | TenantCountOutputTypeCountProcedimentosArgs
     profissionais?: boolean | TenantCountOutputTypeCountProfissionaisArgs
     usuarios?: boolean | TenantCountOutputTypeCountUsuariosArgs
+    Formulario?: boolean | TenantCountOutputTypeCountFormularioArgs
+    Anamnese?: boolean | TenantCountOutputTypeCountAnamneseArgs
   }
 
   // Custom InputTypes
@@ -2101,6 +2336,51 @@ export namespace Prisma {
    */
   export type TenantCountOutputTypeCountUsuariosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UsuarioWhereInput
+  }
+
+  /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeCountFormularioArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FormularioWhereInput
+  }
+
+  /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeCountAnamneseArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AnamneseWhereInput
+  }
+
+
+  /**
+   * Count Type FormularioCountOutputType
+   */
+
+  export type FormularioCountOutputType = {
+    anamneses: number
+  }
+
+  export type FormularioCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    anamneses?: boolean | FormularioCountOutputTypeCountAnamnesesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * FormularioCountOutputType without action
+   */
+  export type FormularioCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormularioCountOutputType
+     */
+    select?: FormularioCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * FormularioCountOutputType without action
+   */
+  export type FormularioCountOutputTypeCountAnamnesesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AnamneseWhereInput
   }
 
 
@@ -3448,6 +3728,7 @@ export namespace Prisma {
     pacientes?: boolean | Profissional$pacientesArgs<ExtArgs>
     agendamentos?: boolean | Profissional$agendamentosArgs<ExtArgs>
     atendimentos?: boolean | Profissional$atendimentosArgs<ExtArgs>
+    Formulario?: boolean | Profissional$FormularioArgs<ExtArgs>
     _count?: boolean | ProfissionalCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["profissional"]>
 
@@ -3495,6 +3776,7 @@ export namespace Prisma {
     pacientes?: boolean | Profissional$pacientesArgs<ExtArgs>
     agendamentos?: boolean | Profissional$agendamentosArgs<ExtArgs>
     atendimentos?: boolean | Profissional$atendimentosArgs<ExtArgs>
+    Formulario?: boolean | Profissional$FormularioArgs<ExtArgs>
     _count?: boolean | ProfissionalCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProfissionalIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3511,6 +3793,7 @@ export namespace Prisma {
       pacientes: Prisma.$PacientePayload<ExtArgs>[]
       agendamentos: Prisma.$AgendamentoPayload<ExtArgs>[]
       atendimentos: Prisma.$AtendimentoPayload<ExtArgs>[]
+      Formulario: Prisma.$FormularioPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3920,6 +4203,7 @@ export namespace Prisma {
     pacientes<T extends Profissional$pacientesArgs<ExtArgs> = {}>(args?: Subset<T, Profissional$pacientesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PacientePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     agendamentos<T extends Profissional$agendamentosArgs<ExtArgs> = {}>(args?: Subset<T, Profissional$agendamentosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgendamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     atendimentos<T extends Profissional$atendimentosArgs<ExtArgs> = {}>(args?: Subset<T, Profissional$atendimentosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AtendimentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    Formulario<T extends Profissional$FormularioArgs<ExtArgs> = {}>(args?: Subset<T, Profissional$FormularioArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormularioPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4426,6 +4710,30 @@ export namespace Prisma {
   }
 
   /**
+   * Profissional.Formulario
+   */
+  export type Profissional$FormularioArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Formulario
+     */
+    select?: FormularioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Formulario
+     */
+    omit?: FormularioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormularioInclude<ExtArgs> | null
+    where?: FormularioWhereInput
+    orderBy?: FormularioOrderByWithRelationInput | FormularioOrderByWithRelationInput[]
+    cursor?: FormularioWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FormularioScalarFieldEnum | FormularioScalarFieldEnum[]
+  }
+
+  /**
    * Profissional without action
    */
   export type ProfissionalDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4772,6 +5080,7 @@ export namespace Prisma {
     profissional?: boolean | Paciente$profissionalArgs<ExtArgs>
     agendamentos?: boolean | Paciente$agendamentosArgs<ExtArgs>
     atendimentos?: boolean | Paciente$atendimentosArgs<ExtArgs>
+    Anamnese?: boolean | Paciente$AnamneseArgs<ExtArgs>
     _count?: boolean | PacienteCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["paciente"]>
 
@@ -4869,6 +5178,7 @@ export namespace Prisma {
     profissional?: boolean | Paciente$profissionalArgs<ExtArgs>
     agendamentos?: boolean | Paciente$agendamentosArgs<ExtArgs>
     atendimentos?: boolean | Paciente$atendimentosArgs<ExtArgs>
+    Anamnese?: boolean | Paciente$AnamneseArgs<ExtArgs>
     _count?: boolean | PacienteCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PacienteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4887,6 +5197,7 @@ export namespace Prisma {
       profissional: Prisma.$ProfissionalPayload<ExtArgs> | null
       agendamentos: Prisma.$AgendamentoPayload<ExtArgs>[]
       atendimentos: Prisma.$AtendimentoPayload<ExtArgs>[]
+      Anamnese: Prisma.$AnamnesePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5312,6 +5623,7 @@ export namespace Prisma {
     profissional<T extends Paciente$profissionalArgs<ExtArgs> = {}>(args?: Subset<T, Paciente$profissionalArgs<ExtArgs>>): Prisma__ProfissionalClient<$Result.GetResult<Prisma.$ProfissionalPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     agendamentos<T extends Paciente$agendamentosArgs<ExtArgs> = {}>(args?: Subset<T, Paciente$agendamentosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgendamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     atendimentos<T extends Paciente$atendimentosArgs<ExtArgs> = {}>(args?: Subset<T, Paciente$atendimentosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AtendimentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    Anamnese<T extends Paciente$AnamneseArgs<ExtArgs> = {}>(args?: Subset<T, Paciente$AnamneseArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnamnesePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5826,6 +6138,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AtendimentoScalarFieldEnum | AtendimentoScalarFieldEnum[]
+  }
+
+  /**
+   * Paciente.Anamnese
+   */
+  export type Paciente$AnamneseArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Anamnese
+     */
+    select?: AnamneseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Anamnese
+     */
+    omit?: AnamneseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnamneseInclude<ExtArgs> | null
+    where?: AnamneseWhereInput
+    orderBy?: AnamneseOrderByWithRelationInput | AnamneseOrderByWithRelationInput[]
+    cursor?: AnamneseWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AnamneseScalarFieldEnum | AnamneseScalarFieldEnum[]
   }
 
   /**
@@ -8476,6 +8812,8 @@ export namespace Prisma {
     paciente?: boolean | PacienteDefaultArgs<ExtArgs>
     profissional?: boolean | ProfissionalDefaultArgs<ExtArgs>
     procedimento?: boolean | Atendimento$procedimentoArgs<ExtArgs>
+    Anamnese?: boolean | Atendimento$AnamneseArgs<ExtArgs>
+    _count?: boolean | AtendimentoCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["atendimento"]>
 
   export type AtendimentoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -8540,6 +8878,8 @@ export namespace Prisma {
     paciente?: boolean | PacienteDefaultArgs<ExtArgs>
     profissional?: boolean | ProfissionalDefaultArgs<ExtArgs>
     procedimento?: boolean | Atendimento$procedimentoArgs<ExtArgs>
+    Anamnese?: boolean | Atendimento$AnamneseArgs<ExtArgs>
+    _count?: boolean | AtendimentoCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type AtendimentoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
@@ -8564,6 +8904,7 @@ export namespace Prisma {
       paciente: Prisma.$PacientePayload<ExtArgs>
       profissional: Prisma.$ProfissionalPayload<ExtArgs>
       procedimento: Prisma.$ProcedimentoPayload<ExtArgs> | null
+      Anamnese: Prisma.$AnamnesePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8977,6 +9318,7 @@ export namespace Prisma {
     paciente<T extends PacienteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PacienteDefaultArgs<ExtArgs>>): Prisma__PacienteClient<$Result.GetResult<Prisma.$PacientePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     profissional<T extends ProfissionalDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProfissionalDefaultArgs<ExtArgs>>): Prisma__ProfissionalClient<$Result.GetResult<Prisma.$ProfissionalPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     procedimento<T extends Atendimento$procedimentoArgs<ExtArgs> = {}>(args?: Subset<T, Atendimento$procedimentoArgs<ExtArgs>>): Prisma__ProcedimentoClient<$Result.GetResult<Prisma.$ProcedimentoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    Anamnese<T extends Atendimento$AnamneseArgs<ExtArgs> = {}>(args?: Subset<T, Atendimento$AnamneseArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnamnesePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9430,6 +9772,30 @@ export namespace Prisma {
      */
     include?: ProcedimentoInclude<ExtArgs> | null
     where?: ProcedimentoWhereInput
+  }
+
+  /**
+   * Atendimento.Anamnese
+   */
+  export type Atendimento$AnamneseArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Anamnese
+     */
+    select?: AnamneseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Anamnese
+     */
+    omit?: AnamneseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnamneseInclude<ExtArgs> | null
+    where?: AnamneseWhereInput
+    orderBy?: AnamneseOrderByWithRelationInput | AnamneseOrderByWithRelationInput[]
+    cursor?: AnamneseWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AnamneseScalarFieldEnum | AnamneseScalarFieldEnum[]
   }
 
   /**
@@ -13076,6 +13442,8 @@ export namespace Prisma {
     profissionais?: boolean | Tenant$profissionaisArgs<ExtArgs>
     usuarios?: boolean | Tenant$usuariosArgs<ExtArgs>
     whatsappConfig?: boolean | Tenant$whatsappConfigArgs<ExtArgs>
+    Formulario?: boolean | Tenant$FormularioArgs<ExtArgs>
+    Anamnese?: boolean | Tenant$AnamneseArgs<ExtArgs>
     _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["tenant"]>
 
@@ -13118,6 +13486,8 @@ export namespace Prisma {
     profissionais?: boolean | Tenant$profissionaisArgs<ExtArgs>
     usuarios?: boolean | Tenant$usuariosArgs<ExtArgs>
     whatsappConfig?: boolean | Tenant$whatsappConfigArgs<ExtArgs>
+    Formulario?: boolean | Tenant$FormularioArgs<ExtArgs>
+    Anamnese?: boolean | Tenant$AnamneseArgs<ExtArgs>
     _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TenantIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13138,6 +13508,8 @@ export namespace Prisma {
       profissionais: Prisma.$ProfissionalPayload<ExtArgs>[]
       usuarios: Prisma.$UsuarioPayload<ExtArgs>[]
       whatsappConfig: Prisma.$WhatsAppConfigPayload<ExtArgs> | null
+      Formulario: Prisma.$FormularioPayload<ExtArgs>[]
+      Anamnese: Prisma.$AnamnesePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -13548,6 +13920,8 @@ export namespace Prisma {
     profissionais<T extends Tenant$profissionaisArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$profissionaisArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProfissionalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     usuarios<T extends Tenant$usuariosArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$usuariosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     whatsappConfig<T extends Tenant$whatsappConfigArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$whatsappConfigArgs<ExtArgs>>): Prisma__WhatsAppConfigClient<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    Formulario<T extends Tenant$FormularioArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$FormularioArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormularioPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    Anamnese<T extends Tenant$AnamneseArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$AnamneseArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnamnesePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -14139,6 +14513,54 @@ export namespace Prisma {
      */
     include?: WhatsAppConfigInclude<ExtArgs> | null
     where?: WhatsAppConfigWhereInput
+  }
+
+  /**
+   * Tenant.Formulario
+   */
+  export type Tenant$FormularioArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Formulario
+     */
+    select?: FormularioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Formulario
+     */
+    omit?: FormularioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormularioInclude<ExtArgs> | null
+    where?: FormularioWhereInput
+    orderBy?: FormularioOrderByWithRelationInput | FormularioOrderByWithRelationInput[]
+    cursor?: FormularioWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FormularioScalarFieldEnum | FormularioScalarFieldEnum[]
+  }
+
+  /**
+   * Tenant.Anamnese
+   */
+  export type Tenant$AnamneseArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Anamnese
+     */
+    select?: AnamneseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Anamnese
+     */
+    omit?: AnamneseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnamneseInclude<ExtArgs> | null
+    where?: AnamneseWhereInput
+    orderBy?: AnamneseOrderByWithRelationInput | AnamneseOrderByWithRelationInput[]
+    cursor?: AnamneseWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AnamneseScalarFieldEnum | AnamneseScalarFieldEnum[]
   }
 
   /**
@@ -15258,6 +15680,2318 @@ export namespace Prisma {
 
 
   /**
+   * Model Formulario
+   */
+
+  export type AggregateFormulario = {
+    _count: FormularioCountAggregateOutputType | null
+    _min: FormularioMinAggregateOutputType | null
+    _max: FormularioMaxAggregateOutputType | null
+  }
+
+  export type FormularioMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    profissionalId: string | null
+    nome: string | null
+    descricao: string | null
+    ativo: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FormularioMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    profissionalId: string | null
+    nome: string | null
+    descricao: string | null
+    ativo: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FormularioCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    profissionalId: number
+    nome: number
+    descricao: number
+    campos: number
+    ativo: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type FormularioMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    profissionalId?: true
+    nome?: true
+    descricao?: true
+    ativo?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FormularioMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    profissionalId?: true
+    nome?: true
+    descricao?: true
+    ativo?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FormularioCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    profissionalId?: true
+    nome?: true
+    descricao?: true
+    campos?: true
+    ativo?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type FormularioAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Formulario to aggregate.
+     */
+    where?: FormularioWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Formularios to fetch.
+     */
+    orderBy?: FormularioOrderByWithRelationInput | FormularioOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FormularioWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Formularios from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Formularios.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Formularios
+    **/
+    _count?: true | FormularioCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FormularioMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FormularioMaxAggregateInputType
+  }
+
+  export type GetFormularioAggregateType<T extends FormularioAggregateArgs> = {
+        [P in keyof T & keyof AggregateFormulario]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFormulario[P]>
+      : GetScalarType<T[P], AggregateFormulario[P]>
+  }
+
+
+
+
+  export type FormularioGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FormularioWhereInput
+    orderBy?: FormularioOrderByWithAggregationInput | FormularioOrderByWithAggregationInput[]
+    by: FormularioScalarFieldEnum[] | FormularioScalarFieldEnum
+    having?: FormularioScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FormularioCountAggregateInputType | true
+    _min?: FormularioMinAggregateInputType
+    _max?: FormularioMaxAggregateInputType
+  }
+
+  export type FormularioGroupByOutputType = {
+    id: string
+    tenantId: string
+    profissionalId: string | null
+    nome: string
+    descricao: string | null
+    campos: JsonValue
+    ativo: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: FormularioCountAggregateOutputType | null
+    _min: FormularioMinAggregateOutputType | null
+    _max: FormularioMaxAggregateOutputType | null
+  }
+
+  type GetFormularioGroupByPayload<T extends FormularioGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FormularioGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FormularioGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FormularioGroupByOutputType[P]>
+            : GetScalarType<T[P], FormularioGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FormularioSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    profissionalId?: boolean
+    nome?: boolean
+    descricao?: boolean
+    campos?: boolean
+    ativo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    profissional?: boolean | Formulario$profissionalArgs<ExtArgs>
+    anamneses?: boolean | Formulario$anamnesesArgs<ExtArgs>
+    _count?: boolean | FormularioCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["formulario"]>
+
+  export type FormularioSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    profissionalId?: boolean
+    nome?: boolean
+    descricao?: boolean
+    campos?: boolean
+    ativo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    profissional?: boolean | Formulario$profissionalArgs<ExtArgs>
+  }, ExtArgs["result"]["formulario"]>
+
+  export type FormularioSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    profissionalId?: boolean
+    nome?: boolean
+    descricao?: boolean
+    campos?: boolean
+    ativo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    profissional?: boolean | Formulario$profissionalArgs<ExtArgs>
+  }, ExtArgs["result"]["formulario"]>
+
+  export type FormularioSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    profissionalId?: boolean
+    nome?: boolean
+    descricao?: boolean
+    campos?: boolean
+    ativo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type FormularioOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "profissionalId" | "nome" | "descricao" | "campos" | "ativo" | "createdAt" | "updatedAt", ExtArgs["result"]["formulario"]>
+  export type FormularioInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    profissional?: boolean | Formulario$profissionalArgs<ExtArgs>
+    anamneses?: boolean | Formulario$anamnesesArgs<ExtArgs>
+    _count?: boolean | FormularioCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type FormularioIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    profissional?: boolean | Formulario$profissionalArgs<ExtArgs>
+  }
+  export type FormularioIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    profissional?: boolean | Formulario$profissionalArgs<ExtArgs>
+  }
+
+  export type $FormularioPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Formulario"
+    objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>
+      profissional: Prisma.$ProfissionalPayload<ExtArgs> | null
+      anamneses: Prisma.$AnamnesePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      profissionalId: string | null
+      nome: string
+      descricao: string | null
+      campos: Prisma.JsonValue
+      ativo: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["formulario"]>
+    composites: {}
+  }
+
+  type FormularioGetPayload<S extends boolean | null | undefined | FormularioDefaultArgs> = $Result.GetResult<Prisma.$FormularioPayload, S>
+
+  type FormularioCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FormularioFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FormularioCountAggregateInputType | true
+    }
+
+  export interface FormularioDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Formulario'], meta: { name: 'Formulario' } }
+    /**
+     * Find zero or one Formulario that matches the filter.
+     * @param {FormularioFindUniqueArgs} args - Arguments to find a Formulario
+     * @example
+     * // Get one Formulario
+     * const formulario = await prisma.formulario.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FormularioFindUniqueArgs>(args: SelectSubset<T, FormularioFindUniqueArgs<ExtArgs>>): Prisma__FormularioClient<$Result.GetResult<Prisma.$FormularioPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Formulario that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FormularioFindUniqueOrThrowArgs} args - Arguments to find a Formulario
+     * @example
+     * // Get one Formulario
+     * const formulario = await prisma.formulario.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FormularioFindUniqueOrThrowArgs>(args: SelectSubset<T, FormularioFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FormularioClient<$Result.GetResult<Prisma.$FormularioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Formulario that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FormularioFindFirstArgs} args - Arguments to find a Formulario
+     * @example
+     * // Get one Formulario
+     * const formulario = await prisma.formulario.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FormularioFindFirstArgs>(args?: SelectSubset<T, FormularioFindFirstArgs<ExtArgs>>): Prisma__FormularioClient<$Result.GetResult<Prisma.$FormularioPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Formulario that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FormularioFindFirstOrThrowArgs} args - Arguments to find a Formulario
+     * @example
+     * // Get one Formulario
+     * const formulario = await prisma.formulario.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FormularioFindFirstOrThrowArgs>(args?: SelectSubset<T, FormularioFindFirstOrThrowArgs<ExtArgs>>): Prisma__FormularioClient<$Result.GetResult<Prisma.$FormularioPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Formularios that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FormularioFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Formularios
+     * const formularios = await prisma.formulario.findMany()
+     * 
+     * // Get first 10 Formularios
+     * const formularios = await prisma.formulario.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const formularioWithIdOnly = await prisma.formulario.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FormularioFindManyArgs>(args?: SelectSubset<T, FormularioFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormularioPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Formulario.
+     * @param {FormularioCreateArgs} args - Arguments to create a Formulario.
+     * @example
+     * // Create one Formulario
+     * const Formulario = await prisma.formulario.create({
+     *   data: {
+     *     // ... data to create a Formulario
+     *   }
+     * })
+     * 
+     */
+    create<T extends FormularioCreateArgs>(args: SelectSubset<T, FormularioCreateArgs<ExtArgs>>): Prisma__FormularioClient<$Result.GetResult<Prisma.$FormularioPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Formularios.
+     * @param {FormularioCreateManyArgs} args - Arguments to create many Formularios.
+     * @example
+     * // Create many Formularios
+     * const formulario = await prisma.formulario.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FormularioCreateManyArgs>(args?: SelectSubset<T, FormularioCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Formularios and returns the data saved in the database.
+     * @param {FormularioCreateManyAndReturnArgs} args - Arguments to create many Formularios.
+     * @example
+     * // Create many Formularios
+     * const formulario = await prisma.formulario.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Formularios and only return the `id`
+     * const formularioWithIdOnly = await prisma.formulario.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FormularioCreateManyAndReturnArgs>(args?: SelectSubset<T, FormularioCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormularioPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Formulario.
+     * @param {FormularioDeleteArgs} args - Arguments to delete one Formulario.
+     * @example
+     * // Delete one Formulario
+     * const Formulario = await prisma.formulario.delete({
+     *   where: {
+     *     // ... filter to delete one Formulario
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FormularioDeleteArgs>(args: SelectSubset<T, FormularioDeleteArgs<ExtArgs>>): Prisma__FormularioClient<$Result.GetResult<Prisma.$FormularioPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Formulario.
+     * @param {FormularioUpdateArgs} args - Arguments to update one Formulario.
+     * @example
+     * // Update one Formulario
+     * const formulario = await prisma.formulario.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FormularioUpdateArgs>(args: SelectSubset<T, FormularioUpdateArgs<ExtArgs>>): Prisma__FormularioClient<$Result.GetResult<Prisma.$FormularioPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Formularios.
+     * @param {FormularioDeleteManyArgs} args - Arguments to filter Formularios to delete.
+     * @example
+     * // Delete a few Formularios
+     * const { count } = await prisma.formulario.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FormularioDeleteManyArgs>(args?: SelectSubset<T, FormularioDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Formularios.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FormularioUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Formularios
+     * const formulario = await prisma.formulario.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FormularioUpdateManyArgs>(args: SelectSubset<T, FormularioUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Formularios and returns the data updated in the database.
+     * @param {FormularioUpdateManyAndReturnArgs} args - Arguments to update many Formularios.
+     * @example
+     * // Update many Formularios
+     * const formulario = await prisma.formulario.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Formularios and only return the `id`
+     * const formularioWithIdOnly = await prisma.formulario.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FormularioUpdateManyAndReturnArgs>(args: SelectSubset<T, FormularioUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormularioPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Formulario.
+     * @param {FormularioUpsertArgs} args - Arguments to update or create a Formulario.
+     * @example
+     * // Update or create a Formulario
+     * const formulario = await prisma.formulario.upsert({
+     *   create: {
+     *     // ... data to create a Formulario
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Formulario we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FormularioUpsertArgs>(args: SelectSubset<T, FormularioUpsertArgs<ExtArgs>>): Prisma__FormularioClient<$Result.GetResult<Prisma.$FormularioPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Formularios.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FormularioCountArgs} args - Arguments to filter Formularios to count.
+     * @example
+     * // Count the number of Formularios
+     * const count = await prisma.formulario.count({
+     *   where: {
+     *     // ... the filter for the Formularios we want to count
+     *   }
+     * })
+    **/
+    count<T extends FormularioCountArgs>(
+      args?: Subset<T, FormularioCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FormularioCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Formulario.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FormularioAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FormularioAggregateArgs>(args: Subset<T, FormularioAggregateArgs>): Prisma.PrismaPromise<GetFormularioAggregateType<T>>
+
+    /**
+     * Group by Formulario.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FormularioGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FormularioGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FormularioGroupByArgs['orderBy'] }
+        : { orderBy?: FormularioGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FormularioGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFormularioGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Formulario model
+   */
+  readonly fields: FormularioFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Formulario.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FormularioClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TenantDefaultArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    profissional<T extends Formulario$profissionalArgs<ExtArgs> = {}>(args?: Subset<T, Formulario$profissionalArgs<ExtArgs>>): Prisma__ProfissionalClient<$Result.GetResult<Prisma.$ProfissionalPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    anamneses<T extends Formulario$anamnesesArgs<ExtArgs> = {}>(args?: Subset<T, Formulario$anamnesesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnamnesePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Formulario model
+   */
+  interface FormularioFieldRefs {
+    readonly id: FieldRef<"Formulario", 'String'>
+    readonly tenantId: FieldRef<"Formulario", 'String'>
+    readonly profissionalId: FieldRef<"Formulario", 'String'>
+    readonly nome: FieldRef<"Formulario", 'String'>
+    readonly descricao: FieldRef<"Formulario", 'String'>
+    readonly campos: FieldRef<"Formulario", 'Json'>
+    readonly ativo: FieldRef<"Formulario", 'Boolean'>
+    readonly createdAt: FieldRef<"Formulario", 'DateTime'>
+    readonly updatedAt: FieldRef<"Formulario", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Formulario findUnique
+   */
+  export type FormularioFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Formulario
+     */
+    select?: FormularioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Formulario
+     */
+    omit?: FormularioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormularioInclude<ExtArgs> | null
+    /**
+     * Filter, which Formulario to fetch.
+     */
+    where: FormularioWhereUniqueInput
+  }
+
+  /**
+   * Formulario findUniqueOrThrow
+   */
+  export type FormularioFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Formulario
+     */
+    select?: FormularioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Formulario
+     */
+    omit?: FormularioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormularioInclude<ExtArgs> | null
+    /**
+     * Filter, which Formulario to fetch.
+     */
+    where: FormularioWhereUniqueInput
+  }
+
+  /**
+   * Formulario findFirst
+   */
+  export type FormularioFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Formulario
+     */
+    select?: FormularioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Formulario
+     */
+    omit?: FormularioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormularioInclude<ExtArgs> | null
+    /**
+     * Filter, which Formulario to fetch.
+     */
+    where?: FormularioWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Formularios to fetch.
+     */
+    orderBy?: FormularioOrderByWithRelationInput | FormularioOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Formularios.
+     */
+    cursor?: FormularioWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Formularios from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Formularios.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Formularios.
+     */
+    distinct?: FormularioScalarFieldEnum | FormularioScalarFieldEnum[]
+  }
+
+  /**
+   * Formulario findFirstOrThrow
+   */
+  export type FormularioFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Formulario
+     */
+    select?: FormularioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Formulario
+     */
+    omit?: FormularioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormularioInclude<ExtArgs> | null
+    /**
+     * Filter, which Formulario to fetch.
+     */
+    where?: FormularioWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Formularios to fetch.
+     */
+    orderBy?: FormularioOrderByWithRelationInput | FormularioOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Formularios.
+     */
+    cursor?: FormularioWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Formularios from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Formularios.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Formularios.
+     */
+    distinct?: FormularioScalarFieldEnum | FormularioScalarFieldEnum[]
+  }
+
+  /**
+   * Formulario findMany
+   */
+  export type FormularioFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Formulario
+     */
+    select?: FormularioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Formulario
+     */
+    omit?: FormularioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormularioInclude<ExtArgs> | null
+    /**
+     * Filter, which Formularios to fetch.
+     */
+    where?: FormularioWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Formularios to fetch.
+     */
+    orderBy?: FormularioOrderByWithRelationInput | FormularioOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Formularios.
+     */
+    cursor?: FormularioWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Formularios from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Formularios.
+     */
+    skip?: number
+    distinct?: FormularioScalarFieldEnum | FormularioScalarFieldEnum[]
+  }
+
+  /**
+   * Formulario create
+   */
+  export type FormularioCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Formulario
+     */
+    select?: FormularioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Formulario
+     */
+    omit?: FormularioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormularioInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Formulario.
+     */
+    data: XOR<FormularioCreateInput, FormularioUncheckedCreateInput>
+  }
+
+  /**
+   * Formulario createMany
+   */
+  export type FormularioCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Formularios.
+     */
+    data: FormularioCreateManyInput | FormularioCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Formulario createManyAndReturn
+   */
+  export type FormularioCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Formulario
+     */
+    select?: FormularioSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Formulario
+     */
+    omit?: FormularioOmit<ExtArgs> | null
+    /**
+     * The data used to create many Formularios.
+     */
+    data: FormularioCreateManyInput | FormularioCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormularioIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Formulario update
+   */
+  export type FormularioUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Formulario
+     */
+    select?: FormularioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Formulario
+     */
+    omit?: FormularioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormularioInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Formulario.
+     */
+    data: XOR<FormularioUpdateInput, FormularioUncheckedUpdateInput>
+    /**
+     * Choose, which Formulario to update.
+     */
+    where: FormularioWhereUniqueInput
+  }
+
+  /**
+   * Formulario updateMany
+   */
+  export type FormularioUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Formularios.
+     */
+    data: XOR<FormularioUpdateManyMutationInput, FormularioUncheckedUpdateManyInput>
+    /**
+     * Filter which Formularios to update
+     */
+    where?: FormularioWhereInput
+    /**
+     * Limit how many Formularios to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Formulario updateManyAndReturn
+   */
+  export type FormularioUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Formulario
+     */
+    select?: FormularioSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Formulario
+     */
+    omit?: FormularioOmit<ExtArgs> | null
+    /**
+     * The data used to update Formularios.
+     */
+    data: XOR<FormularioUpdateManyMutationInput, FormularioUncheckedUpdateManyInput>
+    /**
+     * Filter which Formularios to update
+     */
+    where?: FormularioWhereInput
+    /**
+     * Limit how many Formularios to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormularioIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Formulario upsert
+   */
+  export type FormularioUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Formulario
+     */
+    select?: FormularioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Formulario
+     */
+    omit?: FormularioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormularioInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Formulario to update in case it exists.
+     */
+    where: FormularioWhereUniqueInput
+    /**
+     * In case the Formulario found by the `where` argument doesn't exist, create a new Formulario with this data.
+     */
+    create: XOR<FormularioCreateInput, FormularioUncheckedCreateInput>
+    /**
+     * In case the Formulario was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FormularioUpdateInput, FormularioUncheckedUpdateInput>
+  }
+
+  /**
+   * Formulario delete
+   */
+  export type FormularioDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Formulario
+     */
+    select?: FormularioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Formulario
+     */
+    omit?: FormularioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormularioInclude<ExtArgs> | null
+    /**
+     * Filter which Formulario to delete.
+     */
+    where: FormularioWhereUniqueInput
+  }
+
+  /**
+   * Formulario deleteMany
+   */
+  export type FormularioDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Formularios to delete
+     */
+    where?: FormularioWhereInput
+    /**
+     * Limit how many Formularios to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Formulario.profissional
+   */
+  export type Formulario$profissionalArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Profissional
+     */
+    select?: ProfissionalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Profissional
+     */
+    omit?: ProfissionalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfissionalInclude<ExtArgs> | null
+    where?: ProfissionalWhereInput
+  }
+
+  /**
+   * Formulario.anamneses
+   */
+  export type Formulario$anamnesesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Anamnese
+     */
+    select?: AnamneseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Anamnese
+     */
+    omit?: AnamneseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnamneseInclude<ExtArgs> | null
+    where?: AnamneseWhereInput
+    orderBy?: AnamneseOrderByWithRelationInput | AnamneseOrderByWithRelationInput[]
+    cursor?: AnamneseWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AnamneseScalarFieldEnum | AnamneseScalarFieldEnum[]
+  }
+
+  /**
+   * Formulario without action
+   */
+  export type FormularioDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Formulario
+     */
+    select?: FormularioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Formulario
+     */
+    omit?: FormularioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormularioInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Anamnese
+   */
+
+  export type AggregateAnamnese = {
+    _count: AnamneseCountAggregateOutputType | null
+    _min: AnamneseMinAggregateOutputType | null
+    _max: AnamneseMaxAggregateOutputType | null
+  }
+
+  export type AnamneseMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    pacienteId: string | null
+    formularioId: string | null
+    atendimentoId: string | null
+    observacoes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AnamneseMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    pacienteId: string | null
+    formularioId: string | null
+    atendimentoId: string | null
+    observacoes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AnamneseCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    pacienteId: number
+    formularioId: number
+    atendimentoId: number
+    respostas: number
+    observacoes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AnamneseMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    pacienteId?: true
+    formularioId?: true
+    atendimentoId?: true
+    observacoes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AnamneseMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    pacienteId?: true
+    formularioId?: true
+    atendimentoId?: true
+    observacoes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AnamneseCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    pacienteId?: true
+    formularioId?: true
+    atendimentoId?: true
+    respostas?: true
+    observacoes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AnamneseAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Anamnese to aggregate.
+     */
+    where?: AnamneseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Anamnese to fetch.
+     */
+    orderBy?: AnamneseOrderByWithRelationInput | AnamneseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AnamneseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Anamnese from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Anamnese.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Anamnese
+    **/
+    _count?: true | AnamneseCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AnamneseMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AnamneseMaxAggregateInputType
+  }
+
+  export type GetAnamneseAggregateType<T extends AnamneseAggregateArgs> = {
+        [P in keyof T & keyof AggregateAnamnese]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAnamnese[P]>
+      : GetScalarType<T[P], AggregateAnamnese[P]>
+  }
+
+
+
+
+  export type AnamneseGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AnamneseWhereInput
+    orderBy?: AnamneseOrderByWithAggregationInput | AnamneseOrderByWithAggregationInput[]
+    by: AnamneseScalarFieldEnum[] | AnamneseScalarFieldEnum
+    having?: AnamneseScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AnamneseCountAggregateInputType | true
+    _min?: AnamneseMinAggregateInputType
+    _max?: AnamneseMaxAggregateInputType
+  }
+
+  export type AnamneseGroupByOutputType = {
+    id: string
+    tenantId: string
+    pacienteId: string
+    formularioId: string
+    atendimentoId: string | null
+    respostas: JsonValue
+    observacoes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: AnamneseCountAggregateOutputType | null
+    _min: AnamneseMinAggregateOutputType | null
+    _max: AnamneseMaxAggregateOutputType | null
+  }
+
+  type GetAnamneseGroupByPayload<T extends AnamneseGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AnamneseGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AnamneseGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AnamneseGroupByOutputType[P]>
+            : GetScalarType<T[P], AnamneseGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AnamneseSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    pacienteId?: boolean
+    formularioId?: boolean
+    atendimentoId?: boolean
+    respostas?: boolean
+    observacoes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    paciente?: boolean | PacienteDefaultArgs<ExtArgs>
+    formulario?: boolean | FormularioDefaultArgs<ExtArgs>
+    atendimento?: boolean | Anamnese$atendimentoArgs<ExtArgs>
+  }, ExtArgs["result"]["anamnese"]>
+
+  export type AnamneseSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    pacienteId?: boolean
+    formularioId?: boolean
+    atendimentoId?: boolean
+    respostas?: boolean
+    observacoes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    paciente?: boolean | PacienteDefaultArgs<ExtArgs>
+    formulario?: boolean | FormularioDefaultArgs<ExtArgs>
+    atendimento?: boolean | Anamnese$atendimentoArgs<ExtArgs>
+  }, ExtArgs["result"]["anamnese"]>
+
+  export type AnamneseSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    pacienteId?: boolean
+    formularioId?: boolean
+    atendimentoId?: boolean
+    respostas?: boolean
+    observacoes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    paciente?: boolean | PacienteDefaultArgs<ExtArgs>
+    formulario?: boolean | FormularioDefaultArgs<ExtArgs>
+    atendimento?: boolean | Anamnese$atendimentoArgs<ExtArgs>
+  }, ExtArgs["result"]["anamnese"]>
+
+  export type AnamneseSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    pacienteId?: boolean
+    formularioId?: boolean
+    atendimentoId?: boolean
+    respostas?: boolean
+    observacoes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AnamneseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "pacienteId" | "formularioId" | "atendimentoId" | "respostas" | "observacoes" | "createdAt" | "updatedAt", ExtArgs["result"]["anamnese"]>
+  export type AnamneseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    paciente?: boolean | PacienteDefaultArgs<ExtArgs>
+    formulario?: boolean | FormularioDefaultArgs<ExtArgs>
+    atendimento?: boolean | Anamnese$atendimentoArgs<ExtArgs>
+  }
+  export type AnamneseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    paciente?: boolean | PacienteDefaultArgs<ExtArgs>
+    formulario?: boolean | FormularioDefaultArgs<ExtArgs>
+    atendimento?: boolean | Anamnese$atendimentoArgs<ExtArgs>
+  }
+  export type AnamneseIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    paciente?: boolean | PacienteDefaultArgs<ExtArgs>
+    formulario?: boolean | FormularioDefaultArgs<ExtArgs>
+    atendimento?: boolean | Anamnese$atendimentoArgs<ExtArgs>
+  }
+
+  export type $AnamnesePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Anamnese"
+    objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>
+      paciente: Prisma.$PacientePayload<ExtArgs>
+      formulario: Prisma.$FormularioPayload<ExtArgs>
+      atendimento: Prisma.$AtendimentoPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      pacienteId: string
+      formularioId: string
+      atendimentoId: string | null
+      respostas: Prisma.JsonValue
+      observacoes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["anamnese"]>
+    composites: {}
+  }
+
+  type AnamneseGetPayload<S extends boolean | null | undefined | AnamneseDefaultArgs> = $Result.GetResult<Prisma.$AnamnesePayload, S>
+
+  type AnamneseCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AnamneseFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AnamneseCountAggregateInputType | true
+    }
+
+  export interface AnamneseDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Anamnese'], meta: { name: 'Anamnese' } }
+    /**
+     * Find zero or one Anamnese that matches the filter.
+     * @param {AnamneseFindUniqueArgs} args - Arguments to find a Anamnese
+     * @example
+     * // Get one Anamnese
+     * const anamnese = await prisma.anamnese.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AnamneseFindUniqueArgs>(args: SelectSubset<T, AnamneseFindUniqueArgs<ExtArgs>>): Prisma__AnamneseClient<$Result.GetResult<Prisma.$AnamnesePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Anamnese that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AnamneseFindUniqueOrThrowArgs} args - Arguments to find a Anamnese
+     * @example
+     * // Get one Anamnese
+     * const anamnese = await prisma.anamnese.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AnamneseFindUniqueOrThrowArgs>(args: SelectSubset<T, AnamneseFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AnamneseClient<$Result.GetResult<Prisma.$AnamnesePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Anamnese that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AnamneseFindFirstArgs} args - Arguments to find a Anamnese
+     * @example
+     * // Get one Anamnese
+     * const anamnese = await prisma.anamnese.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AnamneseFindFirstArgs>(args?: SelectSubset<T, AnamneseFindFirstArgs<ExtArgs>>): Prisma__AnamneseClient<$Result.GetResult<Prisma.$AnamnesePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Anamnese that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AnamneseFindFirstOrThrowArgs} args - Arguments to find a Anamnese
+     * @example
+     * // Get one Anamnese
+     * const anamnese = await prisma.anamnese.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AnamneseFindFirstOrThrowArgs>(args?: SelectSubset<T, AnamneseFindFirstOrThrowArgs<ExtArgs>>): Prisma__AnamneseClient<$Result.GetResult<Prisma.$AnamnesePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Anamnese that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AnamneseFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Anamnese
+     * const anamnese = await prisma.anamnese.findMany()
+     * 
+     * // Get first 10 Anamnese
+     * const anamnese = await prisma.anamnese.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const anamneseWithIdOnly = await prisma.anamnese.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AnamneseFindManyArgs>(args?: SelectSubset<T, AnamneseFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnamnesePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Anamnese.
+     * @param {AnamneseCreateArgs} args - Arguments to create a Anamnese.
+     * @example
+     * // Create one Anamnese
+     * const Anamnese = await prisma.anamnese.create({
+     *   data: {
+     *     // ... data to create a Anamnese
+     *   }
+     * })
+     * 
+     */
+    create<T extends AnamneseCreateArgs>(args: SelectSubset<T, AnamneseCreateArgs<ExtArgs>>): Prisma__AnamneseClient<$Result.GetResult<Prisma.$AnamnesePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Anamnese.
+     * @param {AnamneseCreateManyArgs} args - Arguments to create many Anamnese.
+     * @example
+     * // Create many Anamnese
+     * const anamnese = await prisma.anamnese.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AnamneseCreateManyArgs>(args?: SelectSubset<T, AnamneseCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Anamnese and returns the data saved in the database.
+     * @param {AnamneseCreateManyAndReturnArgs} args - Arguments to create many Anamnese.
+     * @example
+     * // Create many Anamnese
+     * const anamnese = await prisma.anamnese.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Anamnese and only return the `id`
+     * const anamneseWithIdOnly = await prisma.anamnese.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AnamneseCreateManyAndReturnArgs>(args?: SelectSubset<T, AnamneseCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnamnesePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Anamnese.
+     * @param {AnamneseDeleteArgs} args - Arguments to delete one Anamnese.
+     * @example
+     * // Delete one Anamnese
+     * const Anamnese = await prisma.anamnese.delete({
+     *   where: {
+     *     // ... filter to delete one Anamnese
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AnamneseDeleteArgs>(args: SelectSubset<T, AnamneseDeleteArgs<ExtArgs>>): Prisma__AnamneseClient<$Result.GetResult<Prisma.$AnamnesePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Anamnese.
+     * @param {AnamneseUpdateArgs} args - Arguments to update one Anamnese.
+     * @example
+     * // Update one Anamnese
+     * const anamnese = await prisma.anamnese.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AnamneseUpdateArgs>(args: SelectSubset<T, AnamneseUpdateArgs<ExtArgs>>): Prisma__AnamneseClient<$Result.GetResult<Prisma.$AnamnesePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Anamnese.
+     * @param {AnamneseDeleteManyArgs} args - Arguments to filter Anamnese to delete.
+     * @example
+     * // Delete a few Anamnese
+     * const { count } = await prisma.anamnese.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AnamneseDeleteManyArgs>(args?: SelectSubset<T, AnamneseDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Anamnese.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AnamneseUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Anamnese
+     * const anamnese = await prisma.anamnese.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AnamneseUpdateManyArgs>(args: SelectSubset<T, AnamneseUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Anamnese and returns the data updated in the database.
+     * @param {AnamneseUpdateManyAndReturnArgs} args - Arguments to update many Anamnese.
+     * @example
+     * // Update many Anamnese
+     * const anamnese = await prisma.anamnese.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Anamnese and only return the `id`
+     * const anamneseWithIdOnly = await prisma.anamnese.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AnamneseUpdateManyAndReturnArgs>(args: SelectSubset<T, AnamneseUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnamnesePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Anamnese.
+     * @param {AnamneseUpsertArgs} args - Arguments to update or create a Anamnese.
+     * @example
+     * // Update or create a Anamnese
+     * const anamnese = await prisma.anamnese.upsert({
+     *   create: {
+     *     // ... data to create a Anamnese
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Anamnese we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AnamneseUpsertArgs>(args: SelectSubset<T, AnamneseUpsertArgs<ExtArgs>>): Prisma__AnamneseClient<$Result.GetResult<Prisma.$AnamnesePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Anamnese.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AnamneseCountArgs} args - Arguments to filter Anamnese to count.
+     * @example
+     * // Count the number of Anamnese
+     * const count = await prisma.anamnese.count({
+     *   where: {
+     *     // ... the filter for the Anamnese we want to count
+     *   }
+     * })
+    **/
+    count<T extends AnamneseCountArgs>(
+      args?: Subset<T, AnamneseCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AnamneseCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Anamnese.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AnamneseAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AnamneseAggregateArgs>(args: Subset<T, AnamneseAggregateArgs>): Prisma.PrismaPromise<GetAnamneseAggregateType<T>>
+
+    /**
+     * Group by Anamnese.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AnamneseGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AnamneseGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AnamneseGroupByArgs['orderBy'] }
+        : { orderBy?: AnamneseGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AnamneseGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAnamneseGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Anamnese model
+   */
+  readonly fields: AnamneseFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Anamnese.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AnamneseClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TenantDefaultArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    paciente<T extends PacienteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PacienteDefaultArgs<ExtArgs>>): Prisma__PacienteClient<$Result.GetResult<Prisma.$PacientePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    formulario<T extends FormularioDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FormularioDefaultArgs<ExtArgs>>): Prisma__FormularioClient<$Result.GetResult<Prisma.$FormularioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    atendimento<T extends Anamnese$atendimentoArgs<ExtArgs> = {}>(args?: Subset<T, Anamnese$atendimentoArgs<ExtArgs>>): Prisma__AtendimentoClient<$Result.GetResult<Prisma.$AtendimentoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Anamnese model
+   */
+  interface AnamneseFieldRefs {
+    readonly id: FieldRef<"Anamnese", 'String'>
+    readonly tenantId: FieldRef<"Anamnese", 'String'>
+    readonly pacienteId: FieldRef<"Anamnese", 'String'>
+    readonly formularioId: FieldRef<"Anamnese", 'String'>
+    readonly atendimentoId: FieldRef<"Anamnese", 'String'>
+    readonly respostas: FieldRef<"Anamnese", 'Json'>
+    readonly observacoes: FieldRef<"Anamnese", 'String'>
+    readonly createdAt: FieldRef<"Anamnese", 'DateTime'>
+    readonly updatedAt: FieldRef<"Anamnese", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Anamnese findUnique
+   */
+  export type AnamneseFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Anamnese
+     */
+    select?: AnamneseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Anamnese
+     */
+    omit?: AnamneseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnamneseInclude<ExtArgs> | null
+    /**
+     * Filter, which Anamnese to fetch.
+     */
+    where: AnamneseWhereUniqueInput
+  }
+
+  /**
+   * Anamnese findUniqueOrThrow
+   */
+  export type AnamneseFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Anamnese
+     */
+    select?: AnamneseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Anamnese
+     */
+    omit?: AnamneseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnamneseInclude<ExtArgs> | null
+    /**
+     * Filter, which Anamnese to fetch.
+     */
+    where: AnamneseWhereUniqueInput
+  }
+
+  /**
+   * Anamnese findFirst
+   */
+  export type AnamneseFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Anamnese
+     */
+    select?: AnamneseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Anamnese
+     */
+    omit?: AnamneseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnamneseInclude<ExtArgs> | null
+    /**
+     * Filter, which Anamnese to fetch.
+     */
+    where?: AnamneseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Anamnese to fetch.
+     */
+    orderBy?: AnamneseOrderByWithRelationInput | AnamneseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Anamnese.
+     */
+    cursor?: AnamneseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Anamnese from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Anamnese.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Anamnese.
+     */
+    distinct?: AnamneseScalarFieldEnum | AnamneseScalarFieldEnum[]
+  }
+
+  /**
+   * Anamnese findFirstOrThrow
+   */
+  export type AnamneseFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Anamnese
+     */
+    select?: AnamneseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Anamnese
+     */
+    omit?: AnamneseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnamneseInclude<ExtArgs> | null
+    /**
+     * Filter, which Anamnese to fetch.
+     */
+    where?: AnamneseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Anamnese to fetch.
+     */
+    orderBy?: AnamneseOrderByWithRelationInput | AnamneseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Anamnese.
+     */
+    cursor?: AnamneseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Anamnese from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Anamnese.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Anamnese.
+     */
+    distinct?: AnamneseScalarFieldEnum | AnamneseScalarFieldEnum[]
+  }
+
+  /**
+   * Anamnese findMany
+   */
+  export type AnamneseFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Anamnese
+     */
+    select?: AnamneseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Anamnese
+     */
+    omit?: AnamneseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnamneseInclude<ExtArgs> | null
+    /**
+     * Filter, which Anamnese to fetch.
+     */
+    where?: AnamneseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Anamnese to fetch.
+     */
+    orderBy?: AnamneseOrderByWithRelationInput | AnamneseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Anamnese.
+     */
+    cursor?: AnamneseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Anamnese from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Anamnese.
+     */
+    skip?: number
+    distinct?: AnamneseScalarFieldEnum | AnamneseScalarFieldEnum[]
+  }
+
+  /**
+   * Anamnese create
+   */
+  export type AnamneseCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Anamnese
+     */
+    select?: AnamneseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Anamnese
+     */
+    omit?: AnamneseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnamneseInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Anamnese.
+     */
+    data: XOR<AnamneseCreateInput, AnamneseUncheckedCreateInput>
+  }
+
+  /**
+   * Anamnese createMany
+   */
+  export type AnamneseCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Anamnese.
+     */
+    data: AnamneseCreateManyInput | AnamneseCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Anamnese createManyAndReturn
+   */
+  export type AnamneseCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Anamnese
+     */
+    select?: AnamneseSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Anamnese
+     */
+    omit?: AnamneseOmit<ExtArgs> | null
+    /**
+     * The data used to create many Anamnese.
+     */
+    data: AnamneseCreateManyInput | AnamneseCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnamneseIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Anamnese update
+   */
+  export type AnamneseUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Anamnese
+     */
+    select?: AnamneseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Anamnese
+     */
+    omit?: AnamneseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnamneseInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Anamnese.
+     */
+    data: XOR<AnamneseUpdateInput, AnamneseUncheckedUpdateInput>
+    /**
+     * Choose, which Anamnese to update.
+     */
+    where: AnamneseWhereUniqueInput
+  }
+
+  /**
+   * Anamnese updateMany
+   */
+  export type AnamneseUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Anamnese.
+     */
+    data: XOR<AnamneseUpdateManyMutationInput, AnamneseUncheckedUpdateManyInput>
+    /**
+     * Filter which Anamnese to update
+     */
+    where?: AnamneseWhereInput
+    /**
+     * Limit how many Anamnese to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Anamnese updateManyAndReturn
+   */
+  export type AnamneseUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Anamnese
+     */
+    select?: AnamneseSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Anamnese
+     */
+    omit?: AnamneseOmit<ExtArgs> | null
+    /**
+     * The data used to update Anamnese.
+     */
+    data: XOR<AnamneseUpdateManyMutationInput, AnamneseUncheckedUpdateManyInput>
+    /**
+     * Filter which Anamnese to update
+     */
+    where?: AnamneseWhereInput
+    /**
+     * Limit how many Anamnese to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnamneseIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Anamnese upsert
+   */
+  export type AnamneseUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Anamnese
+     */
+    select?: AnamneseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Anamnese
+     */
+    omit?: AnamneseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnamneseInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Anamnese to update in case it exists.
+     */
+    where: AnamneseWhereUniqueInput
+    /**
+     * In case the Anamnese found by the `where` argument doesn't exist, create a new Anamnese with this data.
+     */
+    create: XOR<AnamneseCreateInput, AnamneseUncheckedCreateInput>
+    /**
+     * In case the Anamnese was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AnamneseUpdateInput, AnamneseUncheckedUpdateInput>
+  }
+
+  /**
+   * Anamnese delete
+   */
+  export type AnamneseDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Anamnese
+     */
+    select?: AnamneseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Anamnese
+     */
+    omit?: AnamneseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnamneseInclude<ExtArgs> | null
+    /**
+     * Filter which Anamnese to delete.
+     */
+    where: AnamneseWhereUniqueInput
+  }
+
+  /**
+   * Anamnese deleteMany
+   */
+  export type AnamneseDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Anamnese to delete
+     */
+    where?: AnamneseWhereInput
+    /**
+     * Limit how many Anamnese to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Anamnese.atendimento
+   */
+  export type Anamnese$atendimentoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Atendimento
+     */
+    select?: AtendimentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Atendimento
+     */
+    omit?: AtendimentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AtendimentoInclude<ExtArgs> | null
+    where?: AtendimentoWhereInput
+  }
+
+  /**
+   * Anamnese without action
+   */
+  export type AnamneseDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Anamnese
+     */
+    select?: AnamneseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Anamnese
+     */
+    omit?: AnamneseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnamneseInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -15457,6 +18191,36 @@ export namespace Prisma {
   };
 
   export type AutorizacaoScalarFieldEnum = (typeof AutorizacaoScalarFieldEnum)[keyof typeof AutorizacaoScalarFieldEnum]
+
+
+  export const FormularioScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    profissionalId: 'profissionalId',
+    nome: 'nome',
+    descricao: 'descricao',
+    campos: 'campos',
+    ativo: 'ativo',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type FormularioScalarFieldEnum = (typeof FormularioScalarFieldEnum)[keyof typeof FormularioScalarFieldEnum]
+
+
+  export const AnamneseScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    pacienteId: 'pacienteId',
+    formularioId: 'formularioId',
+    atendimentoId: 'atendimentoId',
+    respostas: 'respostas',
+    observacoes: 'observacoes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AnamneseScalarFieldEnum = (typeof AnamneseScalarFieldEnum)[keyof typeof AnamneseScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -15758,6 +18522,7 @@ export namespace Prisma {
     pacientes?: PacienteListRelationFilter
     agendamentos?: AgendamentoListRelationFilter
     atendimentos?: AtendimentoListRelationFilter
+    Formulario?: FormularioListRelationFilter
   }
 
   export type ProfissionalOrderByWithRelationInput = {
@@ -15774,6 +18539,7 @@ export namespace Prisma {
     pacientes?: PacienteOrderByRelationAggregateInput
     agendamentos?: AgendamentoOrderByRelationAggregateInput
     atendimentos?: AtendimentoOrderByRelationAggregateInput
+    Formulario?: FormularioOrderByRelationAggregateInput
   }
 
   export type ProfissionalWhereUniqueInput = Prisma.AtLeast<{
@@ -15793,6 +18559,7 @@ export namespace Prisma {
     pacientes?: PacienteListRelationFilter
     agendamentos?: AgendamentoListRelationFilter
     atendimentos?: AtendimentoListRelationFilter
+    Formulario?: FormularioListRelationFilter
   }, "id">
 
   export type ProfissionalOrderByWithAggregationInput = {
@@ -15858,6 +18625,7 @@ export namespace Prisma {
     profissional?: XOR<ProfissionalNullableScalarRelationFilter, ProfissionalWhereInput> | null
     agendamentos?: AgendamentoListRelationFilter
     atendimentos?: AtendimentoListRelationFilter
+    Anamnese?: AnamneseListRelationFilter
   }
 
   export type PacienteOrderByWithRelationInput = {
@@ -15890,6 +18658,7 @@ export namespace Prisma {
     profissional?: ProfissionalOrderByWithRelationInput
     agendamentos?: AgendamentoOrderByRelationAggregateInput
     atendimentos?: AtendimentoOrderByRelationAggregateInput
+    Anamnese?: AnamneseOrderByRelationAggregateInput
   }
 
   export type PacienteWhereUniqueInput = Prisma.AtLeast<{
@@ -15925,6 +18694,7 @@ export namespace Prisma {
     profissional?: XOR<ProfissionalNullableScalarRelationFilter, ProfissionalWhereInput> | null
     agendamentos?: AgendamentoListRelationFilter
     atendimentos?: AtendimentoListRelationFilter
+    Anamnese?: AnamneseListRelationFilter
   }, "id">
 
   export type PacienteOrderByWithAggregationInput = {
@@ -16190,6 +18960,7 @@ export namespace Prisma {
     paciente?: XOR<PacienteScalarRelationFilter, PacienteWhereInput>
     profissional?: XOR<ProfissionalScalarRelationFilter, ProfissionalWhereInput>
     procedimento?: XOR<ProcedimentoNullableScalarRelationFilter, ProcedimentoWhereInput> | null
+    Anamnese?: AnamneseListRelationFilter
   }
 
   export type AtendimentoOrderByWithRelationInput = {
@@ -16210,6 +18981,7 @@ export namespace Prisma {
     paciente?: PacienteOrderByWithRelationInput
     profissional?: ProfissionalOrderByWithRelationInput
     procedimento?: ProcedimentoOrderByWithRelationInput
+    Anamnese?: AnamneseOrderByRelationAggregateInput
   }
 
   export type AtendimentoWhereUniqueInput = Prisma.AtLeast<{
@@ -16233,6 +19005,7 @@ export namespace Prisma {
     paciente?: XOR<PacienteScalarRelationFilter, PacienteWhereInput>
     profissional?: XOR<ProfissionalScalarRelationFilter, ProfissionalWhereInput>
     procedimento?: XOR<ProcedimentoNullableScalarRelationFilter, ProcedimentoWhereInput> | null
+    Anamnese?: AnamneseListRelationFilter
   }, "id" | "agendamentoId">
 
   export type AtendimentoOrderByWithAggregationInput = {
@@ -16545,6 +19318,8 @@ export namespace Prisma {
     profissionais?: ProfissionalListRelationFilter
     usuarios?: UsuarioListRelationFilter
     whatsappConfig?: XOR<WhatsAppConfigNullableScalarRelationFilter, WhatsAppConfigWhereInput> | null
+    Formulario?: FormularioListRelationFilter
+    Anamnese?: AnamneseListRelationFilter
   }
 
   export type TenantOrderByWithRelationInput = {
@@ -16562,6 +19337,8 @@ export namespace Prisma {
     profissionais?: ProfissionalOrderByRelationAggregateInput
     usuarios?: UsuarioOrderByRelationAggregateInput
     whatsappConfig?: WhatsAppConfigOrderByWithRelationInput
+    Formulario?: FormularioOrderByRelationAggregateInput
+    Anamnese?: AnamneseOrderByRelationAggregateInput
   }
 
   export type TenantWhereUniqueInput = Prisma.AtLeast<{
@@ -16582,6 +19359,8 @@ export namespace Prisma {
     profissionais?: ProfissionalListRelationFilter
     usuarios?: UsuarioListRelationFilter
     whatsappConfig?: XOR<WhatsAppConfigNullableScalarRelationFilter, WhatsAppConfigWhereInput> | null
+    Formulario?: FormularioListRelationFilter
+    Anamnese?: AnamneseListRelationFilter
   }, "id">
 
   export type TenantOrderByWithAggregationInput = {
@@ -16677,6 +19456,171 @@ export namespace Prisma {
     cancelar?: BoolWithAggregatesFilter<"Autorizacao"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Autorizacao"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Autorizacao"> | Date | string
+  }
+
+  export type FormularioWhereInput = {
+    AND?: FormularioWhereInput | FormularioWhereInput[]
+    OR?: FormularioWhereInput[]
+    NOT?: FormularioWhereInput | FormularioWhereInput[]
+    id?: StringFilter<"Formulario"> | string
+    tenantId?: StringFilter<"Formulario"> | string
+    profissionalId?: StringNullableFilter<"Formulario"> | string | null
+    nome?: StringFilter<"Formulario"> | string
+    descricao?: StringNullableFilter<"Formulario"> | string | null
+    campos?: JsonFilter<"Formulario">
+    ativo?: BoolFilter<"Formulario"> | boolean
+    createdAt?: DateTimeFilter<"Formulario"> | Date | string
+    updatedAt?: DateTimeFilter<"Formulario"> | Date | string
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
+    profissional?: XOR<ProfissionalNullableScalarRelationFilter, ProfissionalWhereInput> | null
+    anamneses?: AnamneseListRelationFilter
+  }
+
+  export type FormularioOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    profissionalId?: SortOrderInput | SortOrder
+    nome?: SortOrder
+    descricao?: SortOrderInput | SortOrder
+    campos?: SortOrder
+    ativo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    tenant?: TenantOrderByWithRelationInput
+    profissional?: ProfissionalOrderByWithRelationInput
+    anamneses?: AnamneseOrderByRelationAggregateInput
+  }
+
+  export type FormularioWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: FormularioWhereInput | FormularioWhereInput[]
+    OR?: FormularioWhereInput[]
+    NOT?: FormularioWhereInput | FormularioWhereInput[]
+    tenantId?: StringFilter<"Formulario"> | string
+    profissionalId?: StringNullableFilter<"Formulario"> | string | null
+    nome?: StringFilter<"Formulario"> | string
+    descricao?: StringNullableFilter<"Formulario"> | string | null
+    campos?: JsonFilter<"Formulario">
+    ativo?: BoolFilter<"Formulario"> | boolean
+    createdAt?: DateTimeFilter<"Formulario"> | Date | string
+    updatedAt?: DateTimeFilter<"Formulario"> | Date | string
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
+    profissional?: XOR<ProfissionalNullableScalarRelationFilter, ProfissionalWhereInput> | null
+    anamneses?: AnamneseListRelationFilter
+  }, "id">
+
+  export type FormularioOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    profissionalId?: SortOrderInput | SortOrder
+    nome?: SortOrder
+    descricao?: SortOrderInput | SortOrder
+    campos?: SortOrder
+    ativo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: FormularioCountOrderByAggregateInput
+    _max?: FormularioMaxOrderByAggregateInput
+    _min?: FormularioMinOrderByAggregateInput
+  }
+
+  export type FormularioScalarWhereWithAggregatesInput = {
+    AND?: FormularioScalarWhereWithAggregatesInput | FormularioScalarWhereWithAggregatesInput[]
+    OR?: FormularioScalarWhereWithAggregatesInput[]
+    NOT?: FormularioScalarWhereWithAggregatesInput | FormularioScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Formulario"> | string
+    tenantId?: StringWithAggregatesFilter<"Formulario"> | string
+    profissionalId?: StringNullableWithAggregatesFilter<"Formulario"> | string | null
+    nome?: StringWithAggregatesFilter<"Formulario"> | string
+    descricao?: StringNullableWithAggregatesFilter<"Formulario"> | string | null
+    campos?: JsonWithAggregatesFilter<"Formulario">
+    ativo?: BoolWithAggregatesFilter<"Formulario"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Formulario"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Formulario"> | Date | string
+  }
+
+  export type AnamneseWhereInput = {
+    AND?: AnamneseWhereInput | AnamneseWhereInput[]
+    OR?: AnamneseWhereInput[]
+    NOT?: AnamneseWhereInput | AnamneseWhereInput[]
+    id?: StringFilter<"Anamnese"> | string
+    tenantId?: StringFilter<"Anamnese"> | string
+    pacienteId?: StringFilter<"Anamnese"> | string
+    formularioId?: StringFilter<"Anamnese"> | string
+    atendimentoId?: StringNullableFilter<"Anamnese"> | string | null
+    respostas?: JsonFilter<"Anamnese">
+    observacoes?: StringNullableFilter<"Anamnese"> | string | null
+    createdAt?: DateTimeFilter<"Anamnese"> | Date | string
+    updatedAt?: DateTimeFilter<"Anamnese"> | Date | string
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
+    paciente?: XOR<PacienteScalarRelationFilter, PacienteWhereInput>
+    formulario?: XOR<FormularioScalarRelationFilter, FormularioWhereInput>
+    atendimento?: XOR<AtendimentoNullableScalarRelationFilter, AtendimentoWhereInput> | null
+  }
+
+  export type AnamneseOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    pacienteId?: SortOrder
+    formularioId?: SortOrder
+    atendimentoId?: SortOrderInput | SortOrder
+    respostas?: SortOrder
+    observacoes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    tenant?: TenantOrderByWithRelationInput
+    paciente?: PacienteOrderByWithRelationInput
+    formulario?: FormularioOrderByWithRelationInput
+    atendimento?: AtendimentoOrderByWithRelationInput
+  }
+
+  export type AnamneseWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AnamneseWhereInput | AnamneseWhereInput[]
+    OR?: AnamneseWhereInput[]
+    NOT?: AnamneseWhereInput | AnamneseWhereInput[]
+    tenantId?: StringFilter<"Anamnese"> | string
+    pacienteId?: StringFilter<"Anamnese"> | string
+    formularioId?: StringFilter<"Anamnese"> | string
+    atendimentoId?: StringNullableFilter<"Anamnese"> | string | null
+    respostas?: JsonFilter<"Anamnese">
+    observacoes?: StringNullableFilter<"Anamnese"> | string | null
+    createdAt?: DateTimeFilter<"Anamnese"> | Date | string
+    updatedAt?: DateTimeFilter<"Anamnese"> | Date | string
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
+    paciente?: XOR<PacienteScalarRelationFilter, PacienteWhereInput>
+    formulario?: XOR<FormularioScalarRelationFilter, FormularioWhereInput>
+    atendimento?: XOR<AtendimentoNullableScalarRelationFilter, AtendimentoWhereInput> | null
+  }, "id">
+
+  export type AnamneseOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    pacienteId?: SortOrder
+    formularioId?: SortOrder
+    atendimentoId?: SortOrderInput | SortOrder
+    respostas?: SortOrder
+    observacoes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AnamneseCountOrderByAggregateInput
+    _max?: AnamneseMaxOrderByAggregateInput
+    _min?: AnamneseMinOrderByAggregateInput
+  }
+
+  export type AnamneseScalarWhereWithAggregatesInput = {
+    AND?: AnamneseScalarWhereWithAggregatesInput | AnamneseScalarWhereWithAggregatesInput[]
+    OR?: AnamneseScalarWhereWithAggregatesInput[]
+    NOT?: AnamneseScalarWhereWithAggregatesInput | AnamneseScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Anamnese"> | string
+    tenantId?: StringWithAggregatesFilter<"Anamnese"> | string
+    pacienteId?: StringWithAggregatesFilter<"Anamnese"> | string
+    formularioId?: StringWithAggregatesFilter<"Anamnese"> | string
+    atendimentoId?: StringNullableWithAggregatesFilter<"Anamnese"> | string | null
+    respostas?: JsonWithAggregatesFilter<"Anamnese">
+    observacoes?: StringNullableWithAggregatesFilter<"Anamnese"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Anamnese"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Anamnese"> | Date | string
   }
 
   export type UsuarioCreateInput = {
@@ -16779,6 +19723,7 @@ export namespace Prisma {
     pacientes?: PacienteCreateNestedManyWithoutProfissionalInput
     agendamentos?: AgendamentoCreateNestedManyWithoutProfissionalInput
     atendimentos?: AtendimentoCreateNestedManyWithoutProfissionalInput
+    Formulario?: FormularioCreateNestedManyWithoutProfissionalInput
   }
 
   export type ProfissionalUncheckedCreateInput = {
@@ -16794,6 +19739,7 @@ export namespace Prisma {
     pacientes?: PacienteUncheckedCreateNestedManyWithoutProfissionalInput
     agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutProfissionalInput
     atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutProfissionalInput
+    Formulario?: FormularioUncheckedCreateNestedManyWithoutProfissionalInput
   }
 
   export type ProfissionalUpdateInput = {
@@ -16809,6 +19755,7 @@ export namespace Prisma {
     pacientes?: PacienteUpdateManyWithoutProfissionalNestedInput
     agendamentos?: AgendamentoUpdateManyWithoutProfissionalNestedInput
     atendimentos?: AtendimentoUpdateManyWithoutProfissionalNestedInput
+    Formulario?: FormularioUpdateManyWithoutProfissionalNestedInput
   }
 
   export type ProfissionalUncheckedUpdateInput = {
@@ -16824,6 +19771,7 @@ export namespace Prisma {
     pacientes?: PacienteUncheckedUpdateManyWithoutProfissionalNestedInput
     agendamentos?: AgendamentoUncheckedUpdateManyWithoutProfissionalNestedInput
     atendimentos?: AtendimentoUncheckedUpdateManyWithoutProfissionalNestedInput
+    Formulario?: FormularioUncheckedUpdateManyWithoutProfissionalNestedInput
   }
 
   export type ProfissionalCreateManyInput = {
@@ -16889,6 +19837,7 @@ export namespace Prisma {
     profissional?: ProfissionalCreateNestedOneWithoutPacientesInput
     agendamentos?: AgendamentoCreateNestedManyWithoutPacienteInput
     atendimentos?: AtendimentoCreateNestedManyWithoutPacienteInput
+    Anamnese?: AnamneseCreateNestedManyWithoutPacienteInput
   }
 
   export type PacienteUncheckedCreateInput = {
@@ -16919,6 +19868,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutPacienteInput
     atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutPacienteInput
+    Anamnese?: AnamneseUncheckedCreateNestedManyWithoutPacienteInput
   }
 
   export type PacienteUpdateInput = {
@@ -16949,6 +19899,7 @@ export namespace Prisma {
     profissional?: ProfissionalUpdateOneWithoutPacientesNestedInput
     agendamentos?: AgendamentoUpdateManyWithoutPacienteNestedInput
     atendimentos?: AtendimentoUpdateManyWithoutPacienteNestedInput
+    Anamnese?: AnamneseUpdateManyWithoutPacienteNestedInput
   }
 
   export type PacienteUncheckedUpdateInput = {
@@ -16979,6 +19930,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     agendamentos?: AgendamentoUncheckedUpdateManyWithoutPacienteNestedInput
     atendimentos?: AtendimentoUncheckedUpdateManyWithoutPacienteNestedInput
+    Anamnese?: AnamneseUncheckedUpdateManyWithoutPacienteNestedInput
   }
 
   export type PacienteCreateManyInput = {
@@ -17265,6 +20217,7 @@ export namespace Prisma {
     paciente: PacienteCreateNestedOneWithoutAtendimentosInput
     profissional: ProfissionalCreateNestedOneWithoutAtendimentosInput
     procedimento?: ProcedimentoCreateNestedOneWithoutAtendimentosInput
+    Anamnese?: AnamneseCreateNestedManyWithoutAtendimentoInput
   }
 
   export type AtendimentoUncheckedCreateInput = {
@@ -17280,6 +20233,7 @@ export namespace Prisma {
     canceladoEm?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    Anamnese?: AnamneseUncheckedCreateNestedManyWithoutAtendimentoInput
   }
 
   export type AtendimentoUpdateInput = {
@@ -17295,6 +20249,7 @@ export namespace Prisma {
     paciente?: PacienteUpdateOneRequiredWithoutAtendimentosNestedInput
     profissional?: ProfissionalUpdateOneRequiredWithoutAtendimentosNestedInput
     procedimento?: ProcedimentoUpdateOneWithoutAtendimentosNestedInput
+    Anamnese?: AnamneseUpdateManyWithoutAtendimentoNestedInput
   }
 
   export type AtendimentoUncheckedUpdateInput = {
@@ -17310,6 +20265,7 @@ export namespace Prisma {
     canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Anamnese?: AnamneseUncheckedUpdateManyWithoutAtendimentoNestedInput
   }
 
   export type AtendimentoCreateManyInput = {
@@ -17663,6 +20619,8 @@ export namespace Prisma {
     profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
     usuarios?: UsuarioCreateNestedManyWithoutTenantInput
     whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
+    Formulario?: FormularioCreateNestedManyWithoutTenantInput
+    Anamnese?: AnamneseCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateInput = {
@@ -17679,6 +20637,8 @@ export namespace Prisma {
     profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
     usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
     whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
+    Formulario?: FormularioUncheckedCreateNestedManyWithoutTenantInput
+    Anamnese?: AnamneseUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUpdateInput = {
@@ -17695,6 +20655,8 @@ export namespace Prisma {
     profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
     usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
     whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
+    Formulario?: FormularioUpdateManyWithoutTenantNestedInput
+    Anamnese?: AnamneseUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateInput = {
@@ -17711,6 +20673,8 @@ export namespace Prisma {
     profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
     usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
     whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
+    Formulario?: FormularioUncheckedUpdateManyWithoutTenantNestedInput
+    Anamnese?: AnamneseUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantCreateManyInput = {
@@ -17811,6 +20775,172 @@ export namespace Prisma {
     visualizar?: BoolFieldUpdateOperationsInput | boolean
     criarAlterar?: BoolFieldUpdateOperationsInput | boolean
     cancelar?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FormularioCreateInput = {
+    id?: string
+    nome: string
+    descricao?: string | null
+    campos: JsonNullValueInput | InputJsonValue
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutFormularioInput
+    profissional?: ProfissionalCreateNestedOneWithoutFormularioInput
+    anamneses?: AnamneseCreateNestedManyWithoutFormularioInput
+  }
+
+  export type FormularioUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    profissionalId?: string | null
+    nome: string
+    descricao?: string | null
+    campos: JsonNullValueInput | InputJsonValue
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    anamneses?: AnamneseUncheckedCreateNestedManyWithoutFormularioInput
+  }
+
+  export type FormularioUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    campos?: JsonNullValueInput | InputJsonValue
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutFormularioNestedInput
+    profissional?: ProfissionalUpdateOneWithoutFormularioNestedInput
+    anamneses?: AnamneseUpdateManyWithoutFormularioNestedInput
+  }
+
+  export type FormularioUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    profissionalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nome?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    campos?: JsonNullValueInput | InputJsonValue
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    anamneses?: AnamneseUncheckedUpdateManyWithoutFormularioNestedInput
+  }
+
+  export type FormularioCreateManyInput = {
+    id?: string
+    tenantId: string
+    profissionalId?: string | null
+    nome: string
+    descricao?: string | null
+    campos: JsonNullValueInput | InputJsonValue
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FormularioUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    campos?: JsonNullValueInput | InputJsonValue
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FormularioUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    profissionalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nome?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    campos?: JsonNullValueInput | InputJsonValue
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AnamneseCreateInput = {
+    id?: string
+    respostas: JsonNullValueInput | InputJsonValue
+    observacoes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutAnamneseInput
+    paciente: PacienteCreateNestedOneWithoutAnamneseInput
+    formulario: FormularioCreateNestedOneWithoutAnamnesesInput
+    atendimento?: AtendimentoCreateNestedOneWithoutAnamneseInput
+  }
+
+  export type AnamneseUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    pacienteId: string
+    formularioId: string
+    atendimentoId?: string | null
+    respostas: JsonNullValueInput | InputJsonValue
+    observacoes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AnamneseUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    respostas?: JsonNullValueInput | InputJsonValue
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutAnamneseNestedInput
+    paciente?: PacienteUpdateOneRequiredWithoutAnamneseNestedInput
+    formulario?: FormularioUpdateOneRequiredWithoutAnamnesesNestedInput
+    atendimento?: AtendimentoUpdateOneWithoutAnamneseNestedInput
+  }
+
+  export type AnamneseUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    pacienteId?: StringFieldUpdateOperationsInput | string
+    formularioId?: StringFieldUpdateOperationsInput | string
+    atendimentoId?: NullableStringFieldUpdateOperationsInput | string | null
+    respostas?: JsonNullValueInput | InputJsonValue
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AnamneseCreateManyInput = {
+    id?: string
+    tenantId: string
+    pacienteId: string
+    formularioId: string
+    atendimentoId?: string | null
+    respostas: JsonNullValueInput | InputJsonValue
+    observacoes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AnamneseUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    respostas?: JsonNullValueInput | InputJsonValue
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AnamneseUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    pacienteId?: StringFieldUpdateOperationsInput | string
+    formularioId?: StringFieldUpdateOperationsInput | string
+    atendimentoId?: NullableStringFieldUpdateOperationsInput | string | null
+    respostas?: JsonNullValueInput | InputJsonValue
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17992,6 +21122,12 @@ export namespace Prisma {
     none?: AtendimentoWhereInput
   }
 
+  export type FormularioListRelationFilter = {
+    every?: FormularioWhereInput
+    some?: FormularioWhereInput
+    none?: FormularioWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -18006,6 +21142,10 @@ export namespace Prisma {
   }
 
   export type AtendimentoOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FormularioOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -18077,6 +21217,16 @@ export namespace Prisma {
   export type ProfissionalNullableScalarRelationFilter = {
     is?: ProfissionalWhereInput | null
     isNot?: ProfissionalWhereInput | null
+  }
+
+  export type AnamneseListRelationFilter = {
+    every?: AnamneseWhereInput
+    some?: AnamneseWhereInput
+    none?: AnamneseWhereInput
+  }
+
+  export type AnamneseOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type PacienteCountOrderByAggregateInput = {
@@ -18818,6 +21968,79 @@ export namespace Prisma {
     _max?: NestedEnumModuloFilter<$PrismaModel>
   }
 
+  export type FormularioCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    profissionalId?: SortOrder
+    nome?: SortOrder
+    descricao?: SortOrder
+    campos?: SortOrder
+    ativo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FormularioMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    profissionalId?: SortOrder
+    nome?: SortOrder
+    descricao?: SortOrder
+    ativo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FormularioMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    profissionalId?: SortOrder
+    nome?: SortOrder
+    descricao?: SortOrder
+    ativo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FormularioScalarRelationFilter = {
+    is?: FormularioWhereInput
+    isNot?: FormularioWhereInput
+  }
+
+  export type AnamneseCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    pacienteId?: SortOrder
+    formularioId?: SortOrder
+    atendimentoId?: SortOrder
+    respostas?: SortOrder
+    observacoes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AnamneseMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    pacienteId?: SortOrder
+    formularioId?: SortOrder
+    atendimentoId?: SortOrder
+    observacoes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AnamneseMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    pacienteId?: SortOrder
+    formularioId?: SortOrder
+    atendimentoId?: SortOrder
+    observacoes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type TenantCreateNestedOneWithoutUsuariosInput = {
     create?: XOR<TenantCreateWithoutUsuariosInput, TenantUncheckedCreateWithoutUsuariosInput>
     connectOrCreate?: TenantCreateOrConnectWithoutUsuariosInput
@@ -18917,6 +22140,13 @@ export namespace Prisma {
     connect?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
   }
 
+  export type FormularioCreateNestedManyWithoutProfissionalInput = {
+    create?: XOR<FormularioCreateWithoutProfissionalInput, FormularioUncheckedCreateWithoutProfissionalInput> | FormularioCreateWithoutProfissionalInput[] | FormularioUncheckedCreateWithoutProfissionalInput[]
+    connectOrCreate?: FormularioCreateOrConnectWithoutProfissionalInput | FormularioCreateOrConnectWithoutProfissionalInput[]
+    createMany?: FormularioCreateManyProfissionalInputEnvelope
+    connect?: FormularioWhereUniqueInput | FormularioWhereUniqueInput[]
+  }
+
   export type PacienteUncheckedCreateNestedManyWithoutProfissionalInput = {
     create?: XOR<PacienteCreateWithoutProfissionalInput, PacienteUncheckedCreateWithoutProfissionalInput> | PacienteCreateWithoutProfissionalInput[] | PacienteUncheckedCreateWithoutProfissionalInput[]
     connectOrCreate?: PacienteCreateOrConnectWithoutProfissionalInput | PacienteCreateOrConnectWithoutProfissionalInput[]
@@ -18936,6 +22166,13 @@ export namespace Prisma {
     connectOrCreate?: AtendimentoCreateOrConnectWithoutProfissionalInput | AtendimentoCreateOrConnectWithoutProfissionalInput[]
     createMany?: AtendimentoCreateManyProfissionalInputEnvelope
     connect?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
+  }
+
+  export type FormularioUncheckedCreateNestedManyWithoutProfissionalInput = {
+    create?: XOR<FormularioCreateWithoutProfissionalInput, FormularioUncheckedCreateWithoutProfissionalInput> | FormularioCreateWithoutProfissionalInput[] | FormularioUncheckedCreateWithoutProfissionalInput[]
+    connectOrCreate?: FormularioCreateOrConnectWithoutProfissionalInput | FormularioCreateOrConnectWithoutProfissionalInput[]
+    createMany?: FormularioCreateManyProfissionalInputEnvelope
+    connect?: FormularioWhereUniqueInput | FormularioWhereUniqueInput[]
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -18992,6 +22229,20 @@ export namespace Prisma {
     deleteMany?: AtendimentoScalarWhereInput | AtendimentoScalarWhereInput[]
   }
 
+  export type FormularioUpdateManyWithoutProfissionalNestedInput = {
+    create?: XOR<FormularioCreateWithoutProfissionalInput, FormularioUncheckedCreateWithoutProfissionalInput> | FormularioCreateWithoutProfissionalInput[] | FormularioUncheckedCreateWithoutProfissionalInput[]
+    connectOrCreate?: FormularioCreateOrConnectWithoutProfissionalInput | FormularioCreateOrConnectWithoutProfissionalInput[]
+    upsert?: FormularioUpsertWithWhereUniqueWithoutProfissionalInput | FormularioUpsertWithWhereUniqueWithoutProfissionalInput[]
+    createMany?: FormularioCreateManyProfissionalInputEnvelope
+    set?: FormularioWhereUniqueInput | FormularioWhereUniqueInput[]
+    disconnect?: FormularioWhereUniqueInput | FormularioWhereUniqueInput[]
+    delete?: FormularioWhereUniqueInput | FormularioWhereUniqueInput[]
+    connect?: FormularioWhereUniqueInput | FormularioWhereUniqueInput[]
+    update?: FormularioUpdateWithWhereUniqueWithoutProfissionalInput | FormularioUpdateWithWhereUniqueWithoutProfissionalInput[]
+    updateMany?: FormularioUpdateManyWithWhereWithoutProfissionalInput | FormularioUpdateManyWithWhereWithoutProfissionalInput[]
+    deleteMany?: FormularioScalarWhereInput | FormularioScalarWhereInput[]
+  }
+
   export type PacienteUncheckedUpdateManyWithoutProfissionalNestedInput = {
     create?: XOR<PacienteCreateWithoutProfissionalInput, PacienteUncheckedCreateWithoutProfissionalInput> | PacienteCreateWithoutProfissionalInput[] | PacienteUncheckedCreateWithoutProfissionalInput[]
     connectOrCreate?: PacienteCreateOrConnectWithoutProfissionalInput | PacienteCreateOrConnectWithoutProfissionalInput[]
@@ -19034,6 +22285,20 @@ export namespace Prisma {
     deleteMany?: AtendimentoScalarWhereInput | AtendimentoScalarWhereInput[]
   }
 
+  export type FormularioUncheckedUpdateManyWithoutProfissionalNestedInput = {
+    create?: XOR<FormularioCreateWithoutProfissionalInput, FormularioUncheckedCreateWithoutProfissionalInput> | FormularioCreateWithoutProfissionalInput[] | FormularioUncheckedCreateWithoutProfissionalInput[]
+    connectOrCreate?: FormularioCreateOrConnectWithoutProfissionalInput | FormularioCreateOrConnectWithoutProfissionalInput[]
+    upsert?: FormularioUpsertWithWhereUniqueWithoutProfissionalInput | FormularioUpsertWithWhereUniqueWithoutProfissionalInput[]
+    createMany?: FormularioCreateManyProfissionalInputEnvelope
+    set?: FormularioWhereUniqueInput | FormularioWhereUniqueInput[]
+    disconnect?: FormularioWhereUniqueInput | FormularioWhereUniqueInput[]
+    delete?: FormularioWhereUniqueInput | FormularioWhereUniqueInput[]
+    connect?: FormularioWhereUniqueInput | FormularioWhereUniqueInput[]
+    update?: FormularioUpdateWithWhereUniqueWithoutProfissionalInput | FormularioUpdateWithWhereUniqueWithoutProfissionalInput[]
+    updateMany?: FormularioUpdateManyWithWhereWithoutProfissionalInput | FormularioUpdateManyWithWhereWithoutProfissionalInput[]
+    deleteMany?: FormularioScalarWhereInput | FormularioScalarWhereInput[]
+  }
+
   export type TenantCreateNestedOneWithoutPacientesInput = {
     create?: XOR<TenantCreateWithoutPacientesInput, TenantUncheckedCreateWithoutPacientesInput>
     connectOrCreate?: TenantCreateOrConnectWithoutPacientesInput
@@ -19060,6 +22325,13 @@ export namespace Prisma {
     connect?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
   }
 
+  export type AnamneseCreateNestedManyWithoutPacienteInput = {
+    create?: XOR<AnamneseCreateWithoutPacienteInput, AnamneseUncheckedCreateWithoutPacienteInput> | AnamneseCreateWithoutPacienteInput[] | AnamneseUncheckedCreateWithoutPacienteInput[]
+    connectOrCreate?: AnamneseCreateOrConnectWithoutPacienteInput | AnamneseCreateOrConnectWithoutPacienteInput[]
+    createMany?: AnamneseCreateManyPacienteInputEnvelope
+    connect?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+  }
+
   export type AgendamentoUncheckedCreateNestedManyWithoutPacienteInput = {
     create?: XOR<AgendamentoCreateWithoutPacienteInput, AgendamentoUncheckedCreateWithoutPacienteInput> | AgendamentoCreateWithoutPacienteInput[] | AgendamentoUncheckedCreateWithoutPacienteInput[]
     connectOrCreate?: AgendamentoCreateOrConnectWithoutPacienteInput | AgendamentoCreateOrConnectWithoutPacienteInput[]
@@ -19072,6 +22344,13 @@ export namespace Prisma {
     connectOrCreate?: AtendimentoCreateOrConnectWithoutPacienteInput | AtendimentoCreateOrConnectWithoutPacienteInput[]
     createMany?: AtendimentoCreateManyPacienteInputEnvelope
     connect?: AtendimentoWhereUniqueInput | AtendimentoWhereUniqueInput[]
+  }
+
+  export type AnamneseUncheckedCreateNestedManyWithoutPacienteInput = {
+    create?: XOR<AnamneseCreateWithoutPacienteInput, AnamneseUncheckedCreateWithoutPacienteInput> | AnamneseCreateWithoutPacienteInput[] | AnamneseUncheckedCreateWithoutPacienteInput[]
+    connectOrCreate?: AnamneseCreateOrConnectWithoutPacienteInput | AnamneseCreateOrConnectWithoutPacienteInput[]
+    createMany?: AnamneseCreateManyPacienteInputEnvelope
+    connect?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -19124,6 +22403,20 @@ export namespace Prisma {
     deleteMany?: AtendimentoScalarWhereInput | AtendimentoScalarWhereInput[]
   }
 
+  export type AnamneseUpdateManyWithoutPacienteNestedInput = {
+    create?: XOR<AnamneseCreateWithoutPacienteInput, AnamneseUncheckedCreateWithoutPacienteInput> | AnamneseCreateWithoutPacienteInput[] | AnamneseUncheckedCreateWithoutPacienteInput[]
+    connectOrCreate?: AnamneseCreateOrConnectWithoutPacienteInput | AnamneseCreateOrConnectWithoutPacienteInput[]
+    upsert?: AnamneseUpsertWithWhereUniqueWithoutPacienteInput | AnamneseUpsertWithWhereUniqueWithoutPacienteInput[]
+    createMany?: AnamneseCreateManyPacienteInputEnvelope
+    set?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    disconnect?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    delete?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    connect?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    update?: AnamneseUpdateWithWhereUniqueWithoutPacienteInput | AnamneseUpdateWithWhereUniqueWithoutPacienteInput[]
+    updateMany?: AnamneseUpdateManyWithWhereWithoutPacienteInput | AnamneseUpdateManyWithWhereWithoutPacienteInput[]
+    deleteMany?: AnamneseScalarWhereInput | AnamneseScalarWhereInput[]
+  }
+
   export type AgendamentoUncheckedUpdateManyWithoutPacienteNestedInput = {
     create?: XOR<AgendamentoCreateWithoutPacienteInput, AgendamentoUncheckedCreateWithoutPacienteInput> | AgendamentoCreateWithoutPacienteInput[] | AgendamentoUncheckedCreateWithoutPacienteInput[]
     connectOrCreate?: AgendamentoCreateOrConnectWithoutPacienteInput | AgendamentoCreateOrConnectWithoutPacienteInput[]
@@ -19150,6 +22443,20 @@ export namespace Prisma {
     update?: AtendimentoUpdateWithWhereUniqueWithoutPacienteInput | AtendimentoUpdateWithWhereUniqueWithoutPacienteInput[]
     updateMany?: AtendimentoUpdateManyWithWhereWithoutPacienteInput | AtendimentoUpdateManyWithWhereWithoutPacienteInput[]
     deleteMany?: AtendimentoScalarWhereInput | AtendimentoScalarWhereInput[]
+  }
+
+  export type AnamneseUncheckedUpdateManyWithoutPacienteNestedInput = {
+    create?: XOR<AnamneseCreateWithoutPacienteInput, AnamneseUncheckedCreateWithoutPacienteInput> | AnamneseCreateWithoutPacienteInput[] | AnamneseUncheckedCreateWithoutPacienteInput[]
+    connectOrCreate?: AnamneseCreateOrConnectWithoutPacienteInput | AnamneseCreateOrConnectWithoutPacienteInput[]
+    upsert?: AnamneseUpsertWithWhereUniqueWithoutPacienteInput | AnamneseUpsertWithWhereUniqueWithoutPacienteInput[]
+    createMany?: AnamneseCreateManyPacienteInputEnvelope
+    set?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    disconnect?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    delete?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    connect?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    update?: AnamneseUpdateWithWhereUniqueWithoutPacienteInput | AnamneseUpdateWithWhereUniqueWithoutPacienteInput[]
+    updateMany?: AnamneseUpdateManyWithWhereWithoutPacienteInput | AnamneseUpdateManyWithWhereWithoutPacienteInput[]
+    deleteMany?: AnamneseScalarWhereInput | AnamneseScalarWhereInput[]
   }
 
   export type AgendamentoCreateNestedManyWithoutProcedimentoInput = {
@@ -19390,6 +22697,20 @@ export namespace Prisma {
     connect?: ProcedimentoWhereUniqueInput
   }
 
+  export type AnamneseCreateNestedManyWithoutAtendimentoInput = {
+    create?: XOR<AnamneseCreateWithoutAtendimentoInput, AnamneseUncheckedCreateWithoutAtendimentoInput> | AnamneseCreateWithoutAtendimentoInput[] | AnamneseUncheckedCreateWithoutAtendimentoInput[]
+    connectOrCreate?: AnamneseCreateOrConnectWithoutAtendimentoInput | AnamneseCreateOrConnectWithoutAtendimentoInput[]
+    createMany?: AnamneseCreateManyAtendimentoInputEnvelope
+    connect?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+  }
+
+  export type AnamneseUncheckedCreateNestedManyWithoutAtendimentoInput = {
+    create?: XOR<AnamneseCreateWithoutAtendimentoInput, AnamneseUncheckedCreateWithoutAtendimentoInput> | AnamneseCreateWithoutAtendimentoInput[] | AnamneseUncheckedCreateWithoutAtendimentoInput[]
+    connectOrCreate?: AnamneseCreateOrConnectWithoutAtendimentoInput | AnamneseCreateOrConnectWithoutAtendimentoInput[]
+    createMany?: AnamneseCreateManyAtendimentoInputEnvelope
+    connect?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+  }
+
   export type TenantUpdateOneRequiredWithoutAtendimentosNestedInput = {
     create?: XOR<TenantCreateWithoutAtendimentosInput, TenantUncheckedCreateWithoutAtendimentosInput>
     connectOrCreate?: TenantCreateOrConnectWithoutAtendimentosInput
@@ -19430,6 +22751,34 @@ export namespace Prisma {
     delete?: ProcedimentoWhereInput | boolean
     connect?: ProcedimentoWhereUniqueInput
     update?: XOR<XOR<ProcedimentoUpdateToOneWithWhereWithoutAtendimentosInput, ProcedimentoUpdateWithoutAtendimentosInput>, ProcedimentoUncheckedUpdateWithoutAtendimentosInput>
+  }
+
+  export type AnamneseUpdateManyWithoutAtendimentoNestedInput = {
+    create?: XOR<AnamneseCreateWithoutAtendimentoInput, AnamneseUncheckedCreateWithoutAtendimentoInput> | AnamneseCreateWithoutAtendimentoInput[] | AnamneseUncheckedCreateWithoutAtendimentoInput[]
+    connectOrCreate?: AnamneseCreateOrConnectWithoutAtendimentoInput | AnamneseCreateOrConnectWithoutAtendimentoInput[]
+    upsert?: AnamneseUpsertWithWhereUniqueWithoutAtendimentoInput | AnamneseUpsertWithWhereUniqueWithoutAtendimentoInput[]
+    createMany?: AnamneseCreateManyAtendimentoInputEnvelope
+    set?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    disconnect?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    delete?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    connect?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    update?: AnamneseUpdateWithWhereUniqueWithoutAtendimentoInput | AnamneseUpdateWithWhereUniqueWithoutAtendimentoInput[]
+    updateMany?: AnamneseUpdateManyWithWhereWithoutAtendimentoInput | AnamneseUpdateManyWithWhereWithoutAtendimentoInput[]
+    deleteMany?: AnamneseScalarWhereInput | AnamneseScalarWhereInput[]
+  }
+
+  export type AnamneseUncheckedUpdateManyWithoutAtendimentoNestedInput = {
+    create?: XOR<AnamneseCreateWithoutAtendimentoInput, AnamneseUncheckedCreateWithoutAtendimentoInput> | AnamneseCreateWithoutAtendimentoInput[] | AnamneseUncheckedCreateWithoutAtendimentoInput[]
+    connectOrCreate?: AnamneseCreateOrConnectWithoutAtendimentoInput | AnamneseCreateOrConnectWithoutAtendimentoInput[]
+    upsert?: AnamneseUpsertWithWhereUniqueWithoutAtendimentoInput | AnamneseUpsertWithWhereUniqueWithoutAtendimentoInput[]
+    createMany?: AnamneseCreateManyAtendimentoInputEnvelope
+    set?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    disconnect?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    delete?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    connect?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    update?: AnamneseUpdateWithWhereUniqueWithoutAtendimentoInput | AnamneseUpdateWithWhereUniqueWithoutAtendimentoInput[]
+    updateMany?: AnamneseUpdateManyWithWhereWithoutAtendimentoInput | AnamneseUpdateManyWithWhereWithoutAtendimentoInput[]
+    deleteMany?: AnamneseScalarWhereInput | AnamneseScalarWhereInput[]
   }
 
   export type TenantCreateNestedOneWithoutWhatsappConfigInput = {
@@ -19546,6 +22895,20 @@ export namespace Prisma {
     connect?: WhatsAppConfigWhereUniqueInput
   }
 
+  export type FormularioCreateNestedManyWithoutTenantInput = {
+    create?: XOR<FormularioCreateWithoutTenantInput, FormularioUncheckedCreateWithoutTenantInput> | FormularioCreateWithoutTenantInput[] | FormularioUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: FormularioCreateOrConnectWithoutTenantInput | FormularioCreateOrConnectWithoutTenantInput[]
+    createMany?: FormularioCreateManyTenantInputEnvelope
+    connect?: FormularioWhereUniqueInput | FormularioWhereUniqueInput[]
+  }
+
+  export type AnamneseCreateNestedManyWithoutTenantInput = {
+    create?: XOR<AnamneseCreateWithoutTenantInput, AnamneseUncheckedCreateWithoutTenantInput> | AnamneseCreateWithoutTenantInput[] | AnamneseUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: AnamneseCreateOrConnectWithoutTenantInput | AnamneseCreateOrConnectWithoutTenantInput[]
+    createMany?: AnamneseCreateManyTenantInputEnvelope
+    connect?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+  }
+
   export type AgendamentoUncheckedCreateNestedManyWithoutTenantInput = {
     create?: XOR<AgendamentoCreateWithoutTenantInput, AgendamentoUncheckedCreateWithoutTenantInput> | AgendamentoCreateWithoutTenantInput[] | AgendamentoUncheckedCreateWithoutTenantInput[]
     connectOrCreate?: AgendamentoCreateOrConnectWithoutTenantInput | AgendamentoCreateOrConnectWithoutTenantInput[]
@@ -19592,6 +22955,20 @@ export namespace Prisma {
     create?: XOR<WhatsAppConfigCreateWithoutTenantInput, WhatsAppConfigUncheckedCreateWithoutTenantInput>
     connectOrCreate?: WhatsAppConfigCreateOrConnectWithoutTenantInput
     connect?: WhatsAppConfigWhereUniqueInput
+  }
+
+  export type FormularioUncheckedCreateNestedManyWithoutTenantInput = {
+    create?: XOR<FormularioCreateWithoutTenantInput, FormularioUncheckedCreateWithoutTenantInput> | FormularioCreateWithoutTenantInput[] | FormularioUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: FormularioCreateOrConnectWithoutTenantInput | FormularioCreateOrConnectWithoutTenantInput[]
+    createMany?: FormularioCreateManyTenantInputEnvelope
+    connect?: FormularioWhereUniqueInput | FormularioWhereUniqueInput[]
+  }
+
+  export type AnamneseUncheckedCreateNestedManyWithoutTenantInput = {
+    create?: XOR<AnamneseCreateWithoutTenantInput, AnamneseUncheckedCreateWithoutTenantInput> | AnamneseCreateWithoutTenantInput[] | AnamneseUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: AnamneseCreateOrConnectWithoutTenantInput | AnamneseCreateOrConnectWithoutTenantInput[]
+    createMany?: AnamneseCreateManyTenantInputEnvelope
+    connect?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
   }
 
   export type PlanoUpdateOneRequiredWithoutTenantsNestedInput = {
@@ -19696,6 +23073,34 @@ export namespace Prisma {
     update?: XOR<XOR<WhatsAppConfigUpdateToOneWithWhereWithoutTenantInput, WhatsAppConfigUpdateWithoutTenantInput>, WhatsAppConfigUncheckedUpdateWithoutTenantInput>
   }
 
+  export type FormularioUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<FormularioCreateWithoutTenantInput, FormularioUncheckedCreateWithoutTenantInput> | FormularioCreateWithoutTenantInput[] | FormularioUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: FormularioCreateOrConnectWithoutTenantInput | FormularioCreateOrConnectWithoutTenantInput[]
+    upsert?: FormularioUpsertWithWhereUniqueWithoutTenantInput | FormularioUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: FormularioCreateManyTenantInputEnvelope
+    set?: FormularioWhereUniqueInput | FormularioWhereUniqueInput[]
+    disconnect?: FormularioWhereUniqueInput | FormularioWhereUniqueInput[]
+    delete?: FormularioWhereUniqueInput | FormularioWhereUniqueInput[]
+    connect?: FormularioWhereUniqueInput | FormularioWhereUniqueInput[]
+    update?: FormularioUpdateWithWhereUniqueWithoutTenantInput | FormularioUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: FormularioUpdateManyWithWhereWithoutTenantInput | FormularioUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: FormularioScalarWhereInput | FormularioScalarWhereInput[]
+  }
+
+  export type AnamneseUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<AnamneseCreateWithoutTenantInput, AnamneseUncheckedCreateWithoutTenantInput> | AnamneseCreateWithoutTenantInput[] | AnamneseUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: AnamneseCreateOrConnectWithoutTenantInput | AnamneseCreateOrConnectWithoutTenantInput[]
+    upsert?: AnamneseUpsertWithWhereUniqueWithoutTenantInput | AnamneseUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: AnamneseCreateManyTenantInputEnvelope
+    set?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    disconnect?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    delete?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    connect?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    update?: AnamneseUpdateWithWhereUniqueWithoutTenantInput | AnamneseUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: AnamneseUpdateManyWithWhereWithoutTenantInput | AnamneseUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: AnamneseScalarWhereInput | AnamneseScalarWhereInput[]
+  }
+
   export type AgendamentoUncheckedUpdateManyWithoutTenantNestedInput = {
     create?: XOR<AgendamentoCreateWithoutTenantInput, AgendamentoUncheckedCreateWithoutTenantInput> | AgendamentoCreateWithoutTenantInput[] | AgendamentoUncheckedCreateWithoutTenantInput[]
     connectOrCreate?: AgendamentoCreateOrConnectWithoutTenantInput | AgendamentoCreateOrConnectWithoutTenantInput[]
@@ -19790,6 +23195,34 @@ export namespace Prisma {
     update?: XOR<XOR<WhatsAppConfigUpdateToOneWithWhereWithoutTenantInput, WhatsAppConfigUpdateWithoutTenantInput>, WhatsAppConfigUncheckedUpdateWithoutTenantInput>
   }
 
+  export type FormularioUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<FormularioCreateWithoutTenantInput, FormularioUncheckedCreateWithoutTenantInput> | FormularioCreateWithoutTenantInput[] | FormularioUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: FormularioCreateOrConnectWithoutTenantInput | FormularioCreateOrConnectWithoutTenantInput[]
+    upsert?: FormularioUpsertWithWhereUniqueWithoutTenantInput | FormularioUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: FormularioCreateManyTenantInputEnvelope
+    set?: FormularioWhereUniqueInput | FormularioWhereUniqueInput[]
+    disconnect?: FormularioWhereUniqueInput | FormularioWhereUniqueInput[]
+    delete?: FormularioWhereUniqueInput | FormularioWhereUniqueInput[]
+    connect?: FormularioWhereUniqueInput | FormularioWhereUniqueInput[]
+    update?: FormularioUpdateWithWhereUniqueWithoutTenantInput | FormularioUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: FormularioUpdateManyWithWhereWithoutTenantInput | FormularioUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: FormularioScalarWhereInput | FormularioScalarWhereInput[]
+  }
+
+  export type AnamneseUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<AnamneseCreateWithoutTenantInput, AnamneseUncheckedCreateWithoutTenantInput> | AnamneseCreateWithoutTenantInput[] | AnamneseUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: AnamneseCreateOrConnectWithoutTenantInput | AnamneseCreateOrConnectWithoutTenantInput[]
+    upsert?: AnamneseUpsertWithWhereUniqueWithoutTenantInput | AnamneseUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: AnamneseCreateManyTenantInputEnvelope
+    set?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    disconnect?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    delete?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    connect?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    update?: AnamneseUpdateWithWhereUniqueWithoutTenantInput | AnamneseUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: AnamneseUpdateManyWithWhereWithoutTenantInput | AnamneseUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: AnamneseScalarWhereInput | AnamneseScalarWhereInput[]
+  }
+
   export type UsuarioCreateNestedOneWithoutAutorizacoesInput = {
     create?: XOR<UsuarioCreateWithoutAutorizacoesInput, UsuarioUncheckedCreateWithoutAutorizacoesInput>
     connectOrCreate?: UsuarioCreateOrConnectWithoutAutorizacoesInput
@@ -19806,6 +23239,136 @@ export namespace Prisma {
     upsert?: UsuarioUpsertWithoutAutorizacoesInput
     connect?: UsuarioWhereUniqueInput
     update?: XOR<XOR<UsuarioUpdateToOneWithWhereWithoutAutorizacoesInput, UsuarioUpdateWithoutAutorizacoesInput>, UsuarioUncheckedUpdateWithoutAutorizacoesInput>
+  }
+
+  export type TenantCreateNestedOneWithoutFormularioInput = {
+    create?: XOR<TenantCreateWithoutFormularioInput, TenantUncheckedCreateWithoutFormularioInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutFormularioInput
+    connect?: TenantWhereUniqueInput
+  }
+
+  export type ProfissionalCreateNestedOneWithoutFormularioInput = {
+    create?: XOR<ProfissionalCreateWithoutFormularioInput, ProfissionalUncheckedCreateWithoutFormularioInput>
+    connectOrCreate?: ProfissionalCreateOrConnectWithoutFormularioInput
+    connect?: ProfissionalWhereUniqueInput
+  }
+
+  export type AnamneseCreateNestedManyWithoutFormularioInput = {
+    create?: XOR<AnamneseCreateWithoutFormularioInput, AnamneseUncheckedCreateWithoutFormularioInput> | AnamneseCreateWithoutFormularioInput[] | AnamneseUncheckedCreateWithoutFormularioInput[]
+    connectOrCreate?: AnamneseCreateOrConnectWithoutFormularioInput | AnamneseCreateOrConnectWithoutFormularioInput[]
+    createMany?: AnamneseCreateManyFormularioInputEnvelope
+    connect?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+  }
+
+  export type AnamneseUncheckedCreateNestedManyWithoutFormularioInput = {
+    create?: XOR<AnamneseCreateWithoutFormularioInput, AnamneseUncheckedCreateWithoutFormularioInput> | AnamneseCreateWithoutFormularioInput[] | AnamneseUncheckedCreateWithoutFormularioInput[]
+    connectOrCreate?: AnamneseCreateOrConnectWithoutFormularioInput | AnamneseCreateOrConnectWithoutFormularioInput[]
+    createMany?: AnamneseCreateManyFormularioInputEnvelope
+    connect?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+  }
+
+  export type TenantUpdateOneRequiredWithoutFormularioNestedInput = {
+    create?: XOR<TenantCreateWithoutFormularioInput, TenantUncheckedCreateWithoutFormularioInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutFormularioInput
+    upsert?: TenantUpsertWithoutFormularioInput
+    connect?: TenantWhereUniqueInput
+    update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutFormularioInput, TenantUpdateWithoutFormularioInput>, TenantUncheckedUpdateWithoutFormularioInput>
+  }
+
+  export type ProfissionalUpdateOneWithoutFormularioNestedInput = {
+    create?: XOR<ProfissionalCreateWithoutFormularioInput, ProfissionalUncheckedCreateWithoutFormularioInput>
+    connectOrCreate?: ProfissionalCreateOrConnectWithoutFormularioInput
+    upsert?: ProfissionalUpsertWithoutFormularioInput
+    disconnect?: ProfissionalWhereInput | boolean
+    delete?: ProfissionalWhereInput | boolean
+    connect?: ProfissionalWhereUniqueInput
+    update?: XOR<XOR<ProfissionalUpdateToOneWithWhereWithoutFormularioInput, ProfissionalUpdateWithoutFormularioInput>, ProfissionalUncheckedUpdateWithoutFormularioInput>
+  }
+
+  export type AnamneseUpdateManyWithoutFormularioNestedInput = {
+    create?: XOR<AnamneseCreateWithoutFormularioInput, AnamneseUncheckedCreateWithoutFormularioInput> | AnamneseCreateWithoutFormularioInput[] | AnamneseUncheckedCreateWithoutFormularioInput[]
+    connectOrCreate?: AnamneseCreateOrConnectWithoutFormularioInput | AnamneseCreateOrConnectWithoutFormularioInput[]
+    upsert?: AnamneseUpsertWithWhereUniqueWithoutFormularioInput | AnamneseUpsertWithWhereUniqueWithoutFormularioInput[]
+    createMany?: AnamneseCreateManyFormularioInputEnvelope
+    set?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    disconnect?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    delete?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    connect?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    update?: AnamneseUpdateWithWhereUniqueWithoutFormularioInput | AnamneseUpdateWithWhereUniqueWithoutFormularioInput[]
+    updateMany?: AnamneseUpdateManyWithWhereWithoutFormularioInput | AnamneseUpdateManyWithWhereWithoutFormularioInput[]
+    deleteMany?: AnamneseScalarWhereInput | AnamneseScalarWhereInput[]
+  }
+
+  export type AnamneseUncheckedUpdateManyWithoutFormularioNestedInput = {
+    create?: XOR<AnamneseCreateWithoutFormularioInput, AnamneseUncheckedCreateWithoutFormularioInput> | AnamneseCreateWithoutFormularioInput[] | AnamneseUncheckedCreateWithoutFormularioInput[]
+    connectOrCreate?: AnamneseCreateOrConnectWithoutFormularioInput | AnamneseCreateOrConnectWithoutFormularioInput[]
+    upsert?: AnamneseUpsertWithWhereUniqueWithoutFormularioInput | AnamneseUpsertWithWhereUniqueWithoutFormularioInput[]
+    createMany?: AnamneseCreateManyFormularioInputEnvelope
+    set?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    disconnect?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    delete?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    connect?: AnamneseWhereUniqueInput | AnamneseWhereUniqueInput[]
+    update?: AnamneseUpdateWithWhereUniqueWithoutFormularioInput | AnamneseUpdateWithWhereUniqueWithoutFormularioInput[]
+    updateMany?: AnamneseUpdateManyWithWhereWithoutFormularioInput | AnamneseUpdateManyWithWhereWithoutFormularioInput[]
+    deleteMany?: AnamneseScalarWhereInput | AnamneseScalarWhereInput[]
+  }
+
+  export type TenantCreateNestedOneWithoutAnamneseInput = {
+    create?: XOR<TenantCreateWithoutAnamneseInput, TenantUncheckedCreateWithoutAnamneseInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutAnamneseInput
+    connect?: TenantWhereUniqueInput
+  }
+
+  export type PacienteCreateNestedOneWithoutAnamneseInput = {
+    create?: XOR<PacienteCreateWithoutAnamneseInput, PacienteUncheckedCreateWithoutAnamneseInput>
+    connectOrCreate?: PacienteCreateOrConnectWithoutAnamneseInput
+    connect?: PacienteWhereUniqueInput
+  }
+
+  export type FormularioCreateNestedOneWithoutAnamnesesInput = {
+    create?: XOR<FormularioCreateWithoutAnamnesesInput, FormularioUncheckedCreateWithoutAnamnesesInput>
+    connectOrCreate?: FormularioCreateOrConnectWithoutAnamnesesInput
+    connect?: FormularioWhereUniqueInput
+  }
+
+  export type AtendimentoCreateNestedOneWithoutAnamneseInput = {
+    create?: XOR<AtendimentoCreateWithoutAnamneseInput, AtendimentoUncheckedCreateWithoutAnamneseInput>
+    connectOrCreate?: AtendimentoCreateOrConnectWithoutAnamneseInput
+    connect?: AtendimentoWhereUniqueInput
+  }
+
+  export type TenantUpdateOneRequiredWithoutAnamneseNestedInput = {
+    create?: XOR<TenantCreateWithoutAnamneseInput, TenantUncheckedCreateWithoutAnamneseInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutAnamneseInput
+    upsert?: TenantUpsertWithoutAnamneseInput
+    connect?: TenantWhereUniqueInput
+    update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutAnamneseInput, TenantUpdateWithoutAnamneseInput>, TenantUncheckedUpdateWithoutAnamneseInput>
+  }
+
+  export type PacienteUpdateOneRequiredWithoutAnamneseNestedInput = {
+    create?: XOR<PacienteCreateWithoutAnamneseInput, PacienteUncheckedCreateWithoutAnamneseInput>
+    connectOrCreate?: PacienteCreateOrConnectWithoutAnamneseInput
+    upsert?: PacienteUpsertWithoutAnamneseInput
+    connect?: PacienteWhereUniqueInput
+    update?: XOR<XOR<PacienteUpdateToOneWithWhereWithoutAnamneseInput, PacienteUpdateWithoutAnamneseInput>, PacienteUncheckedUpdateWithoutAnamneseInput>
+  }
+
+  export type FormularioUpdateOneRequiredWithoutAnamnesesNestedInput = {
+    create?: XOR<FormularioCreateWithoutAnamnesesInput, FormularioUncheckedCreateWithoutAnamnesesInput>
+    connectOrCreate?: FormularioCreateOrConnectWithoutAnamnesesInput
+    upsert?: FormularioUpsertWithoutAnamnesesInput
+    connect?: FormularioWhereUniqueInput
+    update?: XOR<XOR<FormularioUpdateToOneWithWhereWithoutAnamnesesInput, FormularioUpdateWithoutAnamnesesInput>, FormularioUncheckedUpdateWithoutAnamnesesInput>
+  }
+
+  export type AtendimentoUpdateOneWithoutAnamneseNestedInput = {
+    create?: XOR<AtendimentoCreateWithoutAnamneseInput, AtendimentoUncheckedCreateWithoutAnamneseInput>
+    connectOrCreate?: AtendimentoCreateOrConnectWithoutAnamneseInput
+    upsert?: AtendimentoUpsertWithoutAnamneseInput
+    disconnect?: AtendimentoWhereInput | boolean
+    delete?: AtendimentoWhereInput | boolean
+    connect?: AtendimentoWhereUniqueInput
+    update?: XOR<XOR<AtendimentoUpdateToOneWithWhereWithoutAnamneseInput, AtendimentoUpdateWithoutAnamneseInput>, AtendimentoUncheckedUpdateWithoutAnamneseInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -20136,6 +23699,8 @@ export namespace Prisma {
     procedimentos?: ProcedimentoCreateNestedManyWithoutTenantInput
     profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
     whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
+    Formulario?: FormularioCreateNestedManyWithoutTenantInput
+    Anamnese?: AnamneseCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutUsuariosInput = {
@@ -20151,6 +23716,8 @@ export namespace Prisma {
     procedimentos?: ProcedimentoUncheckedCreateNestedManyWithoutTenantInput
     profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
     whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
+    Formulario?: FormularioUncheckedCreateNestedManyWithoutTenantInput
+    Anamnese?: AnamneseUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutUsuariosInput = {
@@ -20212,6 +23779,8 @@ export namespace Prisma {
     procedimentos?: ProcedimentoUpdateManyWithoutTenantNestedInput
     profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
     whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
+    Formulario?: FormularioUpdateManyWithoutTenantNestedInput
+    Anamnese?: AnamneseUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutUsuariosInput = {
@@ -20227,6 +23796,8 @@ export namespace Prisma {
     procedimentos?: ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput
     profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
     whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
+    Formulario?: FormularioUncheckedUpdateManyWithoutTenantNestedInput
+    Anamnese?: AnamneseUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type AutorizacaoUpsertWithWhereUniqueWithoutUsuarioInput = {
@@ -20272,6 +23843,8 @@ export namespace Prisma {
     procedimentos?: ProcedimentoCreateNestedManyWithoutTenantInput
     usuarios?: UsuarioCreateNestedManyWithoutTenantInput
     whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
+    Formulario?: FormularioCreateNestedManyWithoutTenantInput
+    Anamnese?: AnamneseCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutProfissionaisInput = {
@@ -20287,6 +23860,8 @@ export namespace Prisma {
     procedimentos?: ProcedimentoUncheckedCreateNestedManyWithoutTenantInput
     usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
     whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
+    Formulario?: FormularioUncheckedCreateNestedManyWithoutTenantInput
+    Anamnese?: AnamneseUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutProfissionaisInput = {
@@ -20321,6 +23896,7 @@ export namespace Prisma {
     tenant: TenantCreateNestedOneWithoutPacientesInput
     agendamentos?: AgendamentoCreateNestedManyWithoutPacienteInput
     atendimentos?: AtendimentoCreateNestedManyWithoutPacienteInput
+    Anamnese?: AnamneseCreateNestedManyWithoutPacienteInput
   }
 
   export type PacienteUncheckedCreateWithoutProfissionalInput = {
@@ -20350,6 +23926,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutPacienteInput
     atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutPacienteInput
+    Anamnese?: AnamneseUncheckedCreateNestedManyWithoutPacienteInput
   }
 
   export type PacienteCreateOrConnectWithoutProfissionalInput = {
@@ -20416,6 +23993,7 @@ export namespace Prisma {
     agendamento: AgendamentoCreateNestedOneWithoutAtendimentoInput
     paciente: PacienteCreateNestedOneWithoutAtendimentosInput
     procedimento?: ProcedimentoCreateNestedOneWithoutAtendimentosInput
+    Anamnese?: AnamneseCreateNestedManyWithoutAtendimentoInput
   }
 
   export type AtendimentoUncheckedCreateWithoutProfissionalInput = {
@@ -20430,6 +24008,7 @@ export namespace Prisma {
     canceladoEm?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    Anamnese?: AnamneseUncheckedCreateNestedManyWithoutAtendimentoInput
   }
 
   export type AtendimentoCreateOrConnectWithoutProfissionalInput = {
@@ -20439,6 +24018,40 @@ export namespace Prisma {
 
   export type AtendimentoCreateManyProfissionalInputEnvelope = {
     data: AtendimentoCreateManyProfissionalInput | AtendimentoCreateManyProfissionalInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FormularioCreateWithoutProfissionalInput = {
+    id?: string
+    nome: string
+    descricao?: string | null
+    campos: JsonNullValueInput | InputJsonValue
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutFormularioInput
+    anamneses?: AnamneseCreateNestedManyWithoutFormularioInput
+  }
+
+  export type FormularioUncheckedCreateWithoutProfissionalInput = {
+    id?: string
+    tenantId: string
+    nome: string
+    descricao?: string | null
+    campos: JsonNullValueInput | InputJsonValue
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    anamneses?: AnamneseUncheckedCreateNestedManyWithoutFormularioInput
+  }
+
+  export type FormularioCreateOrConnectWithoutProfissionalInput = {
+    where: FormularioWhereUniqueInput
+    create: XOR<FormularioCreateWithoutProfissionalInput, FormularioUncheckedCreateWithoutProfissionalInput>
+  }
+
+  export type FormularioCreateManyProfissionalInputEnvelope = {
+    data: FormularioCreateManyProfissionalInput | FormularioCreateManyProfissionalInput[]
     skipDuplicates?: boolean
   }
 
@@ -20466,6 +24079,8 @@ export namespace Prisma {
     procedimentos?: ProcedimentoUpdateManyWithoutTenantNestedInput
     usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
     whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
+    Formulario?: FormularioUpdateManyWithoutTenantNestedInput
+    Anamnese?: AnamneseUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutProfissionaisInput = {
@@ -20481,6 +24096,8 @@ export namespace Prisma {
     procedimentos?: ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput
     usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
     whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
+    Formulario?: FormularioUncheckedUpdateManyWithoutTenantNestedInput
+    Anamnese?: AnamneseUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type PacienteUpsertWithWhereUniqueWithoutProfissionalInput = {
@@ -20599,6 +24216,37 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Atendimento"> | Date | string
   }
 
+  export type FormularioUpsertWithWhereUniqueWithoutProfissionalInput = {
+    where: FormularioWhereUniqueInput
+    update: XOR<FormularioUpdateWithoutProfissionalInput, FormularioUncheckedUpdateWithoutProfissionalInput>
+    create: XOR<FormularioCreateWithoutProfissionalInput, FormularioUncheckedCreateWithoutProfissionalInput>
+  }
+
+  export type FormularioUpdateWithWhereUniqueWithoutProfissionalInput = {
+    where: FormularioWhereUniqueInput
+    data: XOR<FormularioUpdateWithoutProfissionalInput, FormularioUncheckedUpdateWithoutProfissionalInput>
+  }
+
+  export type FormularioUpdateManyWithWhereWithoutProfissionalInput = {
+    where: FormularioScalarWhereInput
+    data: XOR<FormularioUpdateManyMutationInput, FormularioUncheckedUpdateManyWithoutProfissionalInput>
+  }
+
+  export type FormularioScalarWhereInput = {
+    AND?: FormularioScalarWhereInput | FormularioScalarWhereInput[]
+    OR?: FormularioScalarWhereInput[]
+    NOT?: FormularioScalarWhereInput | FormularioScalarWhereInput[]
+    id?: StringFilter<"Formulario"> | string
+    tenantId?: StringFilter<"Formulario"> | string
+    profissionalId?: StringNullableFilter<"Formulario"> | string | null
+    nome?: StringFilter<"Formulario"> | string
+    descricao?: StringNullableFilter<"Formulario"> | string | null
+    campos?: JsonFilter<"Formulario">
+    ativo?: BoolFilter<"Formulario"> | boolean
+    createdAt?: DateTimeFilter<"Formulario"> | Date | string
+    updatedAt?: DateTimeFilter<"Formulario"> | Date | string
+  }
+
   export type TenantCreateWithoutPacientesInput = {
     id?: string
     nome: string
@@ -20612,6 +24260,8 @@ export namespace Prisma {
     profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
     usuarios?: UsuarioCreateNestedManyWithoutTenantInput
     whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
+    Formulario?: FormularioCreateNestedManyWithoutTenantInput
+    Anamnese?: AnamneseCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutPacientesInput = {
@@ -20627,6 +24277,8 @@ export namespace Prisma {
     profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
     usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
     whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
+    Formulario?: FormularioUncheckedCreateNestedManyWithoutTenantInput
+    Anamnese?: AnamneseUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutPacientesInput = {
@@ -20646,6 +24298,7 @@ export namespace Prisma {
     tenant: TenantCreateNestedOneWithoutProfissionaisInput
     agendamentos?: AgendamentoCreateNestedManyWithoutProfissionalInput
     atendimentos?: AtendimentoCreateNestedManyWithoutProfissionalInput
+    Formulario?: FormularioCreateNestedManyWithoutProfissionalInput
   }
 
   export type ProfissionalUncheckedCreateWithoutPacientesInput = {
@@ -20660,6 +24313,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutProfissionalInput
     atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutProfissionalInput
+    Formulario?: FormularioUncheckedCreateNestedManyWithoutProfissionalInput
   }
 
   export type ProfissionalCreateOrConnectWithoutPacientesInput = {
@@ -20721,6 +24375,7 @@ export namespace Prisma {
     agendamento: AgendamentoCreateNestedOneWithoutAtendimentoInput
     profissional: ProfissionalCreateNestedOneWithoutAtendimentosInput
     procedimento?: ProcedimentoCreateNestedOneWithoutAtendimentosInput
+    Anamnese?: AnamneseCreateNestedManyWithoutAtendimentoInput
   }
 
   export type AtendimentoUncheckedCreateWithoutPacienteInput = {
@@ -20735,6 +24390,7 @@ export namespace Prisma {
     canceladoEm?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    Anamnese?: AnamneseUncheckedCreateNestedManyWithoutAtendimentoInput
   }
 
   export type AtendimentoCreateOrConnectWithoutPacienteInput = {
@@ -20744,6 +24400,38 @@ export namespace Prisma {
 
   export type AtendimentoCreateManyPacienteInputEnvelope = {
     data: AtendimentoCreateManyPacienteInput | AtendimentoCreateManyPacienteInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AnamneseCreateWithoutPacienteInput = {
+    id?: string
+    respostas: JsonNullValueInput | InputJsonValue
+    observacoes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutAnamneseInput
+    formulario: FormularioCreateNestedOneWithoutAnamnesesInput
+    atendimento?: AtendimentoCreateNestedOneWithoutAnamneseInput
+  }
+
+  export type AnamneseUncheckedCreateWithoutPacienteInput = {
+    id?: string
+    tenantId: string
+    formularioId: string
+    atendimentoId?: string | null
+    respostas: JsonNullValueInput | InputJsonValue
+    observacoes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AnamneseCreateOrConnectWithoutPacienteInput = {
+    where: AnamneseWhereUniqueInput
+    create: XOR<AnamneseCreateWithoutPacienteInput, AnamneseUncheckedCreateWithoutPacienteInput>
+  }
+
+  export type AnamneseCreateManyPacienteInputEnvelope = {
+    data: AnamneseCreateManyPacienteInput | AnamneseCreateManyPacienteInput[]
     skipDuplicates?: boolean
   }
 
@@ -20771,6 +24459,8 @@ export namespace Prisma {
     profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
     usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
     whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
+    Formulario?: FormularioUpdateManyWithoutTenantNestedInput
+    Anamnese?: AnamneseUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutPacientesInput = {
@@ -20786,6 +24476,8 @@ export namespace Prisma {
     profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
     usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
     whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
+    Formulario?: FormularioUncheckedUpdateManyWithoutTenantNestedInput
+    Anamnese?: AnamneseUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type ProfissionalUpsertWithoutPacientesInput = {
@@ -20811,6 +24503,7 @@ export namespace Prisma {
     tenant?: TenantUpdateOneRequiredWithoutProfissionaisNestedInput
     agendamentos?: AgendamentoUpdateManyWithoutProfissionalNestedInput
     atendimentos?: AtendimentoUpdateManyWithoutProfissionalNestedInput
+    Formulario?: FormularioUpdateManyWithoutProfissionalNestedInput
   }
 
   export type ProfissionalUncheckedUpdateWithoutPacientesInput = {
@@ -20825,6 +24518,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     agendamentos?: AgendamentoUncheckedUpdateManyWithoutProfissionalNestedInput
     atendimentos?: AtendimentoUncheckedUpdateManyWithoutProfissionalNestedInput
+    Formulario?: FormularioUncheckedUpdateManyWithoutProfissionalNestedInput
   }
 
   export type AgendamentoUpsertWithWhereUniqueWithoutPacienteInput = {
@@ -20857,6 +24551,37 @@ export namespace Prisma {
   export type AtendimentoUpdateManyWithWhereWithoutPacienteInput = {
     where: AtendimentoScalarWhereInput
     data: XOR<AtendimentoUpdateManyMutationInput, AtendimentoUncheckedUpdateManyWithoutPacienteInput>
+  }
+
+  export type AnamneseUpsertWithWhereUniqueWithoutPacienteInput = {
+    where: AnamneseWhereUniqueInput
+    update: XOR<AnamneseUpdateWithoutPacienteInput, AnamneseUncheckedUpdateWithoutPacienteInput>
+    create: XOR<AnamneseCreateWithoutPacienteInput, AnamneseUncheckedCreateWithoutPacienteInput>
+  }
+
+  export type AnamneseUpdateWithWhereUniqueWithoutPacienteInput = {
+    where: AnamneseWhereUniqueInput
+    data: XOR<AnamneseUpdateWithoutPacienteInput, AnamneseUncheckedUpdateWithoutPacienteInput>
+  }
+
+  export type AnamneseUpdateManyWithWhereWithoutPacienteInput = {
+    where: AnamneseScalarWhereInput
+    data: XOR<AnamneseUpdateManyMutationInput, AnamneseUncheckedUpdateManyWithoutPacienteInput>
+  }
+
+  export type AnamneseScalarWhereInput = {
+    AND?: AnamneseScalarWhereInput | AnamneseScalarWhereInput[]
+    OR?: AnamneseScalarWhereInput[]
+    NOT?: AnamneseScalarWhereInput | AnamneseScalarWhereInput[]
+    id?: StringFilter<"Anamnese"> | string
+    tenantId?: StringFilter<"Anamnese"> | string
+    pacienteId?: StringFilter<"Anamnese"> | string
+    formularioId?: StringFilter<"Anamnese"> | string
+    atendimentoId?: StringNullableFilter<"Anamnese"> | string | null
+    respostas?: JsonFilter<"Anamnese">
+    observacoes?: StringNullableFilter<"Anamnese"> | string | null
+    createdAt?: DateTimeFilter<"Anamnese"> | Date | string
+    updatedAt?: DateTimeFilter<"Anamnese"> | Date | string
   }
 
   export type AgendamentoCreateWithoutProcedimentoInput = {
@@ -20913,6 +24638,7 @@ export namespace Prisma {
     agendamento: AgendamentoCreateNestedOneWithoutAtendimentoInput
     paciente: PacienteCreateNestedOneWithoutAtendimentosInput
     profissional: ProfissionalCreateNestedOneWithoutAtendimentosInput
+    Anamnese?: AnamneseCreateNestedManyWithoutAtendimentoInput
   }
 
   export type AtendimentoUncheckedCreateWithoutProcedimentoInput = {
@@ -20927,6 +24653,7 @@ export namespace Prisma {
     canceladoEm?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    Anamnese?: AnamneseUncheckedCreateNestedManyWithoutAtendimentoInput
   }
 
   export type AtendimentoCreateOrConnectWithoutProcedimentoInput = {
@@ -20952,6 +24679,8 @@ export namespace Prisma {
     profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
     usuarios?: UsuarioCreateNestedManyWithoutTenantInput
     whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
+    Formulario?: FormularioCreateNestedManyWithoutTenantInput
+    Anamnese?: AnamneseCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutProcedimentosInput = {
@@ -20967,6 +24696,8 @@ export namespace Prisma {
     profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
     usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
     whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
+    Formulario?: FormularioUncheckedCreateNestedManyWithoutTenantInput
+    Anamnese?: AnamneseUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutProcedimentosInput = {
@@ -21030,6 +24761,8 @@ export namespace Prisma {
     profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
     usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
     whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
+    Formulario?: FormularioUpdateManyWithoutTenantNestedInput
+    Anamnese?: AnamneseUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutProcedimentosInput = {
@@ -21045,6 +24778,8 @@ export namespace Prisma {
     profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
     usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
     whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
+    Formulario?: FormularioUncheckedUpdateManyWithoutTenantNestedInput
+    Anamnese?: AnamneseUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type PacienteCreateWithoutAgendamentosInput = {
@@ -21074,6 +24809,7 @@ export namespace Prisma {
     tenant: TenantCreateNestedOneWithoutPacientesInput
     profissional?: ProfissionalCreateNestedOneWithoutPacientesInput
     atendimentos?: AtendimentoCreateNestedManyWithoutPacienteInput
+    Anamnese?: AnamneseCreateNestedManyWithoutPacienteInput
   }
 
   export type PacienteUncheckedCreateWithoutAgendamentosInput = {
@@ -21103,6 +24839,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutPacienteInput
+    Anamnese?: AnamneseUncheckedCreateNestedManyWithoutPacienteInput
   }
 
   export type PacienteCreateOrConnectWithoutAgendamentosInput = {
@@ -21149,6 +24886,7 @@ export namespace Prisma {
     tenant: TenantCreateNestedOneWithoutProfissionaisInput
     pacientes?: PacienteCreateNestedManyWithoutProfissionalInput
     atendimentos?: AtendimentoCreateNestedManyWithoutProfissionalInput
+    Formulario?: FormularioCreateNestedManyWithoutProfissionalInput
   }
 
   export type ProfissionalUncheckedCreateWithoutAgendamentosInput = {
@@ -21163,6 +24901,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     pacientes?: PacienteUncheckedCreateNestedManyWithoutProfissionalInput
     atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutProfissionalInput
+    Formulario?: FormularioUncheckedCreateNestedManyWithoutProfissionalInput
   }
 
   export type ProfissionalCreateOrConnectWithoutAgendamentosInput = {
@@ -21183,6 +24922,8 @@ export namespace Prisma {
     profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
     usuarios?: UsuarioCreateNestedManyWithoutTenantInput
     whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
+    Formulario?: FormularioCreateNestedManyWithoutTenantInput
+    Anamnese?: AnamneseCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutAgendamentosInput = {
@@ -21198,6 +24939,8 @@ export namespace Prisma {
     profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
     usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
     whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
+    Formulario?: FormularioUncheckedCreateNestedManyWithoutTenantInput
+    Anamnese?: AnamneseUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutAgendamentosInput = {
@@ -21217,6 +24960,7 @@ export namespace Prisma {
     paciente: PacienteCreateNestedOneWithoutAtendimentosInput
     profissional: ProfissionalCreateNestedOneWithoutAtendimentosInput
     procedimento?: ProcedimentoCreateNestedOneWithoutAtendimentosInput
+    Anamnese?: AnamneseCreateNestedManyWithoutAtendimentoInput
   }
 
   export type AtendimentoUncheckedCreateWithoutAgendamentoInput = {
@@ -21231,6 +24975,7 @@ export namespace Prisma {
     canceladoEm?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    Anamnese?: AnamneseUncheckedCreateNestedManyWithoutAtendimentoInput
   }
 
   export type AtendimentoCreateOrConnectWithoutAgendamentoInput = {
@@ -21276,6 +25021,7 @@ export namespace Prisma {
     tenant?: TenantUpdateOneRequiredWithoutPacientesNestedInput
     profissional?: ProfissionalUpdateOneWithoutPacientesNestedInput
     atendimentos?: AtendimentoUpdateManyWithoutPacienteNestedInput
+    Anamnese?: AnamneseUpdateManyWithoutPacienteNestedInput
   }
 
   export type PacienteUncheckedUpdateWithoutAgendamentosInput = {
@@ -21305,6 +25051,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     atendimentos?: AtendimentoUncheckedUpdateManyWithoutPacienteNestedInput
+    Anamnese?: AnamneseUncheckedUpdateManyWithoutPacienteNestedInput
   }
 
   export type ProcedimentoUpsertWithoutAgendamentosInput = {
@@ -21363,6 +25110,7 @@ export namespace Prisma {
     tenant?: TenantUpdateOneRequiredWithoutProfissionaisNestedInput
     pacientes?: PacienteUpdateManyWithoutProfissionalNestedInput
     atendimentos?: AtendimentoUpdateManyWithoutProfissionalNestedInput
+    Formulario?: FormularioUpdateManyWithoutProfissionalNestedInput
   }
 
   export type ProfissionalUncheckedUpdateWithoutAgendamentosInput = {
@@ -21377,6 +25125,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     pacientes?: PacienteUncheckedUpdateManyWithoutProfissionalNestedInput
     atendimentos?: AtendimentoUncheckedUpdateManyWithoutProfissionalNestedInput
+    Formulario?: FormularioUncheckedUpdateManyWithoutProfissionalNestedInput
   }
 
   export type TenantUpsertWithoutAgendamentosInput = {
@@ -21403,6 +25152,8 @@ export namespace Prisma {
     profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
     usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
     whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
+    Formulario?: FormularioUpdateManyWithoutTenantNestedInput
+    Anamnese?: AnamneseUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutAgendamentosInput = {
@@ -21418,6 +25169,8 @@ export namespace Prisma {
     profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
     usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
     whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
+    Formulario?: FormularioUncheckedUpdateManyWithoutTenantNestedInput
+    Anamnese?: AnamneseUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type AtendimentoUpsertWithoutAgendamentoInput = {
@@ -21443,6 +25196,7 @@ export namespace Prisma {
     paciente?: PacienteUpdateOneRequiredWithoutAtendimentosNestedInput
     profissional?: ProfissionalUpdateOneRequiredWithoutAtendimentosNestedInput
     procedimento?: ProcedimentoUpdateOneWithoutAtendimentosNestedInput
+    Anamnese?: AnamneseUpdateManyWithoutAtendimentoNestedInput
   }
 
   export type AtendimentoUncheckedUpdateWithoutAgendamentoInput = {
@@ -21457,6 +25211,7 @@ export namespace Prisma {
     canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Anamnese?: AnamneseUncheckedUpdateManyWithoutAtendimentoNestedInput
   }
 
   export type TenantCreateWithoutAtendimentosInput = {
@@ -21472,6 +25227,8 @@ export namespace Prisma {
     profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
     usuarios?: UsuarioCreateNestedManyWithoutTenantInput
     whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
+    Formulario?: FormularioCreateNestedManyWithoutTenantInput
+    Anamnese?: AnamneseCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutAtendimentosInput = {
@@ -21487,6 +25244,8 @@ export namespace Prisma {
     profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
     usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
     whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
+    Formulario?: FormularioUncheckedCreateNestedManyWithoutTenantInput
+    Anamnese?: AnamneseUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutAtendimentosInput = {
@@ -21558,6 +25317,7 @@ export namespace Prisma {
     tenant: TenantCreateNestedOneWithoutPacientesInput
     profissional?: ProfissionalCreateNestedOneWithoutPacientesInput
     agendamentos?: AgendamentoCreateNestedManyWithoutPacienteInput
+    Anamnese?: AnamneseCreateNestedManyWithoutPacienteInput
   }
 
   export type PacienteUncheckedCreateWithoutAtendimentosInput = {
@@ -21587,6 +25347,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutPacienteInput
+    Anamnese?: AnamneseUncheckedCreateNestedManyWithoutPacienteInput
   }
 
   export type PacienteCreateOrConnectWithoutAtendimentosInput = {
@@ -21606,6 +25367,7 @@ export namespace Prisma {
     tenant: TenantCreateNestedOneWithoutProfissionaisInput
     pacientes?: PacienteCreateNestedManyWithoutProfissionalInput
     agendamentos?: AgendamentoCreateNestedManyWithoutProfissionalInput
+    Formulario?: FormularioCreateNestedManyWithoutProfissionalInput
   }
 
   export type ProfissionalUncheckedCreateWithoutAtendimentosInput = {
@@ -21620,6 +25382,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     pacientes?: PacienteUncheckedCreateNestedManyWithoutProfissionalInput
     agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutProfissionalInput
+    Formulario?: FormularioUncheckedCreateNestedManyWithoutProfissionalInput
   }
 
   export type ProfissionalCreateOrConnectWithoutAtendimentosInput = {
@@ -21654,6 +25417,38 @@ export namespace Prisma {
     create: XOR<ProcedimentoCreateWithoutAtendimentosInput, ProcedimentoUncheckedCreateWithoutAtendimentosInput>
   }
 
+  export type AnamneseCreateWithoutAtendimentoInput = {
+    id?: string
+    respostas: JsonNullValueInput | InputJsonValue
+    observacoes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutAnamneseInput
+    paciente: PacienteCreateNestedOneWithoutAnamneseInput
+    formulario: FormularioCreateNestedOneWithoutAnamnesesInput
+  }
+
+  export type AnamneseUncheckedCreateWithoutAtendimentoInput = {
+    id?: string
+    tenantId: string
+    pacienteId: string
+    formularioId: string
+    respostas: JsonNullValueInput | InputJsonValue
+    observacoes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AnamneseCreateOrConnectWithoutAtendimentoInput = {
+    where: AnamneseWhereUniqueInput
+    create: XOR<AnamneseCreateWithoutAtendimentoInput, AnamneseUncheckedCreateWithoutAtendimentoInput>
+  }
+
+  export type AnamneseCreateManyAtendimentoInputEnvelope = {
+    data: AnamneseCreateManyAtendimentoInput | AnamneseCreateManyAtendimentoInput[]
+    skipDuplicates?: boolean
+  }
+
   export type TenantUpsertWithoutAtendimentosInput = {
     update: XOR<TenantUpdateWithoutAtendimentosInput, TenantUncheckedUpdateWithoutAtendimentosInput>
     create: XOR<TenantCreateWithoutAtendimentosInput, TenantUncheckedCreateWithoutAtendimentosInput>
@@ -21678,6 +25473,8 @@ export namespace Prisma {
     profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
     usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
     whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
+    Formulario?: FormularioUpdateManyWithoutTenantNestedInput
+    Anamnese?: AnamneseUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutAtendimentosInput = {
@@ -21693,6 +25490,8 @@ export namespace Prisma {
     profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
     usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
     whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
+    Formulario?: FormularioUncheckedUpdateManyWithoutTenantNestedInput
+    Anamnese?: AnamneseUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type AgendamentoUpsertWithoutAtendimentoInput = {
@@ -21776,6 +25575,7 @@ export namespace Prisma {
     tenant?: TenantUpdateOneRequiredWithoutPacientesNestedInput
     profissional?: ProfissionalUpdateOneWithoutPacientesNestedInput
     agendamentos?: AgendamentoUpdateManyWithoutPacienteNestedInput
+    Anamnese?: AnamneseUpdateManyWithoutPacienteNestedInput
   }
 
   export type PacienteUncheckedUpdateWithoutAtendimentosInput = {
@@ -21805,6 +25605,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     agendamentos?: AgendamentoUncheckedUpdateManyWithoutPacienteNestedInput
+    Anamnese?: AnamneseUncheckedUpdateManyWithoutPacienteNestedInput
   }
 
   export type ProfissionalUpsertWithoutAtendimentosInput = {
@@ -21830,6 +25631,7 @@ export namespace Prisma {
     tenant?: TenantUpdateOneRequiredWithoutProfissionaisNestedInput
     pacientes?: PacienteUpdateManyWithoutProfissionalNestedInput
     agendamentos?: AgendamentoUpdateManyWithoutProfissionalNestedInput
+    Formulario?: FormularioUpdateManyWithoutProfissionalNestedInput
   }
 
   export type ProfissionalUncheckedUpdateWithoutAtendimentosInput = {
@@ -21844,6 +25646,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     pacientes?: PacienteUncheckedUpdateManyWithoutProfissionalNestedInput
     agendamentos?: AgendamentoUncheckedUpdateManyWithoutProfissionalNestedInput
+    Formulario?: FormularioUncheckedUpdateManyWithoutProfissionalNestedInput
   }
 
   export type ProcedimentoUpsertWithoutAtendimentosInput = {
@@ -21879,6 +25682,22 @@ export namespace Prisma {
     agendamentos?: AgendamentoUncheckedUpdateManyWithoutProcedimentoNestedInput
   }
 
+  export type AnamneseUpsertWithWhereUniqueWithoutAtendimentoInput = {
+    where: AnamneseWhereUniqueInput
+    update: XOR<AnamneseUpdateWithoutAtendimentoInput, AnamneseUncheckedUpdateWithoutAtendimentoInput>
+    create: XOR<AnamneseCreateWithoutAtendimentoInput, AnamneseUncheckedCreateWithoutAtendimentoInput>
+  }
+
+  export type AnamneseUpdateWithWhereUniqueWithoutAtendimentoInput = {
+    where: AnamneseWhereUniqueInput
+    data: XOR<AnamneseUpdateWithoutAtendimentoInput, AnamneseUncheckedUpdateWithoutAtendimentoInput>
+  }
+
+  export type AnamneseUpdateManyWithWhereWithoutAtendimentoInput = {
+    where: AnamneseScalarWhereInput
+    data: XOR<AnamneseUpdateManyMutationInput, AnamneseUncheckedUpdateManyWithoutAtendimentoInput>
+  }
+
   export type TenantCreateWithoutWhatsappConfigInput = {
     id?: string
     nome: string
@@ -21892,6 +25711,8 @@ export namespace Prisma {
     procedimentos?: ProcedimentoCreateNestedManyWithoutTenantInput
     profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
     usuarios?: UsuarioCreateNestedManyWithoutTenantInput
+    Formulario?: FormularioCreateNestedManyWithoutTenantInput
+    Anamnese?: AnamneseCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutWhatsappConfigInput = {
@@ -21907,6 +25728,8 @@ export namespace Prisma {
     procedimentos?: ProcedimentoUncheckedCreateNestedManyWithoutTenantInput
     profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
     usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
+    Formulario?: FormularioUncheckedCreateNestedManyWithoutTenantInput
+    Anamnese?: AnamneseUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutWhatsappConfigInput = {
@@ -21938,6 +25761,8 @@ export namespace Prisma {
     procedimentos?: ProcedimentoUpdateManyWithoutTenantNestedInput
     profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
     usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
+    Formulario?: FormularioUpdateManyWithoutTenantNestedInput
+    Anamnese?: AnamneseUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutWhatsappConfigInput = {
@@ -21953,6 +25778,8 @@ export namespace Prisma {
     procedimentos?: ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput
     profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
     usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
+    Formulario?: FormularioUncheckedUpdateManyWithoutTenantNestedInput
+    Anamnese?: AnamneseUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantCreateWithoutPlanoInput = {
@@ -21968,6 +25795,8 @@ export namespace Prisma {
     profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
     usuarios?: UsuarioCreateNestedManyWithoutTenantInput
     whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
+    Formulario?: FormularioCreateNestedManyWithoutTenantInput
+    Anamnese?: AnamneseCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutPlanoInput = {
@@ -21983,6 +25812,8 @@ export namespace Prisma {
     profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
     usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
     whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
+    Formulario?: FormularioUncheckedCreateNestedManyWithoutTenantInput
+    Anamnese?: AnamneseUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutPlanoInput = {
@@ -22120,6 +25951,7 @@ export namespace Prisma {
     paciente: PacienteCreateNestedOneWithoutAtendimentosInput
     profissional: ProfissionalCreateNestedOneWithoutAtendimentosInput
     procedimento?: ProcedimentoCreateNestedOneWithoutAtendimentosInput
+    Anamnese?: AnamneseCreateNestedManyWithoutAtendimentoInput
   }
 
   export type AtendimentoUncheckedCreateWithoutTenantInput = {
@@ -22134,6 +25966,7 @@ export namespace Prisma {
     canceladoEm?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    Anamnese?: AnamneseUncheckedCreateNestedManyWithoutAtendimentoInput
   }
 
   export type AtendimentoCreateOrConnectWithoutTenantInput = {
@@ -22173,6 +26006,7 @@ export namespace Prisma {
     profissional?: ProfissionalCreateNestedOneWithoutPacientesInput
     agendamentos?: AgendamentoCreateNestedManyWithoutPacienteInput
     atendimentos?: AtendimentoCreateNestedManyWithoutPacienteInput
+    Anamnese?: AnamneseCreateNestedManyWithoutPacienteInput
   }
 
   export type PacienteUncheckedCreateWithoutTenantInput = {
@@ -22202,6 +26036,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutPacienteInput
     atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutPacienteInput
+    Anamnese?: AnamneseUncheckedCreateNestedManyWithoutPacienteInput
   }
 
   export type PacienteCreateOrConnectWithoutTenantInput = {
@@ -22258,6 +26093,7 @@ export namespace Prisma {
     pacientes?: PacienteCreateNestedManyWithoutProfissionalInput
     agendamentos?: AgendamentoCreateNestedManyWithoutProfissionalInput
     atendimentos?: AtendimentoCreateNestedManyWithoutProfissionalInput
+    Formulario?: FormularioCreateNestedManyWithoutProfissionalInput
   }
 
   export type ProfissionalUncheckedCreateWithoutTenantInput = {
@@ -22272,6 +26108,7 @@ export namespace Prisma {
     pacientes?: PacienteUncheckedCreateNestedManyWithoutProfissionalInput
     agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutProfissionalInput
     atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutProfissionalInput
+    Formulario?: FormularioUncheckedCreateNestedManyWithoutProfissionalInput
   }
 
   export type ProfissionalCreateOrConnectWithoutTenantInput = {
@@ -22345,6 +26182,72 @@ export namespace Prisma {
   export type WhatsAppConfigCreateOrConnectWithoutTenantInput = {
     where: WhatsAppConfigWhereUniqueInput
     create: XOR<WhatsAppConfigCreateWithoutTenantInput, WhatsAppConfigUncheckedCreateWithoutTenantInput>
+  }
+
+  export type FormularioCreateWithoutTenantInput = {
+    id?: string
+    nome: string
+    descricao?: string | null
+    campos: JsonNullValueInput | InputJsonValue
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    profissional?: ProfissionalCreateNestedOneWithoutFormularioInput
+    anamneses?: AnamneseCreateNestedManyWithoutFormularioInput
+  }
+
+  export type FormularioUncheckedCreateWithoutTenantInput = {
+    id?: string
+    profissionalId?: string | null
+    nome: string
+    descricao?: string | null
+    campos: JsonNullValueInput | InputJsonValue
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    anamneses?: AnamneseUncheckedCreateNestedManyWithoutFormularioInput
+  }
+
+  export type FormularioCreateOrConnectWithoutTenantInput = {
+    where: FormularioWhereUniqueInput
+    create: XOR<FormularioCreateWithoutTenantInput, FormularioUncheckedCreateWithoutTenantInput>
+  }
+
+  export type FormularioCreateManyTenantInputEnvelope = {
+    data: FormularioCreateManyTenantInput | FormularioCreateManyTenantInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AnamneseCreateWithoutTenantInput = {
+    id?: string
+    respostas: JsonNullValueInput | InputJsonValue
+    observacoes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    paciente: PacienteCreateNestedOneWithoutAnamneseInput
+    formulario: FormularioCreateNestedOneWithoutAnamnesesInput
+    atendimento?: AtendimentoCreateNestedOneWithoutAnamneseInput
+  }
+
+  export type AnamneseUncheckedCreateWithoutTenantInput = {
+    id?: string
+    pacienteId: string
+    formularioId: string
+    atendimentoId?: string | null
+    respostas: JsonNullValueInput | InputJsonValue
+    observacoes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AnamneseCreateOrConnectWithoutTenantInput = {
+    where: AnamneseWhereUniqueInput
+    create: XOR<AnamneseCreateWithoutTenantInput, AnamneseUncheckedCreateWithoutTenantInput>
+  }
+
+  export type AnamneseCreateManyTenantInputEnvelope = {
+    data: AnamneseCreateManyTenantInput | AnamneseCreateManyTenantInput[]
+    skipDuplicates?: boolean
   }
 
   export type PlanoUpsertWithoutTenantsInput = {
@@ -22570,6 +26473,38 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type FormularioUpsertWithWhereUniqueWithoutTenantInput = {
+    where: FormularioWhereUniqueInput
+    update: XOR<FormularioUpdateWithoutTenantInput, FormularioUncheckedUpdateWithoutTenantInput>
+    create: XOR<FormularioCreateWithoutTenantInput, FormularioUncheckedCreateWithoutTenantInput>
+  }
+
+  export type FormularioUpdateWithWhereUniqueWithoutTenantInput = {
+    where: FormularioWhereUniqueInput
+    data: XOR<FormularioUpdateWithoutTenantInput, FormularioUncheckedUpdateWithoutTenantInput>
+  }
+
+  export type FormularioUpdateManyWithWhereWithoutTenantInput = {
+    where: FormularioScalarWhereInput
+    data: XOR<FormularioUpdateManyMutationInput, FormularioUncheckedUpdateManyWithoutTenantInput>
+  }
+
+  export type AnamneseUpsertWithWhereUniqueWithoutTenantInput = {
+    where: AnamneseWhereUniqueInput
+    update: XOR<AnamneseUpdateWithoutTenantInput, AnamneseUncheckedUpdateWithoutTenantInput>
+    create: XOR<AnamneseCreateWithoutTenantInput, AnamneseUncheckedCreateWithoutTenantInput>
+  }
+
+  export type AnamneseUpdateWithWhereUniqueWithoutTenantInput = {
+    where: AnamneseWhereUniqueInput
+    data: XOR<AnamneseUpdateWithoutTenantInput, AnamneseUncheckedUpdateWithoutTenantInput>
+  }
+
+  export type AnamneseUpdateManyWithWhereWithoutTenantInput = {
+    where: AnamneseScalarWhereInput
+    data: XOR<AnamneseUpdateManyMutationInput, AnamneseUncheckedUpdateManyWithoutTenantInput>
+  }
+
   export type UsuarioCreateWithoutAutorizacoesInput = {
     id?: string
     nome: string
@@ -22630,6 +26565,574 @@ export namespace Prisma {
     senha?: StringFieldUpdateOperationsInput | string
     tipo?: EnumTipoUsuarioFieldUpdateOperationsInput | $Enums.TipoUsuario
     ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TenantCreateWithoutFormularioInput = {
+    id?: string
+    nome: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    plano: PlanoCreateNestedOneWithoutTenantsInput
+    agendamentos?: AgendamentoCreateNestedManyWithoutTenantInput
+    atendimentos?: AtendimentoCreateNestedManyWithoutTenantInput
+    pacientes?: PacienteCreateNestedManyWithoutTenantInput
+    procedimentos?: ProcedimentoCreateNestedManyWithoutTenantInput
+    profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
+    usuarios?: UsuarioCreateNestedManyWithoutTenantInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
+    Anamnese?: AnamneseCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateWithoutFormularioInput = {
+    id?: string
+    nome: string
+    planoId: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutTenantInput
+    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutTenantInput
+    pacientes?: PacienteUncheckedCreateNestedManyWithoutTenantInput
+    procedimentos?: ProcedimentoUncheckedCreateNestedManyWithoutTenantInput
+    profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
+    usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
+    Anamnese?: AnamneseUncheckedCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantCreateOrConnectWithoutFormularioInput = {
+    where: TenantWhereUniqueInput
+    create: XOR<TenantCreateWithoutFormularioInput, TenantUncheckedCreateWithoutFormularioInput>
+  }
+
+  export type ProfissionalCreateWithoutFormularioInput = {
+    id?: string
+    nome: string
+    especialidade?: string | null
+    cor?: string
+    observacoes?: string | null
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutProfissionaisInput
+    pacientes?: PacienteCreateNestedManyWithoutProfissionalInput
+    agendamentos?: AgendamentoCreateNestedManyWithoutProfissionalInput
+    atendimentos?: AtendimentoCreateNestedManyWithoutProfissionalInput
+  }
+
+  export type ProfissionalUncheckedCreateWithoutFormularioInput = {
+    id?: string
+    tenantId: string
+    nome: string
+    especialidade?: string | null
+    cor?: string
+    observacoes?: string | null
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    pacientes?: PacienteUncheckedCreateNestedManyWithoutProfissionalInput
+    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutProfissionalInput
+    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutProfissionalInput
+  }
+
+  export type ProfissionalCreateOrConnectWithoutFormularioInput = {
+    where: ProfissionalWhereUniqueInput
+    create: XOR<ProfissionalCreateWithoutFormularioInput, ProfissionalUncheckedCreateWithoutFormularioInput>
+  }
+
+  export type AnamneseCreateWithoutFormularioInput = {
+    id?: string
+    respostas: JsonNullValueInput | InputJsonValue
+    observacoes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutAnamneseInput
+    paciente: PacienteCreateNestedOneWithoutAnamneseInput
+    atendimento?: AtendimentoCreateNestedOneWithoutAnamneseInput
+  }
+
+  export type AnamneseUncheckedCreateWithoutFormularioInput = {
+    id?: string
+    tenantId: string
+    pacienteId: string
+    atendimentoId?: string | null
+    respostas: JsonNullValueInput | InputJsonValue
+    observacoes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AnamneseCreateOrConnectWithoutFormularioInput = {
+    where: AnamneseWhereUniqueInput
+    create: XOR<AnamneseCreateWithoutFormularioInput, AnamneseUncheckedCreateWithoutFormularioInput>
+  }
+
+  export type AnamneseCreateManyFormularioInputEnvelope = {
+    data: AnamneseCreateManyFormularioInput | AnamneseCreateManyFormularioInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TenantUpsertWithoutFormularioInput = {
+    update: XOR<TenantUpdateWithoutFormularioInput, TenantUncheckedUpdateWithoutFormularioInput>
+    create: XOR<TenantCreateWithoutFormularioInput, TenantUncheckedCreateWithoutFormularioInput>
+    where?: TenantWhereInput
+  }
+
+  export type TenantUpdateToOneWithWhereWithoutFormularioInput = {
+    where?: TenantWhereInput
+    data: XOR<TenantUpdateWithoutFormularioInput, TenantUncheckedUpdateWithoutFormularioInput>
+  }
+
+  export type TenantUpdateWithoutFormularioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    plano?: PlanoUpdateOneRequiredWithoutTenantsNestedInput
+    agendamentos?: AgendamentoUpdateManyWithoutTenantNestedInput
+    atendimentos?: AtendimentoUpdateManyWithoutTenantNestedInput
+    pacientes?: PacienteUpdateManyWithoutTenantNestedInput
+    procedimentos?: ProcedimentoUpdateManyWithoutTenantNestedInput
+    profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
+    usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
+    Anamnese?: AnamneseUpdateManyWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateWithoutFormularioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    planoId?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUncheckedUpdateManyWithoutTenantNestedInput
+    atendimentos?: AtendimentoUncheckedUpdateManyWithoutTenantNestedInput
+    pacientes?: PacienteUncheckedUpdateManyWithoutTenantNestedInput
+    procedimentos?: ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput
+    profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
+    usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
+    Anamnese?: AnamneseUncheckedUpdateManyWithoutTenantNestedInput
+  }
+
+  export type ProfissionalUpsertWithoutFormularioInput = {
+    update: XOR<ProfissionalUpdateWithoutFormularioInput, ProfissionalUncheckedUpdateWithoutFormularioInput>
+    create: XOR<ProfissionalCreateWithoutFormularioInput, ProfissionalUncheckedCreateWithoutFormularioInput>
+    where?: ProfissionalWhereInput
+  }
+
+  export type ProfissionalUpdateToOneWithWhereWithoutFormularioInput = {
+    where?: ProfissionalWhereInput
+    data: XOR<ProfissionalUpdateWithoutFormularioInput, ProfissionalUncheckedUpdateWithoutFormularioInput>
+  }
+
+  export type ProfissionalUpdateWithoutFormularioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    especialidade?: NullableStringFieldUpdateOperationsInput | string | null
+    cor?: StringFieldUpdateOperationsInput | string
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutProfissionaisNestedInput
+    pacientes?: PacienteUpdateManyWithoutProfissionalNestedInput
+    agendamentos?: AgendamentoUpdateManyWithoutProfissionalNestedInput
+    atendimentos?: AtendimentoUpdateManyWithoutProfissionalNestedInput
+  }
+
+  export type ProfissionalUncheckedUpdateWithoutFormularioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    especialidade?: NullableStringFieldUpdateOperationsInput | string | null
+    cor?: StringFieldUpdateOperationsInput | string
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    pacientes?: PacienteUncheckedUpdateManyWithoutProfissionalNestedInput
+    agendamentos?: AgendamentoUncheckedUpdateManyWithoutProfissionalNestedInput
+    atendimentos?: AtendimentoUncheckedUpdateManyWithoutProfissionalNestedInput
+  }
+
+  export type AnamneseUpsertWithWhereUniqueWithoutFormularioInput = {
+    where: AnamneseWhereUniqueInput
+    update: XOR<AnamneseUpdateWithoutFormularioInput, AnamneseUncheckedUpdateWithoutFormularioInput>
+    create: XOR<AnamneseCreateWithoutFormularioInput, AnamneseUncheckedCreateWithoutFormularioInput>
+  }
+
+  export type AnamneseUpdateWithWhereUniqueWithoutFormularioInput = {
+    where: AnamneseWhereUniqueInput
+    data: XOR<AnamneseUpdateWithoutFormularioInput, AnamneseUncheckedUpdateWithoutFormularioInput>
+  }
+
+  export type AnamneseUpdateManyWithWhereWithoutFormularioInput = {
+    where: AnamneseScalarWhereInput
+    data: XOR<AnamneseUpdateManyMutationInput, AnamneseUncheckedUpdateManyWithoutFormularioInput>
+  }
+
+  export type TenantCreateWithoutAnamneseInput = {
+    id?: string
+    nome: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    plano: PlanoCreateNestedOneWithoutTenantsInput
+    agendamentos?: AgendamentoCreateNestedManyWithoutTenantInput
+    atendimentos?: AtendimentoCreateNestedManyWithoutTenantInput
+    pacientes?: PacienteCreateNestedManyWithoutTenantInput
+    procedimentos?: ProcedimentoCreateNestedManyWithoutTenantInput
+    profissionais?: ProfissionalCreateNestedManyWithoutTenantInput
+    usuarios?: UsuarioCreateNestedManyWithoutTenantInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutTenantInput
+    Formulario?: FormularioCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateWithoutAnamneseInput = {
+    id?: string
+    nome: string
+    planoId: string
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutTenantInput
+    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutTenantInput
+    pacientes?: PacienteUncheckedCreateNestedManyWithoutTenantInput
+    procedimentos?: ProcedimentoUncheckedCreateNestedManyWithoutTenantInput
+    profissionais?: ProfissionalUncheckedCreateNestedManyWithoutTenantInput
+    usuarios?: UsuarioUncheckedCreateNestedManyWithoutTenantInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
+    Formulario?: FormularioUncheckedCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantCreateOrConnectWithoutAnamneseInput = {
+    where: TenantWhereUniqueInput
+    create: XOR<TenantCreateWithoutAnamneseInput, TenantUncheckedCreateWithoutAnamneseInput>
+  }
+
+  export type PacienteCreateWithoutAnamneseInput = {
+    id?: string
+    nome: string
+    cpf?: string | null
+    dataNascimento?: Date | string | null
+    telefone: string
+    telefone2?: string | null
+    email?: string | null
+    cep?: string | null
+    logradouro?: string | null
+    numero?: string | null
+    complemento?: string | null
+    bairro?: string | null
+    cidade?: string | null
+    estado?: string | null
+    alergias?: string | null
+    menorIdade?: boolean
+    responsavelNome?: string | null
+    responsavelCpf?: string | null
+    responsavelTelefone?: string | null
+    responsavelParentesco?: string | null
+    observacoes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutPacientesInput
+    profissional?: ProfissionalCreateNestedOneWithoutPacientesInput
+    agendamentos?: AgendamentoCreateNestedManyWithoutPacienteInput
+    atendimentos?: AtendimentoCreateNestedManyWithoutPacienteInput
+  }
+
+  export type PacienteUncheckedCreateWithoutAnamneseInput = {
+    id?: string
+    tenantId: string
+    profissionalId?: string | null
+    nome: string
+    cpf?: string | null
+    dataNascimento?: Date | string | null
+    telefone: string
+    telefone2?: string | null
+    email?: string | null
+    cep?: string | null
+    logradouro?: string | null
+    numero?: string | null
+    complemento?: string | null
+    bairro?: string | null
+    cidade?: string | null
+    estado?: string | null
+    alergias?: string | null
+    menorIdade?: boolean
+    responsavelNome?: string | null
+    responsavelCpf?: string | null
+    responsavelTelefone?: string | null
+    responsavelParentesco?: string | null
+    observacoes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendamentos?: AgendamentoUncheckedCreateNestedManyWithoutPacienteInput
+    atendimentos?: AtendimentoUncheckedCreateNestedManyWithoutPacienteInput
+  }
+
+  export type PacienteCreateOrConnectWithoutAnamneseInput = {
+    where: PacienteWhereUniqueInput
+    create: XOR<PacienteCreateWithoutAnamneseInput, PacienteUncheckedCreateWithoutAnamneseInput>
+  }
+
+  export type FormularioCreateWithoutAnamnesesInput = {
+    id?: string
+    nome: string
+    descricao?: string | null
+    campos: JsonNullValueInput | InputJsonValue
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutFormularioInput
+    profissional?: ProfissionalCreateNestedOneWithoutFormularioInput
+  }
+
+  export type FormularioUncheckedCreateWithoutAnamnesesInput = {
+    id?: string
+    tenantId: string
+    profissionalId?: string | null
+    nome: string
+    descricao?: string | null
+    campos: JsonNullValueInput | InputJsonValue
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FormularioCreateOrConnectWithoutAnamnesesInput = {
+    where: FormularioWhereUniqueInput
+    create: XOR<FormularioCreateWithoutAnamnesesInput, FormularioUncheckedCreateWithoutAnamnesesInput>
+  }
+
+  export type AtendimentoCreateWithoutAnamneseInput = {
+    id?: string
+    anotacoes?: string | null
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: boolean
+    canceladoEm?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutAtendimentosInput
+    agendamento: AgendamentoCreateNestedOneWithoutAtendimentoInput
+    paciente: PacienteCreateNestedOneWithoutAtendimentosInput
+    profissional: ProfissionalCreateNestedOneWithoutAtendimentosInput
+    procedimento?: ProcedimentoCreateNestedOneWithoutAtendimentosInput
+  }
+
+  export type AtendimentoUncheckedCreateWithoutAnamneseInput = {
+    id?: string
+    tenantId: string
+    agendamentoId: string
+    pacienteId: string
+    profissionalId: string
+    procedimentoId?: string | null
+    anotacoes?: string | null
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: boolean
+    canceladoEm?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AtendimentoCreateOrConnectWithoutAnamneseInput = {
+    where: AtendimentoWhereUniqueInput
+    create: XOR<AtendimentoCreateWithoutAnamneseInput, AtendimentoUncheckedCreateWithoutAnamneseInput>
+  }
+
+  export type TenantUpsertWithoutAnamneseInput = {
+    update: XOR<TenantUpdateWithoutAnamneseInput, TenantUncheckedUpdateWithoutAnamneseInput>
+    create: XOR<TenantCreateWithoutAnamneseInput, TenantUncheckedCreateWithoutAnamneseInput>
+    where?: TenantWhereInput
+  }
+
+  export type TenantUpdateToOneWithWhereWithoutAnamneseInput = {
+    where?: TenantWhereInput
+    data: XOR<TenantUpdateWithoutAnamneseInput, TenantUncheckedUpdateWithoutAnamneseInput>
+  }
+
+  export type TenantUpdateWithoutAnamneseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    plano?: PlanoUpdateOneRequiredWithoutTenantsNestedInput
+    agendamentos?: AgendamentoUpdateManyWithoutTenantNestedInput
+    atendimentos?: AtendimentoUpdateManyWithoutTenantNestedInput
+    pacientes?: PacienteUpdateManyWithoutTenantNestedInput
+    procedimentos?: ProcedimentoUpdateManyWithoutTenantNestedInput
+    profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
+    usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
+    Formulario?: FormularioUpdateManyWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateWithoutAnamneseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    planoId?: StringFieldUpdateOperationsInput | string
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUncheckedUpdateManyWithoutTenantNestedInput
+    atendimentos?: AtendimentoUncheckedUpdateManyWithoutTenantNestedInput
+    pacientes?: PacienteUncheckedUpdateManyWithoutTenantNestedInput
+    procedimentos?: ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput
+    profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
+    usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
+    Formulario?: FormularioUncheckedUpdateManyWithoutTenantNestedInput
+  }
+
+  export type PacienteUpsertWithoutAnamneseInput = {
+    update: XOR<PacienteUpdateWithoutAnamneseInput, PacienteUncheckedUpdateWithoutAnamneseInput>
+    create: XOR<PacienteCreateWithoutAnamneseInput, PacienteUncheckedCreateWithoutAnamneseInput>
+    where?: PacienteWhereInput
+  }
+
+  export type PacienteUpdateToOneWithWhereWithoutAnamneseInput = {
+    where?: PacienteWhereInput
+    data: XOR<PacienteUpdateWithoutAnamneseInput, PacienteUncheckedUpdateWithoutAnamneseInput>
+  }
+
+  export type PacienteUpdateWithoutAnamneseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
+    dataNascimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    telefone?: StringFieldUpdateOperationsInput | string
+    telefone2?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    cep?: NullableStringFieldUpdateOperationsInput | string | null
+    logradouro?: NullableStringFieldUpdateOperationsInput | string | null
+    numero?: NullableStringFieldUpdateOperationsInput | string | null
+    complemento?: NullableStringFieldUpdateOperationsInput | string | null
+    bairro?: NullableStringFieldUpdateOperationsInput | string | null
+    cidade?: NullableStringFieldUpdateOperationsInput | string | null
+    estado?: NullableStringFieldUpdateOperationsInput | string | null
+    alergias?: NullableStringFieldUpdateOperationsInput | string | null
+    menorIdade?: BoolFieldUpdateOperationsInput | boolean
+    responsavelNome?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelCpf?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelTelefone?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelParentesco?: NullableStringFieldUpdateOperationsInput | string | null
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutPacientesNestedInput
+    profissional?: ProfissionalUpdateOneWithoutPacientesNestedInput
+    agendamentos?: AgendamentoUpdateManyWithoutPacienteNestedInput
+    atendimentos?: AtendimentoUpdateManyWithoutPacienteNestedInput
+  }
+
+  export type PacienteUncheckedUpdateWithoutAnamneseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    profissionalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nome?: StringFieldUpdateOperationsInput | string
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
+    dataNascimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    telefone?: StringFieldUpdateOperationsInput | string
+    telefone2?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    cep?: NullableStringFieldUpdateOperationsInput | string | null
+    logradouro?: NullableStringFieldUpdateOperationsInput | string | null
+    numero?: NullableStringFieldUpdateOperationsInput | string | null
+    complemento?: NullableStringFieldUpdateOperationsInput | string | null
+    bairro?: NullableStringFieldUpdateOperationsInput | string | null
+    cidade?: NullableStringFieldUpdateOperationsInput | string | null
+    estado?: NullableStringFieldUpdateOperationsInput | string | null
+    alergias?: NullableStringFieldUpdateOperationsInput | string | null
+    menorIdade?: BoolFieldUpdateOperationsInput | boolean
+    responsavelNome?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelCpf?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelTelefone?: NullableStringFieldUpdateOperationsInput | string | null
+    responsavelParentesco?: NullableStringFieldUpdateOperationsInput | string | null
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendamentos?: AgendamentoUncheckedUpdateManyWithoutPacienteNestedInput
+    atendimentos?: AtendimentoUncheckedUpdateManyWithoutPacienteNestedInput
+  }
+
+  export type FormularioUpsertWithoutAnamnesesInput = {
+    update: XOR<FormularioUpdateWithoutAnamnesesInput, FormularioUncheckedUpdateWithoutAnamnesesInput>
+    create: XOR<FormularioCreateWithoutAnamnesesInput, FormularioUncheckedCreateWithoutAnamnesesInput>
+    where?: FormularioWhereInput
+  }
+
+  export type FormularioUpdateToOneWithWhereWithoutAnamnesesInput = {
+    where?: FormularioWhereInput
+    data: XOR<FormularioUpdateWithoutAnamnesesInput, FormularioUncheckedUpdateWithoutAnamnesesInput>
+  }
+
+  export type FormularioUpdateWithoutAnamnesesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    campos?: JsonNullValueInput | InputJsonValue
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutFormularioNestedInput
+    profissional?: ProfissionalUpdateOneWithoutFormularioNestedInput
+  }
+
+  export type FormularioUncheckedUpdateWithoutAnamnesesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    profissionalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nome?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    campos?: JsonNullValueInput | InputJsonValue
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AtendimentoUpsertWithoutAnamneseInput = {
+    update: XOR<AtendimentoUpdateWithoutAnamneseInput, AtendimentoUncheckedUpdateWithoutAnamneseInput>
+    create: XOR<AtendimentoCreateWithoutAnamneseInput, AtendimentoUncheckedCreateWithoutAnamneseInput>
+    where?: AtendimentoWhereInput
+  }
+
+  export type AtendimentoUpdateToOneWithWhereWithoutAnamneseInput = {
+    where?: AtendimentoWhereInput
+    data: XOR<AtendimentoUpdateWithoutAnamneseInput, AtendimentoUncheckedUpdateWithoutAnamneseInput>
+  }
+
+  export type AtendimentoUpdateWithoutAnamneseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: BoolFieldUpdateOperationsInput | boolean
+    canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutAtendimentosNestedInput
+    agendamento?: AgendamentoUpdateOneRequiredWithoutAtendimentoNestedInput
+    paciente?: PacienteUpdateOneRequiredWithoutAtendimentosNestedInput
+    profissional?: ProfissionalUpdateOneRequiredWithoutAtendimentosNestedInput
+    procedimento?: ProcedimentoUpdateOneWithoutAtendimentosNestedInput
+  }
+
+  export type AtendimentoUncheckedUpdateWithoutAnamneseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    agendamentoId?: StringFieldUpdateOperationsInput | string
+    pacienteId?: StringFieldUpdateOperationsInput | string
+    profissionalId?: StringFieldUpdateOperationsInput | string
+    procedimentoId?: NullableStringFieldUpdateOperationsInput | string | null
+    anotacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    procedimentosRealizados?: JsonNullValueInput | InputJsonValue
+    cancelado?: BoolFieldUpdateOperationsInput | boolean
+    canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -22730,6 +27233,17 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type FormularioCreateManyProfissionalInput = {
+    id?: string
+    tenantId: string
+    nome: string
+    descricao?: string | null
+    campos: JsonNullValueInput | InputJsonValue
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type PacienteUpdateWithoutProfissionalInput = {
     id?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
@@ -22757,6 +27271,7 @@ export namespace Prisma {
     tenant?: TenantUpdateOneRequiredWithoutPacientesNestedInput
     agendamentos?: AgendamentoUpdateManyWithoutPacienteNestedInput
     atendimentos?: AtendimentoUpdateManyWithoutPacienteNestedInput
+    Anamnese?: AnamneseUpdateManyWithoutPacienteNestedInput
   }
 
   export type PacienteUncheckedUpdateWithoutProfissionalInput = {
@@ -22786,6 +27301,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     agendamentos?: AgendamentoUncheckedUpdateManyWithoutPacienteNestedInput
     atendimentos?: AtendimentoUncheckedUpdateManyWithoutPacienteNestedInput
+    Anamnese?: AnamneseUncheckedUpdateManyWithoutPacienteNestedInput
   }
 
   export type PacienteUncheckedUpdateManyWithoutProfissionalInput = {
@@ -22874,6 +27390,7 @@ export namespace Prisma {
     agendamento?: AgendamentoUpdateOneRequiredWithoutAtendimentoNestedInput
     paciente?: PacienteUpdateOneRequiredWithoutAtendimentosNestedInput
     procedimento?: ProcedimentoUpdateOneWithoutAtendimentosNestedInput
+    Anamnese?: AnamneseUpdateManyWithoutAtendimentoNestedInput
   }
 
   export type AtendimentoUncheckedUpdateWithoutProfissionalInput = {
@@ -22888,6 +27405,7 @@ export namespace Prisma {
     canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Anamnese?: AnamneseUncheckedUpdateManyWithoutAtendimentoNestedInput
   }
 
   export type AtendimentoUncheckedUpdateManyWithoutProfissionalInput = {
@@ -22900,6 +27418,41 @@ export namespace Prisma {
     procedimentosRealizados?: JsonNullValueInput | InputJsonValue
     cancelado?: BoolFieldUpdateOperationsInput | boolean
     canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FormularioUpdateWithoutProfissionalInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    campos?: JsonNullValueInput | InputJsonValue
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutFormularioNestedInput
+    anamneses?: AnamneseUpdateManyWithoutFormularioNestedInput
+  }
+
+  export type FormularioUncheckedUpdateWithoutProfissionalInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    campos?: JsonNullValueInput | InputJsonValue
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    anamneses?: AnamneseUncheckedUpdateManyWithoutFormularioNestedInput
+  }
+
+  export type FormularioUncheckedUpdateManyWithoutProfissionalInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    campos?: JsonNullValueInput | InputJsonValue
+    ativo?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -22929,6 +27482,17 @@ export namespace Prisma {
     procedimentosRealizados?: JsonNullValueInput | InputJsonValue
     cancelado?: boolean
     canceladoEm?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AnamneseCreateManyPacienteInput = {
+    id?: string
+    tenantId: string
+    formularioId: string
+    atendimentoId?: string | null
+    respostas: JsonNullValueInput | InputJsonValue
+    observacoes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -22992,6 +27556,7 @@ export namespace Prisma {
     agendamento?: AgendamentoUpdateOneRequiredWithoutAtendimentoNestedInput
     profissional?: ProfissionalUpdateOneRequiredWithoutAtendimentosNestedInput
     procedimento?: ProcedimentoUpdateOneWithoutAtendimentosNestedInput
+    Anamnese?: AnamneseUpdateManyWithoutAtendimentoNestedInput
   }
 
   export type AtendimentoUncheckedUpdateWithoutPacienteInput = {
@@ -23006,6 +27571,7 @@ export namespace Prisma {
     canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Anamnese?: AnamneseUncheckedUpdateManyWithoutAtendimentoNestedInput
   }
 
   export type AtendimentoUncheckedUpdateManyWithoutPacienteInput = {
@@ -23018,6 +27584,39 @@ export namespace Prisma {
     procedimentosRealizados?: JsonNullValueInput | InputJsonValue
     cancelado?: BoolFieldUpdateOperationsInput | boolean
     canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AnamneseUpdateWithoutPacienteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    respostas?: JsonNullValueInput | InputJsonValue
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutAnamneseNestedInput
+    formulario?: FormularioUpdateOneRequiredWithoutAnamnesesNestedInput
+    atendimento?: AtendimentoUpdateOneWithoutAnamneseNestedInput
+  }
+
+  export type AnamneseUncheckedUpdateWithoutPacienteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    formularioId?: StringFieldUpdateOperationsInput | string
+    atendimentoId?: NullableStringFieldUpdateOperationsInput | string | null
+    respostas?: JsonNullValueInput | InputJsonValue
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AnamneseUncheckedUpdateManyWithoutPacienteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    formularioId?: StringFieldUpdateOperationsInput | string
+    atendimentoId?: NullableStringFieldUpdateOperationsInput | string | null
+    respostas?: JsonNullValueInput | InputJsonValue
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -23110,6 +27709,7 @@ export namespace Prisma {
     agendamento?: AgendamentoUpdateOneRequiredWithoutAtendimentoNestedInput
     paciente?: PacienteUpdateOneRequiredWithoutAtendimentosNestedInput
     profissional?: ProfissionalUpdateOneRequiredWithoutAtendimentosNestedInput
+    Anamnese?: AnamneseUpdateManyWithoutAtendimentoNestedInput
   }
 
   export type AtendimentoUncheckedUpdateWithoutProcedimentoInput = {
@@ -23124,6 +27724,7 @@ export namespace Prisma {
     canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Anamnese?: AnamneseUncheckedUpdateManyWithoutAtendimentoNestedInput
   }
 
   export type AtendimentoUncheckedUpdateManyWithoutProcedimentoInput = {
@@ -23136,6 +27737,50 @@ export namespace Prisma {
     procedimentosRealizados?: JsonNullValueInput | InputJsonValue
     cancelado?: BoolFieldUpdateOperationsInput | boolean
     canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AnamneseCreateManyAtendimentoInput = {
+    id?: string
+    tenantId: string
+    pacienteId: string
+    formularioId: string
+    respostas: JsonNullValueInput | InputJsonValue
+    observacoes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AnamneseUpdateWithoutAtendimentoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    respostas?: JsonNullValueInput | InputJsonValue
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutAnamneseNestedInput
+    paciente?: PacienteUpdateOneRequiredWithoutAnamneseNestedInput
+    formulario?: FormularioUpdateOneRequiredWithoutAnamnesesNestedInput
+  }
+
+  export type AnamneseUncheckedUpdateWithoutAtendimentoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    pacienteId?: StringFieldUpdateOperationsInput | string
+    formularioId?: StringFieldUpdateOperationsInput | string
+    respostas?: JsonNullValueInput | InputJsonValue
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AnamneseUncheckedUpdateManyWithoutAtendimentoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    pacienteId?: StringFieldUpdateOperationsInput | string
+    formularioId?: StringFieldUpdateOperationsInput | string
+    respostas?: JsonNullValueInput | InputJsonValue
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -23161,6 +27806,8 @@ export namespace Prisma {
     profissionais?: ProfissionalUpdateManyWithoutTenantNestedInput
     usuarios?: UsuarioUpdateManyWithoutTenantNestedInput
     whatsappConfig?: WhatsAppConfigUpdateOneWithoutTenantNestedInput
+    Formulario?: FormularioUpdateManyWithoutTenantNestedInput
+    Anamnese?: AnamneseUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutPlanoInput = {
@@ -23176,6 +27823,8 @@ export namespace Prisma {
     profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
     usuarios?: UsuarioUncheckedUpdateManyWithoutTenantNestedInput
     whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
+    Formulario?: FormularioUncheckedUpdateManyWithoutTenantNestedInput
+    Anamnese?: AnamneseUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateManyWithoutPlanoInput = {
@@ -23273,6 +27922,28 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type FormularioCreateManyTenantInput = {
+    id?: string
+    profissionalId?: string | null
+    nome: string
+    descricao?: string | null
+    campos: JsonNullValueInput | InputJsonValue
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AnamneseCreateManyTenantInput = {
+    id?: string
+    pacienteId: string
+    formularioId: string
+    atendimentoId?: string | null
+    respostas: JsonNullValueInput | InputJsonValue
+    observacoes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type AgendamentoUpdateWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string
     dataHora?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23332,6 +28003,7 @@ export namespace Prisma {
     paciente?: PacienteUpdateOneRequiredWithoutAtendimentosNestedInput
     profissional?: ProfissionalUpdateOneRequiredWithoutAtendimentosNestedInput
     procedimento?: ProcedimentoUpdateOneWithoutAtendimentosNestedInput
+    Anamnese?: AnamneseUpdateManyWithoutAtendimentoNestedInput
   }
 
   export type AtendimentoUncheckedUpdateWithoutTenantInput = {
@@ -23346,6 +28018,7 @@ export namespace Prisma {
     canceladoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Anamnese?: AnamneseUncheckedUpdateManyWithoutAtendimentoNestedInput
   }
 
   export type AtendimentoUncheckedUpdateManyWithoutTenantInput = {
@@ -23389,6 +28062,7 @@ export namespace Prisma {
     profissional?: ProfissionalUpdateOneWithoutPacientesNestedInput
     agendamentos?: AgendamentoUpdateManyWithoutPacienteNestedInput
     atendimentos?: AtendimentoUpdateManyWithoutPacienteNestedInput
+    Anamnese?: AnamneseUpdateManyWithoutPacienteNestedInput
   }
 
   export type PacienteUncheckedUpdateWithoutTenantInput = {
@@ -23418,6 +28092,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     agendamentos?: AgendamentoUncheckedUpdateManyWithoutPacienteNestedInput
     atendimentos?: AtendimentoUncheckedUpdateManyWithoutPacienteNestedInput
+    Anamnese?: AnamneseUncheckedUpdateManyWithoutPacienteNestedInput
   }
 
   export type PacienteUncheckedUpdateManyWithoutTenantInput = {
@@ -23490,6 +28165,7 @@ export namespace Prisma {
     pacientes?: PacienteUpdateManyWithoutProfissionalNestedInput
     agendamentos?: AgendamentoUpdateManyWithoutProfissionalNestedInput
     atendimentos?: AtendimentoUpdateManyWithoutProfissionalNestedInput
+    Formulario?: FormularioUpdateManyWithoutProfissionalNestedInput
   }
 
   export type ProfissionalUncheckedUpdateWithoutTenantInput = {
@@ -23504,6 +28180,7 @@ export namespace Prisma {
     pacientes?: PacienteUncheckedUpdateManyWithoutProfissionalNestedInput
     agendamentos?: AgendamentoUncheckedUpdateManyWithoutProfissionalNestedInput
     atendimentos?: AtendimentoUncheckedUpdateManyWithoutProfissionalNestedInput
+    Formulario?: FormularioUncheckedUpdateManyWithoutProfissionalNestedInput
   }
 
   export type ProfissionalUncheckedUpdateManyWithoutTenantInput = {
@@ -23548,6 +28225,118 @@ export namespace Prisma {
     senha?: StringFieldUpdateOperationsInput | string
     tipo?: EnumTipoUsuarioFieldUpdateOperationsInput | $Enums.TipoUsuario
     ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FormularioUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    campos?: JsonNullValueInput | InputJsonValue
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profissional?: ProfissionalUpdateOneWithoutFormularioNestedInput
+    anamneses?: AnamneseUpdateManyWithoutFormularioNestedInput
+  }
+
+  export type FormularioUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    profissionalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nome?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    campos?: JsonNullValueInput | InputJsonValue
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    anamneses?: AnamneseUncheckedUpdateManyWithoutFormularioNestedInput
+  }
+
+  export type FormularioUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    profissionalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nome?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    campos?: JsonNullValueInput | InputJsonValue
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AnamneseUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    respostas?: JsonNullValueInput | InputJsonValue
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paciente?: PacienteUpdateOneRequiredWithoutAnamneseNestedInput
+    formulario?: FormularioUpdateOneRequiredWithoutAnamnesesNestedInput
+    atendimento?: AtendimentoUpdateOneWithoutAnamneseNestedInput
+  }
+
+  export type AnamneseUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    pacienteId?: StringFieldUpdateOperationsInput | string
+    formularioId?: StringFieldUpdateOperationsInput | string
+    atendimentoId?: NullableStringFieldUpdateOperationsInput | string | null
+    respostas?: JsonNullValueInput | InputJsonValue
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AnamneseUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    pacienteId?: StringFieldUpdateOperationsInput | string
+    formularioId?: StringFieldUpdateOperationsInput | string
+    atendimentoId?: NullableStringFieldUpdateOperationsInput | string | null
+    respostas?: JsonNullValueInput | InputJsonValue
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AnamneseCreateManyFormularioInput = {
+    id?: string
+    tenantId: string
+    pacienteId: string
+    atendimentoId?: string | null
+    respostas: JsonNullValueInput | InputJsonValue
+    observacoes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AnamneseUpdateWithoutFormularioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    respostas?: JsonNullValueInput | InputJsonValue
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutAnamneseNestedInput
+    paciente?: PacienteUpdateOneRequiredWithoutAnamneseNestedInput
+    atendimento?: AtendimentoUpdateOneWithoutAnamneseNestedInput
+  }
+
+  export type AnamneseUncheckedUpdateWithoutFormularioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    pacienteId?: StringFieldUpdateOperationsInput | string
+    atendimentoId?: NullableStringFieldUpdateOperationsInput | string | null
+    respostas?: JsonNullValueInput | InputJsonValue
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AnamneseUncheckedUpdateManyWithoutFormularioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    pacienteId?: StringFieldUpdateOperationsInput | string
+    atendimentoId?: NullableStringFieldUpdateOperationsInput | string | null
+    respostas?: JsonNullValueInput | InputJsonValue
+    observacoes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

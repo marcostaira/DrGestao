@@ -275,6 +275,30 @@ exports.Prisma.AutorizacaoScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.FormularioScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  profissionalId: 'profissionalId',
+  nome: 'nome',
+  descricao: 'descricao',
+  campos: 'campos',
+  ativo: 'ativo',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AnamneseScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  pacienteId: 'pacienteId',
+  formularioId: 'formularioId',
+  atendimentoId: 'atendimentoId',
+  respostas: 'respostas',
+  observacoes: 'observacoes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -354,7 +378,9 @@ exports.Prisma.ModelName = {
   LogSistema: 'LogSistema',
   Plano: 'Plano',
   Tenant: 'Tenant',
-  Autorizacao: 'Autorizacao'
+  Autorizacao: 'Autorizacao',
+  Formulario: 'Formulario',
+  Anamnese: 'Anamnese'
 };
 
 /**

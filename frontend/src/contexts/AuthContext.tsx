@@ -37,37 +37,62 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  // Carregar dados do localStorage ao montar
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    const storedTenant = localStorage.getItem("tenant");
-    const token = localStorage.getItem("token");
-
-    if (storedUser && storedTenant && token) {
-      const parsedUser = JSON.parse(storedUser);
-      setUser(parsedUser);
-      setTenant(JSON.parse(storedTenant));
-
-      // Carregar permissões
-      fetchPermissions();
-    }
-
-    setLoading(false);
-  }, []);
-
   // Função para carregar permissões
   const fetchPermissions = async () => {
     try {
+      console.log("🔍 Iniciando carregamento de permissões...");
+
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.warn("⚠️ Sem token, não é possível carregar permissões");
+        return;
+      }
+
       const userPermissions = await AutorizacaoService.getMinhasAutorizacoes();
+      console.log("✅ Permissões carregadas com sucesso:", userPermissions);
       setPermissoes(userPermissions);
-    } catch (error) {
-      console.error("Erro ao carregar permissões:", error);
+    } catch (error: any) {
+      console.error("❌ Erro ao carregar permissões:", error);
+      console.error("Detalhes do erro:", error.response?.data);
     }
   };
+
+  // Carregar dados do localStorage ao montar
+  useEffect(() => {
+    const initAuth = async () => {
+      console.log("🚀 Inicializando Auth...");
+
+      const storedUser = localStorage.getItem("user");
+      const storedTenant = localStorage.getItem("tenant");
+      const token = localStorage.getItem("token");
+
+      console.log("Token existe?", !!token);
+      console.log("User existe?", !!storedUser);
+
+      if (storedUser && storedTenant && token) {
+        const parsedUser = JSON.parse(storedUser);
+        console.log("👤 Usuário carregado:", parsedUser);
+
+        setUser(parsedUser);
+        setTenant(JSON.parse(storedTenant));
+
+        // Carregar permissões ANTES de setar loading = false
+        await fetchPermissions();
+      } else {
+        console.log("⚠️ Dados de autenticação incompletos");
+      }
+
+      setLoading(false);
+      console.log("✅ Auth inicializado");
+    };
+
+    initAuth();
+  }, []);
 
   // Login
   const login = async (credentials: LoginCredentials) => {
     try {
+      console.log("🔑 Fazendo login...");
       const response = await authService.login(credentials);
 
       localStorage.setItem("token", response.token);
@@ -78,17 +103,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(response.user);
       setTenant(response.tenant);
 
+      console.log("✅ Login realizado, carregando permissões...");
+
       // Carregar permissões após login
       await fetchPermissions();
 
       router.push("/dashboard");
     } catch (error) {
+      console.error("❌ Erro no login:", error);
       throw error;
     }
   };
 
   // Logout
   const logout = () => {
+    console.log("👋 Fazendo logout...");
     localStorage.removeItem("token");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("user");
@@ -109,7 +138,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     modulo: string,
     tipo: "visualizar" | "criarAlterar" | "cancelar"
   ): boolean => {
-    return AutorizacaoService.temPermissao(permissoes, modulo, tipo);
+    if (!user) {
+      console.log("❌ Sem usuário logado");
+      return false;
+    }
+
+    // ADMIN sempre tem todas as permissões
+    if (isAdmin) {
+      console.log("✅ Admin tem todas as permissões");
+      return true;
+    }
+
+    // Verificar permissões específicas
+    const hasPermission = AutorizacaoService.temPermissao(
+      permissoes,
+      modulo,
+      tipo
+    );
+
+    if (!hasPermission) {
+      console.log(`❌ Sem permissão: ${modulo}.${tipo}`, { permissoes });
+    }
+
+    return hasPermission;
   };
 
   return (
