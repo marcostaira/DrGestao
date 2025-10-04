@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { PacienteController } from "../controllers/paciente.controller";
 import { authenticate, adminOnly } from "../../../middleware/auth";
+import { autorizar } from "../../../middleware/autorizar";
+import { Modulo } from "../../../types";
 import {
   validateTenant,
   validateResourceOwnership,
@@ -15,7 +17,7 @@ import {
 import Joi from "joi";
 
 // ============================================================================
-// PACIENTE ROUTES
+// PACIENTE ROUTES COM AUTORIZAÇÕES GRANULARES
 // ============================================================================
 
 const router = Router();
@@ -25,27 +27,17 @@ router.use(authenticate);
 router.use(validateTenant);
 
 // ==========================================================================
-// MAIN CRUD ROUTES
+// ROTAS DE LEITURA - REQUER PERMISSÃO DE VISUALIZAR
 // ==========================================================================
-
-/**
- * @route   POST /pacientes
- * @desc    Criar novo paciente
- * @access  Private (Admin/Secretaria)
- */
-router.post(
-  "/",
-  validate({ body: createPacienteSchema }),
-  PacienteController.create
-);
 
 /**
  * @route   GET /pacientes
  * @desc    Listar pacientes com filtros e paginação
- * @access  Private (Admin/Secretaria)
+ * @access  Private (Requer permissão: PACIENTES.visualizar)
  */
 router.get(
   "/",
+  autorizar(Modulo.PACIENTES, "visualizar"),
   validate({
     query: paginationSchema.keys({
       profissionalId: Joi.string().optional(),
@@ -58,54 +50,24 @@ router.get(
 /**
  * @route   GET /pacientes/:id
  * @desc    Obter paciente por ID
- * @access  Private (Admin/Secretaria)
+ * @access  Private (Requer permissão: PACIENTES.visualizar)
  */
 router.get(
   "/:id",
+  autorizar(Modulo.PACIENTES, "visualizar"),
   validate({ params: Joi.object({ id: idSchema }) }),
   validateResourceOwnership("paciente"),
   PacienteController.getById
 );
 
 /**
- * @route   PUT /pacientes/:id
- * @desc    Atualizar paciente
- * @access  Private (Admin/Secretaria)
- */
-router.put(
-  "/:id",
-  validate({
-    params: Joi.object({ id: idSchema }),
-    body: updatePacienteSchema,
-  }),
-  validateResourceOwnership("paciente"),
-  PacienteController.update
-);
-
-/**
- * @route   DELETE /pacientes/:id
- * @desc    Excluir paciente
- * @access  Private (Admin only)
- */
-router.delete(
-  "/:id",
-  validate({ params: Joi.object({ id: idSchema }) }),
-  adminOnly,
-  validateResourceOwnership("paciente"),
-  PacienteController.delete
-);
-
-// ==========================================================================
-// SEARCH AND FILTER ROUTES
-// ==========================================================================
-
-/**
  * @route   GET /pacientes/search/autocomplete
  * @desc    Busca rápida de pacientes para autocomplete
- * @access  Private (Admin/Secretaria)
+ * @access  Private (Requer permissão: PACIENTES.visualizar)
  */
 router.get(
   "/search/autocomplete",
+  autorizar(Modulo.PACIENTES, "visualizar"),
   validate({
     query: Joi.object({
       term: Joi.string().min(2).required().messages({
@@ -121,37 +83,79 @@ router.get(
 /**
  * @route   GET /pacientes/profissional/:profissionalId
  * @desc    Listar pacientes de um profissional específico
- * @access  Private (Admin/Secretaria)
+ * @access  Private (Requer permissão: PACIENTES.visualizar)
  */
 router.get(
   "/profissional/:profissionalId",
+  autorizar(Modulo.PACIENTES, "visualizar"),
   validate({ params: Joi.object({ profissionalId: idSchema }) }),
   PacienteController.getByProfissional
 );
 
-// ==========================================================================
-// STATISTICS ROUTES
-// ==========================================================================
-
 /**
  * @route   GET /pacientes/stats/overview
  * @desc    Obter estatísticas gerais dos pacientes
- * @access  Private (Admin/Secretaria)
+ * @access  Private (Requer permissão: PACIENTES.visualizar)
  */
-router.get("/stats/overview", PacienteController.getStatistics);
+router.get(
+  "/stats/overview",
+  autorizar(Modulo.PACIENTES, "visualizar"),
+  PacienteController.getStatistics
+);
 
 // ==========================================================================
-// BULK OPERATIONS (Admin only)
+// ROTAS DE ESCRITA - REQUER PERMISSÃO DE CRIAR/ALTERAR
 // ==========================================================================
+
+/**
+ * @route   POST /pacientes
+ * @desc    Criar novo paciente
+ * @access  Private (Requer permissão: PACIENTES.criarAlterar)
+ */
+router.post(
+  "/",
+  autorizar(Modulo.PACIENTES, "criarAlterar"),
+  validate({ body: createPacienteSchema }),
+  PacienteController.create
+);
+
+/**
+ * @route   PUT /pacientes/:id
+ * @desc    Atualizar paciente
+ * @access  Private (Requer permissão: PACIENTES.criarAlterar)
+ */
+router.put(
+  "/:id",
+  autorizar(Modulo.PACIENTES, "criarAlterar"),
+  validate({
+    params: Joi.object({ id: idSchema }),
+    body: updatePacienteSchema,
+  }),
+  validateResourceOwnership("paciente"),
+  PacienteController.update
+);
+
+/**
+ * @route   DELETE /pacientes/:id
+ * @desc    Excluir paciente
+ * @access  Private (Requer permissão: PACIENTES.criarAlterar)
+ */
+router.delete(
+  "/:id",
+  autorizar(Modulo.PACIENTES, "criarAlterar"),
+  validate({ params: Joi.object({ id: idSchema }) }),
+  validateResourceOwnership("paciente"),
+  PacienteController.delete
+);
 
 /**
  * @route   POST /pacientes/bulk/assign-profissional
  * @desc    Atribuir profissional a múltiplos pacientes
- * @access  Private (Admin only)
+ * @access  Private (Requer permissão: PACIENTES.criarAlterar)
  */
 router.post(
   "/bulk/assign-profissional",
-  adminOnly,
+  autorizar(Modulo.PACIENTES, "criarAlterar"),
   validate({
     body: Joi.object({
       pacienteIds: Joi.array().items(idSchema).min(1).required().messages({
@@ -169,11 +173,11 @@ router.post(
 /**
  * @route   POST /pacientes/bulk/remove-profissional
  * @desc    Remover profissional de múltiplos pacientes
- * @access  Private (Admin only)
+ * @access  Private (Requer permissão: PACIENTES.criarAlterar)
  */
 router.post(
   "/bulk/remove-profissional",
-  adminOnly,
+  autorizar(Modulo.PACIENTES, "criarAlterar"),
   validate({
     body: Joi.object({
       pacienteIds: Joi.array().items(idSchema).min(1).required().messages({
@@ -185,17 +189,14 @@ router.post(
   PacienteController.bulkRemoveProfissional
 );
 
-// ==========================================================================
-// UTILITY ROUTES
-// ==========================================================================
-
 /**
  * @route   POST /pacientes/validate/phone
  * @desc    Validar formato de telefone
- * @access  Private (Admin/Secretaria)
+ * @access  Private (Requer permissão: PACIENTES.visualizar)
  */
 router.post(
   "/validate/phone",
+  autorizar(Modulo.PACIENTES, "visualizar"),
   validate({
     body: Joi.object({
       telefone: Joi.string().required().messages({

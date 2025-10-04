@@ -18,6 +18,7 @@ import atendimentoRoutes from "./modules/atendimentos/routes/atendimento.routes"
 import agendamentoRoutes from "./modules/agenda/routes/agendamento.routes";
 import usuarioRoutes from "./modules/usuarios/routes/usuario.routes";
 import cepRoutes from "./modules/cep/routes/cep.routes";
+import autorizacaoRoutes from "./modules/autorizacoes/routes/autorizacao.routes";
 
 // Load environment variables
 dotenv.config();
@@ -122,6 +123,7 @@ class App {
     this.app.use("/api/agendamentos", agendamentoRoutes);
     this.app.use("/api/usuarios", usuarioRoutes);
     this.app.use("/api/cep", cepRoutes);
+    this.app.use("/api/autorizacoes", autorizacaoRoutes); // ⬅️ NOVA ROTA
 
     // 404 handler
     this.app.use("*", (req: Request, res: Response) => {

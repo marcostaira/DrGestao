@@ -264,6 +264,16 @@ exports.Prisma.TenantScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.AutorizacaoScalarFieldEnum = {
+  id: 'id',
+  usuarioId: 'usuarioId',
+  modulo: 'modulo',
+  visualizar: 'visualizar',
+  criarAlterar: 'criarAlterar',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -321,6 +331,17 @@ exports.TipoLog = exports.$Enums.TipoLog = {
   DELETE: 'DELETE'
 };
 
+exports.Modulo = exports.$Enums.Modulo = {
+  PACIENTES: 'PACIENTES',
+  PROFISSIONAIS: 'PROFISSIONAIS',
+  PROCEDIMENTOS: 'PROCEDIMENTOS',
+  AGENDA: 'AGENDA',
+  ATENDIMENTOS: 'ATENDIMENTOS',
+  WHATSAPP: 'WHATSAPP',
+  USUARIOS: 'USUARIOS',
+  RELATORIOS: 'RELATORIOS'
+};
+
 exports.Prisma.ModelName = {
   Usuario: 'Usuario',
   Profissional: 'Profissional',
@@ -331,7 +352,8 @@ exports.Prisma.ModelName = {
   WhatsAppConfig: 'WhatsAppConfig',
   LogSistema: 'LogSistema',
   Plano: 'Plano',
-  Tenant: 'Tenant'
+  Tenant: 'Tenant',
+  Autorizacao: 'Autorizacao'
 };
 
 /**

@@ -9,16 +9,17 @@ datasource db {
 }
 
 model Usuario {
-  id        String      @id @default(cuid())
-  tenantId  String      @map("tenant_id")
-  nome      String
-  email     String
-  senha     String
-  tipo      TipoUsuario @default(SECRETARIA)
-  ativo     Boolean     @default(true)
-  createdAt DateTime    @default(now()) @map("created_at")
-  updatedAt DateTime    @updatedAt @map("updated_at")
-  tenant    Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  id           String        @id @default(cuid())
+  tenantId     String        @map("tenant_id")
+  nome         String
+  email        String
+  senha        String
+  tipo         TipoUsuario   @default(SECRETARIA)
+  ativo        Boolean       @default(true)
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  autorizacoes Autorizacao[]
 
   @@unique([tenantId, email])
   @@index([tenantId, email])
@@ -273,4 +274,36 @@ model Tenant {
 
   @@index([planoId])
   @@map("tenants")
+}
+
+// Enum para módulos do sistema
+enum Modulo {
+  PACIENTES
+  PROFISSIONAIS
+  PROCEDIMENTOS
+  AGENDA
+  ATENDIMENTOS
+  WHATSAPP
+  USUARIOS
+  RELATORIOS
+}
+
+// Tabela de autorizações por usuário
+model Autorizacao {
+  id        String @id @default(cuid())
+  usuarioId String @map("usuario_id")
+  modulo    Modulo
+
+  // Permissões específicas
+  visualizar   Boolean @default(false)
+  criarAlterar Boolean @default(false) @map("criar_alterar")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@unique([usuarioId, modulo])
+  @@index([usuarioId])
+  @@map("autorizacoes")
 }

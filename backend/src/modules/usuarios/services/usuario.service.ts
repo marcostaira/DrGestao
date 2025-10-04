@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import { prisma } from "../../../config/database";
 import { CreateUserData, UpdateUserData, AppError } from "../../../types";
+import { AutorizacaoService } from "../../autorizacoes/services/autorizacao.service";
 
 // ============================================================================
 // USUARIO SERVICE
@@ -49,27 +50,38 @@ export class UsuarioService {
     // Hash da senha
     const hashedPassword = await bcrypt.hash(data.senha, 10);
 
-    // Criar usuário
-    const usuario = await prisma.usuario.create({
-      data: {
-        tenantId,
-        nome: data.nome.trim(),
-        email: data.email.toLowerCase().trim(),
-        senha: hashedPassword,
-        tipo: data.tipo || "SECRETARIA",
-        ativo: true,
-      },
-      select: {
-        id: true,
-        nome: true,
-        email: true,
-        tipo: true,
-        ativo: true,
-        createdAt: true,
-      },
+    // Criar usuário e autorizações em uma transação
+    const resultado = await prisma.$transaction(async (tx) => {
+      // Criar usuário
+      const usuario = await tx.usuario.create({
+        data: {
+          tenantId,
+          nome: data.nome.trim(),
+          email: data.email.toLowerCase().trim(),
+          senha: hashedPassword,
+          tipo: data.tipo || "SECRETARIA",
+          ativo: true,
+        },
+        select: {
+          id: true,
+          nome: true,
+          email: true,
+          tipo: true,
+          ativo: true,
+          createdAt: true,
+        },
+      });
+
+      // Criar autorizações iniciais
+      await AutorizacaoService.criarAutorizacoesIniciais(
+        usuario.id,
+        usuario.tipo
+      );
+
+      return usuario;
     });
 
-    return usuario;
+    return resultado;
   }
 
   // ==========================================================================

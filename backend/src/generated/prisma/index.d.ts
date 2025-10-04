@@ -63,6 +63,11 @@ export type Plano = $Result.DefaultSelection<Prisma.$PlanoPayload>
  * 
  */
 export type Tenant = $Result.DefaultSelection<Prisma.$TenantPayload>
+/**
+ * Model Autorizacao
+ * 
+ */
+export type Autorizacao = $Result.DefaultSelection<Prisma.$AutorizacaoPayload>
 
 /**
  * Enums
@@ -104,6 +109,20 @@ export const TipoLog: {
 
 export type TipoLog = (typeof TipoLog)[keyof typeof TipoLog]
 
+
+export const Modulo: {
+  PACIENTES: 'PACIENTES',
+  PROFISSIONAIS: 'PROFISSIONAIS',
+  PROCEDIMENTOS: 'PROCEDIMENTOS',
+  AGENDA: 'AGENDA',
+  ATENDIMENTOS: 'ATENDIMENTOS',
+  WHATSAPP: 'WHATSAPP',
+  USUARIOS: 'USUARIOS',
+  RELATORIOS: 'RELATORIOS'
+};
+
+export type Modulo = (typeof Modulo)[keyof typeof Modulo]
+
 }
 
 export type TipoUsuario = $Enums.TipoUsuario
@@ -117,6 +136,10 @@ export const StatusAgendamento: typeof $Enums.StatusAgendamento
 export type TipoLog = $Enums.TipoLog
 
 export const TipoLog: typeof $Enums.TipoLog
+
+export type Modulo = $Enums.Modulo
+
+export const Modulo: typeof $Enums.Modulo
 
 /**
  * ##  Prisma Client ʲˢ
@@ -335,6 +358,16 @@ export class PrismaClient<
     * ```
     */
   get tenant(): Prisma.TenantDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.autorizacao`: Exposes CRUD operations for the **Autorizacao** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Autorizacaos
+    * const autorizacaos = await prisma.autorizacao.findMany()
+    * ```
+    */
+  get autorizacao(): Prisma.AutorizacaoDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -784,7 +817,8 @@ export namespace Prisma {
     WhatsAppConfig: 'WhatsAppConfig',
     LogSistema: 'LogSistema',
     Plano: 'Plano',
-    Tenant: 'Tenant'
+    Tenant: 'Tenant',
+    Autorizacao: 'Autorizacao'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -803,7 +837,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "usuario" | "profissional" | "paciente" | "procedimento" | "agendamento" | "atendimento" | "whatsAppConfig" | "logSistema" | "plano" | "tenant"
+      modelProps: "usuario" | "profissional" | "paciente" | "procedimento" | "agendamento" | "atendimento" | "whatsAppConfig" | "logSistema" | "plano" | "tenant" | "autorizacao"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1547,6 +1581,80 @@ export namespace Prisma {
           }
         }
       }
+      Autorizacao: {
+        payload: Prisma.$AutorizacaoPayload<ExtArgs>
+        fields: Prisma.AutorizacaoFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AutorizacaoFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutorizacaoPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AutorizacaoFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutorizacaoPayload>
+          }
+          findFirst: {
+            args: Prisma.AutorizacaoFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutorizacaoPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AutorizacaoFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutorizacaoPayload>
+          }
+          findMany: {
+            args: Prisma.AutorizacaoFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutorizacaoPayload>[]
+          }
+          create: {
+            args: Prisma.AutorizacaoCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutorizacaoPayload>
+          }
+          createMany: {
+            args: Prisma.AutorizacaoCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AutorizacaoCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutorizacaoPayload>[]
+          }
+          delete: {
+            args: Prisma.AutorizacaoDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutorizacaoPayload>
+          }
+          update: {
+            args: Prisma.AutorizacaoUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutorizacaoPayload>
+          }
+          deleteMany: {
+            args: Prisma.AutorizacaoDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AutorizacaoUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AutorizacaoUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutorizacaoPayload>[]
+          }
+          upsert: {
+            args: Prisma.AutorizacaoUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutorizacaoPayload>
+          }
+          aggregate: {
+            args: Prisma.AutorizacaoAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAutorizacao>
+          }
+          groupBy: {
+            args: Prisma.AutorizacaoGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AutorizacaoGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AutorizacaoCountArgs<ExtArgs>
+            result: $Utils.Optional<AutorizacaoCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1653,6 +1761,7 @@ export namespace Prisma {
     logSistema?: LogSistemaOmit
     plano?: PlanoOmit
     tenant?: TenantOmit
+    autorizacao?: AutorizacaoOmit
   }
 
   /* Types for Logging */
@@ -1726,6 +1835,37 @@ export namespace Prisma {
   /**
    * Count Types
    */
+
+
+  /**
+   * Count Type UsuarioCountOutputType
+   */
+
+  export type UsuarioCountOutputType = {
+    autorizacoes: number
+  }
+
+  export type UsuarioCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    autorizacoes?: boolean | UsuarioCountOutputTypeCountAutorizacoesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * UsuarioCountOutputType without action
+   */
+  export type UsuarioCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsuarioCountOutputType
+     */
+    select?: UsuarioCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UsuarioCountOutputType without action
+   */
+  export type UsuarioCountOutputTypeCountAutorizacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AutorizacaoWhereInput
+  }
 
 
   /**
@@ -2165,6 +2305,8 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    autorizacoes?: boolean | Usuario$autorizacoesArgs<ExtArgs>
+    _count?: boolean | UsuarioCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["usuario"]>
 
   export type UsuarioSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2208,6 +2350,8 @@ export namespace Prisma {
   export type UsuarioOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "nome" | "email" | "senha" | "tipo" | "ativo" | "createdAt" | "updatedAt", ExtArgs["result"]["usuario"]>
   export type UsuarioInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    autorizacoes?: boolean | Usuario$autorizacoesArgs<ExtArgs>
+    _count?: boolean | UsuarioCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UsuarioIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
@@ -2220,6 +2364,7 @@ export namespace Prisma {
     name: "Usuario"
     objects: {
       tenant: Prisma.$TenantPayload<ExtArgs>
+      autorizacoes: Prisma.$AutorizacaoPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2626,6 +2771,7 @@ export namespace Prisma {
   export interface Prisma__UsuarioClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TenantDefaultArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    autorizacoes<T extends Usuario$autorizacoesArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$autorizacoesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AutorizacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3057,6 +3203,30 @@ export namespace Prisma {
      * Limit how many Usuarios to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Usuario.autorizacoes
+   */
+  export type Usuario$autorizacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Autorizacao
+     */
+    select?: AutorizacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Autorizacao
+     */
+    omit?: AutorizacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutorizacaoInclude<ExtArgs> | null
+    where?: AutorizacaoWhereInput
+    orderBy?: AutorizacaoOrderByWithRelationInput | AutorizacaoOrderByWithRelationInput[]
+    cursor?: AutorizacaoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AutorizacaoScalarFieldEnum | AutorizacaoScalarFieldEnum[]
   }
 
   /**
@@ -13991,6 +14161,1090 @@ export namespace Prisma {
 
 
   /**
+   * Model Autorizacao
+   */
+
+  export type AggregateAutorizacao = {
+    _count: AutorizacaoCountAggregateOutputType | null
+    _min: AutorizacaoMinAggregateOutputType | null
+    _max: AutorizacaoMaxAggregateOutputType | null
+  }
+
+  export type AutorizacaoMinAggregateOutputType = {
+    id: string | null
+    usuarioId: string | null
+    modulo: $Enums.Modulo | null
+    visualizar: boolean | null
+    criarAlterar: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AutorizacaoMaxAggregateOutputType = {
+    id: string | null
+    usuarioId: string | null
+    modulo: $Enums.Modulo | null
+    visualizar: boolean | null
+    criarAlterar: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AutorizacaoCountAggregateOutputType = {
+    id: number
+    usuarioId: number
+    modulo: number
+    visualizar: number
+    criarAlterar: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AutorizacaoMinAggregateInputType = {
+    id?: true
+    usuarioId?: true
+    modulo?: true
+    visualizar?: true
+    criarAlterar?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AutorizacaoMaxAggregateInputType = {
+    id?: true
+    usuarioId?: true
+    modulo?: true
+    visualizar?: true
+    criarAlterar?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AutorizacaoCountAggregateInputType = {
+    id?: true
+    usuarioId?: true
+    modulo?: true
+    visualizar?: true
+    criarAlterar?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AutorizacaoAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Autorizacao to aggregate.
+     */
+    where?: AutorizacaoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Autorizacaos to fetch.
+     */
+    orderBy?: AutorizacaoOrderByWithRelationInput | AutorizacaoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AutorizacaoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Autorizacaos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Autorizacaos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Autorizacaos
+    **/
+    _count?: true | AutorizacaoCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AutorizacaoMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AutorizacaoMaxAggregateInputType
+  }
+
+  export type GetAutorizacaoAggregateType<T extends AutorizacaoAggregateArgs> = {
+        [P in keyof T & keyof AggregateAutorizacao]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAutorizacao[P]>
+      : GetScalarType<T[P], AggregateAutorizacao[P]>
+  }
+
+
+
+
+  export type AutorizacaoGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AutorizacaoWhereInput
+    orderBy?: AutorizacaoOrderByWithAggregationInput | AutorizacaoOrderByWithAggregationInput[]
+    by: AutorizacaoScalarFieldEnum[] | AutorizacaoScalarFieldEnum
+    having?: AutorizacaoScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AutorizacaoCountAggregateInputType | true
+    _min?: AutorizacaoMinAggregateInputType
+    _max?: AutorizacaoMaxAggregateInputType
+  }
+
+  export type AutorizacaoGroupByOutputType = {
+    id: string
+    usuarioId: string
+    modulo: $Enums.Modulo
+    visualizar: boolean
+    criarAlterar: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: AutorizacaoCountAggregateOutputType | null
+    _min: AutorizacaoMinAggregateOutputType | null
+    _max: AutorizacaoMaxAggregateOutputType | null
+  }
+
+  type GetAutorizacaoGroupByPayload<T extends AutorizacaoGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AutorizacaoGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AutorizacaoGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AutorizacaoGroupByOutputType[P]>
+            : GetScalarType<T[P], AutorizacaoGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AutorizacaoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    usuarioId?: boolean
+    modulo?: boolean
+    visualizar?: boolean
+    criarAlterar?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["autorizacao"]>
+
+  export type AutorizacaoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    usuarioId?: boolean
+    modulo?: boolean
+    visualizar?: boolean
+    criarAlterar?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["autorizacao"]>
+
+  export type AutorizacaoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    usuarioId?: boolean
+    modulo?: boolean
+    visualizar?: boolean
+    criarAlterar?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["autorizacao"]>
+
+  export type AutorizacaoSelectScalar = {
+    id?: boolean
+    usuarioId?: boolean
+    modulo?: boolean
+    visualizar?: boolean
+    criarAlterar?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AutorizacaoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "usuarioId" | "modulo" | "visualizar" | "criarAlterar" | "createdAt" | "updatedAt", ExtArgs["result"]["autorizacao"]>
+  export type AutorizacaoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+  export type AutorizacaoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+  export type AutorizacaoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+
+  export type $AutorizacaoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Autorizacao"
+    objects: {
+      usuario: Prisma.$UsuarioPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      usuarioId: string
+      modulo: $Enums.Modulo
+      visualizar: boolean
+      criarAlterar: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["autorizacao"]>
+    composites: {}
+  }
+
+  type AutorizacaoGetPayload<S extends boolean | null | undefined | AutorizacaoDefaultArgs> = $Result.GetResult<Prisma.$AutorizacaoPayload, S>
+
+  type AutorizacaoCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AutorizacaoFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AutorizacaoCountAggregateInputType | true
+    }
+
+  export interface AutorizacaoDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Autorizacao'], meta: { name: 'Autorizacao' } }
+    /**
+     * Find zero or one Autorizacao that matches the filter.
+     * @param {AutorizacaoFindUniqueArgs} args - Arguments to find a Autorizacao
+     * @example
+     * // Get one Autorizacao
+     * const autorizacao = await prisma.autorizacao.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AutorizacaoFindUniqueArgs>(args: SelectSubset<T, AutorizacaoFindUniqueArgs<ExtArgs>>): Prisma__AutorizacaoClient<$Result.GetResult<Prisma.$AutorizacaoPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Autorizacao that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AutorizacaoFindUniqueOrThrowArgs} args - Arguments to find a Autorizacao
+     * @example
+     * // Get one Autorizacao
+     * const autorizacao = await prisma.autorizacao.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AutorizacaoFindUniqueOrThrowArgs>(args: SelectSubset<T, AutorizacaoFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AutorizacaoClient<$Result.GetResult<Prisma.$AutorizacaoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Autorizacao that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutorizacaoFindFirstArgs} args - Arguments to find a Autorizacao
+     * @example
+     * // Get one Autorizacao
+     * const autorizacao = await prisma.autorizacao.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AutorizacaoFindFirstArgs>(args?: SelectSubset<T, AutorizacaoFindFirstArgs<ExtArgs>>): Prisma__AutorizacaoClient<$Result.GetResult<Prisma.$AutorizacaoPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Autorizacao that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutorizacaoFindFirstOrThrowArgs} args - Arguments to find a Autorizacao
+     * @example
+     * // Get one Autorizacao
+     * const autorizacao = await prisma.autorizacao.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AutorizacaoFindFirstOrThrowArgs>(args?: SelectSubset<T, AutorizacaoFindFirstOrThrowArgs<ExtArgs>>): Prisma__AutorizacaoClient<$Result.GetResult<Prisma.$AutorizacaoPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Autorizacaos that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutorizacaoFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Autorizacaos
+     * const autorizacaos = await prisma.autorizacao.findMany()
+     * 
+     * // Get first 10 Autorizacaos
+     * const autorizacaos = await prisma.autorizacao.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const autorizacaoWithIdOnly = await prisma.autorizacao.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AutorizacaoFindManyArgs>(args?: SelectSubset<T, AutorizacaoFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AutorizacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Autorizacao.
+     * @param {AutorizacaoCreateArgs} args - Arguments to create a Autorizacao.
+     * @example
+     * // Create one Autorizacao
+     * const Autorizacao = await prisma.autorizacao.create({
+     *   data: {
+     *     // ... data to create a Autorizacao
+     *   }
+     * })
+     * 
+     */
+    create<T extends AutorizacaoCreateArgs>(args: SelectSubset<T, AutorizacaoCreateArgs<ExtArgs>>): Prisma__AutorizacaoClient<$Result.GetResult<Prisma.$AutorizacaoPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Autorizacaos.
+     * @param {AutorizacaoCreateManyArgs} args - Arguments to create many Autorizacaos.
+     * @example
+     * // Create many Autorizacaos
+     * const autorizacao = await prisma.autorizacao.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AutorizacaoCreateManyArgs>(args?: SelectSubset<T, AutorizacaoCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Autorizacaos and returns the data saved in the database.
+     * @param {AutorizacaoCreateManyAndReturnArgs} args - Arguments to create many Autorizacaos.
+     * @example
+     * // Create many Autorizacaos
+     * const autorizacao = await prisma.autorizacao.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Autorizacaos and only return the `id`
+     * const autorizacaoWithIdOnly = await prisma.autorizacao.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AutorizacaoCreateManyAndReturnArgs>(args?: SelectSubset<T, AutorizacaoCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AutorizacaoPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Autorizacao.
+     * @param {AutorizacaoDeleteArgs} args - Arguments to delete one Autorizacao.
+     * @example
+     * // Delete one Autorizacao
+     * const Autorizacao = await prisma.autorizacao.delete({
+     *   where: {
+     *     // ... filter to delete one Autorizacao
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AutorizacaoDeleteArgs>(args: SelectSubset<T, AutorizacaoDeleteArgs<ExtArgs>>): Prisma__AutorizacaoClient<$Result.GetResult<Prisma.$AutorizacaoPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Autorizacao.
+     * @param {AutorizacaoUpdateArgs} args - Arguments to update one Autorizacao.
+     * @example
+     * // Update one Autorizacao
+     * const autorizacao = await prisma.autorizacao.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AutorizacaoUpdateArgs>(args: SelectSubset<T, AutorizacaoUpdateArgs<ExtArgs>>): Prisma__AutorizacaoClient<$Result.GetResult<Prisma.$AutorizacaoPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Autorizacaos.
+     * @param {AutorizacaoDeleteManyArgs} args - Arguments to filter Autorizacaos to delete.
+     * @example
+     * // Delete a few Autorizacaos
+     * const { count } = await prisma.autorizacao.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AutorizacaoDeleteManyArgs>(args?: SelectSubset<T, AutorizacaoDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Autorizacaos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutorizacaoUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Autorizacaos
+     * const autorizacao = await prisma.autorizacao.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AutorizacaoUpdateManyArgs>(args: SelectSubset<T, AutorizacaoUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Autorizacaos and returns the data updated in the database.
+     * @param {AutorizacaoUpdateManyAndReturnArgs} args - Arguments to update many Autorizacaos.
+     * @example
+     * // Update many Autorizacaos
+     * const autorizacao = await prisma.autorizacao.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Autorizacaos and only return the `id`
+     * const autorizacaoWithIdOnly = await prisma.autorizacao.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AutorizacaoUpdateManyAndReturnArgs>(args: SelectSubset<T, AutorizacaoUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AutorizacaoPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Autorizacao.
+     * @param {AutorizacaoUpsertArgs} args - Arguments to update or create a Autorizacao.
+     * @example
+     * // Update or create a Autorizacao
+     * const autorizacao = await prisma.autorizacao.upsert({
+     *   create: {
+     *     // ... data to create a Autorizacao
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Autorizacao we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AutorizacaoUpsertArgs>(args: SelectSubset<T, AutorizacaoUpsertArgs<ExtArgs>>): Prisma__AutorizacaoClient<$Result.GetResult<Prisma.$AutorizacaoPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Autorizacaos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutorizacaoCountArgs} args - Arguments to filter Autorizacaos to count.
+     * @example
+     * // Count the number of Autorizacaos
+     * const count = await prisma.autorizacao.count({
+     *   where: {
+     *     // ... the filter for the Autorizacaos we want to count
+     *   }
+     * })
+    **/
+    count<T extends AutorizacaoCountArgs>(
+      args?: Subset<T, AutorizacaoCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AutorizacaoCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Autorizacao.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutorizacaoAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AutorizacaoAggregateArgs>(args: Subset<T, AutorizacaoAggregateArgs>): Prisma.PrismaPromise<GetAutorizacaoAggregateType<T>>
+
+    /**
+     * Group by Autorizacao.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutorizacaoGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AutorizacaoGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AutorizacaoGroupByArgs['orderBy'] }
+        : { orderBy?: AutorizacaoGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AutorizacaoGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAutorizacaoGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Autorizacao model
+   */
+  readonly fields: AutorizacaoFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Autorizacao.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AutorizacaoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    usuario<T extends UsuarioDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UsuarioDefaultArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Autorizacao model
+   */
+  interface AutorizacaoFieldRefs {
+    readonly id: FieldRef<"Autorizacao", 'String'>
+    readonly usuarioId: FieldRef<"Autorizacao", 'String'>
+    readonly modulo: FieldRef<"Autorizacao", 'Modulo'>
+    readonly visualizar: FieldRef<"Autorizacao", 'Boolean'>
+    readonly criarAlterar: FieldRef<"Autorizacao", 'Boolean'>
+    readonly createdAt: FieldRef<"Autorizacao", 'DateTime'>
+    readonly updatedAt: FieldRef<"Autorizacao", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Autorizacao findUnique
+   */
+  export type AutorizacaoFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Autorizacao
+     */
+    select?: AutorizacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Autorizacao
+     */
+    omit?: AutorizacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutorizacaoInclude<ExtArgs> | null
+    /**
+     * Filter, which Autorizacao to fetch.
+     */
+    where: AutorizacaoWhereUniqueInput
+  }
+
+  /**
+   * Autorizacao findUniqueOrThrow
+   */
+  export type AutorizacaoFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Autorizacao
+     */
+    select?: AutorizacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Autorizacao
+     */
+    omit?: AutorizacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutorizacaoInclude<ExtArgs> | null
+    /**
+     * Filter, which Autorizacao to fetch.
+     */
+    where: AutorizacaoWhereUniqueInput
+  }
+
+  /**
+   * Autorizacao findFirst
+   */
+  export type AutorizacaoFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Autorizacao
+     */
+    select?: AutorizacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Autorizacao
+     */
+    omit?: AutorizacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutorizacaoInclude<ExtArgs> | null
+    /**
+     * Filter, which Autorizacao to fetch.
+     */
+    where?: AutorizacaoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Autorizacaos to fetch.
+     */
+    orderBy?: AutorizacaoOrderByWithRelationInput | AutorizacaoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Autorizacaos.
+     */
+    cursor?: AutorizacaoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Autorizacaos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Autorizacaos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Autorizacaos.
+     */
+    distinct?: AutorizacaoScalarFieldEnum | AutorizacaoScalarFieldEnum[]
+  }
+
+  /**
+   * Autorizacao findFirstOrThrow
+   */
+  export type AutorizacaoFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Autorizacao
+     */
+    select?: AutorizacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Autorizacao
+     */
+    omit?: AutorizacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutorizacaoInclude<ExtArgs> | null
+    /**
+     * Filter, which Autorizacao to fetch.
+     */
+    where?: AutorizacaoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Autorizacaos to fetch.
+     */
+    orderBy?: AutorizacaoOrderByWithRelationInput | AutorizacaoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Autorizacaos.
+     */
+    cursor?: AutorizacaoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Autorizacaos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Autorizacaos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Autorizacaos.
+     */
+    distinct?: AutorizacaoScalarFieldEnum | AutorizacaoScalarFieldEnum[]
+  }
+
+  /**
+   * Autorizacao findMany
+   */
+  export type AutorizacaoFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Autorizacao
+     */
+    select?: AutorizacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Autorizacao
+     */
+    omit?: AutorizacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutorizacaoInclude<ExtArgs> | null
+    /**
+     * Filter, which Autorizacaos to fetch.
+     */
+    where?: AutorizacaoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Autorizacaos to fetch.
+     */
+    orderBy?: AutorizacaoOrderByWithRelationInput | AutorizacaoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Autorizacaos.
+     */
+    cursor?: AutorizacaoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Autorizacaos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Autorizacaos.
+     */
+    skip?: number
+    distinct?: AutorizacaoScalarFieldEnum | AutorizacaoScalarFieldEnum[]
+  }
+
+  /**
+   * Autorizacao create
+   */
+  export type AutorizacaoCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Autorizacao
+     */
+    select?: AutorizacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Autorizacao
+     */
+    omit?: AutorizacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutorizacaoInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Autorizacao.
+     */
+    data: XOR<AutorizacaoCreateInput, AutorizacaoUncheckedCreateInput>
+  }
+
+  /**
+   * Autorizacao createMany
+   */
+  export type AutorizacaoCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Autorizacaos.
+     */
+    data: AutorizacaoCreateManyInput | AutorizacaoCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Autorizacao createManyAndReturn
+   */
+  export type AutorizacaoCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Autorizacao
+     */
+    select?: AutorizacaoSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Autorizacao
+     */
+    omit?: AutorizacaoOmit<ExtArgs> | null
+    /**
+     * The data used to create many Autorizacaos.
+     */
+    data: AutorizacaoCreateManyInput | AutorizacaoCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutorizacaoIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Autorizacao update
+   */
+  export type AutorizacaoUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Autorizacao
+     */
+    select?: AutorizacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Autorizacao
+     */
+    omit?: AutorizacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutorizacaoInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Autorizacao.
+     */
+    data: XOR<AutorizacaoUpdateInput, AutorizacaoUncheckedUpdateInput>
+    /**
+     * Choose, which Autorizacao to update.
+     */
+    where: AutorizacaoWhereUniqueInput
+  }
+
+  /**
+   * Autorizacao updateMany
+   */
+  export type AutorizacaoUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Autorizacaos.
+     */
+    data: XOR<AutorizacaoUpdateManyMutationInput, AutorizacaoUncheckedUpdateManyInput>
+    /**
+     * Filter which Autorizacaos to update
+     */
+    where?: AutorizacaoWhereInput
+    /**
+     * Limit how many Autorizacaos to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Autorizacao updateManyAndReturn
+   */
+  export type AutorizacaoUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Autorizacao
+     */
+    select?: AutorizacaoSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Autorizacao
+     */
+    omit?: AutorizacaoOmit<ExtArgs> | null
+    /**
+     * The data used to update Autorizacaos.
+     */
+    data: XOR<AutorizacaoUpdateManyMutationInput, AutorizacaoUncheckedUpdateManyInput>
+    /**
+     * Filter which Autorizacaos to update
+     */
+    where?: AutorizacaoWhereInput
+    /**
+     * Limit how many Autorizacaos to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutorizacaoIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Autorizacao upsert
+   */
+  export type AutorizacaoUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Autorizacao
+     */
+    select?: AutorizacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Autorizacao
+     */
+    omit?: AutorizacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutorizacaoInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Autorizacao to update in case it exists.
+     */
+    where: AutorizacaoWhereUniqueInput
+    /**
+     * In case the Autorizacao found by the `where` argument doesn't exist, create a new Autorizacao with this data.
+     */
+    create: XOR<AutorizacaoCreateInput, AutorizacaoUncheckedCreateInput>
+    /**
+     * In case the Autorizacao was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AutorizacaoUpdateInput, AutorizacaoUncheckedUpdateInput>
+  }
+
+  /**
+   * Autorizacao delete
+   */
+  export type AutorizacaoDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Autorizacao
+     */
+    select?: AutorizacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Autorizacao
+     */
+    omit?: AutorizacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutorizacaoInclude<ExtArgs> | null
+    /**
+     * Filter which Autorizacao to delete.
+     */
+    where: AutorizacaoWhereUniqueInput
+  }
+
+  /**
+   * Autorizacao deleteMany
+   */
+  export type AutorizacaoDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Autorizacaos to delete
+     */
+    where?: AutorizacaoWhereInput
+    /**
+     * Limit how many Autorizacaos to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Autorizacao without action
+   */
+  export type AutorizacaoDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Autorizacao
+     */
+    select?: AutorizacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Autorizacao
+     */
+    omit?: AutorizacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutorizacaoInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -14178,6 +15432,19 @@ export namespace Prisma {
   export type TenantScalarFieldEnum = (typeof TenantScalarFieldEnum)[keyof typeof TenantScalarFieldEnum]
 
 
+  export const AutorizacaoScalarFieldEnum: {
+    id: 'id',
+    usuarioId: 'usuarioId',
+    modulo: 'modulo',
+    visualizar: 'visualizar',
+    criarAlterar: 'criarAlterar',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AutorizacaoScalarFieldEnum = (typeof AutorizacaoScalarFieldEnum)[keyof typeof AutorizacaoScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -14351,6 +15618,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Modulo'
+   */
+  export type EnumModuloFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Modulo'>
+    
+
+
+  /**
+   * Reference to a field of type 'Modulo[]'
+   */
+  export type ListEnumModuloFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Modulo[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -14381,6 +15662,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Usuario"> | Date | string
     updatedAt?: DateTimeFilter<"Usuario"> | Date | string
     tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
+    autorizacoes?: AutorizacaoListRelationFilter
   }
 
   export type UsuarioOrderByWithRelationInput = {
@@ -14394,6 +15676,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     tenant?: TenantOrderByWithRelationInput
+    autorizacoes?: AutorizacaoOrderByRelationAggregateInput
   }
 
   export type UsuarioWhereUniqueInput = Prisma.AtLeast<{
@@ -14411,6 +15694,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Usuario"> | Date | string
     updatedAt?: DateTimeFilter<"Usuario"> | Date | string
     tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
+    autorizacoes?: AutorizacaoListRelationFilter
   }, "id" | "tenantId_email">
 
   export type UsuarioOrderByWithAggregationInput = {
@@ -15310,6 +16594,72 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Tenant"> | Date | string
   }
 
+  export type AutorizacaoWhereInput = {
+    AND?: AutorizacaoWhereInput | AutorizacaoWhereInput[]
+    OR?: AutorizacaoWhereInput[]
+    NOT?: AutorizacaoWhereInput | AutorizacaoWhereInput[]
+    id?: StringFilter<"Autorizacao"> | string
+    usuarioId?: StringFilter<"Autorizacao"> | string
+    modulo?: EnumModuloFilter<"Autorizacao"> | $Enums.Modulo
+    visualizar?: BoolFilter<"Autorizacao"> | boolean
+    criarAlterar?: BoolFilter<"Autorizacao"> | boolean
+    createdAt?: DateTimeFilter<"Autorizacao"> | Date | string
+    updatedAt?: DateTimeFilter<"Autorizacao"> | Date | string
+    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+  }
+
+  export type AutorizacaoOrderByWithRelationInput = {
+    id?: SortOrder
+    usuarioId?: SortOrder
+    modulo?: SortOrder
+    visualizar?: SortOrder
+    criarAlterar?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    usuario?: UsuarioOrderByWithRelationInput
+  }
+
+  export type AutorizacaoWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    usuarioId_modulo?: AutorizacaoUsuarioIdModuloCompoundUniqueInput
+    AND?: AutorizacaoWhereInput | AutorizacaoWhereInput[]
+    OR?: AutorizacaoWhereInput[]
+    NOT?: AutorizacaoWhereInput | AutorizacaoWhereInput[]
+    usuarioId?: StringFilter<"Autorizacao"> | string
+    modulo?: EnumModuloFilter<"Autorizacao"> | $Enums.Modulo
+    visualizar?: BoolFilter<"Autorizacao"> | boolean
+    criarAlterar?: BoolFilter<"Autorizacao"> | boolean
+    createdAt?: DateTimeFilter<"Autorizacao"> | Date | string
+    updatedAt?: DateTimeFilter<"Autorizacao"> | Date | string
+    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+  }, "id" | "usuarioId_modulo">
+
+  export type AutorizacaoOrderByWithAggregationInput = {
+    id?: SortOrder
+    usuarioId?: SortOrder
+    modulo?: SortOrder
+    visualizar?: SortOrder
+    criarAlterar?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AutorizacaoCountOrderByAggregateInput
+    _max?: AutorizacaoMaxOrderByAggregateInput
+    _min?: AutorizacaoMinOrderByAggregateInput
+  }
+
+  export type AutorizacaoScalarWhereWithAggregatesInput = {
+    AND?: AutorizacaoScalarWhereWithAggregatesInput | AutorizacaoScalarWhereWithAggregatesInput[]
+    OR?: AutorizacaoScalarWhereWithAggregatesInput[]
+    NOT?: AutorizacaoScalarWhereWithAggregatesInput | AutorizacaoScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Autorizacao"> | string
+    usuarioId?: StringWithAggregatesFilter<"Autorizacao"> | string
+    modulo?: EnumModuloWithAggregatesFilter<"Autorizacao"> | $Enums.Modulo
+    visualizar?: BoolWithAggregatesFilter<"Autorizacao"> | boolean
+    criarAlterar?: BoolWithAggregatesFilter<"Autorizacao"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Autorizacao"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Autorizacao"> | Date | string
+  }
+
   export type UsuarioCreateInput = {
     id?: string
     nome: string
@@ -15320,6 +16670,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     tenant: TenantCreateNestedOneWithoutUsuariosInput
+    autorizacoes?: AutorizacaoCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUncheckedCreateInput = {
@@ -15332,6 +16683,7 @@ export namespace Prisma {
     ativo?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    autorizacoes?: AutorizacaoUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUpdateInput = {
@@ -15344,6 +16696,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tenant?: TenantUpdateOneRequiredWithoutUsuariosNestedInput
+    autorizacoes?: AutorizacaoUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioUncheckedUpdateInput = {
@@ -15356,6 +16709,7 @@ export namespace Prisma {
     ativo?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    autorizacoes?: AutorizacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioCreateManyInput = {
@@ -16366,6 +17720,75 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type AutorizacaoCreateInput = {
+    id?: string
+    modulo: $Enums.Modulo
+    visualizar?: boolean
+    criarAlterar?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    usuario: UsuarioCreateNestedOneWithoutAutorizacoesInput
+  }
+
+  export type AutorizacaoUncheckedCreateInput = {
+    id?: string
+    usuarioId: string
+    modulo: $Enums.Modulo
+    visualizar?: boolean
+    criarAlterar?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AutorizacaoUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    modulo?: EnumModuloFieldUpdateOperationsInput | $Enums.Modulo
+    visualizar?: BoolFieldUpdateOperationsInput | boolean
+    criarAlterar?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usuario?: UsuarioUpdateOneRequiredWithoutAutorizacoesNestedInput
+  }
+
+  export type AutorizacaoUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    usuarioId?: StringFieldUpdateOperationsInput | string
+    modulo?: EnumModuloFieldUpdateOperationsInput | $Enums.Modulo
+    visualizar?: BoolFieldUpdateOperationsInput | boolean
+    criarAlterar?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AutorizacaoCreateManyInput = {
+    id?: string
+    usuarioId: string
+    modulo: $Enums.Modulo
+    visualizar?: boolean
+    criarAlterar?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AutorizacaoUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    modulo?: EnumModuloFieldUpdateOperationsInput | $Enums.Modulo
+    visualizar?: BoolFieldUpdateOperationsInput | boolean
+    criarAlterar?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AutorizacaoUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    usuarioId?: StringFieldUpdateOperationsInput | string
+    modulo?: EnumModuloFieldUpdateOperationsInput | $Enums.Modulo
+    visualizar?: BoolFieldUpdateOperationsInput | boolean
+    criarAlterar?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -16407,6 +17830,16 @@ export namespace Prisma {
   export type TenantScalarRelationFilter = {
     is?: TenantWhereInput
     isNot?: TenantWhereInput
+  }
+
+  export type AutorizacaoListRelationFilter = {
+    every?: AutorizacaoWhereInput
+    some?: AutorizacaoWhereInput
+    none?: AutorizacaoWhereInput
+  }
+
+  export type AutorizacaoOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type UsuarioTenantIdEmailCompoundUniqueInput = {
@@ -17299,10 +18732,81 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type EnumModuloFilter<$PrismaModel = never> = {
+    equals?: $Enums.Modulo | EnumModuloFieldRefInput<$PrismaModel>
+    in?: $Enums.Modulo[] | ListEnumModuloFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Modulo[] | ListEnumModuloFieldRefInput<$PrismaModel>
+    not?: NestedEnumModuloFilter<$PrismaModel> | $Enums.Modulo
+  }
+
+  export type UsuarioScalarRelationFilter = {
+    is?: UsuarioWhereInput
+    isNot?: UsuarioWhereInput
+  }
+
+  export type AutorizacaoUsuarioIdModuloCompoundUniqueInput = {
+    usuarioId: string
+    modulo: $Enums.Modulo
+  }
+
+  export type AutorizacaoCountOrderByAggregateInput = {
+    id?: SortOrder
+    usuarioId?: SortOrder
+    modulo?: SortOrder
+    visualizar?: SortOrder
+    criarAlterar?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AutorizacaoMaxOrderByAggregateInput = {
+    id?: SortOrder
+    usuarioId?: SortOrder
+    modulo?: SortOrder
+    visualizar?: SortOrder
+    criarAlterar?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AutorizacaoMinOrderByAggregateInput = {
+    id?: SortOrder
+    usuarioId?: SortOrder
+    modulo?: SortOrder
+    visualizar?: SortOrder
+    criarAlterar?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumModuloWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Modulo | EnumModuloFieldRefInput<$PrismaModel>
+    in?: $Enums.Modulo[] | ListEnumModuloFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Modulo[] | ListEnumModuloFieldRefInput<$PrismaModel>
+    not?: NestedEnumModuloWithAggregatesFilter<$PrismaModel> | $Enums.Modulo
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumModuloFilter<$PrismaModel>
+    _max?: NestedEnumModuloFilter<$PrismaModel>
+  }
+
   export type TenantCreateNestedOneWithoutUsuariosInput = {
     create?: XOR<TenantCreateWithoutUsuariosInput, TenantUncheckedCreateWithoutUsuariosInput>
     connectOrCreate?: TenantCreateOrConnectWithoutUsuariosInput
     connect?: TenantWhereUniqueInput
+  }
+
+  export type AutorizacaoCreateNestedManyWithoutUsuarioInput = {
+    create?: XOR<AutorizacaoCreateWithoutUsuarioInput, AutorizacaoUncheckedCreateWithoutUsuarioInput> | AutorizacaoCreateWithoutUsuarioInput[] | AutorizacaoUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: AutorizacaoCreateOrConnectWithoutUsuarioInput | AutorizacaoCreateOrConnectWithoutUsuarioInput[]
+    createMany?: AutorizacaoCreateManyUsuarioInputEnvelope
+    connect?: AutorizacaoWhereUniqueInput | AutorizacaoWhereUniqueInput[]
+  }
+
+  export type AutorizacaoUncheckedCreateNestedManyWithoutUsuarioInput = {
+    create?: XOR<AutorizacaoCreateWithoutUsuarioInput, AutorizacaoUncheckedCreateWithoutUsuarioInput> | AutorizacaoCreateWithoutUsuarioInput[] | AutorizacaoUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: AutorizacaoCreateOrConnectWithoutUsuarioInput | AutorizacaoCreateOrConnectWithoutUsuarioInput[]
+    createMany?: AutorizacaoCreateManyUsuarioInputEnvelope
+    connect?: AutorizacaoWhereUniqueInput | AutorizacaoWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -17327,6 +18831,34 @@ export namespace Prisma {
     upsert?: TenantUpsertWithoutUsuariosInput
     connect?: TenantWhereUniqueInput
     update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutUsuariosInput, TenantUpdateWithoutUsuariosInput>, TenantUncheckedUpdateWithoutUsuariosInput>
+  }
+
+  export type AutorizacaoUpdateManyWithoutUsuarioNestedInput = {
+    create?: XOR<AutorizacaoCreateWithoutUsuarioInput, AutorizacaoUncheckedCreateWithoutUsuarioInput> | AutorizacaoCreateWithoutUsuarioInput[] | AutorizacaoUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: AutorizacaoCreateOrConnectWithoutUsuarioInput | AutorizacaoCreateOrConnectWithoutUsuarioInput[]
+    upsert?: AutorizacaoUpsertWithWhereUniqueWithoutUsuarioInput | AutorizacaoUpsertWithWhereUniqueWithoutUsuarioInput[]
+    createMany?: AutorizacaoCreateManyUsuarioInputEnvelope
+    set?: AutorizacaoWhereUniqueInput | AutorizacaoWhereUniqueInput[]
+    disconnect?: AutorizacaoWhereUniqueInput | AutorizacaoWhereUniqueInput[]
+    delete?: AutorizacaoWhereUniqueInput | AutorizacaoWhereUniqueInput[]
+    connect?: AutorizacaoWhereUniqueInput | AutorizacaoWhereUniqueInput[]
+    update?: AutorizacaoUpdateWithWhereUniqueWithoutUsuarioInput | AutorizacaoUpdateWithWhereUniqueWithoutUsuarioInput[]
+    updateMany?: AutorizacaoUpdateManyWithWhereWithoutUsuarioInput | AutorizacaoUpdateManyWithWhereWithoutUsuarioInput[]
+    deleteMany?: AutorizacaoScalarWhereInput | AutorizacaoScalarWhereInput[]
+  }
+
+  export type AutorizacaoUncheckedUpdateManyWithoutUsuarioNestedInput = {
+    create?: XOR<AutorizacaoCreateWithoutUsuarioInput, AutorizacaoUncheckedCreateWithoutUsuarioInput> | AutorizacaoCreateWithoutUsuarioInput[] | AutorizacaoUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: AutorizacaoCreateOrConnectWithoutUsuarioInput | AutorizacaoCreateOrConnectWithoutUsuarioInput[]
+    upsert?: AutorizacaoUpsertWithWhereUniqueWithoutUsuarioInput | AutorizacaoUpsertWithWhereUniqueWithoutUsuarioInput[]
+    createMany?: AutorizacaoCreateManyUsuarioInputEnvelope
+    set?: AutorizacaoWhereUniqueInput | AutorizacaoWhereUniqueInput[]
+    disconnect?: AutorizacaoWhereUniqueInput | AutorizacaoWhereUniqueInput[]
+    delete?: AutorizacaoWhereUniqueInput | AutorizacaoWhereUniqueInput[]
+    connect?: AutorizacaoWhereUniqueInput | AutorizacaoWhereUniqueInput[]
+    update?: AutorizacaoUpdateWithWhereUniqueWithoutUsuarioInput | AutorizacaoUpdateWithWhereUniqueWithoutUsuarioInput[]
+    updateMany?: AutorizacaoUpdateManyWithWhereWithoutUsuarioInput | AutorizacaoUpdateManyWithWhereWithoutUsuarioInput[]
+    deleteMany?: AutorizacaoScalarWhereInput | AutorizacaoScalarWhereInput[]
   }
 
   export type TenantCreateNestedOneWithoutProfissionaisInput = {
@@ -18229,6 +19761,24 @@ export namespace Prisma {
     update?: XOR<XOR<WhatsAppConfigUpdateToOneWithWhereWithoutTenantInput, WhatsAppConfigUpdateWithoutTenantInput>, WhatsAppConfigUncheckedUpdateWithoutTenantInput>
   }
 
+  export type UsuarioCreateNestedOneWithoutAutorizacoesInput = {
+    create?: XOR<UsuarioCreateWithoutAutorizacoesInput, UsuarioUncheckedCreateWithoutAutorizacoesInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutAutorizacoesInput
+    connect?: UsuarioWhereUniqueInput
+  }
+
+  export type EnumModuloFieldUpdateOperationsInput = {
+    set?: $Enums.Modulo
+  }
+
+  export type UsuarioUpdateOneRequiredWithoutAutorizacoesNestedInput = {
+    create?: XOR<UsuarioCreateWithoutAutorizacoesInput, UsuarioUncheckedCreateWithoutAutorizacoesInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutAutorizacoesInput
+    upsert?: UsuarioUpsertWithoutAutorizacoesInput
+    connect?: UsuarioWhereUniqueInput
+    update?: XOR<XOR<UsuarioUpdateToOneWithWhereWithoutAutorizacoesInput, UsuarioUpdateWithoutAutorizacoesInput>, UsuarioUncheckedUpdateWithoutAutorizacoesInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -18527,6 +20077,23 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type NestedEnumModuloFilter<$PrismaModel = never> = {
+    equals?: $Enums.Modulo | EnumModuloFieldRefInput<$PrismaModel>
+    in?: $Enums.Modulo[] | ListEnumModuloFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Modulo[] | ListEnumModuloFieldRefInput<$PrismaModel>
+    not?: NestedEnumModuloFilter<$PrismaModel> | $Enums.Modulo
+  }
+
+  export type NestedEnumModuloWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Modulo | EnumModuloFieldRefInput<$PrismaModel>
+    in?: $Enums.Modulo[] | ListEnumModuloFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Modulo[] | ListEnumModuloFieldRefInput<$PrismaModel>
+    not?: NestedEnumModuloWithAggregatesFilter<$PrismaModel> | $Enums.Modulo
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumModuloFilter<$PrismaModel>
+    _max?: NestedEnumModuloFilter<$PrismaModel>
+  }
+
   export type TenantCreateWithoutUsuariosInput = {
     id?: string
     nome: string
@@ -18560,6 +20127,34 @@ export namespace Prisma {
   export type TenantCreateOrConnectWithoutUsuariosInput = {
     where: TenantWhereUniqueInput
     create: XOR<TenantCreateWithoutUsuariosInput, TenantUncheckedCreateWithoutUsuariosInput>
+  }
+
+  export type AutorizacaoCreateWithoutUsuarioInput = {
+    id?: string
+    modulo: $Enums.Modulo
+    visualizar?: boolean
+    criarAlterar?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AutorizacaoUncheckedCreateWithoutUsuarioInput = {
+    id?: string
+    modulo: $Enums.Modulo
+    visualizar?: boolean
+    criarAlterar?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AutorizacaoCreateOrConnectWithoutUsuarioInput = {
+    where: AutorizacaoWhereUniqueInput
+    create: XOR<AutorizacaoCreateWithoutUsuarioInput, AutorizacaoUncheckedCreateWithoutUsuarioInput>
+  }
+
+  export type AutorizacaoCreateManyUsuarioInputEnvelope = {
+    data: AutorizacaoCreateManyUsuarioInput | AutorizacaoCreateManyUsuarioInput[]
+    skipDuplicates?: boolean
   }
 
   export type TenantUpsertWithoutUsuariosInput = {
@@ -18601,6 +20196,35 @@ export namespace Prisma {
     procedimentos?: ProcedimentoUncheckedUpdateManyWithoutTenantNestedInput
     profissionais?: ProfissionalUncheckedUpdateManyWithoutTenantNestedInput
     whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
+  }
+
+  export type AutorizacaoUpsertWithWhereUniqueWithoutUsuarioInput = {
+    where: AutorizacaoWhereUniqueInput
+    update: XOR<AutorizacaoUpdateWithoutUsuarioInput, AutorizacaoUncheckedUpdateWithoutUsuarioInput>
+    create: XOR<AutorizacaoCreateWithoutUsuarioInput, AutorizacaoUncheckedCreateWithoutUsuarioInput>
+  }
+
+  export type AutorizacaoUpdateWithWhereUniqueWithoutUsuarioInput = {
+    where: AutorizacaoWhereUniqueInput
+    data: XOR<AutorizacaoUpdateWithoutUsuarioInput, AutorizacaoUncheckedUpdateWithoutUsuarioInput>
+  }
+
+  export type AutorizacaoUpdateManyWithWhereWithoutUsuarioInput = {
+    where: AutorizacaoScalarWhereInput
+    data: XOR<AutorizacaoUpdateManyMutationInput, AutorizacaoUncheckedUpdateManyWithoutUsuarioInput>
+  }
+
+  export type AutorizacaoScalarWhereInput = {
+    AND?: AutorizacaoScalarWhereInput | AutorizacaoScalarWhereInput[]
+    OR?: AutorizacaoScalarWhereInput[]
+    NOT?: AutorizacaoScalarWhereInput | AutorizacaoScalarWhereInput[]
+    id?: StringFilter<"Autorizacao"> | string
+    usuarioId?: StringFilter<"Autorizacao"> | string
+    modulo?: EnumModuloFilter<"Autorizacao"> | $Enums.Modulo
+    visualizar?: BoolFilter<"Autorizacao"> | boolean
+    criarAlterar?: BoolFilter<"Autorizacao"> | boolean
+    createdAt?: DateTimeFilter<"Autorizacao"> | Date | string
+    updatedAt?: DateTimeFilter<"Autorizacao"> | Date | string
   }
 
   export type TenantCreateWithoutProfissionaisInput = {
@@ -20637,6 +22261,7 @@ export namespace Prisma {
     ativo?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    autorizacoes?: AutorizacaoCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUncheckedCreateWithoutTenantInput = {
@@ -20648,6 +22273,7 @@ export namespace Prisma {
     ativo?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    autorizacoes?: AutorizacaoUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioCreateOrConnectWithoutTenantInput = {
@@ -20908,6 +22534,106 @@ export namespace Prisma {
     templateOpcoesInvalidas?: StringFieldUpdateOperationsInput | string
     horasAntecedencia?: IntFieldUpdateOperationsInput | number
     ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UsuarioCreateWithoutAutorizacoesInput = {
+    id?: string
+    nome: string
+    email: string
+    senha: string
+    tipo?: $Enums.TipoUsuario
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutUsuariosInput
+  }
+
+  export type UsuarioUncheckedCreateWithoutAutorizacoesInput = {
+    id?: string
+    tenantId: string
+    nome: string
+    email: string
+    senha: string
+    tipo?: $Enums.TipoUsuario
+    ativo?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UsuarioCreateOrConnectWithoutAutorizacoesInput = {
+    where: UsuarioWhereUniqueInput
+    create: XOR<UsuarioCreateWithoutAutorizacoesInput, UsuarioUncheckedCreateWithoutAutorizacoesInput>
+  }
+
+  export type UsuarioUpsertWithoutAutorizacoesInput = {
+    update: XOR<UsuarioUpdateWithoutAutorizacoesInput, UsuarioUncheckedUpdateWithoutAutorizacoesInput>
+    create: XOR<UsuarioCreateWithoutAutorizacoesInput, UsuarioUncheckedCreateWithoutAutorizacoesInput>
+    where?: UsuarioWhereInput
+  }
+
+  export type UsuarioUpdateToOneWithWhereWithoutAutorizacoesInput = {
+    where?: UsuarioWhereInput
+    data: XOR<UsuarioUpdateWithoutAutorizacoesInput, UsuarioUncheckedUpdateWithoutAutorizacoesInput>
+  }
+
+  export type UsuarioUpdateWithoutAutorizacoesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    senha?: StringFieldUpdateOperationsInput | string
+    tipo?: EnumTipoUsuarioFieldUpdateOperationsInput | $Enums.TipoUsuario
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutUsuariosNestedInput
+  }
+
+  export type UsuarioUncheckedUpdateWithoutAutorizacoesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    senha?: StringFieldUpdateOperationsInput | string
+    tipo?: EnumTipoUsuarioFieldUpdateOperationsInput | $Enums.TipoUsuario
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AutorizacaoCreateManyUsuarioInput = {
+    id?: string
+    modulo: $Enums.Modulo
+    visualizar?: boolean
+    criarAlterar?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AutorizacaoUpdateWithoutUsuarioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    modulo?: EnumModuloFieldUpdateOperationsInput | $Enums.Modulo
+    visualizar?: BoolFieldUpdateOperationsInput | boolean
+    criarAlterar?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AutorizacaoUncheckedUpdateWithoutUsuarioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    modulo?: EnumModuloFieldUpdateOperationsInput | $Enums.Modulo
+    visualizar?: BoolFieldUpdateOperationsInput | boolean
+    criarAlterar?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AutorizacaoUncheckedUpdateManyWithoutUsuarioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    modulo?: EnumModuloFieldUpdateOperationsInput | $Enums.Modulo
+    visualizar?: BoolFieldUpdateOperationsInput | boolean
+    criarAlterar?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -21764,6 +23490,7 @@ export namespace Prisma {
     ativo?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    autorizacoes?: AutorizacaoUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioUncheckedUpdateWithoutTenantInput = {
@@ -21775,6 +23502,7 @@ export namespace Prisma {
     ativo?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    autorizacoes?: AutorizacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioUncheckedUpdateManyWithoutTenantInput = {

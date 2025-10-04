@@ -353,3 +353,49 @@ export interface WhatsAppConfig {
   horasAntecedencia: number;
   ativo: boolean;
 }
+
+// ============================================================================
+// AUTHORIZATION TYPES
+// ============================================================================
+
+export enum Modulo {
+  PACIENTES = "PACIENTES",
+  PROFISSIONAIS = "PROFISSIONAIS",
+  PROCEDIMENTOS = "PROCEDIMENTOS",
+  AGENDA = "AGENDA",
+  ATENDIMENTOS = "ATENDIMENTOS",
+  WHATSAPP = "WHATSAPP",
+  USUARIOS = "USUARIOS",
+  RELATORIOS = "RELATORIOS",
+}
+
+export interface Permissao {
+  visualizar: boolean;
+  criarAlterar: boolean;
+}
+
+export interface AutorizacaoData {
+  modulo: Modulo;
+  visualizar: boolean;
+  criarAlterar: boolean;
+}
+
+export interface AutorizacoesUsuario {
+  [key: string]: Permissao; // key é o nome do módulo
+}
+
+export interface CreateAutorizacoesData {
+  usuarioId: string;
+  autorizacoes: AutorizacaoData[];
+}
+
+export interface UpdateAutorizacoesData {
+  autorizacoes: AutorizacaoData[];
+}
+
+// Extender AuthenticatedRequest para incluir permissões
+declare module "./index" {
+  interface AuthenticatedRequest {
+    permissoes?: AutorizacoesUsuario;
+  }
+}

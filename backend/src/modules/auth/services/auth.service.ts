@@ -9,6 +9,7 @@ import {
   CreateUserData,
 } from "../../../types";
 import { TipoUsuario } from "../../../generated/prisma";
+import { AutorizacaoService } from "../../autorizacoes/services/autorizacao.service";
 
 // ============================================================================
 // AUTH SERVICE
@@ -130,7 +131,7 @@ export class AuthService {
     // Criptografar senha
     const hashedPassword = await bcrypt.hash(adminUser.senha, 12);
 
-    // Criar tenant e usuário admin em uma transação
+    // Criar tenant, usuário admin e autorizações em uma transação
     const result = await prisma.$transaction(async (tx) => {
       // Criar tenant
       const tenant = await tx.tenant.create({
@@ -155,6 +156,12 @@ export class AuthService {
           ativo: true,
         },
       });
+
+      // Criar autorizações iniciais para o admin (todas as permissões)
+      await AutorizacaoService.criarAutorizacoesIniciais(
+        usuario.id,
+        TipoUsuario.ADMIN
+      );
 
       return { tenant, usuario };
     });
@@ -240,16 +247,22 @@ export class AuthService {
     // Criptografar senha
     const hashedPassword = await bcrypt.hash(senha, 12);
 
-    // Criar usuário
-    await prisma.usuario.create({
-      data: {
-        tenantId,
-        nome: nome.trim(),
-        email: email.toLowerCase().trim(),
-        senha: hashedPassword,
-        tipo,
-        ativo: true,
-      },
+    // Criar usuário e autorizações em uma transação
+    await prisma.$transaction(async (tx) => {
+      // Criar usuário
+      const usuario = await tx.usuario.create({
+        data: {
+          tenantId,
+          nome: nome.trim(),
+          email: email.toLowerCase().trim(),
+          senha: hashedPassword,
+          tipo,
+          ativo: true,
+        },
+      });
+
+      // Criar autorizações iniciais
+      await AutorizacaoService.criarAutorizacoesIniciais(usuario.id, tipo);
     });
   }
 
