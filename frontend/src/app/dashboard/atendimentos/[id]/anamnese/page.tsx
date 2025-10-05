@@ -7,7 +7,7 @@ import AnamneseView from "../../../../../components/anamnese/AnamneseView";
 import { Anamnese } from "../../../../../types/anamnese.types";
 import toast from "react-hot-toast";
 import { PlusIcon, ArrowLeftIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
-import api from "../../../../../services/api";
+import api from "@/lib/api";
 
 export default function AtendimentoAnamnesesPage() {
   const router = useRouter();

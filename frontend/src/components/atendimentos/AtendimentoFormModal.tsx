@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
+import { DocumentTextIcon } from "@heroicons/react/24/outline";
 
 interface AtendimentoFormModalProps {
   isOpen: boolean;
@@ -23,6 +25,7 @@ export function AtendimentoFormModal({
   procedimentos,
   atendimento,
 }: AtendimentoFormModalProps) {
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     agendamentoId: "",
@@ -288,32 +291,54 @@ export function AtendimentoFormModal({
         )}
 
         {/* Botões */}
-        <div className="flex justify-end gap-3 pt-4 border-t">
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={onClose}
-            disabled={isSubmitting}
-          >
-            {isViewing ? "Fechar" : "Cancelar"}
-          </Button>
+        <div className="flex justify-between items-center pt-4 border-t">
+          {/* Lado esquerdo - Botão Anamnese (só no modo visualização) */}
+          <div>
+            {isViewing && atendimento && !atendimento.cancelado && (
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => {
+                  router.push(
+                    `/dashboard/atendimentos/${atendimento.id}/anamnese`
+                  );
+                  onClose();
+                }}
+              >
+                <DocumentTextIcon className="h-5 w-5 mr-2" />
+                Anamneses
+              </Button>
+            )}
+          </div>
 
-          {isViewing && !atendimento?.cancelado && (
+          {/* Lado direito - Botões de ação */}
+          <div className="flex gap-3">
             <Button
               type="button"
-              variant="danger"
-              onClick={handleCancelAtendimento}
-              isLoading={isSubmitting}
+              variant="secondary"
+              onClick={onClose}
+              disabled={isSubmitting}
             >
-              Cancelar Atendimento
+              {isViewing ? "Fechar" : "Cancelar"}
             </Button>
-          )}
 
-          {!isViewing && (
-            <Button type="submit" isLoading={isSubmitting}>
-              Registrar
-            </Button>
-          )}
+            {isViewing && !atendimento?.cancelado && (
+              <Button
+                type="button"
+                variant="danger"
+                onClick={handleCancelAtendimento}
+                isLoading={isSubmitting}
+              >
+                Cancelar Atendimento
+              </Button>
+            )}
+
+            {!isViewing && (
+              <Button type="submit" isLoading={isSubmitting}>
+                Registrar
+              </Button>
+            )}
+          </div>
         </div>
       </form>
     </Modal>

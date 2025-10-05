@@ -2,15 +2,15 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { formularioService } from "../../../../../services/formulario.service";
-import FormularioBuilder from "../../../../../components/anamnese/FormularioBuilder";
+import { formularioService } from "@/services/formulario.service";
+import FormularioBuilder from "@/components/anamnese/FormularioBuilder";
 import {
   CampoFormulario,
   Formulario,
 } from "../../../../../types/anamnese.types";
 import toast from "react-hot-toast";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import api from "../../../../../services/api";
+import api from "@/lib/api";
 
 export default function EditarFormularioPage() {
   const router = useRouter();

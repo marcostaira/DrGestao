@@ -7,7 +7,7 @@ import FormularioBuilder from "../../../../../components/anamnese/FormularioBuil
 import { CampoFormulario } from "../../../../../types/anamnese.types";
 import toast from "react-hot-toast";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import api from "../../../../../services/api";
+import api from "@/lib/api";
 
 export default function NovoFormularioPage() {
   const router = useRouter();
