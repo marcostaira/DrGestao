@@ -4,7 +4,7 @@ import { Router } from "express";
 import { whatsappController } from "./whatsapp.controller";
 import { authenticate } from "../../middleware/auth";
 import { validateTenant } from "../../middleware/tenant";
-import { validateRequest } from "../../middleware/validation";
+import { validate } from "../../middleware/validation";
 import { whatsappValidation } from "./whatsapp.validation";
 
 const router = Router();
@@ -80,7 +80,7 @@ router.get(
  */
 router.put(
   "/templates",
-  validateRequest(whatsappValidation.atualizarTemplates),
+  validate({ body: whatsappValidation.atualizarTemplates }),
   whatsappController.atualizarTemplates.bind(whatsappController)
 );
 
@@ -95,7 +95,7 @@ router.put(
  */
 router.post(
   "/enviar-confirmacao",
-  validateRequest(whatsappValidation.enviarConfirmacao),
+  validate({ body: whatsappValidation.enviarConfirmacao }),
   whatsappController.enviarConfirmacao.bind(whatsappController)
 );
 
@@ -106,7 +106,7 @@ router.post(
  */
 router.post(
   "/enviar-confirmacao-lote",
-  validateRequest(whatsappValidation.enviarConfirmacaoEmLote),
+  validate({ body: whatsappValidation.enviarConfirmacaoEmLote }),
   whatsappController.enviarConfirmacaoEmLote.bind(whatsappController)
 );
 
@@ -132,6 +132,7 @@ router.get(
  */
 router.get(
   "/historico",
+  validate({ query: whatsappValidation.buscarHistorico }),
   whatsappController.buscarHistorico.bind(whatsappController)
 );
 
