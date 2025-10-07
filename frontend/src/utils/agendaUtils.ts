@@ -163,6 +163,8 @@ export const getStatusColor = (status: StatusAgendamento): string => {
     [StatusAgendamento.COMPARECEU]: "bg-blue-100 text-blue-800 border-blue-300",
     [StatusAgendamento.FALTOU]: "bg-red-100 text-red-800 border-red-300",
     [StatusAgendamento.CANCELADO]: "bg-gray-100 text-gray-800 border-gray-300",
+    [StatusAgendamento.REAGENDAR]:
+      "bg-orange-100 text-orange-800 border-orange-300", 
   };
   return colors[status] || "";
 };
@@ -176,6 +178,7 @@ export const getStatusBadge = (
     [StatusAgendamento.COMPARECEU]: "info",
     [StatusAgendamento.FALTOU]: "danger",
     [StatusAgendamento.CANCELADO]: "default",
+    [StatusAgendamento.REAGENDAR]: "warning", 
   } as const;
   return variants[status];
 };

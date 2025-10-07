@@ -43,7 +43,14 @@ router.get(
       pacienteId: Joi.string().optional(),
       profissionalId: Joi.string().optional(),
       status: Joi.string()
-        .valid("MARCADO", "CONFIRMADO", "COMPARECEU", "FALTOU", "CANCELADO")
+        .valid(
+          "MARCADO",
+          "CONFIRMADO",
+          "COMPARECEU",
+          "FALTOU",
+          "CANCELADO",
+          "REAGENDAR"
+        )
         .optional(),
     }),
   }),
@@ -151,7 +158,14 @@ router.patch(
     params: Joi.object({ id: idSchema }),
     body: Joi.object({
       status: Joi.string()
-        .valid("MARCADO", "CONFIRMADO", "COMPARECEU", "FALTOU", "CANCELADO")
+        .valid(
+          "MARCADO",
+          "CONFIRMADO",
+          "COMPARECEU",
+          "FALTOU",
+          "CANCELADO",
+          "REAGENDAR"
+        )
         .required(),
     }),
   }),

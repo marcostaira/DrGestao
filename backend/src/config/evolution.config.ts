@@ -339,12 +339,23 @@ class EvolutionService {
     payload: SendMessagePayload
   ): Promise<any> {
     try {
+      console.log("📤 Enviando mensagem de texto...");
+      console.log("Instance:", instanceName);
+      console.log("Payload completo:", JSON.stringify(payload, null, 2));
+
       const response = await this.client.post<any>(
         `/message/sendText/${instanceName}`,
         payload
       );
+
+      console.log("✅ Mensagem enviada com sucesso:", response.data);
       return response.data;
     } catch (error: any) {
+      console.error("❌ Erro ao enviar mensagem:", error.response?.data);
+      console.error(
+        "Payload que causou erro:",
+        JSON.stringify(payload, null, 2)
+      );
       throw new Error(
         `Erro ao enviar mensagem: ${
           error.response?.data?.message || error.message
@@ -474,6 +485,159 @@ class EvolutionService {
       console.error("❌ Erro ao buscar instâncias:", error.response?.data);
       throw new Error(
         `Erro ao buscar instâncias: ${
+          error.response?.data?.message || error.message
+        }`
+      );
+    }
+  }
+
+  // Atualizar o método configureWebhook
+  async configureWebhook(
+    instanceName: string,
+    webhookUrl: string
+  ): Promise<any> {
+    try {
+      console.log("🔧 Configurando webhook...");
+      console.log("Instance:", instanceName);
+      console.log("Webhook URL:", webhookUrl);
+
+      // Formato correto para a Evolution API v2
+      const payload = {
+        enabled: true,
+        url: webhookUrl,
+        webhookByEvents: false, // ou true, dependendo da versão
+        webhookBase64: false,
+        events: [
+          "QRCODE_UPDATED",
+          "MESSAGES_UPSERT",
+          "MESSAGES_UPDATE",
+          "MESSAGES_DELETE",
+          "SEND_MESSAGE",
+          "CONNECTION_UPDATE",
+        ],
+      };
+
+      console.log("📦 Payload do webhook:", JSON.stringify(payload, null, 2));
+
+      // Tentar a rota mais comum primeiro
+      let response;
+      try {
+        response = await this.client.post<any>(
+          `/webhook/set/${instanceName}`,
+          payload
+        );
+      } catch (err: any) {
+        // Se falhar, tentar rota alternativa
+        console.log(
+          "⚠️ Primeira tentativa falhou, tentando rota alternativa..."
+        );
+
+        // Algumas versões da Evolution usam essa estrutura
+        const alternativePayload = {
+          webhook: {
+            enabled: true,
+            url: webhookUrl,
+            webhookByEvents: false,
+            webhookBase64: false,
+            events: [
+              "QRCODE_UPDATED",
+              "MESSAGES_UPSERT",
+              "MESSAGES_UPDATE",
+              "MESSAGES_DELETE",
+              "SEND_MESSAGE",
+              "CONNECTION_UPDATE",
+            ],
+          },
+        };
+
+        try {
+          response = await this.client.post<any>(
+            `/webhook/set/${instanceName}`,
+            alternativePayload
+          );
+        } catch (err2: any) {
+          // Terceira tentativa: PUT em vez de POST
+          console.log("⚠️ Segunda tentativa falhou, tentando PUT...");
+          response = await this.client.put<any>(
+            `/webhook/set/${instanceName}`,
+            payload
+          );
+        }
+      }
+
+      console.log("✅ Webhook configurado com sucesso:", response.data);
+      return response.data;
+    } catch (error: any) {
+      console.error("❌ Erro ao configurar webhook:", error.response?.data);
+      console.error(
+        "❌ Detalhes completos:",
+        JSON.stringify(error.response?.data, null, 2)
+      );
+      throw new Error(
+        `Erro ao configurar webhook: ${
+          error.response?.data?.message || error.message
+        }`
+      );
+    }
+  }
+
+  // Atualizar o método updateSettings
+  async updateSettings(
+    instanceName: string,
+    settings: {
+      reject_call?: boolean;
+      msg_call?: string;
+      groups_ignore?: boolean;
+      always_online?: boolean;
+      read_messages?: boolean;
+      read_status?: boolean;
+    }
+  ): Promise<any> {
+    try {
+      console.log("⚙️ Atualizando configurações da instância...");
+      console.log("Instance:", instanceName);
+      console.log("Settings:", JSON.stringify(settings, null, 2));
+
+      // Formato correto para Evolution API
+      const payload = {
+        rejectCall: settings.reject_call || false,
+        msgCall: settings.msg_call || "",
+        groupsIgnore: settings.groups_ignore || false,
+        alwaysOnline: settings.always_online || false,
+        readMessages: settings.read_messages || false,
+        readStatus: settings.read_status || false,
+      };
+
+      console.log("📦 Payload das settings:", JSON.stringify(payload, null, 2));
+
+      let response;
+      try {
+        response = await this.client.post<any>(
+          `/settings/set/${instanceName}`,
+          payload
+        );
+      } catch (err: any) {
+        // Tentar PUT se POST falhar
+        console.log("⚠️ POST falhou, tentando PUT...");
+        response = await this.client.put<any>(
+          `/settings/set/${instanceName}`,
+          payload
+        );
+      }
+
+      console.log("✅ Configurações atualizadas:", response.data);
+      return response.data;
+    } catch (error: any) {
+      console.error(
+        "❌ Erro ao atualizar configurações:",
+        error.response?.data
+      );
+      console.error(
+        "❌ Detalhes completos:",
+        JSON.stringify(error.response?.data, null, 2)
+      );
+      throw new Error(
+        `Erro ao atualizar configurações: ${
           error.response?.data?.message || error.message
         }`
       );

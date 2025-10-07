@@ -6,6 +6,7 @@ export enum StatusAgendamento {
   COMPARECEU = "COMPARECEU",
   FALTOU = "FALTOU",
   CANCELADO = "CANCELADO",
+  REAGENDAR = "REAGENDAR",
 }
 
 export interface Agendamento {

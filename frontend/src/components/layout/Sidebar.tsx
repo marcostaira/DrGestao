@@ -15,6 +15,7 @@ interface MenuItem {
 }
 
 export default function Sidebar() {
+  const sysName = process.env.NEXT_PUBLIC_APP_NAME;
   const pathname = usePathname();
   const { isAdmin } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -363,9 +364,7 @@ export default function Sidebar() {
       } bg-primary-800 text-white min-h-screen transition-all duration-300`}
     >
       <div className="p-6 flex items-center justify-between">
-        {!isCollapsed && (
-          <h1 className="text-xl font-bold">Sistema de Agendamentos</h1>
-        )}
+        {!isCollapsed && <h1 className="text-xl font-bold">{sysName}</h1>}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
           className="p-2 hover:bg-primary-700 rounded-lg transition-colors ml-auto"

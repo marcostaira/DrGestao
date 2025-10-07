@@ -6,8 +6,26 @@ import { authenticate } from "../../middleware/auth";
 
 const router = Router();
 
-// Todas as rotas requerem autenticação
+// ============================================================================
+// ROTAS PÚBLICAS (SEM AUTENTICAÇÃO)
+// ============================================================================
+
+/**
+ * @route   POST /api/whatsapp/webhook
+ * @desc    Webhook para receber eventos da Evolution API
+ * @access  Public (mas validado pela Evolution)
+ */
+router.post("/webhook", whatsappController.handleWebhook);
+
+// ============================================================================
+// APLICAR AUTENTICAÇÃO PARA TODAS AS OUTRAS ROTAS
+// ============================================================================
+
 router.use(authenticate);
+
+// ============================================================================
+// ROTAS PRIVADAS (COM AUTENTICAÇÃO)
+// ============================================================================
 
 /**
  * @route   POST /api/whatsapp/inicializar
@@ -80,13 +98,6 @@ router.get("/estatisticas", whatsappController.buscarEstatisticas);
 router.get("/historico", whatsappController.buscarHistorico);
 
 /**
- * @route   POST /api/whatsapp/webhook
- * @desc    Webhook para receber eventos da Evolution API
- * @access  Public (mas validado pela Evolution)
- */
-router.post("/webhook", whatsappController.handleWebhook);
-
-/**
  * @route   GET /api/whatsapp/config
  * @desc    Buscar configuração
  * @access  Private
@@ -99,5 +110,12 @@ router.get("/config", whatsappController.buscarConfiguracao);
  * @access  Private
  */
 router.put("/ativar", whatsappController.ativarDesativar);
+
+/**
+ * @route   POST /api/whatsapp/reconfigurar-webhook
+ * @desc    Reconfigurar webhook e settings da instância
+ * @access  Private
+ */
+router.post("/reconfigurar-webhook", whatsappController.reconfigurarWebhook);
 
 export default router;

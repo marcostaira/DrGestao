@@ -125,4 +125,13 @@ export const whatsappService = {
     const response = await api.put("/whatsapp/ativar", { ativo });
     return response.data.data;
   },
+
+  async reconfigurarWebhook(): Promise<{
+    success: boolean;
+    message: string;
+    webhookUrl: string;
+  }> {
+    const response = await api.post("/whatsapp/reconfigurar-webhook");
+    return response.data.data;
+  },
 };

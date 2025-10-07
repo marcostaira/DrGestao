@@ -24,6 +24,7 @@ enum StatusAgendamento {
   COMPARECEU
   FALTOU
   CANCELADO
+  REAGENDAR
 }
 
 enum TipoLog {

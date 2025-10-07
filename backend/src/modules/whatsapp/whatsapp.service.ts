@@ -189,25 +189,54 @@ export class WhatsAppService {
         }
 
         const instanceData = instances[0];
-        console.log(
-          "📊 Dados completos da instância:",
-          JSON.stringify(instanceData, null, 2)
-        );
-
-        // Normalizar o status
-        const normalizedStatus = instanceData.connectionStatus?.toLowerCase();
-        console.log("📊 Connection Status:", normalizedStatus);
+        console.log("📊 Connection Status:", instanceData.connectionStatus);
 
         // Verificar se está conectado
         const isConnected =
-          normalizedStatus === "open" || normalizedStatus === "connected";
+          instanceData.connectionStatus?.toLowerCase() === "open";
 
         console.log("🔐 Está conectado?", isConnected);
 
         if (isConnected) {
           console.log("✅ WhatsApp CONECTADO!");
 
-          // Extrair número do ownerJid (formato: 554188273161@s.whatsapp.net)
+          // ========================================================================
+          // CONFIGURAR WEBHOOK E SETTINGS QUANDO CONECTAR
+          // ========================================================================
+
+          const webhookUrl = `${
+            process.env.API_URL || "http://localhost:3001"
+          }/api/whatsapp/webhook`;
+
+          try {
+            console.log("🔧 Configurando webhook e settings...");
+
+            // Configurar webhook
+            await evolutionService.configureWebhook(
+              config.instanceName,
+              webhookUrl
+            );
+
+            // Configurar settings (não ignorar grupos para receber mensagens)
+            await evolutionService.updateSettings(config.instanceName, {
+              reject_call: false,
+              groups_ignore: false, // IMPORTANTE: false para receber mensagens
+              always_online: false,
+              read_messages: false, // false para não marcar como lido automaticamente
+              read_status: false,
+            });
+
+            console.log("✅ Webhook e settings configurados!");
+          } catch (webhookError) {
+            console.error(
+              "⚠️ Erro ao configurar webhook/settings (não crítico):",
+              webhookError
+            );
+          }
+
+          // ========================================================================
+
+          // Extrair número do ownerJid
           let phoneNumber = instanceData.number;
           if (!phoneNumber && instanceData.ownerJid) {
             phoneNumber = instanceData.ownerJid.split("@")[0];
@@ -244,13 +273,11 @@ export class WhatsAppService {
           };
         }
 
-        // Se não está conectado, verificar se está conectando
+        // Se não está conectado
         const isConnecting =
-          normalizedStatus === "connecting" ||
-          normalizedStatus === "close" ||
-          normalizedStatus === "qr";
-
-        console.log("⏳ Está conectando?", isConnecting);
+          instanceData.connectionStatus?.toLowerCase() === "connecting" ||
+          instanceData.connectionStatus?.toLowerCase() === "close" ||
+          instanceData.connectionStatus?.toLowerCase() === "qr";
 
         let newStatus: "CONNECTING" | "DISCONNECTED" = isConnecting
           ? "CONNECTING"
@@ -274,7 +301,6 @@ export class WhatsAppService {
           evolutionError.message
         );
 
-        // Se der erro ao consultar a Evolution, marcar como desconectado
         await whatsappModel.updateConfig(tenantId, {
           status: "DISCONNECTED",
         });
@@ -288,10 +314,8 @@ export class WhatsAppService {
       }
     } catch (error: any) {
       console.error("❌ Erro GERAL ao verificar status:", error);
-      console.error(error.stack);
       console.log("==========================================");
 
-      // Em caso de erro, retornar o status atual do banco
       try {
         const config = await whatsappModel.findConfigByTenantId(tenantId);
         return {
@@ -405,6 +429,39 @@ export class WhatsAppService {
         throw new Error("WhatsApp não está conectado");
       }
 
+      // ============================================================================
+      // VERIFICAR SE JÁ FOI ENVIADA CONFIRMAÇÃO RECENTEMENTE (últimas 24h)
+      // ============================================================================
+
+      const vinteCuatroHorasAtras = new Date();
+      vinteCuatroHorasAtras.setHours(vinteCuatroHorasAtras.getHours() - 24);
+
+      const mensagemExistente = await prisma.whatsAppMensagem.findFirst({
+        where: {
+          tenantId,
+          agendamentoId,
+          tipo: "CONFIRMACAO",
+          status: {
+            in: ["PENDENTE", "ENVIADA", "RESPONDIDA"],
+          },
+          createdAt: {
+            gte: vinteCuatroHorasAtras,
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+      if (mensagemExistente) {
+        console.log(
+          "⚠️ Já existe confirmação enviada recentemente para este agendamento"
+        );
+        throw new Error(
+          "Já foi enviada uma confirmação para este agendamento nas últimas 24 horas"
+        );
+      }
+
       // Buscar agendamento com relacionamentos
       const agendamento = await prisma.agendamento.findUnique({
         where: { id: agendamentoId, tenantId },
@@ -424,14 +481,40 @@ export class WhatsAppService {
         throw new Error("Agendamento sem paciente vinculado");
       }
 
-      // Verificar se o paciente tem telefone
-      if (!agendamento.paciente.telefone) {
+      const paciente = agendamento.paciente;
+
+      if (!paciente.telefone) {
         throw new Error("Paciente não possui telefone cadastrado");
       }
 
-      // Montar mensagem com template
+      // ============================================================================
+      // LIMPAR E FORMATAR O TELEFONE
+      // ============================================================================
+
+      let telefone = paciente.telefone.replace(/\D/g, ""); // Remove tudo que não é número
+
+      console.log("📱 Telefone original:", paciente.telefone);
+      console.log("📱 Telefone limpo:", telefone);
+
+      // Adicionar código do país se não tiver (Brasil = 55)
+      if (!telefone.startsWith("55")) {
+        telefone = "55" + telefone;
+      }
+
+      console.log("📱 Telefone com código país:", telefone);
+      console.log("📱 Tamanho do telefone:", telefone.length);
+
+      // O formato correto para WhatsApp é: 5511944604292@s.whatsapp.net
+      const numeroFormatado = `${telefone}@s.whatsapp.net`;
+
+      console.log("📱 Número formatado final:", numeroFormatado);
+
+      // ============================================================================
+      // MONTAR MENSAGEM
+      // ============================================================================
+
       let mensagem = config.templateConfirmacao
-        .replace("{nome}", agendamento.paciente.nome)
+        .replace("{nome}", paciente.nome)
         .replace(
           "{data}",
           new Date(agendamento.dataHora).toLocaleDateString("pt-BR")
@@ -453,19 +536,27 @@ export class WhatsAppService {
         mensagem += `\n\n📋 Preencha sua anamnese: ${linkAnamnese}`;
       }
 
-      // Criar mensagem no banco
+      console.log("📝 Mensagem montada:", mensagem.substring(0, 100) + "...");
+
+      // ============================================================================
+      // SALVAR NO BANCO COM TELEFONE FORMATADO
+      // ============================================================================
+
       const mensagemDb = await whatsappModel.createMensagem({
         tenantId,
         configId: config.id,
         agendamentoId: agendamento.id,
-        pacienteId: agendamento.paciente.id,
-        telefone: agendamento.paciente.telefone,
+        pacienteId: paciente.id,
+        telefone: numeroFormatado,
         mensagem,
         tipo: "CONFIRMACAO",
       });
 
+      console.log("💾 Mensagem salva no banco com ID:", mensagemDb.id);
+
       // Adicionar à fila
       this.queue.addToQueue(mensagemDb.id);
+      console.log("📬 Mensagem adicionada à fila");
 
       return {
         success: true,
@@ -473,6 +564,7 @@ export class WhatsAppService {
         message: "Mensagem adicionada à fila de envio",
       };
     } catch (error: any) {
+      console.error("❌ Erro ao enviar confirmação:", error);
       throw new Error(`Erro ao enviar confirmação: ${error.message}`);
     }
   }
@@ -515,123 +607,6 @@ export class WhatsAppService {
       };
     } catch (error: any) {
       throw new Error(`Erro ao enviar confirmações em lote: ${error.message}`);
-    }
-  }
-
-  // ============================================================================
-  // PROCESSAMENTO DE RESPOSTAS
-  // ============================================================================
-
-  async processarResposta(
-    tenantId: string,
-    telefone: string,
-    mensagemRecebida: string
-  ) {
-    try {
-      const config = await whatsappModel.findConfigByTenantId(tenantId);
-
-      if (!config) {
-        return { success: false, message: "Configuração não encontrada" };
-      }
-
-      // Buscar mensagem enviada nas últimas 24h
-      const mensagemOriginal =
-        await whatsappModel.findMensagemByTelefoneRecente(
-          tenantId,
-          telefone,
-          config.horasAntecedencia
-        );
-
-      if (!mensagemOriginal) {
-        console.log(`Nenhuma mensagem recente encontrada para ${telefone}`);
-        return {
-          success: false,
-          message: "Nenhuma mensagem recente encontrada",
-        };
-      }
-
-      // Verificar se já foi respondida
-      if (mensagemOriginal.status === "RESPONDIDA") {
-        console.log(`Mensagem já foi respondida para ${telefone}`);
-        return { success: false, message: "Mensagem já foi respondida" };
-      }
-
-      // Processar resposta
-      const respostaNormalizada = mensagemRecebida.trim();
-      let mensagemResposta = "";
-      let tipoResposta = "";
-      let novoStatusAgendamento: "CONFIRMADO" | "CANCELADO" | "" = "";
-
-      if (respostaNormalizada === "1") {
-        // Confirmar
-        mensagemResposta = config.templateConfirmado
-          .replace(
-            "{data}",
-            new Date(mensagemOriginal.agendamento!.dataHora).toLocaleDateString(
-              "pt-BR"
-            )
-          )
-          .replace(
-            "{hora}",
-            new Date(mensagemOriginal.agendamento!.dataHora).toLocaleTimeString(
-              "pt-BR",
-              { hour: "2-digit", minute: "2-digit" }
-            )
-          );
-
-        tipoResposta = "RESPOSTA_CONFIRMADO";
-        novoStatusAgendamento = "CONFIRMADO";
-      } else if (respostaNormalizada === "2") {
-        // Reagendar
-        mensagemResposta = config.templateReagendar;
-        tipoResposta = "RESPOSTA_REAGENDAR";
-        novoStatusAgendamento = "CANCELADO";
-      } else {
-        // Opção inválida
-        mensagemResposta = config.templateOpcaoInvalida;
-        tipoResposta = "RESPOSTA_INVALIDA";
-      }
-
-      // Atualizar mensagem original
-      await whatsappModel.updateMensagem(mensagemOriginal.id, {
-        respostaRecebida: mensagemRecebida,
-        respostaEm: new Date(),
-        status: "RESPONDIDA",
-      });
-
-      // Atualizar status do agendamento se necessário
-      if (novoStatusAgendamento && mensagemOriginal.agendamentoId) {
-        await prisma.agendamento.update({
-          where: { id: mensagemOriginal.agendamentoId },
-          data: { status: novoStatusAgendamento },
-        });
-      }
-
-      // Criar mensagem de resposta
-      const mensagemRespostaDb = await whatsappModel.createMensagem({
-        tenantId,
-        configId: config.id,
-        agendamentoId: mensagemOriginal.agendamentoId || undefined,
-        pacienteId: mensagemOriginal.pacienteId,
-        telefone,
-        mensagem: mensagemResposta,
-        tipo: tipoResposta,
-      });
-
-      // Adicionar à fila para envio
-      this.queue.addToQueue(mensagemRespostaDb.id);
-
-      // Incrementar contador de mensagens recebidas
-      await whatsappModel.incrementMensagensRecebidas(tenantId);
-
-      return {
-        success: true,
-        tipoResposta,
-        novoStatusAgendamento,
-      };
-    } catch (error: any) {
-      console.error("Erro ao processar resposta:", error);
-      throw new Error(`Erro ao processar resposta: ${error.message}`);
     }
   }
 
@@ -719,11 +694,18 @@ export class WhatsAppService {
       }
 
       try {
+        console.log("📤 Processando mensagem da fila...");
+        console.log("Instance:", config.instanceName);
+        console.log("Número:", mensagem.telefone);
+        console.log("Mensagem:", mensagem.mensagem.substring(0, 50) + "...");
+
         // Enviar mensagem via Evolution API
         await evolutionService.sendTextMessage(config.instanceName, {
           number: mensagem.telefone,
           text: mensagem.mensagem,
         });
+
+        console.log("✅ Mensagem enviada com sucesso!");
 
         // Atualizar status
         await whatsappModel.updateMensagem(mensagem.id, {
@@ -741,6 +723,8 @@ export class WhatsAppService {
           mensagemId: mensagem.id,
         };
       } catch (error: any) {
+        console.error("❌ Erro ao enviar mensagem:", error.message);
+
         await whatsappModel.updateMensagem(mensagem.id, {
           status: "ERRO",
           tentativas: mensagem.tentativas + 1,
@@ -758,6 +742,295 @@ export class WhatsAppService {
     } catch (error: any) {
       console.error("Erro ao processar fila:", error);
       return null;
+    }
+  }
+
+  async processarResposta(
+    tenantId: string,
+    telefone: string,
+    mensagem: string
+  ) {
+    try {
+      console.log("==========================================");
+      console.log("🔄 PROCESSANDO RESPOSTA DO PACIENTE");
+      console.log("==========================================");
+      console.log("Tenant ID:", tenantId);
+      console.log("Telefone:", telefone);
+      console.log("Mensagem:", mensagem);
+
+      // Buscar mensagem pendente para este telefone
+      const mensagemPendente = await prisma.whatsAppMensagem.findFirst({
+        where: {
+          tenantId,
+          telefone: telefone,
+          tipo: "CONFIRMACAO",
+          status: {
+            in: ["ENVIADA", "PENDENTE"],
+          },
+          respostaRecebida: null,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        include: {
+          agendamento: true,
+          paciente: true,
+          config: true,
+        },
+      });
+
+      console.log(
+        "📋 Mensagem pendente encontrada:",
+        mensagemPendente ? "SIM" : "NÃO"
+      );
+
+      if (!mensagemPendente) {
+        console.log(
+          "⚠️ Nenhuma mensagem pendente encontrada para este telefone"
+        );
+        console.log("Telefone buscado:", telefone);
+
+        // Buscar TODAS as mensagens deste telefone para debug
+        const todasMensagens = await prisma.whatsAppMensagem.findMany({
+          where: {
+            tenantId,
+            telefone: telefone,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+          take: 5,
+        });
+
+        console.log(
+          "🔍 Últimas 5 mensagens deste telefone:",
+          JSON.stringify(todasMensagens, null, 2)
+        );
+        console.log("==========================================");
+        return;
+      }
+
+      console.log("📌 ID da mensagem:", mensagemPendente.id);
+      console.log("📌 Agendamento ID:", mensagemPendente.agendamentoId);
+      console.log(
+        "📌 Status atual do agendamento:",
+        mensagemPendente.agendamento?.status
+      );
+
+      const config = mensagemPendente.config;
+
+      // Normalizar resposta (remover espaços, pontos, vírgulas)
+      const respostaNormalizada = mensagem.trim().replace(/[.,\s]/g, "");
+
+      console.log("✨ Resposta normalizada:", respostaNormalizada);
+
+      let mensagemResposta = "";
+      let novoStatus: "CONFIRMADO" | "REAGENDAR" | null = null;
+
+      // Processar resposta
+      if (
+        respostaNormalizada === "1" ||
+        respostaNormalizada.toLowerCase() === "sim"
+      ) {
+        console.log("✅ Paciente CONFIRMOU!");
+
+        mensagemResposta = config.templateConfirmado
+          .replace("{nome}", mensagemPendente.paciente?.nome || "")
+          .replace(
+            "{data}",
+            new Date(
+              mensagemPendente.agendamento?.dataHora || ""
+            ).toLocaleDateString("pt-BR")
+          )
+          .replace(
+            "{hora}",
+            new Date(
+              mensagemPendente.agendamento?.dataHora || ""
+            ).toLocaleTimeString("pt-BR", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })
+          );
+
+        novoStatus = "CONFIRMADO";
+        console.log("🎯 Novo status será: CONFIRMADO");
+      } else if (
+        respostaNormalizada === "2" ||
+        respostaNormalizada.toLowerCase() === "nao" ||
+        respostaNormalizada.toLowerCase() === "não"
+      ) {
+        console.log("🔄 Paciente quer REAGENDAR!");
+
+        mensagemResposta = config.templateReagendar.replace(
+          "{nome}",
+          mensagemPendente.paciente?.nome || ""
+        );
+
+        novoStatus = "REAGENDAR";
+        console.log("🎯 Novo status será: REAGENDAR");
+      } else {
+        console.log("❓ Resposta INVÁLIDA!");
+        console.log("Resposta recebida:", respostaNormalizada);
+
+        mensagemResposta = config.templateOpcaoInvalida;
+
+        // Atualizar mensagem mas não atualizar o agendamento
+        await whatsappModel.updateMensagem(mensagemPendente.id, {
+          status: "RESPONDIDA",
+          respostaRecebida: mensagem,
+          respostaEm: new Date(),
+        });
+
+        // Enviar mensagem de opção inválida
+        await this.enviarMensagemDireta(tenantId, telefone, mensagemResposta);
+
+        console.log("📤 Mensagem de opção inválida enviada");
+        console.log("==========================================");
+        return;
+      }
+
+      console.log(
+        "📝 Mensagem de resposta:",
+        mensagemResposta.substring(0, 50) + "..."
+      );
+      console.log("📊 Novo status definido:", novoStatus);
+
+      // Atualizar mensagem
+      console.log("💾 Atualizando mensagem no banco...");
+      await whatsappModel.updateMensagem(mensagemPendente.id, {
+        status: "RESPONDIDA",
+        respostaRecebida: mensagem,
+        respostaEm: new Date(),
+      });
+      console.log("✅ Mensagem atualizada no banco");
+
+      // Atualizar status do agendamento
+      if (novoStatus && mensagemPendente.agendamentoId) {
+        console.log("💾 Atualizando status do agendamento...");
+        console.log("Agendamento ID:", mensagemPendente.agendamentoId);
+        console.log("Novo Status:", novoStatus);
+
+        try {
+          const agendamentoAtualizado = await prisma.agendamento.update({
+            where: {
+              id: mensagemPendente.agendamentoId,
+            },
+            data: {
+              status: novoStatus,
+            },
+          });
+
+          console.log("✅ Agendamento atualizado com sucesso!");
+          console.log("Status anterior:", mensagemPendente.agendamento?.status);
+          console.log("Status novo:", agendamentoAtualizado.status);
+        } catch (updateError: any) {
+          console.error("❌ ERRO ao atualizar agendamento:", updateError);
+          console.error("Mensagem de erro:", updateError.message);
+          console.error("Stack:", updateError.stack);
+        }
+      } else {
+        console.log("⚠️ Não atualizou o agendamento:");
+        console.log("- novoStatus:", novoStatus);
+        console.log("- agendamentoId:", mensagemPendente.agendamentoId);
+      }
+
+      // Enviar mensagem de resposta
+      console.log("📤 Enviando mensagem de resposta ao paciente...");
+      await this.enviarMensagemDireta(tenantId, telefone, mensagemResposta);
+
+      console.log("✅ Mensagem de resposta enviada!");
+      console.log("==========================================");
+    } catch (error: any) {
+      console.error("❌ ERRO GERAL ao processar resposta:", error);
+      console.error("Mensagem:", error.message);
+      console.error("Stack:", error.stack);
+      console.log("==========================================");
+    }
+  }
+
+  private async enviarMensagemDireta(
+    tenantId: string,
+    telefone: string,
+    mensagem: string
+  ) {
+    try {
+      const config = await whatsappModel.findConfigByTenantId(tenantId);
+
+      if (!config || !config.instanceName) {
+        throw new Error("Configuração do WhatsApp não encontrada");
+      }
+
+      await evolutionService.sendTextMessage(config.instanceName, {
+        number: telefone,
+        text: mensagem,
+      });
+
+      // Incrementar contador
+      await whatsappModel.incrementMensagensEnviadas(tenantId);
+    } catch (error: any) {
+      console.error("Erro ao enviar mensagem direta:", error);
+      throw error;
+    }
+  }
+
+  async reconfigurarWebhook(tenantId: string) {
+    try {
+      console.log("==========================================");
+      console.log("🔧 RECONFIGURANDO WEBHOOK E SETTINGS");
+      console.log("Tenant ID:", tenantId);
+      console.log("==========================================");
+
+      const config = await whatsappModel.findConfigByTenantId(tenantId);
+
+      if (!config || !config.instanceName) {
+        throw new Error("Configuração do WhatsApp não encontrada");
+      }
+
+      if (config.status !== "CONNECTED") {
+        throw new Error("WhatsApp não está conectado");
+      }
+
+      const webhookUrl = `${
+        process.env.API_URL || "http://localhost:3001"
+      }/api/whatsapp/webhook`;
+
+      console.log("📡 Webhook URL:", webhookUrl);
+      console.log("📱 Instance:", config.instanceName);
+
+      // Configurar webhook
+      await evolutionService.configureWebhook(config.instanceName, webhookUrl);
+      console.log("✅ Webhook configurado");
+
+      // Tentar configurar settings (não crítico)
+      try {
+        console.log("⚙️ Tentando configurar settings...");
+        await evolutionService.updateSettings(config.instanceName, {
+          reject_call: false,
+          groups_ignore: true,
+          always_online: false,
+          read_messages: false,
+          read_status: false,
+        });
+        console.log("✅ Settings configurados");
+      } catch (settingsError: any) {
+        console.log("⚠️ Não foi possível configurar settings (não crítico)");
+        console.log(
+          "⚠️ Você pode configurar manualmente no painel da Evolution se necessário"
+        );
+        // Não lançar erro, settings é opcional
+      }
+
+      console.log("==========================================");
+
+      return {
+        success: true,
+        message:
+          "Webhook configurado com sucesso! Agora você receberá as respostas dos pacientes.",
+        webhookUrl,
+      };
+    } catch (error: any) {
+      console.error("❌ Erro ao reconfigurar webhook:", error);
+      throw new Error(`Erro ao reconfigurar: ${error.message}`);
     }
   }
 
