@@ -3,9 +3,7 @@
 import { whatsappModel } from "./whatsapp.model";
 import { evolutionService } from "../../config/evolution.config";
 import { WhatsAppQueue } from "./whatsapp.queue";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "../../config/database";
 
 export class WhatsAppService {
   private queue: WhatsAppQueue;
@@ -20,11 +18,9 @@ export class WhatsAppService {
 
   async inicializarConexao(tenantId: string) {
     try {
-      // Verificar se já existe config
       let config = await whatsappModel.findConfigByTenantId(tenantId);
 
       if (!config) {
-        // Criar config inicial
         config = await whatsappModel.createConfig({
           tenantId,
           instanceName: `tenant_${tenantId}`,
@@ -33,12 +29,51 @@ export class WhatsAppService {
 
       const instanceName = config.instanceName || `tenant_${tenantId}`;
 
-      // Criar/reconectar instância no Evolution
+      console.log("🔌 Conectando à Evolution API...");
+      console.log("Instance:", instanceName);
+
+      // PRIMEIRO: Verificar se a instância já existe e está conectada
+      try {
+        const statusCheck = await evolutionService.getInstanceStatus(
+          instanceName
+        );
+
+        if (statusCheck.connectionStatus === "open") {
+          console.log("✅ Instância já está conectada!");
+
+          // Buscar informações do perfil
+          const profileInfo = await evolutionService.getProfileInfo(
+            instanceName
+          );
+          const contacts = await evolutionService.fetchContacts(instanceName);
+          const chats = await evolutionService.fetchChats(instanceName);
+
+          // Atualizar config
+          await whatsappModel.updateConfig(tenantId, {
+            status: "CONNECTED",
+            phoneNumber: profileInfo.number || null,
+            profileName: profileInfo.name || null,
+            totalContacts: contacts?.length || 0,
+            totalChats: chats?.length || 0,
+          });
+
+          return {
+            success: true,
+            message: "WhatsApp já está conectado",
+            alreadyConnected: true,
+          };
+        }
+      } catch (statusError) {
+        console.log(
+          "⚠️ Instância não existe ou não está conectada, criando nova..."
+        );
+      }
+
       const webhookUrl = `${
         process.env.API_URL || "http://localhost:3001"
       }/api/whatsapp/webhook`;
 
-      const instanceData = await evolutionService.createInstance({
+      const createPayload = {
         instanceName,
         qrcode: true,
         integration: "WHATSAPP-BAILEYS",
@@ -50,17 +85,56 @@ export class WhatsAppService {
           "CONNECTION_UPDATE",
           "QRCODE_UPDATED",
         ],
-      });
+      };
+
+      try {
+        await evolutionService.createInstance(createPayload);
+        console.log("✅ Instância criada");
+      } catch (createError: any) {
+        const errorData = createError.errorData || {};
+        const errorMessage = createError.message || "";
+        const responseMessages = errorData.response?.message || [];
+
+        const messagesString = Array.isArray(responseMessages)
+          ? responseMessages.join(" ").toLowerCase()
+          : "";
+
+        const alreadyExists =
+          errorMessage.toLowerCase().includes("already in use") ||
+          messagesString.includes("already in use");
+
+        if (alreadyExists) {
+          console.log("♻️ Instância já existe, deletando...");
+
+          try {
+            await evolutionService.deleteInstance(instanceName);
+            console.log("✅ Deletada");
+
+            await new Promise((resolve) => setTimeout(resolve, 3000));
+
+            console.log("🔄 Recriando...");
+            await evolutionService.createInstance(createPayload);
+            console.log("✅ Recriada!");
+          } catch (deleteError: any) {
+            console.error("❌ Erro ao deletar:", deleteError.message);
+          }
+        } else {
+          throw createError;
+        }
+      }
 
       // Buscar QR Code
+      console.log("📱 Buscando QR Code...");
       const qrData = await evolutionService.fetchQRCode(instanceName);
 
-      // Atualizar config com QR Code
+      // Atualizar config
       const updatedConfig = await whatsappModel.updateConfig(tenantId, {
         instanceName,
         qrCode: qrData.qrcode.base64,
         status: "CONNECTING",
       });
+
+      console.log("✅ QR Code gerado!");
 
       return {
         success: true,
@@ -69,68 +143,167 @@ export class WhatsAppService {
         config: updatedConfig,
       };
     } catch (error: any) {
-      throw new Error(`Erro ao inicializar conexão: ${error.message}`);
+      console.error("❌ Erro fatal:", error.message);
+      throw new Error(error.message || "Erro ao inicializar conexão");
     }
   }
 
   async verificarStatus(tenantId: string) {
     try {
+      console.log("==========================================");
+      console.log("🔍 VERIFICANDO STATUS DO WHATSAPP");
+      console.log("Tenant ID:", tenantId);
+      console.log("==========================================");
+
       const config = await whatsappModel.findConfigByTenantId(tenantId);
 
       if (!config || !config.instanceName) {
+        console.log("⚠️ Config não encontrada ou sem instanceName");
         return {
           status: "DISCONNECTED",
           message: "Instância não configurada",
         };
       }
 
-      const statusData = await evolutionService.getInstanceStatus(
-        config.instanceName
-      );
+      console.log("📱 Instance Name:", config.instanceName);
+      console.log("📊 Status atual no banco:", config.status);
 
-      // Atualizar status no banco
-      if (statusData.connectionStatus === "open") {
-        // Buscar informações do perfil
-        const profileInfo = await evolutionService.getProfileInfo(
+      try {
+        // Buscar instância completa com todas as informações
+        console.log("🔍 Buscando informações completas da instância...");
+        const instances = await evolutionService.fetchInstances(
           config.instanceName
         );
 
-        // Buscar contatos e conversas
-        const contacts = await evolutionService.fetchContacts(
-          config.instanceName
+        if (!instances || instances.length === 0) {
+          console.log("⚠️ Instância não encontrada na Evolution API");
+
+          await whatsappModel.updateConfig(tenantId, {
+            status: "DISCONNECTED",
+          });
+
+          return {
+            status: "DISCONNECTED",
+            message: "Instância não encontrada",
+          };
+        }
+
+        const instanceData = instances[0];
+        console.log(
+          "📊 Dados completos da instância:",
+          JSON.stringify(instanceData, null, 2)
         );
-        const chats = await evolutionService.fetchChats(config.instanceName);
+
+        // Normalizar o status
+        const normalizedStatus = instanceData.connectionStatus?.toLowerCase();
+        console.log("📊 Connection Status:", normalizedStatus);
+
+        // Verificar se está conectado
+        const isConnected =
+          normalizedStatus === "open" || normalizedStatus === "connected";
+
+        console.log("🔐 Está conectado?", isConnected);
+
+        if (isConnected) {
+          console.log("✅ WhatsApp CONECTADO!");
+
+          // Extrair número do ownerJid (formato: 554188273161@s.whatsapp.net)
+          let phoneNumber = instanceData.number;
+          if (!phoneNumber && instanceData.ownerJid) {
+            phoneNumber = instanceData.ownerJid.split("@")[0];
+          }
+
+          const profileName = instanceData.profileName;
+          const totalContacts = instanceData._count?.Contact || 0;
+          const totalChats = instanceData._count?.Chat || 0;
+
+          console.log("📱 Informações extraídas:");
+          console.log("  - Telefone:", phoneNumber);
+          console.log("  - Nome:", profileName);
+          console.log("  - Contatos:", totalContacts);
+          console.log("  - Chats:", totalChats);
+
+          // Atualizar config no banco
+          await whatsappModel.updateConfig(tenantId, {
+            status: "CONNECTED",
+            phoneNumber,
+            profileName,
+            totalContacts,
+            totalChats,
+          });
+
+          console.log("✅ Status atualizado para CONNECTED no banco");
+          console.log("==========================================");
+
+          return {
+            status: "CONNECTED",
+            phoneNumber,
+            profileName,
+            totalContacts,
+            totalChats,
+          };
+        }
+
+        // Se não está conectado, verificar se está conectando
+        const isConnecting =
+          normalizedStatus === "connecting" ||
+          normalizedStatus === "close" ||
+          normalizedStatus === "qr";
+
+        console.log("⏳ Está conectando?", isConnecting);
+
+        let newStatus: "CONNECTING" | "DISCONNECTED" = isConnecting
+          ? "CONNECTING"
+          : "DISCONNECTED";
 
         await whatsappModel.updateConfig(tenantId, {
-          status: "CONNECTED",
-          phoneNumber: profileInfo.number || null,
-          profileName: profileInfo.name || null,
-          totalContacts: contacts?.length || 0,
-          totalChats: chats?.length || 0,
+          status: newStatus,
         });
 
+        console.log(`📊 Status atualizado para ${newStatus} no banco`);
+        console.log("==========================================");
+
         return {
-          status: "CONNECTED",
-          phoneNumber: profileInfo.number,
-          profileName: profileInfo.name,
-          totalContacts: contacts?.length || 0,
-          totalChats: chats?.length || 0,
+          status: newStatus,
+          message: "Status atualizado",
+          connectionStatus: instanceData.connectionStatus,
+        };
+      } catch (evolutionError: any) {
+        console.error(
+          "❌ Erro ao consultar Evolution API:",
+          evolutionError.message
+        );
+
+        // Se der erro ao consultar a Evolution, marcar como desconectado
+        await whatsappModel.updateConfig(tenantId, {
+          status: "DISCONNECTED",
+        });
+
+        console.log("==========================================");
+
+        return {
+          status: "DISCONNECTED",
+          message: `Erro ao verificar: ${evolutionError.message}`,
         };
       }
-
-      await whatsappModel.updateConfig(tenantId, {
-        status:
-          statusData.connectionStatus === "connecting"
-            ? "CONNECTING"
-            : "DISCONNECTED",
-      });
-
-      return {
-        status: statusData.connectionStatus,
-        message: "Status atualizado",
-      };
     } catch (error: any) {
-      throw new Error(`Erro ao verificar status: ${error.message}`);
+      console.error("❌ Erro GERAL ao verificar status:", error);
+      console.error(error.stack);
+      console.log("==========================================");
+
+      // Em caso de erro, retornar o status atual do banco
+      try {
+        const config = await whatsappModel.findConfigByTenantId(tenantId);
+        return {
+          status: config?.status || "DISCONNECTED",
+          message: `Erro ao verificar status: ${error.message}`,
+        };
+      } catch {
+        return {
+          status: "DISCONNECTED",
+          message: `Erro crítico: ${error.message}`,
+        };
+      }
     }
   }
 
@@ -195,10 +368,14 @@ export class WhatsAppService {
 
   async buscarTemplates(tenantId: string) {
     try {
-      const config = await whatsappModel.findConfigByTenantId(tenantId);
+      let config = await whatsappModel.findConfigByTenantId(tenantId);
 
+      // Se não existir config, criar uma padrão
       if (!config) {
-        throw new Error("Configuração não encontrada");
+        config = await whatsappModel.createConfig({
+          tenantId,
+          instanceName: `tenant_${tenantId}`,
+        });
       }
 
       return {
@@ -211,6 +388,7 @@ export class WhatsAppService {
         formularioId: config.formularioId,
       };
     } catch (error: any) {
+      console.error("Erro ao buscar templates:", error);
       throw new Error(`Erro ao buscar templates: ${error.message}`);
     }
   }
@@ -241,6 +419,12 @@ export class WhatsAppService {
         throw new Error("Agendamento não encontrado");
       }
 
+      // Verificar se o paciente existe
+      if (!agendamento.paciente) {
+        throw new Error("Agendamento sem paciente vinculado");
+      }
+
+      // Verificar se o paciente tem telefone
       if (!agendamento.paciente.telefone) {
         throw new Error("Paciente não possui telefone cadastrado");
       }
@@ -333,6 +517,7 @@ export class WhatsAppService {
       throw new Error(`Erro ao enviar confirmações em lote: ${error.message}`);
     }
   }
+
   // ============================================================================
   // PROCESSAMENTO DE RESPOSTAS
   // ============================================================================
@@ -375,7 +560,7 @@ export class WhatsAppService {
       const respostaNormalizada = mensagemRecebida.trim();
       let mensagemResposta = "";
       let tipoResposta = "";
-      let novoStatusAgendamento = "";
+      let novoStatusAgendamento: "CONFIRMADO" | "CANCELADO" | "" = "";
 
       if (respostaNormalizada === "1") {
         // Confirmar

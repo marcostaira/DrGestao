@@ -7,7 +7,7 @@ import {
   TipoCampoFormulario,
   RespostaAnamnese,
 } from "../../../types";
-import { Prisma } from "../../../generated/prisma";
+import { Prisma } from "../../../../generated/prisma";
 
 export class AnamneseService {
   // ==========================================================================

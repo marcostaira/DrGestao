@@ -8,7 +8,7 @@ import {
   CreateTenantData,
   CreateUserData,
 } from "../../../types";
-import { TipoUsuario } from "../../../generated/prisma";
+import { TipoUsuario } from "../../../../generated/prisma";
 import { AutorizacaoService } from "../../autorizacoes/services/autorizacao.service";
 
 // ============================================================================

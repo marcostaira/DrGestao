@@ -1,8 +1,8 @@
 import { Request } from "express";
-import { StatusAgendamento, TipoUsuario } from "../generated/prisma";
+import { StatusAgendamento, TipoUsuario } from "../../generated/prisma";
 
 // Importar tipos do Prisma Client GERADO (não do @prisma/client)
-export { TipoUsuario, StatusAgendamento } from "../generated/prisma";
+export { TipoUsuario, StatusAgendamento } from "../../generated/prisma";
 
 // Se TipoLog não existir no schema, defina aqui
 export enum TipoLog {

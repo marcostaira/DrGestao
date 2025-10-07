@@ -2,7 +2,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -18,7 +18,6 @@ enum TipoUsuario {
   ADMIN
   SECRETARIA
 }
-
 enum StatusAgendamento {
   MARCADO
   CONFIRMADO

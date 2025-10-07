@@ -1,8 +1,7 @@
 // backend/src/modules/whatsapp/whatsapp.model.ts
 
-import { PrismaClient } from "@prisma/client";
+import { prisma } from '../../config/database';
 
-const prisma = new PrismaClient();
 
 export interface CreateWhatsAppConfigData {
   tenantId: string;
@@ -24,7 +23,7 @@ export interface UpdateWhatsAppConfigData {
   phoneNumber?: string | null;
   profileName?: string | null;
   totalContacts?: number;
-  totalChats?: number;
+  totalChats?: number; 
   mensagensEnviadas?: number;
   mensagensRecebidas?: number;
   templateConfirmacao?: string;

@@ -3,175 +3,101 @@
 import { Router } from "express";
 import { whatsappController } from "./whatsapp.controller";
 import { authenticate } from "../../middleware/auth";
-import { validateTenant } from "../../middleware/tenant";
-import { validate } from "../../middleware/validation";
-import { whatsappValidation } from "./whatsapp.validation";
 
 const router = Router();
 
-// Aplicar middlewares de autenticação e tenant em todas as rotas (exceto webhook)
-const authAndTenantMiddleware = (req: any, res: any, next: any) => {
-  // Webhook não precisa de autenticação
-  if (req.path === "/webhook") {
-    return next();
-  }
-
-  // Aplicar autenticação e tenant
-  authenticate(req, res, (err?: any) => {
-    if (err) return next(err);
-    validateTenant(req, res, next);
-  });
-};
-
-router.use(authAndTenantMiddleware);
-
-// ============================================================================
-// ROTAS DE CONEXÃO
-// ============================================================================
+// Todas as rotas requerem autenticação
+router.use(authenticate);
 
 /**
  * @route   POST /api/whatsapp/inicializar
- * @desc    Inicializar conexão WhatsApp e obter QR Code
- * @access  Private (Admin)
+ * @desc    Inicializar conexão WhatsApp
+ * @access  Private
  */
-router.post(
-  "/inicializar",
-  whatsappController.inicializarConexao.bind(whatsappController)
-);
+router.post("/inicializar", whatsappController.inicializarConexao);
+
+/**
+ * @route   GET /api/whatsapp/qrcode/:instanceName
+ * @desc    Buscar novo QR Code sem recriar instância
+ * @access  Private
+ */
+router.get("/qrcode/:instanceName", whatsappController.buscarNovoQRCode);
 
 /**
  * @route   GET /api/whatsapp/status
- * @desc    Verificar status da conexão WhatsApp
- * @access  Private (Admin/Secretária)
+ * @desc    Verificar status da conexão
+ * @access  Private
  */
-router.get(
-  "/status",
-  whatsappController.verificarStatus.bind(whatsappController)
-);
+router.get("/status", whatsappController.verificarStatus);
 
 /**
  * @route   POST /api/whatsapp/desconectar
  * @desc    Desconectar WhatsApp
- * @access  Private (Admin)
+ * @access  Private
  */
-router.post(
-  "/desconectar",
-  whatsappController.desconectar.bind(whatsappController)
-);
-
-// ============================================================================
-// ROTAS DE TEMPLATES
-// ============================================================================
+router.post("/desconectar", whatsappController.desconectar);
 
 /**
  * @route   GET /api/whatsapp/templates
- * @desc    Buscar templates configurados
- * @access  Private (Admin)
+ * @desc    Buscar templates de mensagens
+ * @access  Private
  */
-router.get(
-  "/templates",
-  whatsappController.buscarTemplates.bind(whatsappController)
-);
+router.get("/templates", whatsappController.buscarTemplates);
 
 /**
  * @route   PUT /api/whatsapp/templates
- * @desc    Atualizar templates
- * @access  Private (Admin)
+ * @desc    Atualizar templates de mensagens
+ * @access  Private
  */
-router.put(
-  "/templates",
-  validate({ body: whatsappValidation.atualizarTemplates }),
-  whatsappController.atualizarTemplates.bind(whatsappController)
-);
-
-// ============================================================================
-// ROTAS DE ENVIO
-// ============================================================================
+router.put("/templates", whatsappController.atualizarTemplates);
 
 /**
  * @route   POST /api/whatsapp/enviar-confirmacao
  * @desc    Enviar confirmação para um agendamento
- * @access  Private (Admin/Secretária)
+ * @access  Private
  */
-router.post(
-  "/enviar-confirmacao",
-  validate({ body: whatsappValidation.enviarConfirmacao }),
-  whatsappController.enviarConfirmacao.bind(whatsappController)
-);
+router.post("/enviar-confirmacao", whatsappController.enviarConfirmacao);
 
 /**
- * @route   POST /api/whatsapp/enviar-confirmacao-lote
+ * @route   POST /api/whatsapp/enviar-lote
  * @desc    Enviar confirmações em lote
- * @access  Private (Admin/Secretária)
+ * @access  Private
  */
-router.post(
-  "/enviar-confirmacao-lote",
-  validate({ body: whatsappValidation.enviarConfirmacaoEmLote }),
-  whatsappController.enviarConfirmacaoEmLote.bind(whatsappController)
-);
-
-// ============================================================================
-// ROTAS DE ESTATÍSTICAS E HISTÓRICO
-// ============================================================================
+router.post("/enviar-lote", whatsappController.enviarConfirmacaoEmLote);
 
 /**
  * @route   GET /api/whatsapp/estatisticas
- * @desc    Buscar estatísticas de mensagens
- * @access  Private (Admin/Secretária)
+ * @desc    Buscar estatísticas
+ * @access  Private
  */
-router.get(
-  "/estatisticas",
-  whatsappController.buscarEstatisticas.bind(whatsappController)
-);
+router.get("/estatisticas", whatsappController.buscarEstatisticas);
 
 /**
  * @route   GET /api/whatsapp/historico
  * @desc    Buscar histórico de mensagens
- * @access  Private (Admin/Secretária)
- * @query   dataInicio, dataFim, agendamentoId
+ * @access  Private
  */
-router.get(
-  "/historico",
-  validate({ query: whatsappValidation.buscarHistorico }),
-  whatsappController.buscarHistorico.bind(whatsappController)
-);
-
-// ============================================================================
-// ROTAS DE CONFIGURAÇÃO
-// ============================================================================
-
-/**
- * @route   GET /api/whatsapp/configuracao
- * @desc    Buscar configuração do WhatsApp
- * @access  Private (Admin/Secretária)
- */
-router.get(
-  "/configuracao",
-  whatsappController.buscarConfiguracao.bind(whatsappController)
-);
-
-/**
- * @route   PUT /api/whatsapp/ativar
- * @desc    Ativar/Desativar WhatsApp
- * @access  Private (Admin)
- */
-router.put(
-  "/ativar",
-  whatsappController.ativarDesativar.bind(whatsappController)
-);
-
-// ============================================================================
-// WEBHOOK (PÚBLICO)
-// ============================================================================
+router.get("/historico", whatsappController.buscarHistorico);
 
 /**
  * @route   POST /api/whatsapp/webhook
  * @desc    Webhook para receber eventos da Evolution API
- * @access  Public (mas validado pela Evolution API)
+ * @access  Public (mas validado pela Evolution)
  */
-router.post(
-  "/webhook",
-  whatsappController.handleWebhook.bind(whatsappController)
-);
+router.post("/webhook", whatsappController.handleWebhook);
+
+/**
+ * @route   GET /api/whatsapp/config
+ * @desc    Buscar configuração
+ * @access  Private
+ */
+router.get("/config", whatsappController.buscarConfiguracao);
+
+/**
+ * @route   PUT /api/whatsapp/ativar
+ * @desc    Ativar/Desativar WhatsApp
+ * @access  Private
+ */
+router.put("/ativar", whatsappController.ativarDesativar);
 
 export default router;

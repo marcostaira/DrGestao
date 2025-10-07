@@ -5,6 +5,7 @@ import { Response } from "express";
 import { AuthenticatedRequest } from "../../types";
 import { whatsappService } from "./whatsapp.service";
 import { webhookHandler } from "./whatsapp.webhook";
+import { evolutionService } from "../../config/evolution.config";
 
 export class WhatsAppController {
   // ============================================================================
@@ -30,11 +31,34 @@ export class WhatsAppController {
     }
   }
 
+  async buscarNovoQRCode(req: AuthenticatedRequest, res: Response) {
+    try {
+      const { instanceName } = req.params;
+
+      const qrData = await evolutionService.fetchQRCode(instanceName);
+
+      res.json({
+        success: true,
+        data: {
+          qrCode: qrData.qrcode.base64,
+        },
+      });
+    } catch (error: any) {
+      console.error("Erro ao buscar QR Code:", error);
+      res.status(500).json({
+        success: false,
+        error: error.message,
+      });
+    }
+  }
+
   async verificarStatus(req: AuthenticatedRequest, res: Response) {
     try {
       const tenantId = req.user!.tenantId;
 
       const status = await whatsappService.verificarStatus(tenantId);
+
+      console.log("🔍 Controller - Status retornado:", status);
 
       res.json({
         success: true,

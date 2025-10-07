@@ -1,10 +1,9 @@
 // backend/src/jobs/whatsapp-confirmation.job.ts
 
 import cron from "node-cron";
-import { PrismaClient } from "@prisma/client";
 import { whatsappService } from "../modules/whatsapp/whatsapp.service";
+import { prisma } from "@/config/database";
 
-const prisma = new PrismaClient();
 
 export class WhatsAppConfirmationJob {
   private cronJob: cron.ScheduledTask | null = null;
@@ -106,11 +105,19 @@ export class WhatsAppConfirmationJob {
           continue;
         }
 
-        // Verificar se paciente tem telefone
-        if (!agendamento.paciente.telefone) {
+        // Verificar se paciente existe
+        if (!agendamento.paciente) {
           console.log(
-            `⚠️  Paciente ${agendamento.paciente.nome} não possui telefone`
+            `⚠️  Agendamento ${agendamento.id} sem paciente vinculado`
           );
+          continue;
+        }
+
+        const paciente = agendamento.paciente;
+
+        // Verificar se paciente tem telefone
+        if (!paciente.telefone) {
+          console.log(`⚠️  Paciente ${paciente.nome} não possui telefone`);
           continue;
         }
 

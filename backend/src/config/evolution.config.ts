@@ -71,6 +71,31 @@ export interface Chat {
   [key: string]: any;
 }
 
+// Adicionar interface para o retorno
+export interface FetchInstancesResponse {
+  id: string;
+  name: string;
+  connectionStatus: string;
+  ownerJid: string;
+  profileName: string | null;
+  profilePicUrl: string | null;
+  integration: string;
+  number: string | null;
+  businessId: string | null;
+  token: string;
+  clientName: string;
+  disconnectionReasonCode: string | null;
+  disconnectionObject: any;
+  disconnectionAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  _count: {
+    Message: number;
+    Contact: number;
+    Chat: number;
+  };
+}
+
 class EvolutionService {
   private client: ReturnType<typeof axios.create>;
   private config: EvolutionConfig;
@@ -81,6 +106,13 @@ class EvolutionService {
       apiKey: process.env.EVOLUTION_API_KEY || "",
     };
 
+    console.log("🔑 Evolution API Config:", {
+      url: this.config.apiUrl,
+      hasKey: !!this.config.apiKey,
+      keyLength: this.config.apiKey?.length || 0,
+    });
+
+    // A Evolution API v2 usa o header 'apikey' (minúsculo)
     this.client = axios.create({
       baseURL: this.config.apiUrl,
       headers: {
@@ -89,33 +121,120 @@ class EvolutionService {
       },
       timeout: 30000,
     });
+
+    // Log interceptor para debug
+    this.client.interceptors.request.use(
+      (config) => {
+        console.log("📤 Requisição Evolution:", {
+          method: config.method?.toUpperCase(),
+          url: config.url,
+          headers: config.headers
+            ? {
+                ...config.headers,
+                apikey: (config.headers as any).apikey ? "***" : "MISSING",
+              }
+            : "NO_HEADERS",
+        });
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
+      }
+    );
+
+    this.client.interceptors.response.use(
+      (response) => {
+        console.log("📥 Resposta Evolution:", {
+          status: response.status,
+          url: response.config?.url,
+        });
+        return response;
+      },
+      (error) => {
+        console.error("❌ Erro Evolution:", {
+          status: error.response?.status,
+          url: error.config?.url,
+          data: error.response?.data,
+        });
+        return Promise.reject(error);
+      }
+    );
   }
 
   // Criar instância
+
   async createInstance(payload: CreateInstancePayload): Promise<InstanceInfo> {
     try {
+      console.log("📦 Payload para criar instância:", payload);
       const response = await this.client.post<InstanceInfo>(
         "/instance/create",
         payload
       );
       return response.data;
     } catch (error: any) {
-      throw new Error(
-        `Erro ao criar instância: ${
-          error.response?.data?.message || error.message
-        }`
-      );
+      const errorMsg = error.response?.data?.message || error.message;
+      const errorData = error.response?.data || {};
+      console.error("Detalhes completos do erro:", errorData);
+
+      // Lançar o erro com os dados originais anexados
+      const newError: any = new Error(`${errorMsg}`);
+      newError.originalError = error;
+      newError.errorData = errorData;
+      throw newError;
     }
   }
 
   // Buscar QR Code
   async fetchQRCode(instanceName: string): Promise<QRCodeResponse> {
     try {
-      const response = await this.client.get<QRCodeResponse>(
+      const response = await this.client.get<any>(
         `/instance/connect/${instanceName}`
       );
-      return response.data;
+
+      // Logar a resposta completa para debug
+      console.log(
+        "📋 Resposta completa do QR Code:",
+        JSON.stringify(response.data, null, 2)
+      );
+
+      // A Evolution API pode retornar em diferentes formatos dependendo da versão
+      // Vamos tentar diferentes possibilidades:
+
+      let qrCodeData: QRCodeResponse;
+
+      if (response.data.qrcode) {
+        // Formato: { qrcode: { base64: "...", code: "..." } }
+        qrCodeData = response.data;
+      } else if (response.data.base64) {
+        // Formato: { base64: "...", code: "..." }
+        qrCodeData = { qrcode: response.data };
+      } else if (response.data.pairingCode) {
+        // Formato novo com pairing code
+        qrCodeData = {
+          qrcode: {
+            base64: response.data.base64 || response.data.qrcode || "",
+            code: response.data.pairingCode || response.data.code || "",
+          },
+        };
+      } else {
+        // Se não encontrar nenhum formato conhecido, retornar o que vier
+        qrCodeData = {
+          qrcode: {
+            base64:
+              response.data.base64 ||
+              response.data.qr ||
+              response.data.qrcode ||
+              "",
+            code: response.data.code || "",
+          },
+        };
+      }
+
+      console.log("✅ QR Code formatado:", qrCodeData);
+
+      return qrCodeData;
     } catch (error: any) {
+      console.error("❌ Erro ao buscar QR Code:", error.response?.data);
       throw new Error(
         `Erro ao buscar QR Code: ${
           error.response?.data?.message || error.message
@@ -127,11 +246,55 @@ class EvolutionService {
   // Verificar status da instância
   async getInstanceStatus(instanceName: string): Promise<InstanceInfo> {
     try {
-      const response = await this.client.get<InstanceInfo>(
+      const response = await this.client.get<any>(
         `/instance/connectionState/${instanceName}`
       );
-      return response.data;
+
+      console.log(
+        "📋 =========== Resposta COMPLETA do status:",
+        JSON.stringify(response.data, null, 2)
+      );
+
+      // A Evolution pode retornar diferentes formatos
+      let connectionStatus = "close";
+
+      // Tentar diferentes possibilidades
+      if (response.data.instance?.state) {
+        connectionStatus = response.data.instance.state;
+        console.log(
+          "✅ Status encontrado em: instance.state =",
+          connectionStatus
+        );
+      } else if (response.data.state) {
+        connectionStatus = response.data.state;
+        console.log("✅ Status encontrado em: state =", connectionStatus);
+      } else if (response.data.connectionStatus) {
+        connectionStatus = response.data.connectionStatus;
+        console.log(
+          "✅ Status encontrado em: connectionStatus =",
+          connectionStatus
+        );
+      } else if (response.data.status) {
+        connectionStatus = response.data.status;
+        console.log("✅ Status encontrado em: status =", connectionStatus);
+      } else {
+        console.log('⚠️ Status não encontrado, usando "close" como padrão');
+      }
+
+      console.log("🎯 Connection Status final:", connectionStatus);
+
+      return {
+        instance: {
+          instanceName: instanceName,
+          status: connectionStatus,
+        },
+        connectionStatus: connectionStatus,
+      };
     } catch (error: any) {
+      console.error(
+        "❌ Erro ao buscar status da instância:",
+        error.response?.data
+      );
       throw new Error(
         `Erro ao verificar status: ${
           error.response?.data?.message || error.message
@@ -193,11 +356,32 @@ class EvolutionService {
   // Buscar informações do perfil
   async getProfileInfo(instanceName: string): Promise<ProfileInfo> {
     try {
-      const response = await this.client.get<ProfileInfo>(
-        `/instance/profileInfo/${instanceName}`
-      );
+      // Tentar primeiro a rota mais comum
+      let response;
+      try {
+        response = await this.client.get<ProfileInfo>(
+          `/chat/fetchProfile/${instanceName}`
+        );
+      } catch (err) {
+        // Se não funcionar, tentar rota alternativa
+        try {
+          response = await this.client.get<ProfileInfo>(
+            `/instance/fetchProfile/${instanceName}`
+          );
+        } catch (err2) {
+          // Última tentativa
+          response = await this.client.get<ProfileInfo>(
+            `/instance/profileInfo/${instanceName}`
+          );
+        }
+      }
+
       return response.data;
     } catch (error: any) {
+      console.error(
+        "❌ Erro ao buscar perfil (todas as rotas falharam):",
+        error.response?.data
+      );
       throw new Error(
         `Erro ao buscar perfil: ${
           error.response?.data?.message || error.message
@@ -259,6 +443,37 @@ class EvolutionService {
     } catch (error: any) {
       throw new Error(
         `Erro ao configurar webhook: ${
+          error.response?.data?.message || error.message
+        }`
+      );
+    }
+  }
+
+  async fetchInstances(
+    instanceName?: string
+  ): Promise<FetchInstancesResponse[]> {
+    try {
+      console.log("🔍 Buscando instâncias...");
+      const response = await this.client.get<FetchInstancesResponse[]>(
+        "/instance/fetchInstances"
+      );
+
+      console.log("📋 Total de instâncias encontradas:", response.data.length);
+
+      // Se foi passado um instanceName, filtrar
+      if (instanceName) {
+        const filtered = response.data.filter(
+          (instance) => instance.name === instanceName
+        );
+        console.log("🔍 Instâncias filtradas por nome:", filtered.length);
+        return filtered;
+      }
+
+      return response.data;
+    } catch (error: any) {
+      console.error("❌ Erro ao buscar instâncias:", error.response?.data);
+      throw new Error(
+        `Erro ao buscar instâncias: ${
           error.response?.data?.message || error.message
         }`
       );
