@@ -120,6 +120,34 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.PlanoScalarFieldEnum = {
+  id: 'id',
+  nome: 'nome',
+  slug: 'slug',
+  descricao: 'descricao',
+  profissionaisAtivos: 'profissionaisAtivos',
+  usuarios: 'usuarios',
+  agendamentosMes: 'agendamentosMes',
+  pacientes: 'pacientes',
+  armazenamentoMB: 'armazenamentoMB',
+  whatsappAtivo: 'whatsappAtivo',
+  googleCalendarSync: 'googleCalendarSync',
+  valorMensal: 'valorMensal',
+  valorAnual: 'valorAnual',
+  ativo: 'ativo',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TenantScalarFieldEnum = {
+  id: 'id',
+  nome: 'nome',
+  planoId: 'planoId',
+  ativo: 'ativo',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.UsuarioScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -128,6 +156,17 @@ exports.Prisma.UsuarioScalarFieldEnum = {
   senha: 'senha',
   tipo: 'tipo',
   ativo: 'ativo',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AutorizacaoScalarFieldEnum = {
+  id: 'id',
+  usuarioId: 'usuarioId',
+  modulo: 'modulo',
+  visualizar: 'visualizar',
+  criarAlterar: 'criarAlterar',
+  cancelar: 'cancelar',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -189,13 +228,13 @@ exports.Prisma.AgendamentoScalarFieldEnum = {
   profissionalId: 'profissionalId',
   procedimentoId: 'procedimentoId',
   dataHora: 'dataHora',
+  dataHoraFim: 'dataHoraFim',
   status: 'status',
   observacoes: 'observacoes',
   confirmacaoEnviada: 'confirmacaoEnviada',
   recorrenciaId: 'recorrenciaId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  dataHoraFim: 'dataHoraFim'
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.AtendimentoScalarFieldEnum = {
@@ -216,61 +255,43 @@ exports.Prisma.AtendimentoScalarFieldEnum = {
 exports.Prisma.WhatsAppConfigScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
+  instanceName: 'instanceName',
+  instanceToken: 'instanceToken',
+  qrCode: 'qrCode',
+  status: 'status',
+  phoneNumber: 'phoneNumber',
+  profileName: 'profileName',
+  totalContacts: 'totalContacts',
+  totalChats: 'totalChats',
+  mensagensEnviadas: 'mensagensEnviadas',
+  mensagensRecebidas: 'mensagensRecebidas',
   templateConfirmacao: 'templateConfirmacao',
-  templateSim: 'templateSim',
-  templateNao: 'templateNao',
-  templateOpcoesInvalidas: 'templateOpcoesInvalidas',
+  templateConfirmado: 'templateConfirmado',
+  templateReagendar: 'templateReagendar',
+  templateOpcaoInvalida: 'templateOpcaoInvalida',
   horasAntecedencia: 'horasAntecedencia',
+  enviarLinkAnamnese: 'enviarLinkAnamnese',
+  formularioId: 'formularioId',
   ativo: 'ativo',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.LogSistemaScalarFieldEnum = {
+exports.Prisma.WhatsAppMensagemScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
-  usuarioId: 'usuarioId',
+  configId: 'configId',
+  agendamentoId: 'agendamentoId',
+  pacienteId: 'pacienteId',
+  telefone: 'telefone',
+  mensagem: 'mensagem',
   tipo: 'tipo',
-  descricao: 'descricao',
-  metadata: 'metadata',
-  createdAt: 'createdAt'
-};
-
-exports.Prisma.PlanoScalarFieldEnum = {
-  id: 'id',
-  nome: 'nome',
-  slug: 'slug',
-  descricao: 'descricao',
-  profissionaisAtivos: 'profissionaisAtivos',
-  usuarios: 'usuarios',
-  agendamentosMes: 'agendamentosMes',
-  pacientes: 'pacientes',
-  armazenamentoMB: 'armazenamentoMB',
-  whatsappAtivo: 'whatsappAtivo',
-  googleCalendarSync: 'googleCalendarSync',
-  valorMensal: 'valorMensal',
-  valorAnual: 'valorAnual',
-  ativo: 'ativo',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.TenantScalarFieldEnum = {
-  id: 'id',
-  nome: 'nome',
-  planoId: 'planoId',
-  ativo: 'ativo',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.AutorizacaoScalarFieldEnum = {
-  id: 'id',
-  usuarioId: 'usuarioId',
-  modulo: 'modulo',
-  visualizar: 'visualizar',
-  criarAlterar: 'criarAlterar',
-  cancelar: 'cancelar',
+  status: 'status',
+  respostaRecebida: 'respostaRecebida',
+  respostaEm: 'respostaEm',
+  tentativas: 'tentativas',
+  erroMensagem: 'erroMensagem',
+  enviadaEm: 'enviadaEm',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -297,6 +318,16 @@ exports.Prisma.AnamneseScalarFieldEnum = {
   observacoes: 'observacoes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LogSistemaScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  usuarioId: 'usuarioId',
+  tipo: 'tipo',
+  descricao: 'descricao',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -333,6 +364,17 @@ exports.TipoUsuario = exports.$Enums.TipoUsuario = {
   SECRETARIA: 'SECRETARIA'
 };
 
+exports.Modulo = exports.$Enums.Modulo = {
+  PACIENTES: 'PACIENTES',
+  PROFISSIONAIS: 'PROFISSIONAIS',
+  PROCEDIMENTOS: 'PROCEDIMENTOS',
+  AGENDA: 'AGENDA',
+  ATENDIMENTOS: 'ATENDIMENTOS',
+  WHATSAPP: 'WHATSAPP',
+  USUARIOS: 'USUARIOS',
+  RELATORIOS: 'RELATORIOS'
+};
+
 exports.StatusAgendamento = exports.$Enums.StatusAgendamento = {
   MARCADO: 'MARCADO',
   CONFIRMADO: 'CONFIRMADO',
@@ -356,31 +398,21 @@ exports.TipoLog = exports.$Enums.TipoLog = {
   DELETE: 'DELETE'
 };
 
-exports.Modulo = exports.$Enums.Modulo = {
-  PACIENTES: 'PACIENTES',
-  PROFISSIONAIS: 'PROFISSIONAIS',
-  PROCEDIMENTOS: 'PROCEDIMENTOS',
-  AGENDA: 'AGENDA',
-  ATENDIMENTOS: 'ATENDIMENTOS',
-  WHATSAPP: 'WHATSAPP',
-  USUARIOS: 'USUARIOS',
-  RELATORIOS: 'RELATORIOS'
-};
-
 exports.Prisma.ModelName = {
+  Plano: 'Plano',
+  Tenant: 'Tenant',
   Usuario: 'Usuario',
+  Autorizacao: 'Autorizacao',
   Profissional: 'Profissional',
   Paciente: 'Paciente',
   Procedimento: 'Procedimento',
   Agendamento: 'Agendamento',
   Atendimento: 'Atendimento',
   WhatsAppConfig: 'WhatsAppConfig',
-  LogSistema: 'LogSistema',
-  Plano: 'Plano',
-  Tenant: 'Tenant',
-  Autorizacao: 'Autorizacao',
+  WhatsAppMensagem: 'WhatsAppMensagem',
   Formulario: 'Formulario',
-  Anamnese: 'Anamnese'
+  Anamnese: 'Anamnese',
+  LogSistema: 'LogSistema'
 };
 
 /**

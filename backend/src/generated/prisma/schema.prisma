@@ -1,3 +1,5 @@
+// backend/prisma/schema.prisma
+
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
@@ -8,16 +10,122 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+enum TipoUsuario {
+  ADMIN
+  SECRETARIA
+}
+
+enum StatusAgendamento {
+  MARCADO
+  CONFIRMADO
+  COMPARECEU
+  FALTOU
+  CANCELADO
+}
+
+enum TipoLog {
+  LOGIN
+  LOGOUT
+  AGENDAMENTO_CRIADO
+  AGENDAMENTO_ATUALIZADO
+  AGENDAMENTO_CANCELADO
+  CONFIRMACAO_ENVIADA
+  CONFIRMACAO_RECEBIDA
+  SYNC_GOOGLE_CALENDAR
+  ERROR
+  CREATE
+  UPDATE
+  DELETE
+}
+
+enum Modulo {
+  PACIENTES
+  PROFISSIONAIS
+  PROCEDIMENTOS
+  AGENDA
+  ATENDIMENTOS
+  WHATSAPP
+  USUARIOS
+  RELATORIOS
+}
+
+// ============================================================================
+// PLANOS E TENANTS
+// ============================================================================
+
+model Plano {
+  id        String  @id @default(cuid())
+  nome      String  @unique
+  slug      String  @unique
+  descricao String?
+
+  // Limites
+  profissionaisAtivos Int @map("profissionais_ativos")
+  usuarios            Int
+  agendamentosMes     Int @map("agendamentos_mes")
+  pacientes           Int
+  armazenamentoMB     Int @map("armazenamento_mb")
+
+  // Funcionalidades
+  whatsappAtivo      Boolean @default(false) @map("whatsapp_ativo")
+  googleCalendarSync Boolean @default(false) @map("google_calendar_sync")
+
+  // Preço
+  valorMensal Decimal? @map("valor_mensal") @db.Decimal(10, 2)
+  valorAnual  Decimal? @map("valor_anual") @db.Decimal(10, 2)
+
+  ativo     Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tenants Tenant[]
+
+  @@map("planos")
+}
+
+model Tenant {
+  id        String   @id @default(cuid())
+  nome      String
+  planoId   String   @map("plano_id")
+  ativo     Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  plano             Plano              @relation(fields: [planoId], references: [id])
+  agendamentos      Agendamento[]
+  atendimentos      Atendimento[]
+  pacientes         Paciente[]
+  procedimentos     Procedimento[]
+  profissionais     Profissional[]
+  usuarios          Usuario[]
+  whatsappConfig    WhatsAppConfig?
+  formularios       Formulario[]
+  anamneses         Anamnese[]
+  whatsappMensagens WhatsAppMensagem[]
+
+  @@index([planoId])
+  @@map("tenants")
+}
+
+// ============================================================================
+// USUÁRIOS E AUTORIZAÇÕES
+// ============================================================================
+
 model Usuario {
-  id           String        @id @default(cuid())
-  tenantId     String        @map("tenant_id")
-  nome         String
-  email        String
-  senha        String
-  tipo         TipoUsuario   @default(SECRETARIA)
-  ativo        Boolean       @default(true)
-  createdAt    DateTime      @default(now()) @map("created_at")
-  updatedAt    DateTime      @updatedAt @map("updated_at")
+  id        String      @id @default(cuid())
+  tenantId  String      @map("tenant_id")
+  nome      String
+  email     String
+  senha     String
+  tipo      TipoUsuario @default(SECRETARIA)
+  ativo     Boolean     @default(true)
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+
   tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   autorizacoes Autorizacao[]
 
@@ -26,12 +134,36 @@ model Usuario {
   @@map("usuarios")
 }
 
+model Autorizacao {
+  id        String @id @default(cuid())
+  usuarioId String @map("usuario_id")
+  modulo    Modulo
+
+  // Permissões específicas
+  visualizar   Boolean @default(false)
+  criarAlterar Boolean @default(false) @map("criar_alterar")
+  cancelar     Boolean @default(false)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@unique([usuarioId, modulo])
+  @@index([usuarioId])
+  @@map("autorizacoes")
+}
+
+// ============================================================================
+// PROFISSIONAIS
+// ============================================================================
+
 model Profissional {
   id            String   @id @default(uuid())
   tenantId      String   @map("tenant_id")
   nome          String
   especialidade String?
-  cor           String   @default("#3B82F6") // Azul padrão
+  cor           String   @default("#3B82F6")
   observacoes   String?
   ativo         Boolean  @default(true)
   createdAt     DateTime @default(now()) @map("created_at")
@@ -41,11 +173,15 @@ model Profissional {
   pacientes    Paciente[]
   agendamentos Agendamento[]
   atendimentos Atendimento[]
-  Formulario   Formulario[]
+  formularios  Formulario[]
 
   @@index([tenantId, ativo])
   @@map("profissionais")
 }
+
+// ============================================================================
+// PACIENTES
+// ============================================================================
 
 model Paciente {
   id             String  @id @default(cuid())
@@ -86,11 +222,12 @@ model Paciente {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  profissional Profissional? @relation(fields: [profissionalId], references: [id], onDelete: SetNull)
-  agendamentos Agendamento[]
-  atendimentos Atendimento[]
-  Anamnese     Anamnese[]
+  tenant            Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  profissional      Profissional?      @relation(fields: [profissionalId], references: [id], onDelete: SetNull)
+  agendamentos      Agendamento[]
+  atendimentos      Atendimento[]
+  anamneses         Anamnese[]
+  whatsappMensagens WhatsAppMensagem[]
 
   @@index([tenantId])
   @@index([tenantId, nome])
@@ -99,21 +236,30 @@ model Paciente {
   @@map("pacientes")
 }
 
+// ============================================================================
+// PROCEDIMENTOS
+// ============================================================================
+
 model Procedimento {
-  id             String        @id @default(cuid())
-  tenantId       String        @map("tenant_id")
+  id             String   @id @default(cuid())
+  tenantId       String   @map("tenant_id")
   nome           String
-  valor          Decimal?      @db.Decimal(10, 2)
-  duracaoMinutos Int           @map("duracao_minutos")
-  createdAt      DateTime      @default(now()) @map("created_at")
-  updatedAt      DateTime      @updatedAt @map("updated_at")
-  agendamentos   Agendamento[]
-  atendimentos   Atendimento[]
-  tenant         Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  valor          Decimal? @db.Decimal(10, 2)
+  duracaoMinutos Int      @map("duracao_minutos")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  agendamentos Agendamento[]
+  atendimentos Atendimento[]
+  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   @@index([tenantId, nome])
   @@map("procedimentos")
 }
+
+// ============================================================================
+// AGENDAMENTOS
+// ============================================================================
 
 model Agendamento {
   id                 String            @id @default(cuid())
@@ -122,19 +268,21 @@ model Agendamento {
   profissionalId     String            @map("profissional_id")
   procedimentoId     String            @map("procedimento_id")
   dataHora           DateTime          @map("data_hora")
+  dataHoraFim        DateTime          @map("data_hora_fim")
   status             StatusAgendamento @default(MARCADO)
   observacoes        String?
   confirmacaoEnviada Boolean           @default(false) @map("confirmacao_enviada")
-  recorrenciaId      String?           @map("recorrencia_id") // NOVO CAMPO
+  recorrenciaId      String?           @map("recorrencia_id")
 
-  createdAt    DateTime     @default(now()) @map("created_at")
-  updatedAt    DateTime     @updatedAt @map("updated_at")
-  dataHoraFim  DateTime     @map("data_hora_fim")
-  paciente     Paciente?    @relation(fields: [pacienteId], references: [id])
-  procedimento Procedimento @relation(fields: [procedimentoId], references: [id], onDelete: Cascade)
-  profissional Profissional @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
-  tenant       Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  atendimento  Atendimento?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  paciente          Paciente?          @relation(fields: [pacienteId], references: [id])
+  procedimento      Procedimento       @relation(fields: [procedimentoId], references: [id], onDelete: Cascade)
+  profissional      Profissional       @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
+  tenant            Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  atendimento       Atendimento?
+  whatsappMensagens WhatsAppMensagem[]
 
   @@index([tenantId, dataHora])
   @@index([tenantId, profissionalId])
@@ -142,10 +290,14 @@ model Agendamento {
   @@map("agendamentos")
 }
 
+// ============================================================================
+// ATENDIMENTOS
+// ============================================================================
+
 model Atendimento {
   id                      String    @id @default(uuid())
   tenantId                String    @map("tenant_id")
-  agendamentoId           String    @unique @map("agendamento_id") // ADICIONAR @unique
+  agendamentoId           String    @unique @map("agendamento_id")
   pacienteId              String    @map("paciente_id")
   profissionalId          String    @map("profissional_id")
   procedimentoId          String?   @map("procedimento_id")
@@ -161,7 +313,7 @@ model Atendimento {
   paciente     Paciente      @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
   profissional Profissional  @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
   procedimento Procedimento? @relation(fields: [procedimentoId], references: [id], onDelete: SetNull)
-  Anamnese     Anamnese[]
+  anamneses    Anamnese[]
 
   @@index([tenantId, pacienteId])
   @@index([tenantId, profissionalId])
@@ -170,148 +322,87 @@ model Atendimento {
   @@map("atendimentos")
 }
 
-model WhatsAppConfig {
-  id                      String   @id @default(cuid())
-  tenantId                String   @unique @map("tenant_id")
-  templateConfirmacao     String   @default("Olá {nome}! Você tem consulta marcada para {data} às {hora}. Para confirmar, responda: 1=SIM ou 2=NÃO") @map("template_confirmacao")
-  templateSim             String   @default("Consulta confirmada! Nos vemos em {data} às {hora}.") @map("template_sim")
-  templateNao             String   @default("Consulta cancelada. Entre em contato para reagendar.") @map("template_nao")
-  templateOpcoesInvalidas String   @default("Resposta não reconhecida. Digite 1 para SIM ou 2 para NÃO.") @map("template_opcoes_invalidas")
-  horasAntecedencia       Int      @default(24) @map("horas_antecedencia")
-  ativo                   Boolean  @default(true)
-  createdAt               DateTime @default(now()) @map("created_at")
-  updatedAt               DateTime @updatedAt @map("updated_at")
-  tenant                  Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+// ============================================================================
+// WHATSAPP
+// ============================================================================
 
+model WhatsAppConfig {
+  id       String @id @default(cuid())
+  tenantId String @unique @map("tenant_id")
+
+  // Configurações de conexão
+  instanceName  String? @map("instance_name")
+  instanceToken String? @map("instance_token")
+  qrCode        String? @map("qr_code") @db.Text
+  status        String  @default("DISCONNECTED") // DISCONNECTED, CONNECTING, CONNECTED
+  phoneNumber   String? @map("phone_number")
+  profileName   String? @map("profile_name")
+
+  // Estatísticas
+  totalContacts      Int @default(0) @map("total_contacts")
+  totalChats         Int @default(0) @map("total_chats")
+  mensagensEnviadas  Int @default(0) @map("mensagens_enviadas")
+  mensagensRecebidas Int @default(0) @map("mensagens_recebidas")
+
+  // Templates
+  templateConfirmacao   String @default("Olá {nome}! Você tem consulta marcada para {data} às {hora} com {profissional}. Para confirmar, responda: 1=SIM ou 2=REAGENDAR") @map("template_confirmacao") @db.Text
+  templateConfirmado    String @default("✅ Consulta confirmada! Nos vemos em {data} às {hora}.") @map("template_confirmado") @db.Text
+  templateReagendar     String @default("📅 Vamos reagendar sua consulta. Em breve entraremos em contato.") @map("template_reagendar") @db.Text
+  templateOpcaoInvalida String @default("❌ Resposta não reconhecida. Digite:\n1 - Para confirmar\n2 - Para reagendar") @map("template_opcao_invalida") @db.Text
+
+  // Configurações de envio
+  horasAntecedencia  Int     @default(24) @map("horas_antecedencia")
+  enviarLinkAnamnese Boolean @default(false) @map("enviar_link_anamnese")
+  formularioId       String? @map("formulario_id")
+
+  ativo     Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tenant     Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  formulario Formulario?        @relation(fields: [formularioId], references: [id])
+  mensagens  WhatsAppMensagem[]
+
+  @@index([tenantId])
+  @@index([status])
   @@map("whatsapp_config")
 }
 
-model LogSistema {
-  id        String   @id @default(cuid())
-  tenantId  String   @map("tenant_id")
-  usuarioId String?  @map("usuario_id")
-  tipo      TipoLog
-  descricao String
-  metadata  Json?
-  createdAt DateTime @default(now()) @map("created_at")
+model WhatsAppMensagem {
+  id            String  @id @default(cuid())
+  tenantId      String  @map("tenant_id")
+  configId      String  @map("config_id")
+  agendamentoId String? @map("agendamento_id")
+  pacienteId    String  @map("paciente_id")
 
-  @@index([tenantId, tipo])
-  @@index([tenantId, createdAt])
-  @@map("logs_sistema")
-}
+  telefone String
+  mensagem String @db.Text
+  tipo     String // CONFIRMACAO, RESPOSTA_CONFIRMADO, RESPOSTA_REAGENDAR, RESPOSTA_INVALIDA
+  status   String @default("PENDENTE") // PENDENTE, ENVIANDO, ENVIADA, ERRO, RESPONDIDA
 
-enum TipoUsuario {
-  ADMIN
-  SECRETARIA
-}
+  respostaRecebida String?   @map("resposta_recebida") @db.Text
+  respostaEm       DateTime? @map("resposta_em")
 
-enum StatusAgendamento {
-  MARCADO
-  CONFIRMADO
-  COMPARECEU
-  FALTOU
-  CANCELADO
-}
+  tentativas   Int     @default(0)
+  erroMensagem String? @map("erro_mensagem") @db.Text
 
-enum TipoLog {
-  LOGIN
-  LOGOUT
-  AGENDAMENTO_CRIADO
-  AGENDAMENTO_ATUALIZADO
-  AGENDAMENTO_CANCELADO
-  CONFIRMACAO_ENVIADA
-  CONFIRMACAO_RECEBIDA
-  SYNC_GOOGLE_CALENDAR
-  ERROR
-  CREATE
-  UPDATE
-  DELETE
-}
+  enviadaEm DateTime? @map("enviada_em")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
 
-model Plano {
-  id        String  @id @default(cuid())
-  nome      String  @unique
-  slug      String  @unique
-  descricao String?
+  config      WhatsAppConfig @relation(fields: [configId], references: [id], onDelete: Cascade)
+  agendamento Agendamento?   @relation(fields: [agendamentoId], references: [id], onDelete: SetNull)
+  paciente    Paciente       @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
+  tenant      Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-  // Limites
-  profissionaisAtivos Int @map("profissionais_ativos")
-  usuarios            Int
-  agendamentosMes     Int @map("agendamentos_mes")
-  pacientes           Int
-  armazenamentoMB     Int @map("armazenamento_mb")
-
-  // Funcionalidades
-  whatsappAtivo      Boolean @default(false) @map("whatsapp_ativo")
-  googleCalendarSync Boolean @default(false) @map("google_calendar_sync")
-
-  // Preço
-  valorMensal Decimal? @map("valor_mensal") @db.Decimal(10, 2)
-  valorAnual  Decimal? @map("valor_anual") @db.Decimal(10, 2)
-
-  ativo     Boolean  @default(true)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  tenants Tenant[]
-
-  @@map("planos")
-}
-
-model Tenant {
-  id        String   @id @default(cuid())
-  nome      String
-  planoId   String   @map("plano_id")
-  ativo     Boolean  @default(true)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  plano          Plano           @relation(fields: [planoId], references: [id])
-  agendamentos   Agendamento[]
-  atendimentos   Atendimento[]
-  pacientes      Paciente[]
-  procedimentos  Procedimento[]
-  profissionais  Profissional[]
-  usuarios       Usuario[]
-  whatsappConfig WhatsAppConfig?
-  Formulario     Formulario[]
-  Anamnese       Anamnese[]
-
-  @@index([planoId])
-  @@map("tenants")
-}
-
-// Enum para módulos do sistema
-enum Modulo {
-  PACIENTES
-  PROFISSIONAIS
-  PROCEDIMENTOS
-  AGENDA
-  ATENDIMENTOS
-  WHATSAPP
-  USUARIOS
-  RELATORIOS
-}
-
-// Tabela de autorizações por usuário
-model Autorizacao {
-  id        String @id @default(cuid())
-  usuarioId String @map("usuario_id")
-  modulo    Modulo
-
-  // Permissões específicas
-  visualizar   Boolean @default(false)
-  criarAlterar Boolean @default(false) @map("criar_alterar")
-  cancelar     Boolean @default(false)
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
-
-  @@unique([usuarioId, modulo])
-  @@index([usuarioId])
-  @@map("autorizacoes")
+  @@index([tenantId])
+  @@index([configId])
+  @@index([agendamentoId])
+  @@index([pacienteId])
+  @@index([status])
+  @@index([telefone])
+  @@index([enviadaEm])
+  @@map("whatsapp_mensagens")
 }
 
 // ============================================================================
@@ -331,9 +422,10 @@ model Formulario {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  profissional Profissional? @relation(fields: [profissionalId], references: [id], onDelete: SetNull)
-  anamneses    Anamnese[]
+  tenant          Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  profissional    Profissional?    @relation(fields: [profissionalId], references: [id], onDelete: SetNull)
+  anamneses       Anamnese[]
+  whatsappConfigs WhatsAppConfig[]
 
   @@index([tenantId])
   @@index([tenantId, profissionalId])
@@ -363,4 +455,22 @@ model Anamnese {
   @@index([tenantId, formularioId])
   @@index([tenantId, atendimentoId])
   @@map("anamneses")
+}
+
+// ============================================================================
+// LOGS DO SISTEMA
+// ============================================================================
+
+model LogSistema {
+  id        String   @id @default(cuid())
+  tenantId  String   @map("tenant_id")
+  usuarioId String?  @map("usuario_id")
+  tipo      TipoLog
+  descricao String
+  metadata  Json?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([tenantId, tipo])
+  @@index([tenantId, createdAt])
+  @@map("logs_sistema")
 }

@@ -1,3 +1,5 @@
+// backend/prisma/schema.prisma
+
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
@@ -8,197 +10,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Usuario {
-  id        String      @id @default(cuid())
-  tenantId  String      @map("tenant_id")
-  nome      String
-  email     String
-  senha     String
-  tipo      TipoUsuario @default(SECRETARIA)
-  ativo     Boolean     @default(true)
-  createdAt DateTime    @default(now()) @map("created_at")
-  updatedAt DateTime    @updatedAt @map("updated_at")
-  tenant    Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  autorizacoes  Autorizacao[] 
-
-  @@unique([tenantId, email])
-  @@index([tenantId, email])
-  @@map("usuarios")
-}
-
-model Profissional {
-  id            String   @id @default(uuid())
-  tenantId      String   @map("tenant_id")
-  nome          String
-  especialidade String?
-  cor           String   @default("#3B82F6") // Azul padrão
-  observacoes   String?
-  ativo         Boolean  @default(true)
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
-
-  tenant        Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  pacientes     Paciente[]
-  agendamentos  Agendamento[]
-  atendimentos  Atendimento[]
-
-  @@index([tenantId, ativo])
-  @@map("profissionais")
-  Formulario Formulario[]
-}
-
-model Paciente {
-  id        String   @id @default(cuid())
-  tenantId  String   @map("tenant_id")
-  profissionalId String? @map("profissional_id")
-  
-  // Dados pessoais
-  nome      String
-  cpf       String?
-  dataNascimento DateTime? @map("data_nascimento")
-  
-  // Contatos
-  telefone  String
-  telefone2 String?  @map("telefone2")
-  email     String?
-  
-  // Endereço
-  cep       String?
-  logradouro String?
-  numero    String?
-  complemento String?
-  bairro    String?
-  cidade    String?
-  estado    String?  @db.VarChar(2)
-  
-  // Dados médicos
-  alergias  String?  @db.Text
-  
-  // Responsável (para menores de idade)
-  menorIdade Boolean @default(false) @map("menor_idade")
-  responsavelNome String? @map("responsavel_nome")
-  responsavelCpf String? @map("responsavel_cpf")
-  responsavelTelefone String? @map("responsavel_telefone")
-  responsavelParentesco String? @map("responsavel_parentesco")
-  
-  observacoes String? @db.Text
-  
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  tenant        Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  profissional  Profissional? @relation(fields: [profissionalId], references: [id], onDelete: SetNull)
-  agendamentos  Agendamento[]
-  atendimentos  Atendimento[]
-
-  @@map("pacientes")
-  @@index([tenantId])
-  @@index([tenantId, nome])
-  @@index([tenantId, telefone])
-  @@index([cpf])
-  Anamnese Anamnese[]
-}
-
-model Procedimento {
-  id             String        @id @default(cuid())
-  tenantId       String        @map("tenant_id")
-  nome           String
-  valor          Decimal?      @db.Decimal(10, 2)
-  duracaoMinutos Int           @map("duracao_minutos")
-  createdAt      DateTime      @default(now()) @map("created_at")
-  updatedAt      DateTime      @updatedAt @map("updated_at")
-  agendamentos   Agendamento[]
-  atendimentos   Atendimento[]
-  tenant         Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-
-  @@index([tenantId, nome])
-  @@map("procedimentos")
-}
-
-model Agendamento {
-  id                 String            @id @default(cuid())
-  tenantId           String            @map("tenant_id")
-  pacienteId         String?           @map("paciente_id")
-  profissionalId     String            @map("profissional_id")
-  procedimentoId     String            @map("procedimento_id")
-  dataHora           DateTime          @map("data_hora")
-  status             StatusAgendamento @default(MARCADO)
-  observacoes        String?
-  confirmacaoEnviada Boolean           @default(false) @map("confirmacao_enviada")
-  recorrenciaId       String?       @map("recorrencia_id") // NOVO CAMPO
-
-  createdAt          DateTime          @default(now()) @map("created_at")
-  updatedAt          DateTime          @updatedAt @map("updated_at")
-  dataHoraFim        DateTime          @map("data_hora_fim")
-  paciente           Paciente?         @relation(fields: [pacienteId], references: [id])
-  procedimento       Procedimento      @relation(fields: [procedimentoId], references: [id], onDelete: Cascade)
-  profissional       Profissional      @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
-  tenant             Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  atendimento        Atendimento?
-
-  @@index([tenantId, dataHora])
-  @@index([tenantId, profissionalId])
-  @@index([tenantId, pacienteId])
-  @@map("agendamentos")
-}
-
-model Atendimento {
-  id                      String   @id @default(uuid())
-  tenantId                String   @map("tenant_id")
-  agendamentoId           String   @unique @map("agendamento_id")  // ADICIONAR @unique
-  pacienteId              String   @map("paciente_id")
-  profissionalId          String   @map("profissional_id")
-  procedimentoId          String?  @map("procedimento_id")
-  anotacoes               String?  @db.Text
-  procedimentosRealizados Json     @default("[]") @map("procedimentos_realizados")
-  cancelado               Boolean  @default(false)
-  canceladoEm             DateTime? @map("cancelado_em")
-  createdAt               DateTime @default(now()) @map("created_at")
-  updatedAt               DateTime @updatedAt @map("updated_at")
-
-  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  agendamento  Agendamento   @relation(fields: [agendamentoId], references: [id], onDelete: Cascade)
-  paciente     Paciente      @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
-  profissional Profissional  @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
-  procedimento Procedimento? @relation(fields: [procedimentoId], references: [id], onDelete: SetNull)
-
-  @@map("atendimentos")
-  @@index([tenantId, pacienteId])
-  @@index([tenantId, profissionalId])
-  @@index([tenantId, agendamentoId])
-  @@index([tenantId, cancelado])
-  Anamnese Anamnese[]
-}
-
-model WhatsAppConfig {
-  id                      String   @id @default(cuid())
-  tenantId                String   @unique @map("tenant_id")
-  templateConfirmacao     String   @default("Olá {nome}! Você tem consulta marcada para {data} às {hora}. Para confirmar, responda: 1=SIM ou 2=NÃO") @map("template_confirmacao")
-  templateSim             String   @default("Consulta confirmada! Nos vemos em {data} às {hora}.") @map("template_sim")
-  templateNao             String   @default("Consulta cancelada. Entre em contato para reagendar.") @map("template_nao")
-  templateOpcoesInvalidas String   @default("Resposta não reconhecida. Digite 1 para SIM ou 2 para NÃO.") @map("template_opcoes_invalidas")
-  horasAntecedencia       Int      @default(24) @map("horas_antecedencia")
-  ativo                   Boolean  @default(true)
-  createdAt               DateTime @default(now()) @map("created_at")
-  updatedAt               DateTime @updatedAt @map("updated_at")
-  tenant                  Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-
-  @@map("whatsapp_config")
-}
-
-model LogSistema {
-  id        String   @id @default(cuid())
-  tenantId  String   @map("tenant_id")
-  usuarioId String?  @map("usuario_id")
-  tipo      TipoLog
-  descricao String
-  metadata  Json?
-  createdAt DateTime @default(now()) @map("created_at")
-
-  @@index([tenantId, tipo])
-  @@index([tenantId, createdAt])
-  @@map("logs_sistema")
-}
+// ============================================================================
+// ENUMS
+// ============================================================================
 
 enum TipoUsuario {
   ADMIN
@@ -227,6 +41,21 @@ enum TipoLog {
   UPDATE
   DELETE
 }
+
+enum Modulo {
+  PACIENTES
+  PROFISSIONAIS
+  PROCEDIMENTOS
+  AGENDA
+  ATENDIMENTOS
+  WHATSAPP
+  USUARIOS
+  RELATORIOS
+}
+
+// ============================================================================
+// PLANOS E TENANTS
+// ============================================================================
 
 model Plano {
   id        String   @id @default(cuid())
@@ -266,34 +95,45 @@ model Tenant {
   createdAt      DateTime        @default(now()) @map("created_at")
   updatedAt      DateTime        @updatedAt @map("updated_at")
   
-  plano          Plano           @relation(fields: [planoId], references: [id])
-  agendamentos   Agendamento[]
-  atendimentos   Atendimento[]
-  pacientes      Paciente[]
-  procedimentos  Procedimento[]
-  profissionais  Profissional[]
-  usuarios       Usuario[]
-  whatsappConfig WhatsAppConfig?
+  plano             Plano              @relation(fields: [planoId], references: [id])
+  agendamentos      Agendamento[]
+  atendimentos      Atendimento[]
+  pacientes         Paciente[]
+  procedimentos     Procedimento[]
+  profissionais     Profissional[]
+  usuarios          Usuario[]
+  whatsappConfig    WhatsAppConfig?
+  formularios       Formulario[]
+  anamneses         Anamnese[]
+  whatsappMensagens WhatsAppMensagem[]
 
   @@index([planoId])
   @@map("tenants")
-  Formulario Formulario[]
-  Anamnese Anamnese[]
 }
 
-// Enum para módulos do sistema
-enum Modulo {
-  PACIENTES
-  PROFISSIONAIS
-  PROCEDIMENTOS
-  AGENDA
-  ATENDIMENTOS
-  WHATSAPP
-  USUARIOS
-  RELATORIOS
+// ============================================================================
+// USUÁRIOS E AUTORIZAÇÕES
+// ============================================================================
+
+model Usuario {
+  id        String      @id @default(cuid())
+  tenantId  String      @map("tenant_id")
+  nome      String
+  email     String
+  senha     String
+  tipo      TipoUsuario @default(SECRETARIA)
+  ativo     Boolean     @default(true)
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+  
+  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  autorizacoes Autorizacao[]
+
+  @@unique([tenantId, email])
+  @@index([tenantId, email])
+  @@map("usuarios")
 }
 
-// Tabela de autorizações por usuário
 model Autorizacao {
   id        String   @id @default(cuid())
   usuarioId String   @map("usuario_id")
@@ -302,7 +142,7 @@ model Autorizacao {
   // Permissões específicas
   visualizar     Boolean @default(false)
   criarAlterar   Boolean @default(false) @map("criar_alterar")
-  cancelar       Boolean @default(false) 
+  cancelar       Boolean @default(false)
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -312,6 +152,257 @@ model Autorizacao {
   @@unique([usuarioId, modulo])
   @@index([usuarioId])
   @@map("autorizacoes")
+}
+
+// ============================================================================
+// PROFISSIONAIS
+// ============================================================================
+
+model Profissional {
+  id            String   @id @default(uuid())
+  tenantId      String   @map("tenant_id")
+  nome          String
+  especialidade String?
+  cor           String   @default("#3B82F6")
+  observacoes   String?
+  ativo         Boolean  @default(true)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  pacientes    Paciente[]
+  agendamentos Agendamento[]
+  atendimentos Atendimento[]
+  formularios  Formulario[]
+
+  @@index([tenantId, ativo])
+  @@map("profissionais")
+}
+
+// ============================================================================
+// PACIENTES
+// ============================================================================
+
+model Paciente {
+  id             String   @id @default(cuid())
+  tenantId       String   @map("tenant_id")
+  profissionalId String?  @map("profissional_id")
+  
+  // Dados pessoais
+  nome           String
+  cpf            String?
+  dataNascimento DateTime? @map("data_nascimento")
+  
+  // Contatos
+  telefone  String
+  telefone2 String? @map("telefone2")
+  email     String?
+  
+  // Endereço
+  cep         String?
+  logradouro  String?
+  numero      String?
+  complemento String?
+  bairro      String?
+  cidade      String?
+  estado      String? @db.VarChar(2)
+  
+  // Dados médicos
+  alergias String? @db.Text
+  
+  // Responsável (para menores de idade)
+  menorIdade            Boolean @default(false) @map("menor_idade")
+  responsavelNome       String? @map("responsavel_nome")
+  responsavelCpf        String? @map("responsavel_cpf")
+  responsavelTelefone   String? @map("responsavel_telefone")
+  responsavelParentesco String? @map("responsavel_parentesco")
+  
+  observacoes String? @db.Text
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tenant            Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  profissional      Profissional?      @relation(fields: [profissionalId], references: [id], onDelete: SetNull)
+  agendamentos      Agendamento[]
+  atendimentos      Atendimento[]
+  anamneses         Anamnese[]
+  whatsappMensagens WhatsAppMensagem[]
+
+  @@index([tenantId])
+  @@index([tenantId, nome])
+  @@index([tenantId, telefone])
+  @@index([cpf])
+  @@map("pacientes")
+}
+
+// ============================================================================
+// PROCEDIMENTOS
+// ============================================================================
+
+model Procedimento {
+  id             String        @id @default(cuid())
+  tenantId       String        @map("tenant_id")
+  nome           String
+  valor          Decimal?      @db.Decimal(10, 2)
+  duracaoMinutos Int           @map("duracao_minutos")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+  
+  agendamentos Agendamento[]
+  atendimentos Atendimento[]
+  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, nome])
+  @@map("procedimentos")
+}
+
+// ============================================================================
+// AGENDAMENTOS
+// ============================================================================
+
+model Agendamento {
+  id                 String            @id @default(cuid())
+  tenantId           String            @map("tenant_id")
+  pacienteId         String?           @map("paciente_id")
+  profissionalId     String            @map("profissional_id")
+  procedimentoId     String            @map("procedimento_id")
+  dataHora           DateTime          @map("data_hora")
+  dataHoraFim        DateTime          @map("data_hora_fim")
+  status             StatusAgendamento @default(MARCADO)
+  observacoes        String?
+  confirmacaoEnviada Boolean           @default(false) @map("confirmacao_enviada")
+  recorrenciaId      String?           @map("recorrencia_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  paciente          Paciente?          @relation(fields: [pacienteId], references: [id])
+  procedimento      Procedimento       @relation(fields: [procedimentoId], references: [id], onDelete: Cascade)
+  profissional      Profissional       @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
+  tenant            Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  atendimento       Atendimento?
+  whatsappMensagens WhatsAppMensagem[]
+
+  @@index([tenantId, dataHora])
+  @@index([tenantId, profissionalId])
+  @@index([tenantId, pacienteId])
+  @@map("agendamentos")
+}
+
+// ============================================================================
+// ATENDIMENTOS
+// ============================================================================
+
+model Atendimento {
+  id                      String   @id @default(uuid())
+  tenantId                String   @map("tenant_id")
+  agendamentoId           String   @unique @map("agendamento_id")
+  pacienteId              String   @map("paciente_id")
+  profissionalId          String   @map("profissional_id")
+  procedimentoId          String?  @map("procedimento_id")
+  anotacoes               String?  @db.Text
+  procedimentosRealizados Json     @default("[]") @map("procedimentos_realizados")
+  cancelado               Boolean  @default(false)
+  canceladoEm             DateTime? @map("cancelado_em")
+  createdAt               DateTime @default(now()) @map("created_at")
+  updatedAt               DateTime @updatedAt @map("updated_at")
+
+  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  agendamento  Agendamento   @relation(fields: [agendamentoId], references: [id], onDelete: Cascade)
+  paciente     Paciente      @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
+  profissional Profissional  @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
+  procedimento Procedimento? @relation(fields: [procedimentoId], references: [id], onDelete: SetNull)
+  anamneses    Anamnese[]
+
+  @@index([tenantId, pacienteId])
+  @@index([tenantId, profissionalId])
+  @@index([tenantId, agendamentoId])
+  @@index([tenantId, cancelado])
+  @@map("atendimentos")
+}
+
+// ============================================================================
+// WHATSAPP
+// ============================================================================
+
+model WhatsAppConfig {
+  id                      String   @id @default(cuid())
+  tenantId                String   @unique @map("tenant_id")
+  
+  // Configurações de conexão
+  instanceName            String?  @map("instance_name")
+  instanceToken           String?  @map("instance_token")
+  qrCode                  String?  @db.Text @map("qr_code")
+  status                  String   @default("DISCONNECTED") // DISCONNECTED, CONNECTING, CONNECTED
+  phoneNumber             String?  @map("phone_number")
+  profileName             String?  @map("profile_name")
+  
+  // Estatísticas
+  totalContacts           Int      @default(0) @map("total_contacts")
+  totalChats              Int      @default(0) @map("total_chats")
+  mensagensEnviadas       Int      @default(0) @map("mensagens_enviadas")
+  mensagensRecebidas      Int      @default(0) @map("mensagens_recebidas")
+  
+  // Templates
+  templateConfirmacao     String   @db.Text @map("template_confirmacao") @default("Olá {nome}! Você tem consulta marcada para {data} às {hora} com {profissional}. Para confirmar, responda: 1=SIM ou 2=REAGENDAR")
+  templateConfirmado      String   @db.Text @map("template_confirmado") @default("✅ Consulta confirmada! Nos vemos em {data} às {hora}.")
+  templateReagendar       String   @db.Text @map("template_reagendar") @default("📅 Vamos reagendar sua consulta. Em breve entraremos em contato.")
+  templateOpcaoInvalida   String   @db.Text @map("template_opcao_invalida") @default("❌ Resposta não reconhecida. Digite:\n1 - Para confirmar\n2 - Para reagendar")
+  
+  // Configurações de envio
+  horasAntecedencia       Int      @default(24) @map("horas_antecedencia")
+  enviarLinkAnamnese      Boolean  @default(false) @map("enviar_link_anamnese")
+  formularioId            String?  @map("formulario_id")
+  
+  ativo                   Boolean  @default(false)
+  createdAt               DateTime @default(now()) @map("created_at")
+  updatedAt               DateTime @updatedAt @map("updated_at")
+
+  tenant     Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  formulario Formulario?        @relation(fields: [formularioId], references: [id])
+  mensagens  WhatsAppMensagem[]
+  
+  @@index([tenantId])
+  @@index([status])
+  @@map("whatsapp_config")
+}
+
+model WhatsAppMensagem {
+  id                String   @id @default(cuid())
+  tenantId          String   @map("tenant_id")
+  configId          String   @map("config_id")
+  agendamentoId     String?  @map("agendamento_id")
+  pacienteId        String   @map("paciente_id")
+  
+  telefone          String
+  mensagem          String   @db.Text
+  tipo              String   // CONFIRMACAO, RESPOSTA_CONFIRMADO, RESPOSTA_REAGENDAR, RESPOSTA_INVALIDA
+  status            String   @default("PENDENTE") // PENDENTE, ENVIANDO, ENVIADA, ERRO, RESPONDIDA
+  
+  respostaRecebida  String?  @db.Text @map("resposta_recebida")
+  respostaEm        DateTime? @map("resposta_em")
+  
+  tentativas        Int      @default(0)
+  erroMensagem      String?  @db.Text @map("erro_mensagem")
+  
+  enviadaEm         DateTime? @map("enviada_em")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  config      WhatsAppConfig @relation(fields: [configId], references: [id], onDelete: Cascade)
+  agendamento Agendamento?   @relation(fields: [agendamentoId], references: [id], onDelete: SetNull)
+  paciente    Paciente       @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
+  tenant      Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  
+  @@index([tenantId])
+  @@index([configId])
+  @@index([agendamentoId])
+  @@index([pacienteId])
+  @@index([status])
+  @@index([telefone])
+  @@index([enviadaEm])
+  @@map("whatsapp_mensagens")
 }
 
 // ============================================================================
@@ -331,9 +422,10 @@ model Formulario {
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @updatedAt @map("updated_at")
 
-  tenant         Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  profissional   Profissional? @relation(fields: [profissionalId], references: [id], onDelete: SetNull)
-  anamneses      Anamnese[]
+  tenant          Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  profissional    Profissional?    @relation(fields: [profissionalId], references: [id], onDelete: SetNull)
+  anamneses       Anamnese[]
+  whatsappConfigs WhatsAppConfig[]
 
   @@index([tenantId])
   @@index([tenantId, profissionalId])
@@ -354,13 +446,31 @@ model Anamnese {
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @updatedAt @map("updated_at")
 
-  tenant         Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  paciente       Paciente     @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
-  formulario     Formulario   @relation(fields: [formularioId], references: [id], onDelete: Restrict)
-  atendimento    Atendimento? @relation(fields: [atendimentoId], references: [id], onDelete: SetNull)
+  tenant      Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  paciente    Paciente     @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
+  formulario  Formulario   @relation(fields: [formularioId], references: [id], onDelete: Restrict)
+  atendimento Atendimento? @relation(fields: [atendimentoId], references: [id], onDelete: SetNull)
 
   @@index([tenantId, pacienteId])
   @@index([tenantId, formularioId])
   @@index([tenantId, atendimentoId])
   @@map("anamneses")
+}
+
+// ============================================================================
+// LOGS DO SISTEMA
+// ============================================================================
+
+model LogSistema {
+  id        String   @id @default(cuid())
+  tenantId  String   @map("tenant_id")
+  usuarioId String?  @map("usuario_id")
+  tipo      TipoLog
+  descricao String
+  metadata  Json?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([tenantId, tipo])
+  @@index([tenantId, createdAt])
+  @@map("logs_sistema")
 }

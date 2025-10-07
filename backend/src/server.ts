@@ -1,5 +1,6 @@
 import app from "./app";
 import DatabaseService from "./config/database";
+import { whatsappConfirmationJob } from "./jobs/whatsapp-confirmation.job";
 
 // ============================================================================
 // SERVER SETUP
@@ -101,6 +102,7 @@ process.on("unhandledRejection", (reason: any, promise: Promise<any>) => {
 // ============================================================================
 
 startServer();
+whatsappConfirmationJob.start();
 
 // Export for testing
 export default app;

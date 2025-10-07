@@ -21,6 +21,7 @@ import cepRoutes from "./modules/cep/routes/cep.routes";
 import autorizacaoRoutes from "./modules/autorizacoes/routes/autorizacao.routes";
 import formularioRoutes from "./modules/anamnese/routes/formulario.routes";
 import anamneseRoutes from "./modules/anamnese/routes/anamnese.routes";
+import whatsappRouter from "./modules/whatsapp/whatsapp.router";
 
 // Load environment variables
 dotenv.config();
@@ -128,6 +129,8 @@ class App {
     this.app.use("/api/autorizacoes", autorizacaoRoutes);
     this.app.use("/api/formularios", formularioRoutes);
     this.app.use("/api/anamneses", anamneseRoutes);
+    this.app.use("/api/whatsapp", whatsappRouter);
+
     // 404 handler
     this.app.use("*", (req: Request, res: Response) => {
       const response: ApiResponse = {
