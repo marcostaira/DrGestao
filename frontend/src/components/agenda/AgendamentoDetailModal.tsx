@@ -7,6 +7,7 @@ import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import { getStatusBadge, formatDateTime } from "@/utils/agendaUtils";
 import { WhatsAppConfirmButton } from "../whatsapp/WhatsAppConfirmButton";
+import { SendAnamneseWhatsApp } from "../anamnese/SendAnamneseWhatsApp";
 import { useWhatsApp } from "@/hooks/useWhatsApp";
 import { whatsappService } from "@/services/whatsapp.service";
 
@@ -127,11 +128,12 @@ export const AgendamentoDetailModal: React.FC<AgendamentoDetailModalProps> = ({
           </div>
         </div>
 
-        {/* Status da Confirmação WhatsApp */}
+        {/* Ações WhatsApp */}
         {isWhatsAppConnected && agendamento.paciente?.telefone && (
-          <div className="pb-4 border-b border-gray-200">
+          <div className="pb-4 border-b border-gray-200 space-y-3">
+            {/* Confirmação */}
             {temConfirmacaoEnviada && ultimaConfirmacao ? (
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-3">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                 <div className="flex items-start gap-3">
                   <span className="text-2xl">✅</span>
                   <div className="flex-1">
@@ -167,6 +169,16 @@ export const AgendamentoDetailModal: React.FC<AgendamentoDetailModalProps> = ({
                 onSuccess={() => {
                   buscarMensagensAgendamento();
                 }}
+              />
+            )}
+
+            {/* Anamnese */}
+            {agendamento.paciente && (
+              <SendAnamneseWhatsApp
+                pacienteId={agendamento.paciente.id}
+                pacienteNome={agendamento.paciente.nome}
+                pacienteTelefone={agendamento.paciente.telefone}
+                agendamentoId={agendamento.id}
               />
             )}
           </div>

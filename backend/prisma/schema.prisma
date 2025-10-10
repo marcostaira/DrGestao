@@ -228,12 +228,14 @@ model Paciente {
   atendimentos      Atendimento[]
   anamneses         Anamnese[]
   whatsappMensagens WhatsAppMensagem[]
+  linksAnamnese LinkAnamnese[]
 
   @@index([tenantId])
   @@index([tenantId, nome])
   @@index([tenantId, telefone])
   @@index([cpf])
   @@map("pacientes")
+
 }
 
 // ============================================================================
@@ -283,6 +285,7 @@ model Agendamento {
   tenant            Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   atendimento       Atendimento?
   whatsappMensagens WhatsAppMensagem[]
+  linksAnamnese LinkAnamnese[]
 
   @@index([tenantId, dataHora])
   @@index([tenantId, profissionalId])
@@ -426,6 +429,7 @@ model Formulario {
   profissional    Profissional?    @relation(fields: [profissionalId], references: [id], onDelete: SetNull)
   anamneses       Anamnese[]
   whatsappConfigs WhatsAppConfig[]
+  linksAnamnese LinkAnamnese[]
 
   @@index([tenantId])
   @@index([tenantId, profissionalId])
@@ -450,11 +454,39 @@ model Anamnese {
   paciente    Paciente     @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
   formulario  Formulario   @relation(fields: [formularioId], references: [id], onDelete: Restrict)
   atendimento Atendimento? @relation(fields: [atendimentoId], references: [id], onDelete: SetNull)
-
+  linksAnamnese LinkAnamnese[]
+  
   @@index([tenantId, pacienteId])
   @@index([tenantId, formularioId])
   @@index([tenantId, atendimentoId])
   @@map("anamneses")
+}
+
+model LinkAnamnese {
+  id             String    @id @default(cuid())
+  tenantId       String    @map("tenant_id")
+  pacienteId     String    @map("paciente_id")
+  formularioId   String    @map("formulario_id")
+  agendamentoId  String?   @map("agendamento_id")
+  
+  token          String    @unique // Token criptografado
+  preenchido     Boolean   @default(false)
+  expiresAt      DateTime  @map("expires_at")
+  preenchidoEm   DateTime? @map("preenchido_em")
+  anamneseId     String?   @unique @map("anamnese_id") // Link para anamnese preenchida
+  
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  paciente     Paciente     @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
+  formulario   Formulario   @relation(fields: [formularioId], references: [id], onDelete: Cascade)
+  agendamento  Agendamento? @relation(fields: [agendamentoId], references: [id], onDelete: SetNull)
+  anamnese     Anamnese?    @relation(fields: [anamneseId], references: [id], onDelete: SetNull)
+
+  @@index([token])
+  @@index([tenantId])
+  @@index([pacienteId])
+  @@map("links_anamnese")
 }
 
 // ============================================================================

@@ -1,3 +1,5 @@
+// frontend/src/components/atendimentos/AtendimentoFormModal.tsx
+
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -5,6 +7,8 @@ import { useRouter } from "next/navigation";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
 import { DocumentTextIcon } from "@heroicons/react/24/outline";
+import { SendAnamneseWhatsApp } from "../anamnese/SendAnamneseWhatsApp";
+import { useWhatsApp } from "@/hooks/useWhatsApp";
 
 interface AtendimentoFormModalProps {
   isOpen: boolean;
@@ -26,6 +30,8 @@ export function AtendimentoFormModal({
   atendimento,
 }: AtendimentoFormModalProps) {
   const router = useRouter();
+  const { config } = useWhatsApp();
+  const isWhatsAppConnected = config?.status === "CONNECTED";
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     agendamentoId: "",
@@ -155,6 +161,20 @@ export function AtendimentoFormModal({
                 </p>
               )}
             </div>
+
+            {/* Botão Enviar Anamnese */}
+            {isWhatsAppConnected &&
+              agendamento.paciente?.telefone &&
+              !atendimento?.cancelado && (
+                <div className="mt-4 pt-4 border-t border-gray-300">
+                  <SendAnamneseWhatsApp
+                    pacienteId={agendamento.paciente.id}
+                    pacienteNome={agendamento.paciente.nome}
+                    pacienteTelefone={agendamento.paciente.telefone}
+                    agendamentoId={agendamento.id}
+                  />
+                </div>
+              )}
           </div>
         )}
 
