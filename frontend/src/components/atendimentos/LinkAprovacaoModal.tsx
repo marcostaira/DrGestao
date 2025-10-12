@@ -2,7 +2,7 @@
 
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
 import {
@@ -30,11 +30,44 @@ export function LinkAprovacaoModal({
   pacienteTelefone,
 }: LinkAprovacaoModalProps) {
   const [loading, setLoading] = useState(false);
+  const [checkingExisting, setCheckingExisting] = useState(true); // ✅ NOVO
   const [link, setLink] = useState<string>("");
   const [expiresAt, setExpiresAt] = useState<string>("");
   const [copied, setCopied] = useState(false);
   const [expiresInDays, setExpiresInDays] = useState(7);
   const [sendingWhatsApp, setSendingWhatsApp] = useState(false);
+  const [enviadoWhatsApp, setEnviadoWhatsApp] = useState(false); // ✅ NOVO
+  const [enviadoEm, setEnviadoEm] = useState<string>(""); // ✅ NOVO
+
+  // ✅ NOVO: Verificar se já existe link válido ao abrir modal
+  useEffect(() => {
+    if (isOpen) {
+      checkExistingLink();
+    }
+  }, [isOpen, avaliacaoId]);
+
+  const checkExistingLink = async () => {
+    try {
+      setCheckingExisting(true);
+      const response = await api.get(
+        `/atendimentos/${avaliacaoId}/link-aprovacao/status`
+      );
+
+      if (response.data.data && response.data.data.linkValido) {
+        const data = response.data.data;
+        setLink(data.link);
+        setExpiresAt(data.expiresAt);
+        setEnviadoWhatsApp(data.enviadoWhatsApp || false);
+        setEnviadoEm(data.enviadoEm || "");
+      }
+    } catch (error) {
+      // Sem link existente ou link expirado
+      setLink("");
+      setExpiresAt("");
+    } finally {
+      setCheckingExisting(false);
+    }
+  };
 
   const handleGerarLink = async () => {
     try {
@@ -74,7 +107,10 @@ export function LinkAprovacaoModal({
       setSendingWhatsApp(true);
       await api.post(`/atendimentos/${avaliacaoId}/link-aprovacao/whatsapp`);
       toast.success("Link enviado via WhatsApp!");
-      onClose();
+
+      // Atualizar estado de envio
+      setEnviadoWhatsApp(true);
+      setEnviadoEm(new Date().toISOString());
     } catch (error: any) {
       toast.error(error.response?.data?.error || "Erro ao enviar via WhatsApp");
       console.error(error);
@@ -88,14 +124,41 @@ export function LinkAprovacaoModal({
     setExpiresAt("");
     setCopied(false);
     setExpiresInDays(7);
+    setEnviadoWhatsApp(false);
+    setEnviadoEm("");
     onClose();
+  };
+
+  // ✅ Formato de data mais legível
+  const formatExpiration = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = date.getTime() - now.getTime();
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffHours / 24);
+
+    const formattedDate = date.toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    if (diffDays > 0) {
+      return `${formattedDate} (${diffDays} dia${diffDays > 1 ? "s" : ""})`;
+    } else if (diffHours > 0) {
+      return `${formattedDate} (${diffHours} hora${diffHours > 1 ? "s" : ""})`;
+    } else {
+      return `${formattedDate} (expira em breve)`;
+    }
   };
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      title="Gerar Link de Aprovação"
+      title={link ? "Link de Aprovação" : "Gerar Link de Aprovação"}
       size="md"
     >
       <div className="space-y-6">
@@ -106,7 +169,12 @@ export function LinkAprovacaoModal({
           <p className="text-sm text-blue-700">{pacienteTelefone}</p>
         </div>
 
-        {!link ? (
+        {/* ✅ Loading ao verificar link existente */}
+        {checkingExisting ? (
+          <div className="flex justify-center items-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          </div>
+        ) : !link ? (
           <>
             {/* Configuração de Expiração */}
             <div>
@@ -176,16 +244,23 @@ export function LinkAprovacaoModal({
                 </button>
               </div>
               <p className="text-xs text-gray-500 mt-1">
-                Expira em:{" "}
-                {new Date(expiresAt).toLocaleDateString("pt-BR", {
-                  day: "2-digit",
-                  month: "long",
-                  year: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
+                Expira em: {formatExpiration(expiresAt)}
               </p>
             </div>
+
+            {/* ✅ Info de envio WhatsApp */}
+            {enviadoWhatsApp && enviadoEm && (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                <p className="text-sm text-green-800">
+                  ✓ Link enviado via WhatsApp em{" "}
+                  {new Date(enviadoEm).toLocaleDateString("pt-BR")} às{" "}
+                  {new Date(enviadoEm).toLocaleTimeString("pt-BR", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </p>
+              </div>
+            )}
 
             {/* Informações */}
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
@@ -205,10 +280,12 @@ export function LinkAprovacaoModal({
                 variant="primary"
                 onClick={handleEnviarWhatsApp}
                 isLoading={sendingWhatsApp}
-                disabled={sendingWhatsApp}
+                disabled={sendingWhatsApp || enviadoWhatsApp}
               >
                 <PaperAirplaneIcon className="h-5 w-5 mr-2" />
-                Enviar via WhatsApp
+                {enviadoWhatsApp
+                  ? "Enviado via WhatsApp"
+                  : "Enviar via WhatsApp"}
               </Button>
             </div>
           </>

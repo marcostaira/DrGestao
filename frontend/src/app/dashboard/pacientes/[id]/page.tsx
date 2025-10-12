@@ -455,6 +455,11 @@ function AvaliacoesPlanos({ paciente, avaliacoes, planos, onReload }: any) {
     setShowLinkModal(true);
   };
 
+  const handleLinkGerado = () => {
+    setShowLinkModal(false);
+    setAvaliacaoParaLink(null);
+  };
+
   const handleAprovar = (avaliacao: any) => {
     setSelectedAvaliacao(avaliacao);
     setShowApprovalModal(true);
@@ -649,6 +654,7 @@ function AvaliacoesPlanos({ paciente, avaliacoes, planos, onReload }: any) {
           onClose={() => {
             setShowLinkModal(false);
             setAvaliacaoParaLink(null);
+            onReload(); // ✅ MOVER O RELOAD PARA CÁ
           }}
           avaliacaoId={avaliacaoParaLink.id}
           pacienteNome={
@@ -687,13 +693,68 @@ function AvaliacaoCard({
   avaliacao,
   onAprovar,
   onGerarLink,
-  onEditar, // ✅ NOVO
+  onEditar,
 }: {
   avaliacao: any;
   onAprovar: (avaliacao: any) => void;
   onGerarLink: (avaliacao: any) => void;
-  onEditar: (avaliacao: any) => void; // ✅ NOVO
+  onEditar: (avaliacao: any) => void;
 }) {
+  const [linkData, setLinkData] = useState<any>(null); // ✅ NOVO
+  const [loadingLink, setLoadingLink] = useState(false); // ✅ NOVO
+  const [showLinkInfo, setShowLinkInfo] = useState(false); // ✅ NOVO
+
+  // ✅ NOVO: Buscar link existente quando é pendente
+  useEffect(() => {
+    if (avaliacao.statusAprovacao === "PENDENTE") {
+      checkExistingLink();
+    }
+  }, [avaliacao.id, avaliacao.statusAprovacao]);
+
+  // ✅ NOVO: Verificar se já existe link válido
+  const checkExistingLink = async () => {
+    try {
+      setLoadingLink(true);
+      const response = await api.get(
+        `/atendimentos/${avaliacao.id}/link-aprovacao/status`
+      );
+
+      if (response.data.data && response.data.data.linkValido) {
+        setLinkData(response.data.data);
+      }
+    } catch (error) {
+      // Sem link ou link expirado
+      setLinkData(null);
+    } finally {
+      setLoadingLink(false);
+    }
+  };
+
+  // ✅ NOVO: Copiar link
+  const handleCopyLink = () => {
+    if (linkData?.link) {
+      navigator.clipboard.writeText(linkData.link);
+      toast.success("Link copiado para a área de transferência!");
+    }
+  };
+
+  // ✅ NOVO: Formatar data de expiração
+  const formatExpiration = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = date.getTime() - now.getTime();
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffHours / 24);
+
+    if (diffDays > 0) {
+      return `Expira em ${diffDays} dia${diffDays > 1 ? "s" : ""}`;
+    } else if (diffHours > 0) {
+      return `Expira em ${diffHours} hora${diffHours > 1 ? "s" : ""}`;
+    } else {
+      return "Expira em breve";
+    }
+  };
+
   const getStatusBadge = (status: string) => {
     const badges = {
       PENDENTE: { color: "bg-yellow-100 text-yellow-800", label: "Pendente" },
@@ -736,19 +797,32 @@ function AvaliacaoCard({
           </p>
         </div>
 
-        {/* ✅ ATUALIZADO: Botões de ação */}
         <div className="flex items-center gap-2">
           {avaliacao.statusAprovacao === "PENDENTE" && (
             <>
-              <button
-                onClick={() => onGerarLink(avaliacao)}
-                className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                title="Gerar link de aprovação"
-              >
-                <LinkIcon className="h-5 w-5" />
-              </button>
+              {/* ✅ ATUALIZADO: Botão de Link com estado */}
+              {loadingLink ? (
+                <div className="p-2">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
+                </div>
+              ) : linkData ? (
+                <button
+                  onClick={() => setShowLinkInfo(!showLinkInfo)}
+                  className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                  title="Ver link de aprovação"
+                >
+                  <LinkIcon className="h-5 w-5" />
+                </button>
+              ) : (
+                <button
+                  onClick={() => onGerarLink(avaliacao)}
+                  className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                  title="Gerar link de aprovação"
+                >
+                  <LinkIcon className="h-5 w-5" />
+                </button>
+              )}
 
-              {/* ✅ NOVO: Botão Editar */}
               <button
                 onClick={() => onEditar(avaliacao)}
                 className="px-3 py-1 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700"
@@ -766,6 +840,54 @@ function AvaliacaoCard({
           )}
         </div>
       </div>
+
+      {/* ✅ NOVO: Exibir informações do link quando existir */}
+      {showLinkInfo && linkData && (
+        <div className="mb-3 bg-green-50 border border-green-200 rounded-lg p-3">
+          <div className="flex items-start justify-between mb-2">
+            <div>
+              <p className="text-sm font-medium text-green-900">
+                Link de Aprovação Ativo
+              </p>
+              <p className="text-xs text-green-700 mt-1">
+                {formatExpiration(linkData.expiresAt)}
+              </p>
+            </div>
+            <button
+              onClick={() => setShowLinkInfo(false)}
+              className="text-green-600 hover:text-green-800"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div className="flex items-center gap-2 mt-2">
+            <input
+              type="text"
+              value={linkData.link}
+              readOnly
+              className="flex-1 px-3 py-2 text-sm bg-white border border-green-300 rounded-md"
+            />
+            <button
+              onClick={handleCopyLink}
+              className="px-3 py-2 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 whitespace-nowrap"
+            >
+              Copiar
+            </button>
+          </div>
+
+          {linkData.enviadoWhatsApp && (
+            <p className="text-xs text-green-700 mt-2">
+              ✓ Enviado via WhatsApp em{" "}
+              {new Date(linkData.enviadoEm).toLocaleDateString("pt-BR")} às{" "}
+              {new Date(linkData.enviadoEm).toLocaleTimeString("pt-BR", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </p>
+          )}
+        </div>
+      )}
 
       {avaliacao.anotacoes && (
         <div className="mb-3 bg-gray-50 rounded p-2">
