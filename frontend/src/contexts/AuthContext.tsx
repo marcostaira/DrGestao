@@ -1,3 +1,5 @@
+// frontend/src/contexts/AuthContext.tsx
+
 "use client";
 
 import {
@@ -7,7 +9,7 @@ import {
   useEffect,
   ReactNode,
 } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation"; // ✅ Adicionar usePathname
 import { User, Tenant, LoginCredentials } from "@/types";
 import * as authService from "@/services/authService";
 import { MinhasAutorizacoesResponse } from "@/types/autorizacao.types";
@@ -36,9 +38,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     useState<MinhasAutorizacoesResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const pathname = usePathname(); // ✅ Adicionar hook para pegar o pathname
+
+  // ✅ NOVO: Verificar se é rota pública
+  const isPublicRoute =
+    pathname?.startsWith("/aprovacao") ||
+    pathname?.startsWith("/login") ||
+    pathname?.startsWith("/anamnese") ||
+    pathname === "/";
 
   // Função para carregar permissões
   const fetchPermissions = async () => {
+    // ✅ NOVO: Não carregar permissões em rotas públicas
+    if (isPublicRoute) {
+      console.log("🌐 Rota pública, pulando carregamento de permissões");
+      return;
+    }
+
     try {
       console.log("🔍 Iniciando carregamento de permissões...");
 
@@ -61,6 +77,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const initAuth = async () => {
       console.log("🚀 Inicializando Auth...");
+      console.log("📍 Pathname atual:", pathname);
+      console.log("🌐 É rota pública?", isPublicRoute);
+
+      // ✅ NOVO: Em rotas públicas, apenas setar loading = false
+      if (isPublicRoute) {
+        console.log("✅ Rota pública detectada, pulando inicialização de auth");
+        setLoading(false);
+        return;
+      }
 
       const storedUser = localStorage.getItem("user");
       const storedTenant = localStorage.getItem("tenant");
@@ -87,7 +112,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     initAuth();
-  }, []);
+  }, [pathname]); // ✅ NOVO: Adicionar pathname como dependência
 
   // Login
   const login = async (credentials: LoginCredentials) => {

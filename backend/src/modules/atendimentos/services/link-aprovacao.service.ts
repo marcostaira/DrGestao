@@ -4,6 +4,7 @@ import { prisma } from "../../../config/database";
 import { AppError } from "../../../types";
 import { randomBytes } from "crypto";
 import { StatusAprovacao } from "../../../../generated/prisma";
+import { AtendimentoService } from "./atendimento.service"; // ✅ ADICIONAR IMPORT
 
 export class LinkAprovacaoService {
   // Gerar token único
@@ -120,6 +121,8 @@ export class LinkAprovacaoService {
     }
 
     return {
+      linkAprovacao: link, // ✅ ADICIONAR O LINK COMPLETO
+      tenantId: link.tenantId, // ✅ ADICIONAR TENANT ID
       avaliacao: link.avaliacao,
       paciente: link.avaliacao.agendamento.paciente,
       expiresAt: link.expiresAt,
@@ -264,5 +267,58 @@ export class LinkAprovacaoService {
     });
 
     return resultado;
+  }
+
+  /**
+   * Reprovar avaliação via link público
+   */
+  static async reprovarAvaliacao(
+    token: string,
+    motivo: string
+  ): Promise<{ avaliacao: any; message: string }> {
+    // Validar token e obter dados
+    const tokenData = await this.validarToken(token);
+    const { avaliacao, tenantId, linkAprovacao } = tokenData;
+
+    // Usar transação para garantir consistência
+    const resultado = await prisma.$transaction(async (tx) => {
+      // 1. Marcar link como utilizado
+      await tx.linkAprovacaoAvaliacao.update({
+        where: { id: linkAprovacao.id },
+        data: {
+          utilizado: true,
+          utilizadoEm: new Date(),
+        },
+      });
+
+      // 2. Reprovar a avaliação
+      const avaliacaoReprovada = await tx.atendimento.update({
+        where: { id: avaliacao.id },
+        data: {
+          statusAprovacao: StatusAprovacao.REPROVADO,
+          reprovadoMotivo: motivo, // ✅ CORRIGIDO: usar reprovadoMotivo
+          reprovadoEm: new Date(), // ✅ Usar campo correto
+        },
+        include: {
+          agendamento: {
+            include: {
+              paciente: true,
+            },
+          },
+          procedimentosPlano: {
+            include: {
+              procedimento: true,
+            },
+          },
+        },
+      });
+
+      return avaliacaoReprovada;
+    });
+
+    return {
+      avaliacao: resultado,
+      message: "Avaliação reprovada com sucesso",
+    };
   }
 }

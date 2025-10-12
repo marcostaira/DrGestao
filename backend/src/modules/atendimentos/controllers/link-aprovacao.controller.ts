@@ -53,4 +53,41 @@ export class LinkAprovacaoController {
       res.status(error.statusCode || 400).json(response);
     }
   }
+
+  // ✅ NOVO: Reprovar avaliação (público)
+  static async reprovar(req: Request, res: Response) {
+    try {
+      const { token } = req.params;
+      const { motivo } = req.body;
+
+      // Validar se o motivo foi enviado
+      if (!motivo || motivo.trim().length < 10) {
+        const response: ApiResponse = {
+          success: false,
+          error: "O motivo da reprovação deve ter no mínimo 10 caracteres",
+        };
+        res.status(400).json(response);
+        return;
+      }
+
+      const resultado = await LinkAprovacaoService.reprovarAvaliacao(
+        token,
+        motivo.trim()
+      );
+
+      const response: ApiResponse = {
+        success: true,
+        data: resultado,
+        message: "Avaliação reprovada com sucesso",
+      };
+
+      res.json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao reprovar avaliação",
+      };
+      res.status(error.statusCode || 400).json(response);
+    }
+  }
 }

@@ -17,6 +17,7 @@ import {
   idSchema,
 } from "../../../middleware/validation";
 import Joi from "joi";
+import { LinkAprovacaoController } from "../controllers/link-aprovacao.controller";
 
 // ============================================================================
 // ATENDIMENTO ROUTES COM AUTORIZAÇÕES
@@ -61,6 +62,27 @@ router.post(
   AtendimentoController.aprovarViaLink
 );
 
+/**
+ * @route   POST /atendimentos/link-aprovacao/:token/reprovar
+ * @desc    Reprovar avaliação via link público
+ * @access  Public
+ */
+router.post(
+  "/link-aprovacao/:token/reprovar",
+  validate({
+    params: Joi.object({
+      token: Joi.string().required(),
+    }),
+    body: Joi.object({
+      motivo: Joi.string().required().min(10).max(500).messages({
+        "string.min": "O motivo deve ter no mínimo 10 caracteres",
+        "string.max": "O motivo deve ter no máximo 500 caracteres",
+        "any.required": "O motivo é obrigatório",
+      }),
+    }),
+  }),
+  LinkAprovacaoController.reprovar // ✅ Usar o novo método
+);
 // ==========================================================================
 // MIDDLEWARE DE AUTENTICAÇÃO E TENANT
 // ==========================================================================
