@@ -1,9 +1,11 @@
+// frontend/src/lib/api.ts
+
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
 export const api = axios.create({
-  baseURL: API_URL,
+  baseURL: `${API_URL}`, // ✅ MUDANÇA: Adicionar /api
   headers: {
     "Content-Type": "application/json",
   },
@@ -40,7 +42,8 @@ api.interceptors.response.use(
           throw new Error("No refresh token");
         }
 
-        const response = await axios.post(`${API_URL}/auth/refresh`, {
+        const response = await axios.post(`${API_URL}/api/auth/refresh`, {
+          // ✅ MUDANÇA: Adicionar /api
           refreshToken,
         });
 

@@ -8,6 +8,7 @@ import {
   getAtendimentoByAgendamentoId,
   aprovarAvaliacao,
   reprovarAvaliacao,
+  updateAtendimento,
   StatusAtendimento,
 } from "@/services/atendimentoService";
 import { StatusAgendamento } from "@/services/agendamentoService";
@@ -22,7 +23,7 @@ import { AvaliacaoFormModal } from "@/components/atendimentos/AvaliacaoFormModal
 import { AvaliacaoApprovalModal } from "@/components/atendimentos/AvaliacaoApprovalModal";
 import { toast } from "react-hot-toast";
 
-type ModalMode = "atendimento" | "avaliacao" | "approval";
+type ModalMode = "atendimento" | "avaliacao" | "avaliacao-edit" | "approval";
 
 export default function AtendimentosPage() {
   const searchParams = useSearchParams();
@@ -94,7 +95,6 @@ export default function AtendimentosPage() {
     }
   };
 
-  // FUNÇÃO PARA RECARREGAR A PÁGINA
   const reloadData = () => {
     router.refresh();
   };
@@ -113,14 +113,18 @@ export default function AtendimentosPage() {
     );
     setSelectedAgendamento(agendamento);
 
-    // Se for uma avaliação pendente, abrir modal de aprovação
-    if (
-      atendimento.tipo === StatusAtendimento.AVALIACAO &&
-      atendimento.statusAprovacao === "PENDENTE"
-    ) {
-      setAvaliacaoParaAprovar(atendimento);
-      setModalMode("approval");
+    // ✅ LÓGICA CORRIGIDA: Verificar tipo e status
+    if (atendimento.tipo === StatusAtendimento.AVALIACAO) {
+      if (atendimento.statusAprovacao === "PENDENTE") {
+        // PENDENTE → Modal de aprovação (com botão editar)
+        setAvaliacaoParaAprovar(atendimento);
+        setModalMode("approval");
+      } else {
+        // APROVADO/REPROVADO → Apenas visualização
+        setModalMode("atendimento");
+      }
     } else {
+      // AVULSO ou PLANO_TRATAMENTO → Visualização normal
       setModalMode("atendimento");
     }
   };
@@ -159,23 +163,53 @@ export default function AtendimentosPage() {
     }
   };
 
-  // ========== APROVAÇÃO/REPROVAÇÃO ==========
+  // ✅ NOVO: Editar avaliação existente
+  const handleEditarAvaliacao = () => {
+    if (!avaliacaoParaAprovar) return;
 
+    // Fechar modal de aprovação
+    setModalMode(null);
+
+    // Abrir modal de edição
+    setTimeout(() => {
+      setModalMode("avaliacao-edit");
+    }, 100);
+  };
+
+  const handleAvaliacaoEditSubmit = async (data: {
+    anotacoes: string;
+    procedimentosPlano: any[];
+  }) => {
+    if (!avaliacaoParaAprovar) return;
+
+    try {
+      await updateAtendimento(avaliacaoParaAprovar.id, {
+        anotacoes: data.anotacoes,
+        procedimentosPlano: data.procedimentosPlano,
+      });
+
+      toast.success("Avaliação atualizada com sucesso!");
+      closeAllModals();
+      reloadData();
+    } catch (error: any) {
+      toast.error(error.response?.data?.error || "Erro ao atualizar avaliação");
+      throw error;
+    }
+  };
+
+  // ========== APROVAÇÃO/REPROVAÇÃO ==========
   const handleAprovarAvaliacao = async (aprovadoPor: string) => {
     if (!avaliacaoParaAprovar) return;
 
     try {
       setIsSubmitting(true);
-      const result = await aprovarAvaliacao(avaliacaoParaAprovar.id, {
+      await aprovarAvaliacao(avaliacaoParaAprovar.id, {
         aprovadoPor,
       });
 
-      // IMPORTANTE: Fechar modal ANTES do toast e reload
       closeAllModals();
-
       toast.success("Avaliação aprovada! Plano de tratamento criado.");
 
-      // Dar um delay antes de recarregar para o toast aparecer
       setTimeout(() => {
         reloadData();
       }, 500);
@@ -194,9 +228,7 @@ export default function AtendimentosPage() {
       setIsSubmitting(true);
       await reprovarAvaliacao(avaliacaoParaAprovar.id, { motivo });
 
-      // IMPORTANTE: Fechar modal ANTES do toast e reload
       closeAllModals();
-
       toast.success("Avaliação reprovada.");
 
       setTimeout(() => {
@@ -319,7 +351,7 @@ export default function AtendimentosPage() {
         />
       )}
 
-      {/* Modal de Avaliação */}
+      {/* Modal de Avaliação (Criar) */}
       {modalMode === "avaliacao" && (
         <AvaliacaoFormModal
           isOpen={true}
@@ -330,6 +362,18 @@ export default function AtendimentosPage() {
         />
       )}
 
+      {/* ✅ NOVO: Modal de Edição de Avaliação */}
+      {modalMode === "avaliacao-edit" && avaliacaoParaAprovar && (
+        <AvaliacaoFormModal
+          isOpen={true}
+          onClose={closeAllModals}
+          onSubmit={handleAvaliacaoEditSubmit}
+          procedimentos={procedimentos}
+          agendamento={selectedAgendamento}
+          avaliacao={avaliacaoParaAprovar}
+        />
+      )}
+
       {/* Modal de Aprovação de Avaliação */}
       {modalMode === "approval" && avaliacaoParaAprovar && (
         <AvaliacaoApprovalModal
@@ -337,6 +381,7 @@ export default function AtendimentosPage() {
           onClose={closeAllModals}
           onAprovar={handleAprovarAvaliacao}
           onReprovar={handleReprovarAvaliacao}
+          onEditar={handleEditarAvaliacao} // ✅ NOVO
           avaliacao={avaliacaoParaAprovar}
         />
       )}

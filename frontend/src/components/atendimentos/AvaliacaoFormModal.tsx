@@ -2,7 +2,7 @@
 
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
 import {
@@ -11,7 +11,7 @@ import {
   ArrowUpIcon,
   ArrowDownIcon,
 } from "@heroicons/react/24/outline";
-import { CreateProcedimentoPlanoData } from "@/types/atendimento.types"; // CORRIGIDO: sem .types
+import { CreateProcedimentoPlanoData } from "@/types/atendimento.types";
 
 interface AvaliacaoFormModalProps {
   isOpen: boolean;
@@ -22,6 +22,7 @@ interface AvaliacaoFormModalProps {
   }) => Promise<void>;
   procedimentos: any[];
   agendamento: any;
+  avaliacao?: any;
 }
 
 export function AvaliacaoFormModal({
@@ -30,13 +31,45 @@ export function AvaliacaoFormModal({
   onSubmit,
   procedimentos,
   agendamento,
+  avaliacao, // ✅ ADICIONAR ESTE PARÂMETRO
 }: AvaliacaoFormModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [anotacoes, setAnotacoes] = useState("");
   const [procedimentosPlano, setProcedimentosPlano] = useState<
-    // CORRIGIDO: sintaxe
     CreateProcedimentoPlanoData[]
   >([]);
+
+  // ✅ ADICIONAR ESTE useEffect COMPLETO
+  useEffect(() => {
+    if (avaliacao && isOpen) {
+      setAnotacoes(avaliacao.anotacoes || "");
+
+      if (
+        avaliacao.procedimentosPlano &&
+        avaliacao.procedimentosPlano.length > 0
+      ) {
+        const procedimentosFormatados: CreateProcedimentoPlanoData[] =
+          avaliacao.procedimentosPlano.map(
+            (proc: any, index: number): CreateProcedimentoPlanoData => ({
+              procedimentoId: proc.procedimentoId,
+              ordem: proc.ordem || index + 1,
+              observacoes: proc.observacoes || "",
+              valorPraticado: proc.valorPraticado
+                ? Number(proc.valorPraticado)
+                : proc.procedimento?.valor
+                ? Number(proc.procedimento.valor)
+                : undefined,
+            })
+          );
+        setProcedimentosPlano(procedimentosFormatados);
+      } else {
+        setProcedimentosPlano([]);
+      }
+    } else if (!avaliacao && isOpen) {
+      setAnotacoes("");
+      setProcedimentosPlano([]);
+    }
+  }, [avaliacao, isOpen]);
 
   const handleAddProcedimento = () => {
     setProcedimentosPlano([
@@ -52,7 +85,6 @@ export function AvaliacaoFormModal({
 
   const handleRemoveProcedimento = (index: number) => {
     const newList = procedimentosPlano.filter((_, i) => i !== index);
-    // Reordenar
     const reordered = newList.map((proc, i) => ({ ...proc, ordem: i + 1 }));
     setProcedimentosPlano(reordered);
   };
@@ -71,7 +103,6 @@ export function AvaliacaoFormModal({
     if (index === 0) return;
     const updated = [...procedimentosPlano];
     [updated[index - 1], updated[index]] = [updated[index], updated[index - 1]];
-    // Atualizar ordem
     updated[index - 1].ordem = index;
     updated[index].ordem = index + 1;
     setProcedimentosPlano(updated);
@@ -81,7 +112,6 @@ export function AvaliacaoFormModal({
     if (index === procedimentosPlano.length - 1) return;
     const updated = [...procedimentosPlano];
     [updated[index], updated[index + 1]] = [updated[index + 1], updated[index]];
-    // Atualizar ordem
     updated[index].ordem = index + 1;
     updated[index + 1].ordem = index + 2;
     setProcedimentosPlano(updated);
@@ -96,7 +126,7 @@ export function AvaliacaoFormModal({
     }
 
     const hasInvalidProcedimento = procedimentosPlano.some(
-      (p) => !p.procedimentoId
+      (p: CreateProcedimentoPlanoData) => !p.procedimentoId
     );
     if (hasInvalidProcedimento) {
       alert("Todos os procedimentos devem ser selecionados");
@@ -124,22 +154,25 @@ export function AvaliacaoFormModal({
   };
 
   const calcularValorTotal = () => {
-    return procedimentosPlano.reduce((total, proc) => {
-      if (proc.valorPraticado) {
-        return total + Number(proc.valorPraticado);
-      }
-      const procedimento = procedimentos.find(
-        (p) => p.id === proc.procedimentoId
-      );
-      return total + (procedimento?.valor ? Number(procedimento.valor) : 0);
-    }, 0);
+    return procedimentosPlano.reduce(
+      (total: number, proc: CreateProcedimentoPlanoData) => {
+        if (proc.valorPraticado) {
+          return total + Number(proc.valorPraticado);
+        }
+        const procedimento = procedimentos.find(
+          (p: any) => p.id === proc.procedimentoId
+        );
+        return total + (procedimento?.valor ? Number(procedimento.valor) : 0);
+      },
+      0
+    );
   };
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      title="Nova Avaliação"
+      title={avaliacao ? "Editar Avaliação" : "Nova Avaliação"} // ✅ TÍTULO DINÂMICO
       size="xl"
     >
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -206,122 +239,125 @@ export function AvaliacaoFormModal({
             </div>
           ) : (
             <div className="space-y-3">
-              {procedimentosPlano.map((proc, index) => (
-                <div
-                  key={index}
-                  className="bg-gray-50 border border-gray-200 rounded-lg p-4"
-                >
-                  <div className="flex items-start gap-3">
-                    {/* Ordem */}
-                    <div className="flex flex-col gap-1">
-                      <button
-                        type="button"
-                        onClick={() => handleMoveUp(index)}
-                        disabled={index === 0}
-                        className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
-                      >
-                        <ArrowUpIcon className="h-4 w-4" />
-                      </button>
-                      <span className="text-sm font-semibold text-gray-700 text-center">
-                        {index + 1}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => handleMoveDown(index)}
-                        disabled={index === procedimentosPlano.length - 1}
-                        className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
-                      >
-                        <ArrowDownIcon className="h-4 w-4" />
-                      </button>
-                    </div>
-
-                    {/* Campos */}
-                    <div className="flex-1 space-y-3">
-                      {/* Procedimento */}
-                      <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">
-                          Procedimento
-                        </label>
-                        <select
-                          value={proc.procedimentoId}
-                          onChange={(e) =>
-                            handleUpdateProcedimento(
-                              index,
-                              "procedimentoId",
-                              e.target.value
-                            )
-                          }
-                          className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
-                          required
+              {procedimentosPlano.map(
+                (proc: CreateProcedimentoPlanoData, index: number) => (
+                  <div
+                    key={index}
+                    className="bg-gray-50 border border-gray-200 rounded-lg p-4"
+                  >
+                    <div className="flex items-start gap-3">
+                      {/* Ordem */}
+                      <div className="flex flex-col gap-1">
+                        <button
+                          type="button"
+                          onClick={() => handleMoveUp(index)}
+                          disabled={index === 0}
+                          className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
                         >
-                          <option value="">Selecione...</option>
-                          {procedimentos.map((p) => (
-                            <option key={p.id} value={p.id}>
-                              {p.nome}
-                              {p.valor && ` - R$ ${Number(p.valor).toFixed(2)}`}
-                            </option>
-                          ))}
-                        </select>
+                          <ArrowUpIcon className="h-4 w-4" />
+                        </button>
+                        <span className="text-sm font-semibold text-gray-700 text-center">
+                          {index + 1}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleMoveDown(index)}
+                          disabled={index === procedimentosPlano.length - 1}
+                          className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                        >
+                          <ArrowDownIcon className="h-4 w-4" />
+                        </button>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-3">
-                        {/* Valor Praticado */}
+                      {/* Campos */}
+                      <div className="flex-1 space-y-3">
+                        {/* Procedimento */}
                         <div>
                           <label className="block text-xs font-medium text-gray-700 mb-1">
-                            Valor (R$)
+                            Procedimento
                           </label>
-                          <input
-                            type="number"
-                            step="0.01"
-                            value={proc.valorPraticado || ""}
+                          <select
+                            value={proc.procedimentoId}
                             onChange={(e) =>
                               handleUpdateProcedimento(
                                 index,
-                                "valorPraticado",
+                                "procedimentoId",
                                 e.target.value
-                                  ? Number(e.target.value)
-                                  : undefined
                               )
                             }
-                            placeholder="Valor personalizado"
                             className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
-                          />
+                            required
+                          >
+                            <option value="">Selecione...</option>
+                            {procedimentos.map((p: any) => (
+                              <option key={p.id} value={p.id}>
+                                {p.nome}
+                                {p.valor &&
+                                  ` - R$ ${Number(p.valor).toFixed(2)}`}
+                              </option>
+                            ))}
+                          </select>
                         </div>
 
-                        {/* Observações */}
-                        <div>
-                          <label className="block text-xs font-medium text-gray-700 mb-1">
-                            Observações
-                          </label>
-                          <input
-                            type="text"
-                            value={proc.observacoes || ""}
-                            onChange={(e) =>
-                              handleUpdateProcedimento(
-                                index,
-                                "observacoes",
-                                e.target.value
-                              )
-                            }
-                            placeholder="Ex: Urgente, 2 sessões..."
-                            className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
-                          />
+                        <div className="grid grid-cols-2 gap-3">
+                          {/* Valor Praticado */}
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">
+                              Valor (R$)
+                            </label>
+                            <input
+                              type="number"
+                              step="0.01"
+                              value={proc.valorPraticado || ""}
+                              onChange={(e) =>
+                                handleUpdateProcedimento(
+                                  index,
+                                  "valorPraticado",
+                                  e.target.value
+                                    ? Number(e.target.value)
+                                    : undefined
+                                )
+                              }
+                              placeholder="Valor personalizado"
+                              className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
+                            />
+                          </div>
+
+                          {/* Observações */}
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">
+                              Observações
+                            </label>
+                            <input
+                              type="text"
+                              value={proc.observacoes || ""}
+                              onChange={(e) =>
+                                handleUpdateProcedimento(
+                                  index,
+                                  "observacoes",
+                                  e.target.value
+                                )
+                              }
+                              placeholder="Ex: Urgente, 2 sessões..."
+                              className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
+                            />
+                          </div>
                         </div>
                       </div>
+
+                      {/* Remover */}
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveProcedimento(index)}
+                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        title="Remover"
+                      >
+                        <TrashIcon className="h-5 w-5" />
+                      </button>
                     </div>
-
-                    {/* Remover */}
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveProcedimento(index)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                      title="Remover"
-                    >
-                      <TrashIcon className="h-5 w-5" />
-                    </button>
                   </div>
-                </div>
-              ))}
+                )
+              )}
             </div>
           )}
         </div>
@@ -342,7 +378,7 @@ export function AvaliacaoFormModal({
 
         {/* Actions */}
         <div className="flex justify-end gap-3 pt-4 border-t">
-          <Button type="button" variant="primary" onClick={handleClose}>
+          <Button type="button" variant="secondary" onClick={handleClose}>
             Cancelar
           </Button>
           <Button
@@ -351,7 +387,8 @@ export function AvaliacaoFormModal({
             isLoading={isSubmitting}
             disabled={procedimentosPlano.length === 0}
           >
-            Criar Avaliação
+            {avaliacao ? "Salvar Alterações" : "Criar Avaliação"}{" "}
+            {/* ✅ TEXTO DINÂMICO */}
           </Button>
         </div>
       </form>

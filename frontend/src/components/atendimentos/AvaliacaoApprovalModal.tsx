@@ -5,7 +5,7 @@
 import React, { useState } from "react";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
-import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { CheckIcon, XMarkIcon, PencilIcon } from "@heroicons/react/24/outline";
 import { Atendimento } from "@/types/atendimento.types";
 import { calcularValorTotalPlano } from "@/services/atendimentoService";
 import { toast } from "react-hot-toast";
@@ -15,6 +15,7 @@ interface AvaliacaoApprovalModalProps {
   onClose: () => void;
   onAprovar: (aprovadoPor: string) => Promise<void>;
   onReprovar: (motivo: string) => Promise<void>;
+  onEditar?: () => void; // ✅ NOVO
   avaliacao: Atendimento;
 }
 
@@ -23,6 +24,7 @@ export function AvaliacaoApprovalModal({
   onClose,
   onAprovar,
   onReprovar,
+  onEditar, // ✅ NOVO
   avaliacao,
 }: AvaliacaoApprovalModalProps) {
   const [mode, setMode] = useState<"view" | "aprovar" | "reprovar">("view");
@@ -36,7 +38,6 @@ export function AvaliacaoApprovalModal({
       return;
     }
 
-    // Prevenir double-click
     if (isSubmitting) {
       console.log("⚠️ Já está processando, ignorando clique duplicado");
       return;
@@ -45,8 +46,7 @@ export function AvaliacaoApprovalModal({
     setIsSubmitting(true);
     try {
       await onAprovar(aprovadoPor);
-      toast.success("Avaliação aprovada com sucesso!");
-      handleClose();
+      // Não precisa de toast aqui, será mostrado no page.tsx
     } catch (error: any) {
       console.error("Erro ao aprovar:", error);
       toast.error(error.response?.data?.error || "Erro ao aprovar avaliação");
@@ -61,7 +61,6 @@ export function AvaliacaoApprovalModal({
       return;
     }
 
-    // Prevenir double-click
     if (isSubmitting) {
       console.log("⚠️ Já está processando, ignorando clique duplicado");
       return;
@@ -70,8 +69,7 @@ export function AvaliacaoApprovalModal({
     setIsSubmitting(true);
     try {
       await onReprovar(motivo);
-      toast.success("Avaliação reprovada");
-      handleClose();
+      // Não precisa de toast aqui, será mostrado no page.tsx
     } catch (error: any) {
       console.error("Erro ao reprovar:", error);
       toast.error(error.response?.data?.error || "Erro ao reprovar avaliação");
@@ -91,7 +89,6 @@ export function AvaliacaoApprovalModal({
     ? calcularValorTotalPlano(avaliacao.procedimentosPlano)
     : 0;
 
-  // CORRIGIDO: Pegar paciente do agendamento com fallback
   const paciente =
     avaliacao.paciente || (avaliacao.agendamento as any)?.paciente;
   const profissional =
@@ -264,6 +261,15 @@ export function AvaliacaoApprovalModal({
               <Button variant="secondary" onClick={handleClose}>
                 Fechar
               </Button>
+
+              {/* ✅ NOVO: Botão Editar */}
+              {onEditar && (
+                <Button variant="secondary" onClick={onEditar}>
+                  <PencilIcon className="h-5 w-5 mr-2" />
+                  Editar
+                </Button>
+              )}
+
               <Button
                 variant="danger"
                 onClick={() => setMode("reprovar")}

@@ -26,11 +26,10 @@ export default function AprovacaoPublicaPage() {
   const [expiresAt, setExpiresAt] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [aprovadoPor, setAprovadoPor] = useState("");
-  const [motivo, setMotivo] = useState(""); // NOVO: Para reprovação
-  const [mode, setMode] = useState<"view" | "reprovar">("view"); // NOVO: Controlar modo
+  const [motivo, setMotivo] = useState("");
+  const [mode, setMode] = useState<"view" | "reprovar">("view");
   const [showSuccess, setShowSuccess] = useState(false);
-  const [showReprovarSuccess, setShowReprovarSuccess] = useState(false); // NOVO
-  const [errorType, setErrorType] = useState<string>("");
+  const [showReprovarSuccess, setShowReprovarSuccess] = useState(false);
 
   useEffect(() => {
     if (token) {
@@ -68,19 +67,12 @@ export default function AprovacaoPublicaPage() {
     try {
       setSubmitting(true);
 
-      console.log("📤 Enviando aprovação:", {
-        token,
-        aprovadoPor: aprovadoPor.trim(),
-      });
-
       const response = await api.post(
         `/atendimentos/link-aprovacao/${token}/aprovar`,
         {
           aprovadoPor: aprovadoPor.trim(),
         }
       );
-
-      console.log("✅ Resposta:", response.data);
 
       setShowSuccess(true);
       toast.success("Avaliação aprovada com sucesso!");
@@ -94,7 +86,6 @@ export default function AprovacaoPublicaPage() {
     }
   };
 
-  // NOVO: Função para reprovar
   const handleReprovar = async () => {
     if (!motivo.trim()) {
       toast.error("Por favor, informe o motivo da recusa");
@@ -104,19 +95,12 @@ export default function AprovacaoPublicaPage() {
     try {
       setSubmitting(true);
 
-      console.log("📤 Enviando reprovação:", {
-        token,
-        motivo: motivo.trim(),
-      });
-
       const response = await api.post(
         `/atendimentos/link-aprovacao/${token}/reprovar`,
         {
           motivo: motivo.trim(),
         }
       );
-
-      console.log("✅ Resposta:", response.data);
 
       setShowReprovarSuccess(true);
       toast.success("Avaliação recusada");
@@ -130,13 +114,13 @@ export default function AprovacaoPublicaPage() {
     }
   };
 
+  // ✅ CORRIGIDO: Usar valorPraticado
   const calcularValorTotal = () => {
     if (!avaliacao?.procedimentosPlano) return 0;
-    return avaliacao.procedimentosPlano.reduce(
-      (total: number, proc: any) =>
-        total + (proc.procedimento?.valor || 0) * (proc.quantidade || 1),
-      0
-    );
+    return avaliacao.procedimentosPlano.reduce((total: number, proc: any) => {
+      const valor = proc.valorPraticado || proc.procedimento?.valor || 0;
+      return total + Number(valor);
+    }, 0);
   };
 
   const formatarValor = (valor: number) => {
@@ -220,7 +204,7 @@ export default function AprovacaoPublicaPage() {
     );
   }
 
-  // NOVO: Success state - Reprovação
+  // Success state - Reprovação
   if (showReprovarSuccess) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-100 flex items-center justify-center p-4">
@@ -267,7 +251,6 @@ export default function AprovacaoPublicaPage() {
                 : "Revise o plano de tratamento proposto e aprove se estiver de acordo."}
             </p>
 
-            {/* Alerta de expiração */}
             {isProximoDeExpirar() && (
               <div className="mt-4 bg-orange-50 border border-orange-200 rounded-lg p-3">
                 <div className="flex items-center justify-center gap-2 text-orange-800">
@@ -294,41 +277,37 @@ export default function AprovacaoPublicaPage() {
               </p>
             ) : (
               <div className="space-y-3">
-                {avaliacao?.procedimentosPlano?.map((proc: any) => (
-                  <div
-                    key={proc.id}
-                    className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors"
-                  >
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h3 className="font-semibold text-gray-900">
-                          {proc.procedimento?.nome}
-                        </h3>
-                        <p className="text-sm text-gray-600 mt-1">
-                          Quantidade: {proc.quantidade}x
-                        </p>
-                        {proc.observacoes && (
-                          <p className="text-sm text-gray-500 mt-2 italic">
-                            {proc.observacoes}
-                          </p>
-                        )}
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm text-gray-500">Valor unitário</p>
-                        <p className="font-bold text-gray-900">
-                          {formatarValor(proc.procedimento?.valor || 0)}
-                        </p>
-                        <p className="text-xs text-gray-500 mt-1">
-                          Total:{" "}
-                          {formatarValor(
-                            (proc.procedimento?.valor || 0) *
-                              (proc.quantidade || 1)
+                {avaliacao?.procedimentosPlano?.map((proc: any) => {
+                  // ✅ CORRIGIDO: Usar valorPraticado
+                  const valorUnitario =
+                    proc.valorPraticado || proc.procedimento?.valor || 0;
+
+                  return (
+                    <div
+                      key={proc.id}
+                      className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors"
+                    >
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900">
+                            {proc.procedimento?.nome}
+                          </h3>
+                          {proc.observacoes && (
+                            <p className="text-sm text-gray-500 mt-2 italic">
+                              {proc.observacoes}
+                            </p>
                           )}
-                        </p>
+                        </div>
+                        <div className="text-right ml-4">
+                          <p className="text-sm text-gray-500">Valor</p>
+                          <p className="font-bold text-gray-900 text-lg">
+                            {formatarValor(Number(valorUnitario))}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
 
                 {/* Total Geral */}
                 <div className="border-t-2 border-blue-200 pt-4 mt-4">
@@ -346,7 +325,7 @@ export default function AprovacaoPublicaPage() {
           </div>
         )}
 
-        {/* Anotações da Avaliação - Mostrar apenas no modo view */}
+        {/* Anotações da Avaliação */}
         {mode === "view" && avaliacao?.anotacoes && (
           <div className="bg-white rounded-2xl shadow-xl p-6 mb-6">
             <h2 className="text-xl font-bold text-gray-900 mb-4">
@@ -358,7 +337,7 @@ export default function AprovacaoPublicaPage() {
           </div>
         )}
 
-        {/* Formulário de Aprovação - Modo view */}
+        {/* Formulário de Aprovação */}
         {mode === "view" && (
           <div className="bg-white rounded-2xl shadow-xl p-6">
             <h2 className="text-xl font-bold text-gray-900 mb-4">
@@ -390,7 +369,6 @@ export default function AprovacaoPublicaPage() {
               </p>
             </div>
 
-            {/* Botões de Ação */}
             <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={handleAprovar}
@@ -414,7 +392,6 @@ export default function AprovacaoPublicaPage() {
                 )}
               </button>
 
-              {/* NOVO: Botão Recusar */}
               <button
                 onClick={() => setMode("reprovar")}
                 disabled={submitting}
@@ -431,7 +408,6 @@ export default function AprovacaoPublicaPage() {
               </button>
             </div>
 
-            {/* Data de expiração */}
             {expiresAt && (
               <p className="text-xs text-center text-gray-500 mt-4">
                 Este link é válido até{" "}
@@ -441,7 +417,7 @@ export default function AprovacaoPublicaPage() {
           </div>
         )}
 
-        {/* NOVO: Formulário de Reprovação */}
+        {/* Formulário de Reprovação */}
         {mode === "reprovar" && (
           <div className="bg-white rounded-2xl shadow-xl p-6">
             <h2 className="text-xl font-bold text-gray-900 mb-4">
@@ -474,7 +450,6 @@ export default function AprovacaoPublicaPage() {
               </p>
             </div>
 
-            {/* Botões de Ação */}
             <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={() => setMode("view")}

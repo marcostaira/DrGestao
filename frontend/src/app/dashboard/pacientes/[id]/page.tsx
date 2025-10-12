@@ -5,8 +5,13 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { getPacienteById } from "@/services/pacienteService";
-import { getAtendimentos } from "@/services/atendimentoService";
-import anamneseService from "@/services/anamneseService"; // CORRIGIDO
+import {
+  getAtendimentos,
+  aprovarAvaliacao,
+  reprovarAvaliacao,
+  updateAtendimento,
+} from "@/services/atendimentoService";
+import anamneseService from "@/services/anamneseService";
 import { toast } from "react-hot-toast";
 import {
   UserIcon,
@@ -14,17 +19,14 @@ import {
   ClipboardDocumentListIcon,
   FolderIcon,
   ArrowLeftIcon,
-  LinkIcon, // NOVO
-  ChevronDownIcon, // NOVO
+  LinkIcon,
+  ChevronDownIcon,
 } from "@heroicons/react/24/outline";
-import {
-  aprovarAvaliacao,
-  reprovarAvaliacao,
-} from "@/services/atendimentoService"; // NOVO
-import { AvaliacaoApprovalModal } from "@/components/atendimentos/AvaliacaoApprovalModal"; // NOVO
-import api from "@/lib/api"; // NOVO
+import { AvaliacaoApprovalModal } from "@/components/atendimentos/AvaliacaoApprovalModal";
+import { AvaliacaoFormModal } from "@/components/atendimentos/AvaliacaoFormModal"; // ✅ NOVO
 import { LinkAprovacaoModal } from "@/components/atendimentos/LinkAprovacaoModal";
 import { CriarAvaliacaoModal } from "@/components/atendimentos/CriarAvaliacaoModal";
+import api from "@/lib/api";
 
 type TabType = "dados" | "anamneses" | "avaliacoes" | "prontuario";
 
@@ -51,11 +53,9 @@ export default function PacienteDetalhePage() {
     try {
       setLoading(true);
 
-      // Buscar dados do paciente
       const pacienteData = await getPacienteById(pacienteId);
       setPaciente(pacienteData);
 
-      // Buscar anamneses (CORRIGIDO)
       try {
         const anamnesesData = await anamneseService.listByPaciente(pacienteId);
         setAnamneses(anamnesesData);
@@ -64,14 +64,12 @@ export default function PacienteDetalhePage() {
         setAnamneses([]);
       }
 
-      // Buscar atendimentos
       const atendimentosData = await getAtendimentos({
         pacienteId,
         incluirCancelados: false,
       });
       setAtendimentos(atendimentosData);
 
-      // Separar avaliações e planos
       const avaliacoesData = atendimentosData.filter(
         (a: any) => a.tipo === "AVALIACAO"
       );
@@ -248,7 +246,6 @@ export default function PacienteDetalhePage() {
 function DadosGeraisTab({ paciente }: { paciente: any }) {
   return (
     <div className="p-6 space-y-6">
-      {/* Dados Pessoais */}
       <div>
         <h3 className="text-lg font-semibold text-gray-900 mb-4">
           Dados Pessoais
@@ -270,7 +267,6 @@ function DadosGeraisTab({ paciente }: { paciente: any }) {
         </div>
       </div>
 
-      {/* Endereço */}
       {(paciente.cep ||
         paciente.logradouro ||
         paciente.cidade ||
@@ -289,7 +285,6 @@ function DadosGeraisTab({ paciente }: { paciente: any }) {
         </div>
       )}
 
-      {/* Dados Médicos */}
       {paciente.alergias && (
         <div>
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
@@ -299,7 +294,6 @@ function DadosGeraisTab({ paciente }: { paciente: any }) {
         </div>
       )}
 
-      {/* Responsável (se menor) */}
       {paciente.menorIdade && (
         <div>
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
@@ -317,7 +311,6 @@ function DadosGeraisTab({ paciente }: { paciente: any }) {
         </div>
       )}
 
-      {/* Observações */}
       {paciente.observacoes && (
         <div>
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
@@ -330,7 +323,6 @@ function DadosGeraisTab({ paciente }: { paciente: any }) {
   );
 }
 
-// Componente auxiliar para exibir informações
 function InfoField({
   label,
   value,
@@ -441,6 +433,22 @@ function AvaliacoesPlanos({ paciente, avaliacoes, planos, onReload }: any) {
   const [showLinkModal, setShowLinkModal] = useState(false);
   const [avaliacaoParaLink, setAvaliacaoParaLink] = useState<any>(null);
   const [showCriarModal, setShowCriarModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false); // ✅ NOVO
+  const [avaliacaoParaEditar, setAvaliacaoParaEditar] = useState<any>(null); // ✅ NOVO
+  const [procedimentos, setProcedimentos] = useState<any[]>([]); // ✅ NOVO
+
+  // ✅ NOVO: Carregar procedimentos
+  useEffect(() => {
+    const loadProcedimentos = async () => {
+      try {
+        const response = await api.get("/procedimentos");
+        setProcedimentos(response.data.data || []);
+      } catch (error) {
+        console.error("Erro ao carregar procedimentos:", error);
+      }
+    };
+    loadProcedimentos();
+  }, []);
 
   const handleGerarLink = (avaliacao: any) => {
     setAvaliacaoParaLink(avaliacao);
@@ -464,7 +472,41 @@ function AvaliacoesPlanos({ paciente, avaliacoes, planos, onReload }: any) {
     }
   };
 
-  // CORRIGIDO: Handler que abre o modal ao invés de redirecionar
+  // ✅ NOVO: Handler para editar avaliação
+  const handleEditarAvaliacao = () => {
+    if (!selectedAvaliacao) return;
+
+    setShowApprovalModal(false);
+
+    setTimeout(() => {
+      setAvaliacaoParaEditar(selectedAvaliacao);
+      setShowEditModal(true);
+    }, 100);
+  };
+
+  // ✅ NOVO: Handler para salvar edição
+  const handleSalvarEdicao = async (data: {
+    anotacoes: string;
+    procedimentosPlano: any[];
+  }) => {
+    if (!avaliacaoParaEditar) return;
+
+    try {
+      await updateAtendimento(avaliacaoParaEditar.id, {
+        anotacoes: data.anotacoes,
+        procedimentosPlano: data.procedimentosPlano,
+      });
+
+      toast.success("Avaliação atualizada com sucesso!");
+      setShowEditModal(false);
+      setAvaliacaoParaEditar(null);
+      onReload();
+    } catch (error: any) {
+      toast.error(error.response?.data?.error || "Erro ao atualizar avaliação");
+      throw error;
+    }
+  };
+
   const handleCriarAvaliacao = () => {
     setShowCriarModal(true);
   };
@@ -491,7 +533,6 @@ function AvaliacoesPlanos({ paciente, avaliacoes, planos, onReload }: any) {
           </div>
         </div>
 
-        {/* Modal de Criar Avaliação */}
         {showCriarModal && (
           <CriarAvaliacaoModal
             isOpen={showCriarModal}
@@ -512,7 +553,6 @@ function AvaliacoesPlanos({ paciente, avaliacoes, planos, onReload }: any) {
 
   return (
     <div className="p-6 space-y-6">
-      {/* Header com botão */}
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-semibold text-gray-900">
           Histórico de Avaliações e Planos
@@ -526,7 +566,6 @@ function AvaliacoesPlanos({ paciente, avaliacoes, planos, onReload }: any) {
         </button>
       </div>
 
-      {/* Avaliações */}
       {avaliacoes.length > 0 && (
         <div>
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
@@ -539,13 +578,17 @@ function AvaliacoesPlanos({ paciente, avaliacoes, planos, onReload }: any) {
                 avaliacao={avaliacao}
                 onAprovar={handleAprovar}
                 onGerarLink={handleGerarLink}
+                onEditar={(avaliacao) => {
+                  // ✅ NOVO
+                  setAvaliacaoParaEditar(avaliacao);
+                  setShowEditModal(true);
+                }}
               />
             ))}
           </div>
         </div>
       )}
 
-      {/* Planos de Tratamento */}
       {planos.length > 0 && (
         <div>
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
@@ -579,7 +622,23 @@ function AvaliacoesPlanos({ paciente, avaliacoes, planos, onReload }: any) {
               toast.error("Erro ao reprovar avaliação");
             }
           }}
+          onEditar={handleEditarAvaliacao} // ✅ NOVO
           avaliacao={selectedAvaliacao}
+        />
+      )}
+
+      {/* ✅ NOVO: Modal de Edição de Avaliação */}
+      {showEditModal && avaliacaoParaEditar && (
+        <AvaliacaoFormModal
+          isOpen={showEditModal}
+          onClose={() => {
+            setShowEditModal(false);
+            setAvaliacaoParaEditar(null);
+          }}
+          onSubmit={handleSalvarEdicao}
+          procedimentos={procedimentos}
+          agendamento={avaliacaoParaEditar.agendamento}
+          avaliacao={avaliacaoParaEditar}
         />
       )}
 
@@ -628,10 +687,12 @@ function AvaliacaoCard({
   avaliacao,
   onAprovar,
   onGerarLink,
+  onEditar, // ✅ NOVO
 }: {
   avaliacao: any;
   onAprovar: (avaliacao: any) => void;
   onGerarLink: (avaliacao: any) => void;
+  onEditar: (avaliacao: any) => void; // ✅ NOVO
 }) {
   const getStatusBadge = (status: string) => {
     const badges = {
@@ -675,6 +736,7 @@ function AvaliacaoCard({
           </p>
         </div>
 
+        {/* ✅ ATUALIZADO: Botões de ação */}
         <div className="flex items-center gap-2">
           {avaliacao.statusAprovacao === "PENDENTE" && (
             <>
@@ -685,6 +747,15 @@ function AvaliacaoCard({
               >
                 <LinkIcon className="h-5 w-5" />
               </button>
+
+              {/* ✅ NOVO: Botão Editar */}
+              <button
+                onClick={() => onEditar(avaliacao)}
+                className="px-3 py-1 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700"
+              >
+                Editar
+              </button>
+
               <button
                 onClick={() => onAprovar(avaliacao)}
                 className="px-3 py-1 bg-green-600 text-white text-sm rounded-md hover:bg-green-700"
@@ -696,14 +767,12 @@ function AvaliacaoCard({
         </div>
       </div>
 
-      {/* Anotações */}
       {avaliacao.anotacoes && (
         <div className="mb-3 bg-gray-50 rounded p-2">
           <p className="text-sm text-gray-700">{avaliacao.anotacoes}</p>
         </div>
       )}
 
-      {/* Procedimentos */}
       {avaliacao.procedimentosPlano &&
         avaliacao.procedimentosPlano.length > 0 && (
           <div className="space-y-2">
@@ -737,7 +806,6 @@ function AvaliacaoCard({
               </div>
             ))}
 
-            {/* Total */}
             <div className="flex justify-between items-center pt-2 border-t border-gray-200">
               <span className="font-semibold text-gray-900">Total:</span>
               <span className="font-bold text-green-600 text-lg">
@@ -747,7 +815,6 @@ function AvaliacaoCard({
           </div>
         )}
 
-      {/* Info de Aprovação/Reprovação */}
       {avaliacao.statusAprovacao === "APROVADO" && (
         <div className="mt-3 bg-green-50 border border-green-200 rounded p-2 text-sm">
           <p className="text-green-800">
@@ -774,7 +841,6 @@ function AvaliacaoCard({
   );
 }
 
-// Componente: Card de Plano de Tratamento
 function PlanoTratamentoCard({ plano }: { plano: any }) {
   const [expanded, setExpanded] = useState(false);
 
@@ -827,7 +893,6 @@ function PlanoTratamentoCard({ plano }: { plano: any }) {
         </button>
       </div>
 
-      {/* Barra de Progresso */}
       <div className="mb-3">
         <div className="flex justify-between text-sm mb-1">
           <span className="text-gray-600">
@@ -842,7 +907,6 @@ function PlanoTratamentoCard({ plano }: { plano: any }) {
         </div>
       </div>
 
-      {/* Valor Total */}
       <div className="flex justify-between items-center py-2 border-t border-gray-200">
         <span className="font-medium text-gray-700">Valor Total:</span>
         <span className="font-bold text-gray-900 text-lg">
@@ -850,7 +914,6 @@ function PlanoTratamentoCard({ plano }: { plano: any }) {
         </span>
       </div>
 
-      {/* Procedimentos Expandidos */}
       {expanded && procedimentos.length > 0 && (
         <div className="mt-3 space-y-2 border-t border-gray-200 pt-3">
           {procedimentos.map((proc: any, index: number) => (
@@ -893,7 +956,6 @@ function PlanoTratamentoCard({ plano }: { plano: any }) {
   );
 }
 
-// Componente: Prontuário
 function ProntuarioTab({ paciente, atendimentos, onReload }: any) {
   return (
     <div className="p-6">
