@@ -1,0 +1,23 @@
+title: Dr. Gestão - Manual do Usuário
+description: Sistema SaaS de Agendamentos para Clínicas
+theme: jekyll-theme-leap-day
+show_downloads: false
+
+# Configurações do site
+lang: pt-BR
+timezone: America/Sao_Paulo
+
+# URLs
+url: "https://marcostaira.github.io"
+baseurl: "/DrGestao"
+
+# Navegação
+navigation:
+  - title: Home
+    url: /
+  - title: Agenda
+    url: /Agenda
+  - title: Pacientes
+    url: /Pacientes
+  - title: FAQ
+    url: /FAQ
