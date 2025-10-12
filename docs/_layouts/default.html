@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ page.title | default: site.title }}</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      .header {
+        background: #2c3e50;
+        color: white;
+        padding: 20px;
+      }
+      .nav {
+        background: #34495e;
+        padding: 10px;
+      }
+      .nav a {
+        color: white;
+        padding: 10px 15px;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .nav a:hover {
+        background: #2c3e50;
+      }
+      .content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>📚 Manual do Usuário</h1>
+      <p>Sistema SaaS de Agendamentos</p>
+    </div>
+
+    <div class="nav">
+      <a href="index.html">🏠 Início</a>
+      <a href="Agenda.html">📅 Agenda</a>
+      <a href="Pacientes.html">👥 Pacientes</a>
+      <a href="Atendimentos.html">📋 Atendimentos</a>
+      <a href="Anamnese.html">📝 Anamnese</a>
+      <a href="Profissionais.html">👨‍⚕️ Profissionais</a>
+      <a href="Procedimentos.html">💊 Procedimentos</a>
+      <a href="WhatsApp.html">💬 WhatsApp</a>
+      <a href="Usuarios-Permissoes.html">🔐 Usuários</a>
+      <a href="FAQ.html">❓ FAQ</a>
+    </div>
+
+    <div class="content">{{ content }}</div>
+  </body>
+</html>
