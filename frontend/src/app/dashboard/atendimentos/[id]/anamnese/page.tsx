@@ -2,11 +2,15 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { anamneseService } from "../../../../../services/anamnese.service";
+import { anamneseService } from "../../../../../services/anamneseService";
 import AnamneseView from "../../../../../components/anamnese/AnamneseView";
 import { Anamnese } from "../../../../../types/anamnese.types";
 import toast from "react-hot-toast";
-import { PlusIcon, ArrowLeftIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
+import {
+  PlusIcon,
+  ArrowLeftIcon,
+  DocumentTextIcon,
+} from "@heroicons/react/24/outline";
 import api from "@/lib/api";
 
 export default function AtendimentoAnamnesesPage() {
@@ -17,7 +21,8 @@ export default function AtendimentoAnamnesesPage() {
   const [loading, setLoading] = useState(true);
   const [atendimento, setAtendimento] = useState<any>(null);
   const [anamneses, setAnamneses] = useState<Anamnese[]>([]);
-  const [anamneseVisualizando, setAnamneseVisualizando] = useState<Anamnese | null>(null);
+  const [anamneseVisualizando, setAnamneseVisualizando] =
+    useState<Anamnese | null>(null);
 
   useEffect(() => {
     carregarDados();
@@ -26,15 +31,17 @@ export default function AtendimentoAnamnesesPage() {
   const carregarDados = async () => {
     try {
       setLoading(true);
-      
+
       // Carregar atendimento
-      const responseAtendimento = await api.get(`/atendimentos/${atendimentoId}`);
+      const responseAtendimento = await api.get(
+        `/atendimentos/${atendimentoId}`
+      );
       setAtendimento(responseAtendimento.data.data);
 
       // Carregar todas as anamneses do paciente
       const pacienteId = responseAtendimento.data.data.pacienteId;
       const todasAnamneses = await anamneseService.listByPaciente(pacienteId);
-      
+
       // Filtrar anamneses deste atendimento
       const anamnesasDoAtendimento = todasAnamneses.filter(
         (a) => a.atendimentoId === atendimentoId
@@ -69,13 +76,15 @@ export default function AtendimentoAnamnesesPage() {
       {/* Header */}
       <div className="mb-6">
         <button
-          onClick={() => router.push(`/dashboard/atendimentos/${atendimentoId}`)}
+          onClick={() =>
+            router.push(`/dashboard/atendimentos/${atendimentoId}`)
+          }
           className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4"
         >
           <ArrowLeftIcon className="h-4 w-4 mr-1" />
           Voltar para o atendimento
         </button>
-        
+
         <div className="sm:flex sm:items-center sm:justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">
@@ -88,7 +97,9 @@ export default function AtendimentoAnamnesesPage() {
           <div className="mt-4 sm:mt-0">
             <button
               onClick={() =>
-                router.push(`/dashboard/atendimentos/${atendimentoId}/anamnese/novo`)
+                router.push(
+                  `/dashboard/atendimentos/${atendimentoId}/anamnese/novo`
+                )
               }
               className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
             >
@@ -105,15 +116,21 @@ export default function AtendimentoAnamnesesPage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
             <div>
               <span className="text-gray-600">Paciente:</span>
-              <p className="font-medium text-gray-900">{atendimento.paciente?.nome}</p>
+              <p className="font-medium text-gray-900">
+                {atendimento.paciente?.nome}
+              </p>
             </div>
             <div>
               <span className="text-gray-600">Profissional:</span>
-              <p className="font-medium text-gray-900">{atendimento.profissional?.nome}</p>
+              <p className="font-medium text-gray-900">
+                {atendimento.profissional?.nome}
+              </p>
             </div>
             <div>
               <span className="text-gray-600">Procedimento:</span>
-              <p className="font-medium text-gray-900">{atendimento.procedimento?.nome || "Não informado"}</p>
+              <p className="font-medium text-gray-900">
+                {atendimento.procedimento?.nome || "Não informado"}
+              </p>
             </div>
             <div>
               <span className="text-gray-600">Data:</span>
@@ -139,7 +156,9 @@ export default function AtendimentoAnamnesesPage() {
             <div className="mt-6">
               <button
                 onClick={() =>
-                  router.push(`/dashboard/atendimentos/${atendimentoId}/anamnese/novo`)
+                  router.push(
+                    `/dashboard/atendimentos/${atendimentoId}/anamnese/novo`
+                  )
                 }
                 className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
               >
@@ -167,11 +186,15 @@ export default function AtendimentoAnamnesesPage() {
                     )}
                     <p className="text-sm text-gray-500 mt-2">
                       Preenchida em:{" "}
-                      {new Date(anamnese.createdAt).toLocaleDateString("pt-BR")} às{" "}
-                      {new Date(anamnese.createdAt).toLocaleTimeString("pt-BR", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      {new Date(anamnese.createdAt).toLocaleDateString("pt-BR")}{" "}
+                      às{" "}
+                      {new Date(anamnese.createdAt).toLocaleTimeString(
+                        "pt-BR",
+                        {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        }
+                      )}
                     </p>
                   </div>
 

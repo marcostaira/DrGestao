@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { anamneseService } from "../../../../../services/anamnese.service";
+import { anamneseService } from "../../../../../services/anamneseService";
 import AnamneseList from "../../../../../components/anamnese/AnamneseList";
 import AnamneseView from "../../../../../components/anamnese/AnamneseView";
 import { Anamnese } from "../../../../../types/anamnese.types";

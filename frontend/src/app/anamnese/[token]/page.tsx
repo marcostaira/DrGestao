@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import {
   anamneseService,
   ValidateTokenResponse,
-} from "@/services/anamnese.service";
+} from "@/services/anamneseService";
 import toast from "react-hot-toast";
 
 // Definir interface local para CampoFormulario

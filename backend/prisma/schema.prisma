@@ -18,6 +18,7 @@ enum TipoUsuario {
   ADMIN
   SECRETARIA
 }
+
 enum StatusAgendamento {
   MARCADO
   CONFIRMADO
@@ -25,6 +26,24 @@ enum StatusAgendamento {
   FALTOU
   CANCELADO
   REAGENDAR
+}
+
+enum StatusAtendimento {
+  AVULSO
+  AVALIACAO
+  PLANO_TRATAMENTO
+}
+
+enum StatusAprovacao {
+  PENDENTE
+  APROVADO
+  REPROVADO
+}
+
+enum ProgressoProcedimento {
+  NAO_INICIADO
+  EM_ANDAMENTO
+  CONCLUIDO
 }
 
 enum TipoLog {
@@ -95,20 +114,22 @@ model Tenant {
   createdAt      DateTime        @default(now()) @map("created_at")
   updatedAt      DateTime        @updatedAt @map("updated_at")
   
-  plano             Plano              @relation(fields: [planoId], references: [id])
-  agendamentos      Agendamento[]
-  atendimentos      Atendimento[]
-  pacientes         Paciente[]
-  procedimentos     Procedimento[]
-  profissionais     Profissional[]
-  usuarios          Usuario[]
-  whatsappConfig    WhatsAppConfig?
-  formularios       Formulario[]
-  anamneses         Anamnese[]
-  whatsappMensagens WhatsAppMensagem[]
+  plano                     Plano                      @relation(fields: [planoId], references: [id])
+  agendamentos              Agendamento[]
+  atendimentos              Atendimento[]
+  atendimentoProcedimentos  AtendimentoProcedimento[]
+  pacientes                 Paciente[]
+  procedimentos             Procedimento[]
+  profissionais             Profissional[]
+  usuarios                  Usuario[]
+  whatsappConfig            WhatsAppConfig?
+  formularios               Formulario[]
+  anamneses                 Anamnese[]
+  whatsappMensagens         WhatsAppMensagem[]
 
   @@index([planoId])
   @@map("tenants")
+  LinkAprovacaoAvaliacao LinkAprovacaoAvaliacao[]
 }
 
 // ============================================================================
@@ -228,14 +249,13 @@ model Paciente {
   atendimentos      Atendimento[]
   anamneses         Anamnese[]
   whatsappMensagens WhatsAppMensagem[]
-  linksAnamnese LinkAnamnese[]
+  linksAnamnese     LinkAnamnese[]
 
   @@index([tenantId])
   @@index([tenantId, nome])
   @@index([tenantId, telefone])
   @@index([cpf])
   @@map("pacientes")
-
 }
 
 // ============================================================================
@@ -251,9 +271,10 @@ model Procedimento {
   createdAt      DateTime      @default(now()) @map("created_at")
   updatedAt      DateTime      @updatedAt @map("updated_at")
   
-  agendamentos Agendamento[]
-  atendimentos Atendimento[]
-  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  agendamentos              Agendamento[]
+  atendimentos              Atendimento[]
+  atendimentoProcedimentos  AtendimentoProcedimento[]
+  tenant                    Tenant                    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   @@index([tenantId, nome])
   @@map("procedimentos")
@@ -279,13 +300,14 @@ model Agendamento {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
   
-  paciente          Paciente?          @relation(fields: [pacienteId], references: [id])
-  procedimento      Procedimento       @relation(fields: [procedimentoId], references: [id], onDelete: Cascade)
-  profissional      Profissional       @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
-  tenant            Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  atendimento       Atendimento?
-  whatsappMensagens WhatsAppMensagem[]
-  linksAnamnese LinkAnamnese[]
+  paciente                  Paciente?                  @relation(fields: [pacienteId], references: [id])
+  procedimento              Procedimento               @relation(fields: [procedimentoId], references: [id], onDelete: Cascade)
+  profissional              Profissional               @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
+  tenant                    Tenant                     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  atendimento               Atendimento?
+  whatsappMensagens         WhatsAppMensagem[]
+  linksAnamnese             LinkAnamnese[]
+  atendimentoProcedimentos  AtendimentoProcedimento[]
 
   @@index([tenantId, dataHora])
   @@index([tenantId, profissionalId])
@@ -298,31 +320,97 @@ model Agendamento {
 // ============================================================================
 
 model Atendimento {
-  id                      String   @id @default(uuid())
-  tenantId                String   @map("tenant_id")
-  agendamentoId           String   @unique @map("agendamento_id")
-  pacienteId              String   @map("paciente_id")
-  profissionalId          String   @map("profissional_id")
-  procedimentoId          String?  @map("procedimento_id")
-  anotacoes               String?  @db.Text
-  procedimentosRealizados Json     @default("[]") @map("procedimentos_realizados")
-  cancelado               Boolean  @default(false)
-  canceladoEm             DateTime? @map("cancelado_em")
-  createdAt               DateTime @default(now()) @map("created_at")
-  updatedAt               DateTime @updatedAt @map("updated_at")
+  id                      String             @id @default(uuid())
+  tenantId                String             @map("tenant_id")
+  agendamentoId           String             @unique @map("agendamento_id")
+  pacienteId              String             @map("paciente_id")
+  profissionalId          String             @map("profissional_id")
+  procedimentoId          String?            @map("procedimento_id")
+  
+  // Tipo e Status
+  tipo                    StatusAtendimento  @default(AVULSO)
+  statusAprovacao         StatusAprovacao?   @default(PENDENTE) @map("status_aprovacao")
+  
+  // Anotações
+  anotacoes               String?            @db.Text
+  procedimentosRealizados Json               @default("[]") @map("procedimentos_realizados")
+  
+  // Aprovação/Reprovação
+  aprovadoEm              DateTime?          @map("aprovado_em")
+  aprovadoPor             String?            @map("aprovado_por")
+  reprovadoEm             DateTime?          @map("reprovado_em")
+  reprovadoMotivo         String?            @map("reprovado_motivo")
+  
+  // Relacionamento entre Avaliação e Plano
+  avaliacaoId             String?            @map("avaliacao_id")
+  planoTratamentoId       String?            @map("plano_tratamento_id")
+  
+  // Cancelamento
+  cancelado               Boolean            @default(false)
+  canceladoEm             DateTime?          @map("cancelado_em")
+  
+  createdAt               DateTime           @default(now()) @map("created_at")
+  updatedAt               DateTime           @updatedAt @map("updated_at")
 
-  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  agendamento  Agendamento   @relation(fields: [agendamentoId], references: [id], onDelete: Cascade)
-  paciente     Paciente      @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
-  profissional Profissional  @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
-  procedimento Procedimento? @relation(fields: [procedimentoId], references: [id], onDelete: SetNull)
-  anamneses    Anamnese[]
+  // Relações
+  tenant              Tenant                    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  agendamento         Agendamento               @relation(fields: [agendamentoId], references: [id], onDelete: Cascade)
+  paciente            Paciente                  @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
+  profissional        Profissional              @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
+  procedimento        Procedimento?             @relation(fields: [procedimentoId], references: [id], onDelete: SetNull)
+  anamneses           Anamnese[]
+  
+  // Auto-relacionamento
+  avaliacao           Atendimento?              @relation("AvaliacaoPlano", fields: [avaliacaoId], references: [id], onDelete: SetNull)
+  planosGerados       Atendimento[]             @relation("AvaliacaoPlano")
+  
+  // Procedimentos do plano/avaliação
+  procedimentosPlano  AtendimentoProcedimento[]
 
+  @@index([tenantId])
   @@index([tenantId, pacienteId])
   @@index([tenantId, profissionalId])
   @@index([tenantId, agendamentoId])
   @@index([tenantId, cancelado])
+  @@index([tipo])
+  @@index([statusAprovacao])
+  @@index([avaliacaoId])
+  @@index([planoTratamentoId])
   @@map("atendimentos")
+  LinkAprovacaoAvaliacao LinkAprovacaoAvaliacao[]
+}
+
+// ============================================================================
+// PROCEDIMENTOS DO PLANO/AVALIAÇÃO
+// ============================================================================
+
+model AtendimentoProcedimento {
+  id              String                 @id @default(cuid())
+  tenantId        String                 @map("tenant_id")
+  atendimentoId   String                 @map("atendimento_id")
+  procedimentoId  String                 @map("procedimento_id")
+  ordem           Int                    @default(1)
+  progresso       ProgressoProcedimento  @default(NAO_INICIADO)
+  agendamentoId   String?                @map("agendamento_id")
+  observacoes     String?                @db.Text
+  valorPraticado  Decimal?               @db.Decimal(10, 2) @map("valor_praticado")
+  concluidoEm     DateTime?              @map("concluido_em")
+  
+  createdAt       DateTime               @default(now()) @map("created_at")
+  updatedAt       DateTime               @updatedAt @map("updated_at")
+
+  // Relações
+  tenant          Tenant                 @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  atendimento     Atendimento            @relation(fields: [atendimentoId], references: [id], onDelete: Cascade)
+  procedimento    Procedimento           @relation(fields: [procedimentoId], references: [id], onDelete: Restrict)
+  agendamento     Agendamento?           @relation(fields: [agendamentoId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId])
+  @@index([atendimentoId])
+  @@index([procedimentoId])
+  @@index([agendamentoId])
+  @@index([progresso])
+  @@map("atendimento_procedimentos")
 }
 
 // ============================================================================
@@ -337,7 +425,7 @@ model WhatsAppConfig {
   instanceName            String?  @map("instance_name")
   instanceToken           String?  @map("instance_token")
   qrCode                  String?  @db.Text @map("qr_code")
-  status                  String   @default("DISCONNECTED") // DISCONNECTED, CONNECTING, CONNECTED
+  status                  String   @default("DISCONNECTED")
   phoneNumber             String?  @map("phone_number")
   profileName             String?  @map("profile_name")
   
@@ -380,8 +468,8 @@ model WhatsAppMensagem {
   
   telefone          String
   mensagem          String   @db.Text
-  tipo              String   // CONFIRMACAO, RESPOSTA_CONFIRMADO, RESPOSTA_REAGENDAR, RESPOSTA_INVALIDA
-  status            String   @default("PENDENTE") // PENDENTE, ENVIANDO, ENVIADA, ERRO, RESPONDIDA
+  tipo              String
+  status            String   @default("PENDENTE")
   
   respostaRecebida  String?  @db.Text @map("resposta_recebida")
   respostaEm        DateTime? @map("resposta_em")
@@ -419,7 +507,7 @@ model Formulario {
   
   nome           String
   descricao      String?  @db.Text
-  campos         Json     // Array de objetos com configuração dos campos
+  campos         Json
   ativo          Boolean  @default(true)
   
   createdAt      DateTime @default(now()) @map("created_at")
@@ -429,7 +517,7 @@ model Formulario {
   profissional    Profissional?    @relation(fields: [profissionalId], references: [id], onDelete: SetNull)
   anamneses       Anamnese[]
   whatsappConfigs WhatsAppConfig[]
-  linksAnamnese LinkAnamnese[]
+  linksAnamnese   LinkAnamnese[]
 
   @@index([tenantId])
   @@index([tenantId, profissionalId])
@@ -444,16 +532,16 @@ model Anamnese {
   formularioId   String   @map("formulario_id")
   atendimentoId  String?  @map("atendimento_id")
   
-  respostas      Json     // Objeto com as respostas do formulário
+  respostas      Json
   observacoes    String?  @db.Text
   
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @updatedAt @map("updated_at")
 
-  tenant      Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  paciente    Paciente     @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
-  formulario  Formulario   @relation(fields: [formularioId], references: [id], onDelete: Restrict)
-  atendimento Atendimento? @relation(fields: [atendimentoId], references: [id], onDelete: SetNull)
+  tenant        Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  paciente      Paciente      @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
+  formulario    Formulario    @relation(fields: [formularioId], references: [id], onDelete: Restrict)
+  atendimento   Atendimento?  @relation(fields: [atendimentoId], references: [id], onDelete: SetNull)
   linksAnamnese LinkAnamnese[]
   
   @@index([tenantId, pacienteId])
@@ -469,11 +557,11 @@ model LinkAnamnese {
   formularioId   String    @map("formulario_id")
   agendamentoId  String?   @map("agendamento_id")
   
-  token          String    @unique // Token criptografado
+  token          String    @unique
   preenchido     Boolean   @default(false)
   expiresAt      DateTime  @map("expires_at")
   preenchidoEm   DateTime? @map("preenchido_em")
-  anamneseId     String?   @unique @map("anamnese_id") // Link para anamnese preenchida
+  anamneseId     String?   @unique @map("anamnese_id")
   
   createdAt      DateTime  @default(now()) @map("created_at")
   updatedAt      DateTime  @updatedAt @map("updated_at")
@@ -505,4 +593,23 @@ model LogSistema {
   @@index([tenantId, tipo])
   @@index([tenantId, createdAt])
   @@map("logs_sistema")
+}
+
+model LinkAprovacaoAvaliacao {
+  id           String      @id @default(cuid())
+  tenantId     String
+  avaliacaoId  String
+  token        String      @unique
+  expiresAt    DateTime
+  utilizado    Boolean     @default(false)
+  utilizadoEm  DateTime?
+  createdAt    DateTime    @default(now())
+  
+  tenant       Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  avaliacao    Atendimento @relation(fields: [avaliacaoId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([avaliacaoId])
+  @@index([token])
+  @@map("links_aprovacao_avaliacao")
 }

@@ -1,3 +1,5 @@
+// frontend/src/components/atendimentos/AgendamentosDoDia.tsx
+
 import React from "react";
 import { Agendamento, StatusAgendamento } from "@/services/agendamentoService";
 import { Atendimento } from "@/services/atendimentoService";
@@ -9,6 +11,7 @@ interface AgendamentosDoDiaProps {
   agendamentos: Agendamento[];
   atendimentos: Atendimento[];
   onRegistrarAtendimento: (agendamento: Agendamento) => void;
+  onRegistrarAvaliacao?: (agendamento: Agendamento) => void;
   onVerAtendimento: (atendimento: Atendimento) => void;
   onUpdateStatus: (agendamentoId: string, status: StatusAgendamento) => void;
   onOpenStatusModal: (
@@ -18,25 +21,30 @@ interface AgendamentosDoDiaProps {
 }
 
 const getStatusBadgeVariant = (status: StatusAgendamento) => {
-  const variants = {
+  const variants: Record<
+    StatusAgendamento,
+    "warning" | "success" | "info" | "danger" | "default"
+  > = {
     [StatusAgendamento.MARCADO]: "warning",
     [StatusAgendamento.CONFIRMADO]: "success",
     [StatusAgendamento.COMPARECEU]: "info",
     [StatusAgendamento.FALTOU]: "danger",
     [StatusAgendamento.CANCELADO]: "default",
-  } as const;
+    [StatusAgendamento.REAGENDAR]: "warning", // ADICIONADO
+  };
   return variants[status];
 };
 
 const getNextStatus = (
   currentStatus: StatusAgendamento
 ): StatusAgendamento | null => {
-  const statusFlow = {
+  const statusFlow: Record<StatusAgendamento, StatusAgendamento | null> = {
     [StatusAgendamento.MARCADO]: StatusAgendamento.CONFIRMADO,
     [StatusAgendamento.CONFIRMADO]: StatusAgendamento.COMPARECEU,
     [StatusAgendamento.COMPARECEU]: null,
     [StatusAgendamento.FALTOU]: StatusAgendamento.MARCADO,
     [StatusAgendamento.CANCELADO]: null,
+    [StatusAgendamento.REAGENDAR]: StatusAgendamento.MARCADO, // ADICIONADO
   };
   return statusFlow[currentStatus];
 };
@@ -45,12 +53,13 @@ const getNextStatusLabel = (currentStatus: StatusAgendamento): string => {
   const nextStatus = getNextStatus(currentStatus);
   if (!nextStatus) return "";
 
-  const labels = {
+  const labels: Record<StatusAgendamento, string> = {
     [StatusAgendamento.MARCADO]: "",
     [StatusAgendamento.CONFIRMADO]: "Confirmar",
     [StatusAgendamento.COMPARECEU]: "Compareceu",
     [StatusAgendamento.FALTOU]: "Reagendar",
     [StatusAgendamento.CANCELADO]: "",
+    [StatusAgendamento.REAGENDAR]: "Marcar", // ADICIONADO
   };
   return labels[nextStatus] || "";
 };
@@ -59,10 +68,24 @@ const canChangeStatus = (status: StatusAgendamento): boolean => {
   return status !== StatusAgendamento.CANCELADO;
 };
 
+// Helper para obter variante do badge por tipo de atendimento
+const getTipoAtendimentoBadge = (tipo: string) => {
+  const badges = {
+    AVALIACAO: { variant: "info" as const, label: "Avaliação" },
+    PLANO_TRATAMENTO: {
+      variant: "success" as const,
+      label: "Plano de Tratamento",
+    },
+    AVULSO: { variant: "default" as const, label: "Atendimento" },
+  };
+  return badges[tipo as keyof typeof badges] || badges.AVULSO;
+};
+
 export const AgendamentosDoDia: React.FC<AgendamentosDoDiaProps> = ({
   agendamentos,
   atendimentos,
   onRegistrarAtendimento,
+  onRegistrarAvaliacao,
   onVerAtendimento,
   onUpdateStatus,
   onOpenStatusModal,
@@ -122,6 +145,17 @@ export const AgendamentosDoDia: React.FC<AgendamentosDoDiaProps> = ({
                   <Badge variant={getStatusBadgeVariant(ag.status)}>
                     {ag.status}
                   </Badge>
+
+                  {/* Badge do tipo de atendimento */}
+                  {atendimento && (
+                    <Badge
+                      variant={
+                        getTipoAtendimentoBadge(atendimento.tipo).variant
+                      }
+                    >
+                      {getTipoAtendimentoBadge(atendimento.tipo).label}
+                    </Badge>
+                  )}
                 </div>
 
                 <div className="ml-6 flex items-center gap-2 text-sm text-gray-600">
@@ -200,6 +234,7 @@ export const AgendamentosDoDia: React.FC<AgendamentosDoDiaProps> = ({
                   </div>
                 )}
 
+                {/* Botões de ação */}
                 {hasAtendimento && atendimento ? (
                   <Button
                     size="sm"
@@ -209,9 +244,27 @@ export const AgendamentosDoDia: React.FC<AgendamentosDoDiaProps> = ({
                     Ver Atendimento
                   </Button>
                 ) : ag.status === StatusAgendamento.COMPARECEU ? (
-                  <Button size="sm" onClick={() => onRegistrarAtendimento(ag)}>
-                    Registrar Atendimento
-                  </Button>
+                  // Opções de Atendimento ou Avaliação
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      onClick={() => onRegistrarAtendimento(ag)}
+                      variant="primary"
+                    >
+                      Atendimento
+                    </Button>
+
+                    {onRegistrarAvaliacao && (
+                      <Button
+                        size="sm"
+                        onClick={() => onRegistrarAvaliacao(ag)}
+                        variant="primary"
+                        className="border-blue-500 text-blue-600 hover:bg-blue-50"
+                      >
+                        Avaliação
+                      </Button>
+                    )}
+                  </div>
                 ) : ag.status === StatusAgendamento.FALTOU ? (
                   <span className="text-sm text-red-600 font-medium">
                     Não compareceu

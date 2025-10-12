@@ -1,3 +1,5 @@
+// backend/src/middleware/validation.ts
+
 import Joi from "joi";
 import { Request, Response, NextFunction } from "express";
 import { ApiResponse, AppError } from "../types";
@@ -193,7 +195,7 @@ export const createAgendamentoSchema = Joi.object({
   // Validação de recorrência
   recorrencia: Joi.object({
     tipo: Joi.string().valid("DIARIA", "SEMANAL", "MENSAL").required(),
-    dataFim: Joi.date().iso().required(), // Mudança aqui
+    dataFim: Joi.date().iso().required(),
     diasSemana: Joi.array()
       .items(Joi.number().min(0).max(6))
       .optional()
@@ -233,9 +235,34 @@ export const batchAgendamentoSchema = Joi.object({
 // ============================================================================
 // ATENDIMENTO VALIDATION SCHEMAS
 // ============================================================================
+
+// Schema para procedimentos do plano/avaliação
+export const procedimentoPlanoSchema = Joi.object({
+  procedimentoId: Joi.string().required().messages({
+    "string.empty": "ID do procedimento é obrigatório",
+    "any.required": "ID do procedimento é obrigatório",
+  }),
+  ordem: Joi.number().integer().min(1).required().messages({
+    "number.base": "Ordem deve ser um número",
+    "number.min": "Ordem deve ser no mínimo 1",
+    "any.required": "Ordem é obrigatória",
+  }),
+  observacoes: Joi.string().max(500).optional().allow("", null),
+  valorPraticado: Joi.number().min(0).optional().allow(null),
+});
+
 export const createAtendimentoSchema = Joi.object({
-  agendamentoId: Joi.string().required(),
-  anotacoes: Joi.string().max(2000).allow(""),
+  agendamentoId: Joi.string().required().messages({
+    "string.empty": "ID do agendamento é obrigatório",
+    "any.required": "ID do agendamento é obrigatório",
+  }),
+  tipo: Joi.string()
+    .valid("AVULSO", "AVALIACAO", "PLANO_TRATAMENTO")
+    .default("AVULSO")
+    .messages({
+      "any.only": "Tipo deve ser AVULSO, AVALIACAO ou PLANO_TRATAMENTO",
+    }),
+  anotacoes: Joi.string().max(2000).allow("", null),
   procedimentosRealizados: Joi.array()
     .items(
       Joi.object({
@@ -244,10 +271,23 @@ export const createAtendimentoSchema = Joi.object({
       })
     )
     .optional(),
+  // Array de procedimentos para AVALIACAO ou PLANO_TRATAMENTO
+  procedimentosPlano: Joi.array()
+    .items(procedimentoPlanoSchema)
+    .min(1)
+    .when("tipo", {
+      is: Joi.valid("AVALIACAO", "PLANO_TRATAMENTO"),
+      then: Joi.required().messages({
+        "array.min": "Deve haver pelo menos 1 procedimento no plano/avaliação",
+        "any.required":
+          "Procedimentos são obrigatórios para avaliação ou plano de tratamento",
+      }),
+      otherwise: Joi.optional(),
+    }),
 });
 
 export const updateAtendimentoSchema = Joi.object({
-  anotacoes: Joi.string().max(2000).allow(""),
+  anotacoes: Joi.string().max(2000).allow("", null),
   procedimentosRealizados: Joi.array()
     .items(
       Joi.object({
@@ -256,6 +296,41 @@ export const updateAtendimentoSchema = Joi.object({
       })
     )
     .optional(),
+  procedimentosPlano: Joi.array().items(procedimentoPlanoSchema).optional(),
+});
+
+// Schema para aprovar avaliação
+export const aprovarAvaliacaoSchema = Joi.object({
+  aprovadoPor: Joi.string().required().trim().min(2).max(100).messages({
+    "string.empty": "Nome de quem aprovou é obrigatório",
+    "string.min": "Nome deve ter pelo menos 2 caracteres",
+    "any.required": "Nome de quem aprovou é obrigatório",
+  }),
+});
+
+// Schema para reprovar avaliação
+export const reprovarAvaliacaoSchema = Joi.object({
+  motivo: Joi.string().required().trim().min(5).max(500).messages({
+    "string.empty": "Motivo da reprovação é obrigatório",
+    "string.min": "Motivo deve ter pelo menos 5 caracteres",
+    "any.required": "Motivo da reprovação é obrigatório",
+  }),
+});
+
+// Schema para atualizar progresso de procedimento
+export const updateProgressoProcedimentoSchema = Joi.object({
+  progresso: Joi.string()
+    .valid("NAO_INICIADO", "EM_ANDAMENTO", "CONCLUIDO")
+    .required()
+    .messages({
+      "any.only": "Progresso deve ser NAO_INICIADO, EM_ANDAMENTO ou CONCLUIDO",
+      "any.required": "Progresso é obrigatório",
+    }),
+  agendamentoId: Joi.string().optional().allow(null).messages({
+    "string.base": "ID do agendamento deve ser uma string",
+  }),
+  observacoes: Joi.string().max(500).optional().allow("", null),
+  concluidoEm: Joi.date().iso().optional().allow(null),
 });
 
 // ============================================================================
@@ -278,40 +353,8 @@ export const whatsAppWebhookSchema = Joi.object({
 });
 
 // ============================================================================
-// CUSTOM VALIDATORS
-// ============================================================================
-
-export const validateBusinessHours = (value: Date): boolean => {
-  const hour = value.getHours();
-  const day = value.getDay();
-
-  // Segunda a Sexta: 8h às 18h
-  if (day >= 1 && day <= 5) {
-    return hour >= 8 && hour < 18;
-  }
-
-  // Sábado: 8h às 12h
-  if (day === 6) {
-    return hour >= 8 && hour < 12;
-  }
-
-  return false;
-};
-
-export const validatePhone = (phone: string): boolean => {
-  const cleanPhone = phone.replace(/\D/g, "");
-  return /^\d{10,11}$/.test(cleanPhone);
-};
-
-export const sanitizeInput = (input: string): string => {
-  return input.trim().replace(/[<>]/g, "");
-};
-
-// ============================================================================
 // PACIENTE VALIDATION SCHEMAS
 // ============================================================================
-
-// ... código existente ...
 
 export const createPacienteSchema = Joi.object({
   nome: Joi.string().required(),
@@ -409,6 +452,36 @@ export const updatePacienteSchema = Joi.object({
   profissionalId: Joi.string().allow("", null),
   observacoes: Joi.string().max(1000).allow("", null),
 });
+
+// ============================================================================
+// CUSTOM VALIDATORS
+// ============================================================================
+
+export const validateBusinessHours = (value: Date): boolean => {
+  const hour = value.getHours();
+  const day = value.getDay();
+
+  // Segunda a Sexta: 8h às 18h
+  if (day >= 1 && day <= 5) {
+    return hour >= 8 && hour < 18;
+  }
+
+  // Sábado: 8h às 12h
+  if (day === 6) {
+    return hour >= 8 && hour < 12;
+  }
+
+  return false;
+};
+
+export const validatePhone = (phone: string): boolean => {
+  const cleanPhone = phone.replace(/\D/g, "");
+  return /^\d{10,11}$/.test(cleanPhone);
+};
+
+export const sanitizeInput = (input: string): string => {
+  return input.trim().replace(/[<>]/g, "");
+};
 
 // ============================================================================
 // VALIDATE REQUEST MIDDLEWARE

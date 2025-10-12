@@ -262,9 +262,7 @@ export default function PacientesPage() {
                   Anamneses
                 </button>
                 <button
-                  onClick={() =>
-                    router.push(`/dashboard/pacientes/${pac.id}/editar`)
-                  }
+                  onClick={() => router.push(`/dashboard/pacientes/${pac.id}`)}
                   className="text-primary-600 hover:text-primary-800"
                   title="Editar"
                 >
@@ -404,7 +402,7 @@ export default function PacientesPage() {
               onRowClick={
                 permissoesPacientes.criarAlterar
                   ? (paciente) => {
-                      router.push(`/dashboard/pacientes/${paciente.id}/editar`);
+                      router.push(`/dashboard/pacientes/${paciente.id}`);
                     }
                   : undefined
               }

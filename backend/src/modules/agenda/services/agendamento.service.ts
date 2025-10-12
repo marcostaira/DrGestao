@@ -61,41 +61,47 @@ export class AgendamentoService {
       );
     }
 
-    // Verificar conflitos de horário
-    const conflito = await prisma.agendamento.findFirst({
-      where: {
-        tenantId,
-        profissionalId: data.profissionalId,
-        status: { notIn: ["CANCELADO"] },
-        dataHoraFim: { gt: prisma.agendamento.fields.dataHora },
-        OR: [
-          {
-            AND: [
-              { dataHora: { lte: dataHora } },
-              { dataHoraFim: { gt: dataHora } },
-            ],
-          },
-          {
-            AND: [
-              { dataHora: { lt: dataHoraFim } },
-              { dataHoraFim: { gte: dataHoraFim } },
-            ],
-          },
-          {
-            AND: [
-              { dataHora: { gte: dataHora } },
-              { dataHoraFim: { lte: dataHoraFim } },
-            ],
-          },
-        ],
-      },
-    });
+    // MODIFICADO: Verificar conflitos APENAS se não for agendamento automático para avaliação
+    const isAgendamentoAvaliacao = data.observacoes?.includes(
+      "Agendamento automático para avaliação"
+    );
 
-    if (conflito) {
-      throw new AppError(
-        "Já existe um agendamento neste horário para este profissional",
-        400
-      );
+    if (!isAgendamentoAvaliacao) {
+      const conflito = await prisma.agendamento.findFirst({
+        where: {
+          tenantId,
+          profissionalId: data.profissionalId,
+          status: { notIn: ["CANCELADO"] },
+          dataHoraFim: { gt: prisma.agendamento.fields.dataHora },
+          OR: [
+            {
+              AND: [
+                { dataHora: { lte: dataHora } },
+                { dataHoraFim: { gt: dataHora } },
+              ],
+            },
+            {
+              AND: [
+                { dataHora: { lt: dataHoraFim } },
+                { dataHoraFim: { gte: dataHoraFim } },
+              ],
+            },
+            {
+              AND: [
+                { dataHora: { gte: dataHora } },
+                { dataHoraFim: { lte: dataHoraFim } },
+              ],
+            },
+          ],
+        },
+      });
+
+      if (conflito) {
+        throw new AppError(
+          "Já existe um agendamento neste horário para este profissional",
+          400
+        );
+      }
     }
 
     // Criar agendamento
@@ -140,7 +146,6 @@ export class AgendamentoService {
 
     return agendamento;
   }
-
   // ==========================================================================
   // CREATE BATCH AGENDAMENTOS (Recorrência)
   // ==========================================================================

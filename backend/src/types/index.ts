@@ -1,3 +1,5 @@
+// backend/src/types/index.ts
+
 import { Request } from "express";
 import { StatusAgendamento, TipoUsuario } from "../../generated/prisma";
 
@@ -309,16 +311,47 @@ export interface ConflictCheckData {
 }
 
 // ============================================================================
+// ATENDIMENTO ENUMS
+// ============================================================================
+
+export enum StatusAtendimento {
+  AVULSO = "AVULSO",
+  AVALIACAO = "AVALIACAO",
+  PLANO_TRATAMENTO = "PLANO_TRATAMENTO",
+}
+
+export enum StatusAprovacao {
+  PENDENTE = "PENDENTE",
+  APROVADO = "APROVADO",
+  REPROVADO = "REPROVADO",
+}
+
+export enum ProgressoProcedimento {
+  NAO_INICIADO = "NAO_INICIADO",
+  EM_ANDAMENTO = "EM_ANDAMENTO",
+  CONCLUIDO = "CONCLUIDO",
+}
+
+// ============================================================================
 // ATENDIMENTO TYPES
 // ============================================================================
 
+export interface CreateProcedimentoPlanoData {
+  procedimentoId: string;
+  ordem: number;
+  observacoes?: string;
+  valorPraticado?: number;
+}
+
 export interface CreateAtendimentoData {
   agendamentoId: string;
+  tipo?: StatusAtendimento;
   anotacoes?: string;
   procedimentosRealizados?: {
     procedimentoId: string;
     observacao?: string;
   }[];
+  procedimentosPlano?: CreateProcedimentoPlanoData[];
 }
 
 export interface UpdateAtendimentoData {
@@ -327,6 +360,22 @@ export interface UpdateAtendimentoData {
     procedimentoId: string;
     observacao?: string;
   }[];
+  procedimentosPlano?: CreateProcedimentoPlanoData[];
+}
+
+export interface AprovarAvaliacaoData {
+  aprovadoPor: string;
+}
+
+export interface ReprovarAvaliacaoData {
+  motivo: string;
+}
+
+export interface UpdateProgressoProcedimentoData {
+  progresso: ProgressoProcedimento;
+  agendamentoId?: string;
+  observacoes?: string;
+  concluidoEm?: Date | string;
 }
 
 // ============================================================================
@@ -383,7 +432,7 @@ export interface AutorizacaoData {
 }
 
 export interface AutorizacoesUsuario {
-  [key: string]: Permissao; // key é o nome do módulo
+  [key: string]: Permissao;
 }
 
 export interface CreateAutorizacoesData {
@@ -426,7 +475,7 @@ export interface CampoFormulario {
   tipo: TipoCampoFormulario;
   obrigatorio: boolean;
   ordem: number;
-  opcoes?: string[]; // Para SELECAO, MULTIPLA_ESCOLHA, RADIO
+  opcoes?: string[];
   placeholder?: string;
   valorPadrao?: any;
   validacao?: {

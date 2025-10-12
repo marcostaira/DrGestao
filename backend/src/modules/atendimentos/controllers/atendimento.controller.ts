@@ -1,6 +1,9 @@
+// backend/src/modules/atendimentos/controllers/atendimento.controller.ts
+
 import { Response } from "express";
 import { AtendimentoService } from "../services/atendimento.service";
 import { AuthenticatedRequest, ApiResponse } from "../../../types";
+import { LinkAprovacaoService } from "../services/link-aprovacao.service";
 
 // ============================================================================
 // ATENDIMENTO CONTROLLER
@@ -68,14 +71,24 @@ export class AtendimentoController {
   static async list(req: AuthenticatedRequest, res: Response): Promise<void> {
     try {
       const tenantId = req.user!.tenantId;
-      const { page, limit, pacienteId, profissionalId, dataInicio, dataFim } =
-        req.query;
+      const {
+        page,
+        limit,
+        pacienteId,
+        profissionalId,
+        tipo,
+        statusAprovacao,
+        dataInicio,
+        dataFim,
+      } = req.query;
 
       const result = await AtendimentoService.list(tenantId, {
         page: page ? Number(page) : undefined,
         limit: limit ? Number(limit) : undefined,
         pacienteId: pacienteId as string,
         profissionalId: profissionalId as string,
+        tipo: tipo as any,
+        statusAprovacao: statusAprovacao as any,
         dataInicio: dataInicio ? new Date(dataInicio as string) : undefined,
         dataFim: dataFim ? new Date(dataFim as string) : undefined,
       });
@@ -154,6 +167,33 @@ export class AtendimentoController {
   }
 
   // ==========================================================================
+  // CANCEL
+  // ==========================================================================
+
+  static async cancel(req: AuthenticatedRequest, res: Response): Promise<void> {
+    try {
+      const tenantId = req.user!.tenantId;
+      const { id } = req.params;
+
+      const atendimento = await AtendimentoService.cancel(tenantId, id);
+
+      const response: ApiResponse = {
+        success: true,
+        data: atendimento,
+        message: "Atendimento cancelado com sucesso",
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao cancelar atendimento",
+      };
+      res.status(error.statusCode || 500).json(response);
+    }
+  }
+
+  // ==========================================================================
   // GET BY PACIENTE
   // ==========================================================================
 
@@ -218,6 +258,10 @@ export class AtendimentoController {
     }
   }
 
+  // ==========================================================================
+  // GET BY AGENDAMENTO
+  // ==========================================================================
+
   static async getByAgendamento(
     req: AuthenticatedRequest,
     res: Response
@@ -255,28 +299,371 @@ export class AtendimentoController {
     }
   }
 
-  // Adicionar este método
+  // ==========================================================================
+  // APROVAR AVALIAÇÃO
+  // ==========================================================================
 
-  static async cancel(req: AuthenticatedRequest, res: Response): Promise<void> {
+  static async aprovarAvaliacao(
+    req: AuthenticatedRequest,
+    res: Response
+  ): Promise<void> {
     try {
       const tenantId = req.user!.tenantId;
       const { id } = req.params;
 
-      const atendimento = await AtendimentoService.cancel(tenantId, id);
+      const result = await AtendimentoService.aprovarAvaliacao(
+        tenantId,
+        id,
+        req.body
+      );
 
       const response: ApiResponse = {
         success: true,
-        data: atendimento,
-        message: "Atendimento cancelado com sucesso",
+        data: result,
+        message: "Avaliação aprovada e plano de tratamento criado com sucesso",
       };
 
       res.status(200).json(response);
     } catch (error: any) {
       const response: ApiResponse = {
         success: false,
-        error: error.message || "Erro ao cancelar atendimento",
+        error: error.message || "Erro ao aprovar avaliação",
       };
       res.status(error.statusCode || 500).json(response);
+    }
+  }
+
+  // ==========================================================================
+  // REPROVAR AVALIAÇÃO
+  // ==========================================================================
+
+  static async reprovarAvaliacao(
+    req: AuthenticatedRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      const tenantId = req.user!.tenantId;
+      const { id } = req.params;
+
+      const avaliacao = await AtendimentoService.reprovarAvaliacao(
+        tenantId,
+        id,
+        req.body
+      );
+
+      const response: ApiResponse = {
+        success: true,
+        data: avaliacao,
+        message: "Avaliação reprovada",
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao reprovar avaliação",
+      };
+      res.status(error.statusCode || 500).json(response);
+    }
+  }
+
+  // ==========================================================================
+  // GET PLANO TRATAMENTO BY PACIENTE
+  // ==========================================================================
+
+  static async getPlanoTratamentoByPaciente(
+    req: AuthenticatedRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      const tenantId = req.user!.tenantId;
+      const { pacienteId } = req.params;
+
+      const planos = await AtendimentoService.getPlanoTratamentoByPaciente(
+        tenantId,
+        pacienteId
+      );
+
+      const response: ApiResponse = {
+        success: true,
+        data: planos,
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao buscar planos de tratamento",
+      };
+      res.status(error.statusCode || 500).json(response);
+    }
+  }
+
+  // ==========================================================================
+  // UPDATE PROGRESSO PROCEDIMENTO
+  // ==========================================================================
+
+  static async updateProgressoProcedimento(
+    req: AuthenticatedRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      const tenantId = req.user!.tenantId;
+      const { procedimentoPlanoId } = req.params;
+
+      const procedimento = await AtendimentoService.updateProgressoProcedimento(
+        tenantId,
+        procedimentoPlanoId,
+        req.body
+      );
+
+      const response: ApiResponse = {
+        success: true,
+        data: procedimento,
+        message: "Progresso do procedimento atualizado com sucesso",
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao atualizar progresso do procedimento",
+      };
+      res.status(error.statusCode || 500).json(response);
+    }
+  }
+
+  // ==========================================================================
+  // GET PROCEDIMENTOS PLANO
+  // ==========================================================================
+
+  static async getProcedimentosPlano(
+    req: AuthenticatedRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      const tenantId = req.user!.tenantId;
+      const { id } = req.params;
+
+      const procedimentos = await AtendimentoService.getProcedimentosPlano(
+        tenantId,
+        id
+      );
+
+      const response: ApiResponse = {
+        success: true,
+        data: procedimentos,
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao buscar procedimentos do plano",
+      };
+      res.status(error.statusCode || 500).json(response);
+    }
+  }
+
+  // ==========================================================================
+  // AGENDAR PROCEDIMENTO DO PLANO
+  // ==========================================================================
+
+  static async agendarProcedimentoPlano(
+    req: AuthenticatedRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      const tenantId = req.user!.tenantId;
+      const { planoId, procedimentoId } = req.params;
+      const { agendamentoId } = req.body;
+
+      const procedimento = await AtendimentoService.agendarProcedimentoPlano(
+        tenantId,
+        planoId,
+        procedimentoId,
+        agendamentoId
+      );
+
+      const response: ApiResponse = {
+        success: true,
+        data: procedimento,
+        message: "Procedimento agendado com sucesso",
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao agendar procedimento",
+      };
+      res.status(error.statusCode || 500).json(response);
+    }
+  }
+
+  // ==========================================================================
+  // GET PROCEDIMENTOS PENDENTES DE AGENDAMENTO
+  // ==========================================================================
+
+  static async getProcedimentosPendentes(
+    req: AuthenticatedRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      const tenantId = req.user!.tenantId;
+      const { planoId } = req.params;
+
+      const procedimentos = await AtendimentoService.getProcedimentosPendentes(
+        tenantId,
+        planoId
+      );
+
+      const response: ApiResponse = {
+        success: true,
+        data: procedimentos,
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao buscar procedimentos pendentes",
+      };
+      res.status(error.statusCode || 500).json(response);
+    }
+  }
+
+  // ==========================================================================
+  // GERAR LINK DE APROVAÇÃO
+  // ==========================================================================
+
+  static async gerarLinkAprovacao(
+    req: AuthenticatedRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      const tenantId = req.user!.tenantId;
+      const { id } = req.params;
+      const { expiresInDays = 7 } = req.body;
+
+      const linkData = await AtendimentoService.gerarLinkAprovacao(
+        tenantId,
+        id,
+        expiresInDays
+      );
+
+      const response: ApiResponse = {
+        success: true,
+        data: linkData,
+        message: "Link de aprovação gerado com sucesso",
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao gerar link de aprovação",
+      };
+      res.status(error.statusCode || 500).json(response);
+    }
+  }
+
+  // ==========================================================================
+  // ENVIAR LINK VIA WHATSAPP
+  // ==========================================================================
+
+  static async enviarLinkAprovacaoWhatsApp(
+    req: AuthenticatedRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      const tenantId = req.user!.tenantId;
+      const { id } = req.params;
+
+      await AtendimentoService.enviarLinkAprovacaoWhatsApp(tenantId, id);
+
+      const response: ApiResponse = {
+        success: true,
+        message: "Link enviado via WhatsApp com sucesso",
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao enviar link via WhatsApp",
+      };
+      res.status(error.statusCode || 500).json(response);
+    }
+  }
+
+  // ==========================================================================
+  // VALIDAR TOKEN DE APROVAÇÃO (PÚBLICO)
+  // ==========================================================================
+
+  static async validarTokenAprovacao(
+    req: any, // ⬅️ MUDADO para any
+    res: Response
+  ): Promise<void> {
+    try {
+      const { token } = req.params;
+
+      const data = await LinkAprovacaoService.validarToken(token);
+
+      const response: ApiResponse = {
+        success: true,
+        data,
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Token inválido ou expirado",
+      };
+      res.status(error.statusCode || 400).json(response);
+    }
+  }
+
+  // ==========================================================================
+  // APROVAR VIA LINK (PÚBLICO)
+  // ==========================================================================
+
+  static async aprovarViaLink(
+    req: any, // ⬅️ MUDADO para any
+    res: Response
+  ): Promise<void> {
+    try {
+      const { token } = req.params;
+      const { aprovadoPor } = req.body;
+
+      if (!aprovadoPor) {
+        const response: ApiResponse = {
+          success: false,
+          error: "Campo 'aprovadoPor' é obrigatório",
+        };
+        res.status(400).json(response);
+        return;
+      }
+
+      const result = await LinkAprovacaoService.aprovarAvaliacao(
+        token,
+        aprovadoPor
+      );
+
+      const response: ApiResponse = {
+        success: true,
+        data: result,
+        message: "Avaliação aprovada com sucesso!",
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao aprovar avaliação",
+      };
+      res.status(error.statusCode || 400).json(response);
     }
   }
 }

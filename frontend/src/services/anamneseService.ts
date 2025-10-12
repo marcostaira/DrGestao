@@ -1,4 +1,4 @@
-// frontend/src/services/anamnese.service.ts
+// frontend/src/services/anamneseService.ts
 
 import api from "@/lib/api";
 import { Anamnese, RespostaAnamnese } from "@/types/anamnese.types";

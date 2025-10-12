@@ -3,7 +3,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { anamneseService, LinkAnamnese } from "@/services/anamnese.service";
+import { anamneseService, LinkAnamnese } from "@/services/anamneseService";
 import { formularioService } from "@/services/formulario.service";
 import toast from "react-hot-toast";
 

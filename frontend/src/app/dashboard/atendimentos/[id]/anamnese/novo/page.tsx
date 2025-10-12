@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { formularioService } from "../../../../../../services/formulario.service";
-import { anamneseService } from "../../../../../../services/anamnese.service";
+import { anamneseService } from "../../../../../../services/anamneseService";
 import FormularioRenderer from "../../../../../../components/anamnese/FormularioRenderer";
 import {
   Formulario,
