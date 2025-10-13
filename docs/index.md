@@ -3,7 +3,7 @@ layout: default
 title: Home
 ---
 
-# 🏥 Sistema de Agendamentos - Manual do Usuário
+# 🏥 DrGestão - Manual do Usuário
 
 Bem-vindo à documentação oficial do Sistema SaaS de Agendamentos!
 
