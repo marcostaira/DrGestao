@@ -1,5 +1,6 @@
 // backend/src/modules/atendimentos/services/atendimento.service.ts
 
+import { WhatsAppService } from "@/modules/whatsapp/whatsapp.service";
 import { prisma } from "../../../config/database";
 import {
   CreateAtendimentoData,
@@ -1225,6 +1226,11 @@ export class AtendimentoService {
     tenantId: string,
     avaliacaoId: string
   ) {
+    console.log("🚀 INICIANDO enviarLinkAprovacaoWhatsApp", {
+      tenantId,
+      avaliacaoId,
+    });
+
     const avaliacao = await prisma.atendimento.findFirst({
       where: {
         id: avaliacaoId,
@@ -1243,6 +1249,10 @@ export class AtendimentoService {
 
     if (!avaliacao) {
       throw new AppError("Avaliação não encontrada", 404);
+    }
+
+    if (!avaliacao.paciente) {
+      throw new AppError("Paciente não encontrado", 404);
     }
 
     // Buscar ou criar link
@@ -1273,7 +1283,7 @@ export class AtendimentoService {
     }, 0);
 
     // Mensagem para WhatsApp
-    const mensagem = `Olá ${avaliacao.paciente!.nome}!
+    const mensagem = `Olá ${avaliacao.paciente.nome}!
 
 Sua avaliação está pronta para aprovação.
 
@@ -1281,25 +1291,144 @@ Sua avaliação está pronta para aprovação.
 ${avaliacao.procedimentosPlano
   .map(
     (proc, index) =>
-      `${index + 1}. ${proc.procedimento?.nome} - R$ ${Number(
-        proc.valorPraticado || proc.procedimento?.valor || 0
+      `${index + 1}. ${proc.procedimento!.nome} - R$ ${Number(
+        proc.valorPraticado || proc.procedimento!.valor || 0
       ).toFixed(2)}`
   )
   .join("\n")}
 
 💰 *Valor Total: R$ ${valorTotal.toFixed(2)}*
 
-Para aprovar ou recusar, acesse:
+Para aprovar ou reprovar, acesse:
 ${link}
 
-Este link expira em ${new Date(linkData!.expiresAt).toLocaleDateString(
+Este link expira em: ${new Date(linkData!.expiresAt).toLocaleDateString(
       "pt-BR"
     )}`;
 
-    // TODO: Integrar com WhatsApp API
-    console.log("Mensagem WhatsApp:", mensagem);
+    console.log("📱 Enviando mensagem via WhatsApp:");
+    console.log("Telefone:", avaliacao.paciente.telefone);
+    console.log("Mensagem:", mensagem);
 
-    return { success: true, mensagem };
+    // ✅ USAR O MÉTODO CORRETO - Salvar na fila do WhatsApp
+    const whatsappService = new WhatsAppService();
+
+    try {
+      // Buscar config do WhatsApp
+      const config = await prisma.whatsAppConfig.findFirst({
+        where: {
+          tenantId,
+          status: "CONNECTED",
+        },
+      });
+
+      if (!config) {
+        throw new AppError(
+          "WhatsApp não está conectado. Configure em WhatsApp > Conectar",
+          400
+        );
+      }
+
+      // Formatar número (remover caracteres especiais e adicionar 55 se necessário)
+      let numeroFormatado = avaliacao.paciente.telefone.replace(/\D/g, "");
+      if (!numeroFormatado.startsWith("55")) {
+        numeroFormatado = `55${numeroFormatado}`;
+      }
+
+      // Salvar mensagem no banco (será enviada pela fila)
+      const mensagemDb = await prisma.whatsAppMensagem.create({
+        data: {
+          tenantId,
+          configId: config.id,
+          pacienteId: avaliacao.paciente.id,
+          telefone: numeroFormatado,
+          mensagem,
+          tipo: "APROVACAO_PLANO", // Novo tipo
+          status: "PENDENTE",
+        },
+      });
+
+      // Adicionar à fila de envio
+      whatsappService["queue"].addToQueue(mensagemDb.id);
+
+      console.log("✅ Mensagem adicionada à fila de envio!");
+
+      // Processar fila imediatamente
+      setTimeout(() => {
+        whatsappService.processarFila().catch(console.error);
+      }, 1000);
+    } catch (error: any) {
+      console.error("❌ Erro ao enviar via WhatsApp:", error.message);
+      throw new AppError(
+        error.message || "Erro ao enviar mensagem via WhatsApp",
+        500
+      );
+    }
+
+    // Atualizar como enviado
+    await prisma.linkAprovacaoAvaliacao.update({
+      where: { id: linkData!.id },
+      data: {
+        enviadoWhatsApp: true,
+        enviadoEm: new Date(),
+      },
+    });
+
+    return {
+      success: true,
+      message: "Link enviado via WhatsApp",
+    };
+  }
+  // ==========================================================================
+  // VERIFICAR STATUS DO LINK
+  // ==========================================================================
+
+  static async verificarStatusLink(tenantId: string, avaliacaoId: string) {
+    // Validar que é uma avaliação
+    const avaliacao = await prisma.atendimento.findFirst({
+      where: {
+        id: avaliacaoId,
+        tenantId,
+        tipo: StatusAtendimento.AVALIACAO,
+      },
+    });
+
+    if (!avaliacao) {
+      throw new AppError("Avaliação não encontrada", 404);
+    }
+
+    // Buscar link válido mais recente
+    const link = await prisma.linkAprovacaoAvaliacao.findFirst({
+      where: {
+        avaliacaoId,
+        tenantId,
+        expiresAt: {
+          gte: new Date(),
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    // Se não tem link válido
+    if (!link) {
+      return {
+        linkValido: false,
+      };
+    }
+
+    // Retornar dados do link
+    const baseUrl = process.env.FRONTEND_URL || "http://localhost:3000";
+    const linkCompleto = `${baseUrl}/aprovacao/${link.token}`;
+
+    return {
+      linkValido: true,
+      link: linkCompleto,
+      expiresAt: link.expiresAt,
+      enviadoWhatsApp: link.enviadoWhatsApp || false,
+      enviadoEm: link.enviadoEm || null,
+    };
   }
 
   // ==========================================================================

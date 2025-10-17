@@ -700,18 +700,17 @@ function AvaliacaoCard({
   onGerarLink: (avaliacao: any) => void;
   onEditar: (avaliacao: any) => void;
 }) {
-  const [linkData, setLinkData] = useState<any>(null); // ✅ NOVO
-  const [loadingLink, setLoadingLink] = useState(false); // ✅ NOVO
-  const [showLinkInfo, setShowLinkInfo] = useState(false); // ✅ NOVO
+  const [linkData, setLinkData] = useState<any>(null);
+  const [loadingLink, setLoadingLink] = useState(false);
+  const [showLinkInfo, setShowLinkInfo] = useState(false);
+  const [reenviandoWhatsApp, setReenviandoWhatsApp] = useState(false); // ✅ NOVO
 
-  // ✅ NOVO: Buscar link existente quando é pendente
   useEffect(() => {
     if (avaliacao.statusAprovacao === "PENDENTE") {
       checkExistingLink();
     }
   }, [avaliacao.id, avaliacao.statusAprovacao]);
 
-  // ✅ NOVO: Verificar se já existe link válido
   const checkExistingLink = async () => {
     try {
       setLoadingLink(true);
@@ -723,14 +722,12 @@ function AvaliacaoCard({
         setLinkData(response.data.data);
       }
     } catch (error) {
-      // Sem link ou link expirado
       setLinkData(null);
     } finally {
       setLoadingLink(false);
     }
   };
 
-  // ✅ NOVO: Copiar link
   const handleCopyLink = () => {
     if (linkData?.link) {
       navigator.clipboard.writeText(linkData.link);
@@ -738,7 +735,24 @@ function AvaliacaoCard({
     }
   };
 
-  // ✅ NOVO: Formatar data de expiração
+  // ✅ NOVO: Handler para reenviar WhatsApp
+  const handleReenviarWhatsApp = async () => {
+    try {
+      setReenviandoWhatsApp(true);
+      await api.post(`/atendimentos/${avaliacao.id}/link-aprovacao/whatsapp`);
+      toast.success("Link reenviado via WhatsApp com sucesso!");
+
+      // Atualizar data de envio
+      await checkExistingLink();
+    } catch (error: any) {
+      toast.error(
+        error.response?.data?.error || "Erro ao reenviar link via WhatsApp"
+      );
+    } finally {
+      setReenviandoWhatsApp(false);
+    }
+  };
+
   const formatExpiration = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -800,7 +814,6 @@ function AvaliacaoCard({
         <div className="flex items-center gap-2">
           {avaliacao.statusAprovacao === "PENDENTE" && (
             <>
-              {/* ✅ ATUALIZADO: Botão de Link com estado */}
               {loadingLink ? (
                 <div className="p-2">
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
@@ -841,7 +854,7 @@ function AvaliacaoCard({
         </div>
       </div>
 
-      {/* ✅ NOVO: Exibir informações do link quando existir */}
+      {/* ✅ ATUALIZADO: Exibir informações do link quando existir */}
       {showLinkInfo && linkData && (
         <div className="mb-3 bg-green-50 border border-green-200 rounded-lg p-3">
           <div className="flex items-start justify-between mb-2">
@@ -876,15 +889,34 @@ function AvaliacaoCard({
             </button>
           </div>
 
-          {linkData.enviadoWhatsApp && (
-            <p className="text-xs text-green-700 mt-2">
-              ✓ Enviado via WhatsApp em{" "}
-              {new Date(linkData.enviadoEm).toLocaleDateString("pt-BR")} às{" "}
-              {new Date(linkData.enviadoEm).toLocaleTimeString("pt-BR", {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </p>
+          {/* ✅ NOVO: Info e botão de reenvio WhatsApp */}
+          {linkData.enviadoWhatsApp && linkData.enviadoEm && (
+            <div className="mt-3 pt-3 border-t border-green-200">
+              <div className="flex items-center justify-between">
+                <p className="text-xs text-green-700">
+                  ✓ Enviado via WhatsApp em{" "}
+                  {new Date(linkData.enviadoEm).toLocaleDateString("pt-BR")} às{" "}
+                  {new Date(linkData.enviadoEm).toLocaleTimeString("pt-BR", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </p>
+                <button
+                  onClick={handleReenviarWhatsApp}
+                  disabled={reenviandoWhatsApp}
+                  className="px-3 py-1 bg-blue-600 text-white text-xs rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+                >
+                  {reenviandoWhatsApp ? (
+                    <>
+                      <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
+                      Reenviando...
+                    </>
+                  ) : (
+                    "Reenviar"
+                  )}
+                </button>
+              </div>
+            </div>
           )}
         </div>
       )}

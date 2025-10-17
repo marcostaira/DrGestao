@@ -276,17 +276,28 @@ export function LinkAprovacaoModal({
               <Button variant="secondary" onClick={handleClose}>
                 Fechar
               </Button>
-              <Button
-                variant="primary"
-                onClick={handleEnviarWhatsApp}
-                isLoading={sendingWhatsApp}
-                disabled={sendingWhatsApp || enviadoWhatsApp}
-              >
-                <PaperAirplaneIcon className="h-5 w-5 mr-2" />
-                {enviadoWhatsApp
-                  ? "Enviado via WhatsApp"
-                  : "Enviar via WhatsApp"}
-              </Button>
+              {/* ✅ NOVO: Botão Reenviar se já foi enviado */}
+              {enviadoWhatsApp ? (
+                <Button
+                  variant="primary"
+                  onClick={handleEnviarWhatsApp}
+                  isLoading={sendingWhatsApp}
+                  disabled={sendingWhatsApp}
+                >
+                  <PaperAirplaneIcon className="h-5 w-5 mr-2" />
+                  Reenviar via WhatsApp
+                </Button>
+              ) : (
+                <Button
+                  variant="primary"
+                  onClick={handleEnviarWhatsApp}
+                  isLoading={sendingWhatsApp}
+                  disabled={sendingWhatsApp}
+                >
+                  <PaperAirplaneIcon className="h-5 w-5 mr-2" />
+                  Enviar via WhatsApp
+                </Button>
+              )}
             </div>
           </>
         )}

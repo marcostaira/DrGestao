@@ -604,12 +604,15 @@ model LinkAprovacaoAvaliacao {
   utilizado    Boolean     @default(false)
   utilizadoEm  DateTime?
   createdAt    DateTime    @default(now())
-  
+  enviadoWhatsApp Boolean   @default(false)
+  enviadoEm       DateTime?
+
   tenant       Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   avaliacao    Atendimento @relation(fields: [avaliacaoId], references: [id], onDelete: Cascade)
 
   @@index([tenantId])
   @@index([avaliacaoId])
   @@index([token])
+  @@index([expiresAt])
   @@map("links_aprovacao_avaliacao")
 }

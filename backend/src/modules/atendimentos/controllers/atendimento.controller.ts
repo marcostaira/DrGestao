@@ -598,6 +598,38 @@ export class AtendimentoController {
   }
 
   // ==========================================================================
+  // VERIFICAR STATUS DO LINK DE APROVAÇÃO
+  // ==========================================================================
+
+  static async verificarStatusLink(
+    req: AuthenticatedRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      const tenantId = req.user!.tenantId;
+      const { id: avaliacaoId } = req.params;
+
+      const linkData = await AtendimentoService.verificarStatusLink(
+        tenantId,
+        avaliacaoId
+      );
+
+      const response: ApiResponse = {
+        success: true,
+        data: linkData,
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao verificar status do link",
+      };
+      res.status(error.statusCode || 500).json(response);
+    }
+  }
+
+  // ==========================================================================
   // VALIDAR TOKEN DE APROVAÇÃO (PÚBLICO)
   // ==========================================================================
 

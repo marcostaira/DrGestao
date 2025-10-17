@@ -30,6 +30,22 @@ const router = Router();
 // ==========================================================================
 
 /**
+ * @route   GET /atendimentos/:id/link-aprovacao/status
+ * @desc    Verificar status do link de aprovação
+ * @access  Private (Requer permissão: ATENDIMENTOS.visualizar)
+ */
+router.get(
+  "/:id/link-aprovacao/status",
+  authenticate,
+  validateTenant,
+  autorizar(Modulo.ATENDIMENTOS, "visualizar"),
+  validate({
+    params: Joi.object({ id: idSchema }),
+  }),
+  AtendimentoController.verificarStatusLink
+);
+
+/**
  * @route   GET /atendimentos/link-aprovacao/:token
  * @desc    Validar token de aprovação (público)
  * @access  Public
