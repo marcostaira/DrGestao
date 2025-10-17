@@ -579,3 +579,51 @@ export const validateParams = (schema: Joi.ObjectSchema) => {
     next();
   };
 };
+
+// ============================================================================
+// VALIDATE PARAMS MIDDLEWARE
+// ============================================================================
+export const agendarProcedimentosAvaliacaoSchema = Joi.object({
+  avaliacaoId: Joi.string().required().messages({
+    "string.empty": "ID da avaliação é obrigatório",
+    "any.required": "ID da avaliação é obrigatório",
+  }),
+  procedimentos: Joi.array()
+    .items(
+      Joi.object({
+        atendimentoProcedimentoId: Joi.string().required().messages({
+          "string.empty": "ID do procedimento é obrigatório",
+        }),
+        profissionalId: Joi.string().required().messages({
+          "string.empty": "ID do profissional é obrigatório",
+        }),
+        dataHora: Joi.date().iso().required().messages({
+          "date.base": "Data e hora devem ser válidas",
+          "date.iso": "Data deve estar no formato ISO",
+          "any.required": "Data e hora são obrigatórias",
+        }),
+      })
+    )
+    .min(1)
+    .required()
+    .messages({
+      "array.min": "Deve haver pelo menos um procedimento para agendar",
+      "any.required": "Lista de procedimentos é obrigatória",
+    }),
+});
+
+export const agendarProcedimentoIndividualSchema = Joi.object({
+  atendimentoProcedimentoId: Joi.string().required().messages({
+    "string.empty": "ID do procedimento é obrigatório",
+    "any.required": "ID do procedimento é obrigatório",
+  }),
+  profissionalId: Joi.string().required().messages({
+    "string.empty": "ID do profissional é obrigatório",
+    "any.required": "ID do profissional é obrigatório",
+  }),
+  dataHora: Joi.date().iso().required().messages({
+    "date.base": "Data e hora devem ser válidas",
+    "date.iso": "Data deve estar no formato ISO",
+    "any.required": "Data e hora são obrigatórias",
+  }),
+});

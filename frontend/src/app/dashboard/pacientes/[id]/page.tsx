@@ -19,13 +19,14 @@ import {
   ClipboardDocumentListIcon,
   FolderIcon,
   ArrowLeftIcon,
-  LinkIcon,
   ChevronDownIcon,
 } from "@heroicons/react/24/outline";
 import { AvaliacaoApprovalModal } from "@/components/atendimentos/AvaliacaoApprovalModal";
-import { AvaliacaoFormModal } from "@/components/atendimentos/AvaliacaoFormModal"; // ✅ NOVO
+import { AvaliacaoFormModal } from "@/components/atendimentos/AvaliacaoFormModal";
+import { AvaliacaoCard } from "@/components/atendimentos/AvaliacaoCard";
 import { LinkAprovacaoModal } from "@/components/atendimentos/LinkAprovacaoModal";
 import { CriarAvaliacaoModal } from "@/components/atendimentos/CriarAvaliacaoModal";
+import { AgendarProcedimentosModal } from "@/components/atendimentos/AgendarProcedimentosModal";
 import api from "@/lib/api";
 
 type TabType = "dados" | "anamneses" | "avaliacoes" | "prontuario";
@@ -433,11 +434,13 @@ function AvaliacoesPlanos({ paciente, avaliacoes, planos, onReload }: any) {
   const [showLinkModal, setShowLinkModal] = useState(false);
   const [avaliacaoParaLink, setAvaliacaoParaLink] = useState<any>(null);
   const [showCriarModal, setShowCriarModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false); // ✅ NOVO
-  const [avaliacaoParaEditar, setAvaliacaoParaEditar] = useState<any>(null); // ✅ NOVO
-  const [procedimentos, setProcedimentos] = useState<any[]>([]); // ✅ NOVO
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [avaliacaoParaEditar, setAvaliacaoParaEditar] = useState<any>(null);
+  const [procedimentos, setProcedimentos] = useState<any[]>([]);
+  const [showAgendarModal, setShowAgendarModal] = useState(false);
+  const [avaliacaoParaAgendar, setAvaliacaoParaAgendar] = useState<any>(null);
+  const [profissionais, setProfissionais] = useState<any[]>([]);
 
-  // ✅ NOVO: Carregar procedimentos
   useEffect(() => {
     const loadProcedimentos = async () => {
       try {
@@ -447,17 +450,23 @@ function AvaliacoesPlanos({ paciente, avaliacoes, planos, onReload }: any) {
         console.error("Erro ao carregar procedimentos:", error);
       }
     };
+
+    const loadProfissionais = async () => {
+      try {
+        const response = await api.get("/profissionais");
+        setProfissionais(response.data.data || []);
+      } catch (error) {
+        console.error("Erro ao carregar profissionais:", error);
+      }
+    };
+
     loadProcedimentos();
+    loadProfissionais();
   }, []);
 
   const handleGerarLink = (avaliacao: any) => {
     setAvaliacaoParaLink(avaliacao);
     setShowLinkModal(true);
-  };
-
-  const handleLinkGerado = () => {
-    setShowLinkModal(false);
-    setAvaliacaoParaLink(null);
   };
 
   const handleAprovar = (avaliacao: any) => {
@@ -477,7 +486,6 @@ function AvaliacoesPlanos({ paciente, avaliacoes, planos, onReload }: any) {
     }
   };
 
-  // ✅ NOVO: Handler para editar avaliação
   const handleEditarAvaliacao = () => {
     if (!selectedAvaliacao) return;
 
@@ -489,7 +497,6 @@ function AvaliacoesPlanos({ paciente, avaliacoes, planos, onReload }: any) {
     }, 100);
   };
 
-  // ✅ NOVO: Handler para salvar edição
   const handleSalvarEdicao = async (data: {
     anotacoes: string;
     procedimentosPlano: any[];
@@ -510,6 +517,11 @@ function AvaliacoesPlanos({ paciente, avaliacoes, planos, onReload }: any) {
       toast.error(error.response?.data?.error || "Erro ao atualizar avaliação");
       throw error;
     }
+  };
+
+  const handleAgendarProcedimentos = (avaliacao: any) => {
+    setAvaliacaoParaAgendar(avaliacao);
+    setShowAgendarModal(true);
   };
 
   const handleCriarAvaliacao = () => {
@@ -584,10 +596,10 @@ function AvaliacoesPlanos({ paciente, avaliacoes, planos, onReload }: any) {
                 onAprovar={handleAprovar}
                 onGerarLink={handleGerarLink}
                 onEditar={(avaliacao) => {
-                  // ✅ NOVO
                   setAvaliacaoParaEditar(avaliacao);
                   setShowEditModal(true);
                 }}
+                onAgendarProcedimentos={handleAgendarProcedimentos}
               />
             ))}
           </div>
@@ -627,12 +639,12 @@ function AvaliacoesPlanos({ paciente, avaliacoes, planos, onReload }: any) {
               toast.error("Erro ao reprovar avaliação");
             }
           }}
-          onEditar={handleEditarAvaliacao} // ✅ NOVO
+          onEditar={handleEditarAvaliacao}
           avaliacao={selectedAvaliacao}
         />
       )}
 
-      {/* ✅ NOVO: Modal de Edição de Avaliação */}
+      {/* Modal de Edição */}
       {showEditModal && avaliacaoParaEditar && (
         <AvaliacaoFormModal
           isOpen={showEditModal}
@@ -647,14 +659,14 @@ function AvaliacoesPlanos({ paciente, avaliacoes, planos, onReload }: any) {
         />
       )}
 
-      {/* Modal de Link de Aprovação */}
+      {/* Modal de Link */}
       {showLinkModal && avaliacaoParaLink && (
         <LinkAprovacaoModal
           isOpen={showLinkModal}
           onClose={() => {
             setShowLinkModal(false);
             setAvaliacaoParaLink(null);
-            onReload(); // ✅ MOVER O RELOAD PARA CÁ
+            onReload();
           }}
           avaliacaoId={avaliacaoParaLink.id}
           pacienteNome={
@@ -685,311 +697,24 @@ function AvaliacoesPlanos({ paciente, avaliacoes, planos, onReload }: any) {
           }}
         />
       )}
-    </div>
-  );
-}
 
-function AvaliacaoCard({
-  avaliacao,
-  onAprovar,
-  onGerarLink,
-  onEditar,
-}: {
-  avaliacao: any;
-  onAprovar: (avaliacao: any) => void;
-  onGerarLink: (avaliacao: any) => void;
-  onEditar: (avaliacao: any) => void;
-}) {
-  const [linkData, setLinkData] = useState<any>(null);
-  const [loadingLink, setLoadingLink] = useState(false);
-  const [showLinkInfo, setShowLinkInfo] = useState(false);
-  const [reenviandoWhatsApp, setReenviandoWhatsApp] = useState(false); // ✅ NOVO
-
-  useEffect(() => {
-    if (avaliacao.statusAprovacao === "PENDENTE") {
-      checkExistingLink();
-    }
-  }, [avaliacao.id, avaliacao.statusAprovacao]);
-
-  const checkExistingLink = async () => {
-    try {
-      setLoadingLink(true);
-      const response = await api.get(
-        `/atendimentos/${avaliacao.id}/link-aprovacao/status`
-      );
-
-      if (response.data.data && response.data.data.linkValido) {
-        setLinkData(response.data.data);
-      }
-    } catch (error) {
-      setLinkData(null);
-    } finally {
-      setLoadingLink(false);
-    }
-  };
-
-  const handleCopyLink = () => {
-    if (linkData?.link) {
-      navigator.clipboard.writeText(linkData.link);
-      toast.success("Link copiado para a área de transferência!");
-    }
-  };
-
-  // ✅ NOVO: Handler para reenviar WhatsApp
-  const handleReenviarWhatsApp = async () => {
-    try {
-      setReenviandoWhatsApp(true);
-      await api.post(`/atendimentos/${avaliacao.id}/link-aprovacao/whatsapp`);
-      toast.success("Link reenviado via WhatsApp com sucesso!");
-
-      // Atualizar data de envio
-      await checkExistingLink();
-    } catch (error: any) {
-      toast.error(
-        error.response?.data?.error || "Erro ao reenviar link via WhatsApp"
-      );
-    } finally {
-      setReenviandoWhatsApp(false);
-    }
-  };
-
-  const formatExpiration = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffMs = date.getTime() - now.getTime();
-    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-    const diffDays = Math.floor(diffHours / 24);
-
-    if (diffDays > 0) {
-      return `Expira em ${diffDays} dia${diffDays > 1 ? "s" : ""}`;
-    } else if (diffHours > 0) {
-      return `Expira em ${diffHours} hora${diffHours > 1 ? "s" : ""}`;
-    } else {
-      return "Expira em breve";
-    }
-  };
-
-  const getStatusBadge = (status: string) => {
-    const badges = {
-      PENDENTE: { color: "bg-yellow-100 text-yellow-800", label: "Pendente" },
-      APROVADO: { color: "bg-green-100 text-green-800", label: "Aprovado" },
-      REPROVADO: { color: "bg-red-100 text-red-800", label: "Reprovado" },
-    };
-    return badges[status as keyof typeof badges] || badges.PENDENTE;
-  };
-
-  const statusBadge = getStatusBadge(avaliacao.statusAprovacao || "PENDENTE");
-
-  const valorTotal = avaliacao.procedimentosPlano?.reduce(
-    (total: number, proc: any) => {
-      return (
-        total + Number(proc.valorPraticado || proc.procedimento?.valor || 0)
-      );
-    },
-    0
-  );
-
-  return (
-    <div className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-      <div className="flex justify-between items-start mb-3">
-        <div>
-          <div className="flex items-center gap-3">
-            <h4 className="font-medium text-gray-900">Avaliação</h4>
-            <span
-              className={`px-2 py-1 rounded-full text-xs font-medium ${statusBadge.color}`}
-            >
-              {statusBadge.label}
-            </span>
-          </div>
-          <p className="text-sm text-gray-500 mt-1">
-            Criada em{" "}
-            {new Date(avaliacao.createdAt).toLocaleDateString("pt-BR")} às{" "}
-            {new Date(avaliacao.createdAt).toLocaleTimeString("pt-BR", {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2">
-          {avaliacao.statusAprovacao === "PENDENTE" && (
-            <>
-              {loadingLink ? (
-                <div className="p-2">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
-                </div>
-              ) : linkData ? (
-                <button
-                  onClick={() => setShowLinkInfo(!showLinkInfo)}
-                  className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
-                  title="Ver link de aprovação"
-                >
-                  <LinkIcon className="h-5 w-5" />
-                </button>
-              ) : (
-                <button
-                  onClick={() => onGerarLink(avaliacao)}
-                  className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                  title="Gerar link de aprovação"
-                >
-                  <LinkIcon className="h-5 w-5" />
-                </button>
-              )}
-
-              <button
-                onClick={() => onEditar(avaliacao)}
-                className="px-3 py-1 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700"
-              >
-                Editar
-              </button>
-
-              <button
-                onClick={() => onAprovar(avaliacao)}
-                className="px-3 py-1 bg-green-600 text-white text-sm rounded-md hover:bg-green-700"
-              >
-                Aprovar Agora
-              </button>
-            </>
-          )}
-        </div>
-      </div>
-
-      {/* ✅ ATUALIZADO: Exibir informações do link quando existir */}
-      {showLinkInfo && linkData && (
-        <div className="mb-3 bg-green-50 border border-green-200 rounded-lg p-3">
-          <div className="flex items-start justify-between mb-2">
-            <div>
-              <p className="text-sm font-medium text-green-900">
-                Link de Aprovação Ativo
-              </p>
-              <p className="text-xs text-green-700 mt-1">
-                {formatExpiration(linkData.expiresAt)}
-              </p>
-            </div>
-            <button
-              onClick={() => setShowLinkInfo(false)}
-              className="text-green-600 hover:text-green-800"
-            >
-              ✕
-            </button>
-          </div>
-
-          <div className="flex items-center gap-2 mt-2">
-            <input
-              type="text"
-              value={linkData.link}
-              readOnly
-              className="flex-1 px-3 py-2 text-sm bg-white border border-green-300 rounded-md"
-            />
-            <button
-              onClick={handleCopyLink}
-              className="px-3 py-2 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 whitespace-nowrap"
-            >
-              Copiar
-            </button>
-          </div>
-
-          {/* ✅ NOVO: Info e botão de reenvio WhatsApp */}
-          {linkData.enviadoWhatsApp && linkData.enviadoEm && (
-            <div className="mt-3 pt-3 border-t border-green-200">
-              <div className="flex items-center justify-between">
-                <p className="text-xs text-green-700">
-                  ✓ Enviado via WhatsApp em{" "}
-                  {new Date(linkData.enviadoEm).toLocaleDateString("pt-BR")} às{" "}
-                  {new Date(linkData.enviadoEm).toLocaleTimeString("pt-BR", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </p>
-                <button
-                  onClick={handleReenviarWhatsApp}
-                  disabled={reenviandoWhatsApp}
-                  className="px-3 py-1 bg-blue-600 text-white text-xs rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
-                >
-                  {reenviandoWhatsApp ? (
-                    <>
-                      <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
-                      Reenviando...
-                    </>
-                  ) : (
-                    "Reenviar"
-                  )}
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-
-      {avaliacao.anotacoes && (
-        <div className="mb-3 bg-gray-50 rounded p-2">
-          <p className="text-sm text-gray-700">{avaliacao.anotacoes}</p>
-        </div>
-      )}
-
-      {avaliacao.procedimentosPlano &&
-        avaliacao.procedimentosPlano.length > 0 && (
-          <div className="space-y-2">
-            <h5 className="text-sm font-medium text-gray-700">
-              Procedimentos Propostos:
-            </h5>
-            {avaliacao.procedimentosPlano.map((proc: any, index: number) => (
-              <div
-                key={proc.id}
-                className="flex items-center justify-between text-sm bg-gray-50 p-2 rounded"
-              >
-                <div className="flex items-center gap-2">
-                  <span className="font-medium text-gray-500">
-                    {index + 1}.
-                  </span>
-                  <span className="text-gray-900">
-                    {proc.procedimento?.nome || "Procedimento"}
-                  </span>
-                  {proc.observacoes && (
-                    <span className="text-gray-500 text-xs">
-                      ({proc.observacoes})
-                    </span>
-                  )}
-                </div>
-                <span className="font-medium text-gray-900">
-                  R${" "}
-                  {Number(
-                    proc.valorPraticado || proc.procedimento?.valor || 0
-                  ).toFixed(2)}
-                </span>
-              </div>
-            ))}
-
-            <div className="flex justify-between items-center pt-2 border-t border-gray-200">
-              <span className="font-semibold text-gray-900">Total:</span>
-              <span className="font-bold text-green-600 text-lg">
-                R$ {valorTotal?.toFixed(2) || "0.00"}
-              </span>
-            </div>
-          </div>
-        )}
-
-      {avaliacao.statusAprovacao === "APROVADO" && (
-        <div className="mt-3 bg-green-50 border border-green-200 rounded p-2 text-sm">
-          <p className="text-green-800">
-            ✓ Aprovado por <strong>{avaliacao.aprovadoPor}</strong> em{" "}
-            {new Date(avaliacao.aprovadoEm).toLocaleDateString("pt-BR")}
-          </p>
-        </div>
-      )}
-
-      {avaliacao.statusAprovacao === "REPROVADO" && (
-        <div className="mt-3 bg-red-50 border border-red-200 rounded p-2 text-sm">
-          <p className="text-red-800">
-            ✗ Reprovado em{" "}
-            {new Date(avaliacao.reprovadoEm).toLocaleDateString("pt-BR")}
-          </p>
-          {avaliacao.reprovadoMotivo && (
-            <p className="text-red-700 mt-1">
-              Motivo: {avaliacao.reprovadoMotivo}
-            </p>
-          )}
-        </div>
+      {/* Modal Agendar Procedimentos */}
+      {showAgendarModal && avaliacaoParaAgendar && (
+        <AgendarProcedimentosModal
+          isOpen={true}
+          onClose={() => {
+            setShowAgendarModal(false);
+            setAvaliacaoParaAgendar(null);
+          }}
+          onSuccess={() => {
+            setShowAgendarModal(false);
+            setAvaliacaoParaAgendar(null);
+            onReload();
+          }}
+          avaliacaoId={avaliacaoParaAgendar.id}
+          pacienteNome={paciente.nome}
+          profissionais={profissionais}
+        />
       )}
     </div>
   );

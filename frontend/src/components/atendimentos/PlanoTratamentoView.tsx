@@ -2,19 +2,28 @@
 
 "use client";
 
-import React, { useState } from "react";
-import { Atendimento, ProcedimentoPlano, ProgressoProcedimento } from "@/types/atendimento.types";
+import React, { useState, useEffect } from "react";
+import {
+  Atendimento,
+  ProcedimentoPlano,
+  ProgressoProcedimento,
+} from "@/types/atendimento.types";
 import {
   calcularProgressoPlano,
   calcularValorTotalPlano,
 } from "@/services/atendimentoService";
 import { ProcedimentoProgressCard } from "./ProcedimentoProgressCard";
+import { AgendarProcedimentosModal } from "./AgendarProcedimentosModal";
 import {
   ChartBarIcon,
   ClockIcon,
   CurrencyDollarIcon,
   CheckCircleIcon,
+  PlusCircleIcon,
 } from "@heroicons/react/24/outline";
+import Button from "@/components/ui/Button";
+import api from "@/lib/api";
+import { toast } from "react-hot-toast";
 
 interface PlanoTratamentoViewProps {
   plano: Atendimento;
@@ -32,7 +41,30 @@ export function PlanoTratamentoView({
   onUpdateProgresso,
   readOnly = false,
 }: PlanoTratamentoViewProps) {
-  const [expandedProcedimento, setExpandedProcedimento] = useState<string | null>(null); // CORRIGIDO: tipo explícito
+  const [expandedProcedimento, setExpandedProcedimento] = useState<
+    string | null
+  >(null);
+  const [showAgendarModal, setShowAgendarModal] = useState(false);
+  const [profissionais, setProfissionais] = useState<any[]>([]);
+  const [loadingProfissionais, setLoadingProfissionais] = useState(false);
+
+  // Carregar profissionais
+  useEffect(() => {
+    const loadProfissionais = async () => {
+      try {
+        setLoadingProfissionais(true);
+        const response = await api.get("/profissionais");
+        setProfissionais(response.data.data || []);
+      } catch (error: any) {
+        console.error("Erro ao carregar profissionais:", error);
+        toast.error("Erro ao carregar profissionais");
+      } finally {
+        setLoadingProfissionais(false);
+      }
+    };
+
+    loadProfissionais();
+  }, []);
 
   const procedimentos = plano.procedimentosPlano || [];
   const progresso = calcularProgressoPlano(procedimentos);
@@ -41,6 +73,22 @@ export function PlanoTratamentoView({
   const procedimentosConcluidos = procedimentos.filter(
     (p) => p.progresso === ProgressoProcedimento.CONCLUIDO
   ).length;
+
+  // Verificar se é avaliação aprovada (para mostrar botão de agendar)
+  const isAvaliacaoAprovada =
+    plano.avaliacao && plano.avaliacao.statusAprovacao === "APROVADO";
+
+  // Verificar se é plano de tratamento
+  const isPlanoTratamento = plano.tipo === "PLANO_TRATAMENTO";
+
+  const handleAgendarSuccess = () => {
+    setShowAgendarModal(false);
+    toast.success("Procedimentos agendados com sucesso!");
+    // Recarregar página para atualizar dados
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  };
 
   return (
     <div className="space-y-6">
@@ -53,11 +101,11 @@ export function PlanoTratamentoView({
           <div className="text-sm text-blue-800">
             <p>
               <span className="font-medium">Data da Avaliação:</span>{" "}
-              {/* CORRIGIDO: verificação de existência */}
-              {plano.avaliacao.createdAt 
-                ? new Date(plano.avaliacao.createdAt).toLocaleDateString("pt-BR")
-                : new Date(plano.createdAt).toLocaleDateString("pt-BR")
-              }
+              {plano.avaliacao.createdAt
+                ? new Date(plano.avaliacao.createdAt).toLocaleDateString(
+                    "pt-BR"
+                  )
+                : new Date(plano.createdAt).toLocaleDateString("pt-BR")}
             </p>
             <p>
               <span className="font-medium">Aprovado por:</span>{" "}
@@ -164,6 +212,31 @@ export function PlanoTratamentoView({
         </div>
       )}
 
+      {/* Botão Agendar Procedimentos */}
+      {isAvaliacaoAprovada && isPlanoTratamento && !readOnly && (
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-semibold text-amber-900">
+                Procedimentos Pendentes de Agendamento
+              </h3>
+              <p className="text-sm text-amber-800 mt-1">
+                Selecione os profissionais e datas para agendar os procedimentos
+                da avaliação
+              </p>
+            </div>
+            <Button
+              variant="primary"
+              onClick={() => setShowAgendarModal(true)}
+              disabled={loadingProfissionais}
+            >
+              <PlusCircleIcon className="w-5 h-5 mr-2 inline" />
+              Agendar Procedimentos
+            </Button>
+          </div>
+        </div>
+      )}
+
       {/* Lista de Procedimentos */}
       <div>
         <h3 className="font-semibold text-gray-900 mb-4">
@@ -186,6 +259,16 @@ export function PlanoTratamentoView({
           ))}
         </div>
       </div>
+
+      {/* Modal Agendar Procedimentos */}
+      <AgendarProcedimentosModal
+        isOpen={showAgendarModal}
+        onClose={() => setShowAgendarModal(false)}
+        onSuccess={handleAgendarSuccess}
+        avaliacaoId={plano.avaliacao?.id || plano.id}
+        pacienteNome={plano.paciente?.nome || "Paciente"}
+        profissionais={profissionais}
+      />
     </div>
   );
 }

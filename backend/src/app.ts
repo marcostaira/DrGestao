@@ -23,6 +23,7 @@ import formularioRoutes from "./modules/anamnese/routes/formulario.routes";
 import anamneseRoutes from "./modules/anamnese/routes/anamnese.routes";
 import whatsappRouter from "./modules/whatsapp/whatsapp.router";
 import linkAnamneseRoutes from "./modules/anamnese/routes/link-anamnese.routes";
+import agendamentoProcedimentosRoutes from "./modules/atendimentos/routes/agendamento-procedimentos.routes";
 
 // Load environment variables
 dotenv.config();
@@ -132,6 +133,10 @@ class App {
     this.app.use("/api/anamneses", anamneseRoutes);
     this.app.use("/api/whatsapp", whatsappRouter);
     this.app.use("/api/anamnese", linkAnamneseRoutes);
+    this.app.use(
+      "/api/agendamento-procedimentos",
+      agendamentoProcedimentosRoutes
+    );
 
     // 404 handler
     this.app.use("*", (req: Request, res: Response) => {
