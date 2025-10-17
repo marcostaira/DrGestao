@@ -133,8 +133,9 @@ class App {
     this.app.use("/api/anamneses", anamneseRoutes);
     this.app.use("/api/whatsapp", whatsappRouter);
     this.app.use("/api/anamnese", linkAnamneseRoutes);
+
     this.app.use(
-      "/api/agendamento-procedimentos",
+      "/api/atendimentos/agendamento-procedimentos",
       agendamentoProcedimentosRoutes
     );
 
