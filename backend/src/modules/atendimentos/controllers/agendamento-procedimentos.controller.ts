@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 // backend/src/modules/atendimentos/controllers/agendamento-procedimentos.controller.ts
 
 import { Response } from "express";

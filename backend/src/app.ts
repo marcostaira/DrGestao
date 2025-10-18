@@ -1,4 +1,6 @@
-import express, { Application, Request, Response, NextFunction } from "express";
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
@@ -160,7 +162,6 @@ class App {
         error: Error | AppError,
         req: Request,
         res: Response,
-        next: NextFunction
       ) => {
         console.error("Global error handler:", error);
 

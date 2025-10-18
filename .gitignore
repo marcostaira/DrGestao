@@ -39,7 +39,7 @@ lerna-debug.log*
 
 # Prisma
 **/generated/prisma
-/prisma/migrations/*_
+**/prisma/migrations/*_
 *.db
 *.db-journal
 

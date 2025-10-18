@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // backend/src/modules/atendimentos/services/agendamento-procedimentos.service.ts
 
 import { StatusAprovacao, StatusAtendimento } from "generated/prisma";
 import { prisma } from "../../../config/database";
 
-import { AgendamentoService } from "../../agenda/services/agendamento.service";
 import { AppError } from "@/middleware/errorHandler";
 
 interface AgendarProcedimentoData {

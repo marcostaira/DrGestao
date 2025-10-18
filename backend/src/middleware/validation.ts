@@ -2,7 +2,7 @@
 
 import Joi from "joi";
 import { Request, Response, NextFunction } from "express";
-import { ApiResponse, AppError } from "../types";
+import { ApiResponse } from "../types";
 
 // ============================================================================
 // VALIDATION MIDDLEWARE

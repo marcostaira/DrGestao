@@ -1,3 +1,6 @@
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // backend/src/modules/atendimentos/services/atendimento.service.ts
 
 import { WhatsAppService } from "@/modules/whatsapp/whatsapp.service";
@@ -468,39 +471,6 @@ export class AtendimentoService {
     if (data.procedimentosRealizados !== undefined) {
       updateData.procedimentosRealizados = data.procedimentosRealizados;
     }
-
-    // Atualizar atendimento
-    const atendimento = await prisma.atendimento.update({
-      where: { id: atendimentoId },
-      data: updateData,
-      include: {
-        agendamento: {
-          include: {
-            paciente: {
-              select: {
-                id: true,
-                nome: true,
-              },
-            },
-            profissional: {
-              select: {
-                id: true,
-                nome: true,
-              },
-            },
-          },
-        },
-        procedimentosPlano: {
-          include: {
-            procedimento: true,
-            agendamento: true,
-          },
-          orderBy: {
-            ordem: "asc",
-          },
-        },
-      },
-    });
 
     // Atualizar procedimentos do plano se fornecido
     if (data.procedimentosPlano && data.procedimentosPlano.length > 0) {
