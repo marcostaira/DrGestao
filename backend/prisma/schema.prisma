@@ -267,6 +267,7 @@ model Procedimento {
   tenantId       String        @map("tenant_id")
   nome           String
   valor          Decimal?      @db.Decimal(10, 2)
+  temStatus      Boolean       @default(false) @map("tem_status") 
   duracaoMinutos Int           @map("duracao_minutos")
   createdAt      DateTime      @default(now()) @map("created_at")
   updatedAt      DateTime      @updatedAt @map("updated_at")
@@ -391,6 +392,7 @@ model AtendimentoProcedimento {
   procedimentoId  String                 @map("procedimento_id")
   ordem           Int                    @default(1)
   progresso       ProgressoProcedimento  @default(NAO_INICIADO)
+  percentualProgresso Int?               @map("percentual_progresso")
   agendamentoId   String?                @map("agendamento_id")
   observacoes     String?                @db.Text
   valorPraticado  Decimal?               @db.Decimal(10, 2) @map("valor_praticado")

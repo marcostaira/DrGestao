@@ -18,12 +18,11 @@ import { DayNavigation } from "@/components/atendimentos/DayNavigation";
 import { AgendamentosDoDia } from "@/components/atendimentos/AgendamentosDoDia";
 import { AgendamentosCancelados } from "@/components/atendimentos/AgendamentosCancelados";
 import { StatusConfirmModal } from "@/components/atendimentos/StatusConfirmModal";
-import { AtendimentoFormModal } from "@/components/atendimentos/AtendimentoFormModal";
 import { AvaliacaoFormModal } from "@/components/atendimentos/AvaliacaoFormModal";
 import { AvaliacaoApprovalModal } from "@/components/atendimentos/AvaliacaoApprovalModal";
 import { toast } from "react-hot-toast";
 
-type ModalMode = "atendimento" | "avaliacao" | "avaliacao-edit" | "approval";
+type ModalMode = "avaliacao" | "avaliacao-edit" | "approval";
 
 export default function AtendimentosPage() {
   const searchParams = useSearchParams();
@@ -58,7 +57,6 @@ export default function AtendimentosPage() {
   const [modalMode, setModalMode] = useState<ModalMode | null>(null);
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [selectedAgendamento, setSelectedAgendamento] = useState<any>(null);
-  const [viewingAtendimento, setViewingAtendimento] = useState<any>(null);
   const [avaliacaoParaAprovar, setAvaliacaoParaAprovar] = useState<any>(null);
   const [changingStatusAgendamento, setChangingStatusAgendamento] =
     useState<any>(null);
@@ -78,16 +76,14 @@ export default function AtendimentosPage() {
       );
 
       if (existingAtendimento) {
-        const agendamento = agendamentos.find((ag) => ag.id === agendamentoId);
-        setViewingAtendimento(existingAtendimento);
-        setSelectedAgendamento(agendamento);
-        setModalMode("atendimento");
+        router.push(`/dashboard/atendimentos/${existingAtendimento.id}`);
       } else {
         const agendamento = agendamentos.find((ag) => ag.id === agendamentoId);
         if (agendamento) {
-          setSelectedAgendamento(agendamento);
-          setViewingAtendimento(null);
-          setModalMode("atendimento");
+          // ✅ REDIRECIONAR PARA CRIAR NOVO
+          router.push(
+            `/dashboard/atendimentos/novo?agendamentoId=${agendamentoId}`
+          );
         }
       }
     } catch (err: any) {
@@ -100,43 +96,20 @@ export default function AtendimentosPage() {
   };
 
   // ========== ATENDIMENTO AVULSO ==========
+  // ✅ REDIRECIONAR PARA PÁGINA DE CRIAR
   const handleRegistrarAtendimento = (agendamento: any) => {
-    setSelectedAgendamento(agendamento);
-    setViewingAtendimento(null);
-    setModalMode("atendimento");
+    // ✅ Ir para /dashboard/atendimentos/novo-{agendamentoId}
+    router.push(`/dashboard/atendimentos/novo-${agendamento.id}`);
   };
 
+  // ✅ REDIRECIONAR PARA PÁGINA DE VISUALIZAR
   const handleVerAtendimento = (atendimento: any) => {
-    setViewingAtendimento(atendimento);
-    const agendamento = agendamentos.find(
-      (ag) => ag.id === atendimento.agendamentoId
-    );
-    setSelectedAgendamento(agendamento);
-
-    // ✅ LÓGICA CORRIGIDA: Verificar tipo e status
-    if (atendimento.tipo === StatusAtendimento.AVALIACAO) {
-      if (atendimento.statusAprovacao === "PENDENTE") {
-        // PENDENTE → Modal de aprovação (com botão editar)
-        setAvaliacaoParaAprovar(atendimento);
-        setModalMode("approval");
-      } else {
-        // APROVADO/REPROVADO → Apenas visualização
-        setModalMode("atendimento");
-      }
-    } else {
-      // AVULSO ou PLANO_TRATAMENTO → Visualização normal
-      setModalMode("atendimento");
-    }
+    console.log("📋 Redirecionando para detalhes:", atendimento.id);
+    router.push(`/dashboard/atendimentos/${atendimento.id}`);
   };
-
-  const handleAtendimentoSubmit = async (data: any) => {
-    return await handleCreateAtendimento(data);
-  };
-
   // ========== AVALIAÇÃO ==========
   const handleRegistrarAvaliacao = (agendamento: any) => {
     setSelectedAgendamento(agendamento);
-    setViewingAtendimento(null);
     setModalMode("avaliacao");
   };
 
@@ -163,14 +136,9 @@ export default function AtendimentosPage() {
     }
   };
 
-  // ✅ NOVO: Editar avaliação existente
   const handleEditarAvaliacao = () => {
     if (!avaliacaoParaAprovar) return;
-
-    // Fechar modal de aprovação
     setModalMode(null);
-
-    // Abrir modal de edição
     setTimeout(() => {
       setModalMode("avaliacao-edit");
     }, 100);
@@ -203,16 +171,10 @@ export default function AtendimentosPage() {
 
     try {
       setIsSubmitting(true);
-      await aprovarAvaliacao(avaliacaoParaAprovar.id, {
-        aprovadoPor,
-      });
-
+      await aprovarAvaliacao(avaliacaoParaAprovar.id, { aprovadoPor });
       closeAllModals();
       toast.success("Avaliação aprovada! Plano de tratamento criado.");
-
-      setTimeout(() => {
-        reloadData();
-      }, 500);
+      setTimeout(() => reloadData(), 500);
     } catch (error: any) {
       console.error("Erro ao aprovar:", error);
       toast.error(error.response?.data?.error || "Erro ao aprovar avaliação");
@@ -227,13 +189,9 @@ export default function AtendimentosPage() {
     try {
       setIsSubmitting(true);
       await reprovarAvaliacao(avaliacaoParaAprovar.id, { motivo });
-
       closeAllModals();
       toast.success("Avaliação reprovada.");
-
-      setTimeout(() => {
-        reloadData();
-      }, 500);
+      setTimeout(() => reloadData(), 500);
     } catch (error: any) {
       console.error("Erro ao reprovar:", error);
       toast.error(error.response?.data?.error || "Erro ao reprovar avaliação");
@@ -273,7 +231,6 @@ export default function AtendimentosPage() {
   const closeAllModals = () => {
     setModalMode(null);
     setSelectedAgendamento(null);
-    setViewingAtendimento(null);
     setAvaliacaoParaAprovar(null);
   };
 
@@ -338,19 +295,6 @@ export default function AtendimentosPage() {
       {/* Agendamentos Cancelados */}
       <AgendamentosCancelados agendamentos={agendamentosCancelados} />
 
-      {/* Modal de Atendimento Avulso */}
-      {modalMode === "atendimento" && (
-        <AtendimentoFormModal
-          isOpen={true}
-          onClose={closeAllModals}
-          onSubmit={!viewingAtendimento ? handleAtendimentoSubmit : undefined}
-          onCancel={handleCancelAtendimento}
-          agendamento={selectedAgendamento}
-          procedimentos={procedimentos}
-          atendimento={viewingAtendimento}
-        />
-      )}
-
       {/* Modal de Avaliação (Criar) */}
       {modalMode === "avaliacao" && (
         <AvaliacaoFormModal
@@ -362,7 +306,7 @@ export default function AtendimentosPage() {
         />
       )}
 
-      {/* ✅ NOVO: Modal de Edição de Avaliação */}
+      {/* Modal de Edição de Avaliação */}
       {modalMode === "avaliacao-edit" && avaliacaoParaAprovar && (
         <AvaliacaoFormModal
           isOpen={true}
@@ -381,7 +325,7 @@ export default function AtendimentosPage() {
           onClose={closeAllModals}
           onAprovar={handleAprovarAvaliacao}
           onReprovar={handleReprovarAvaliacao}
-          onEditar={handleEditarAvaliacao} // ✅ NOVO
+          onEditar={handleEditarAvaliacao}
           avaliacao={avaliacaoParaAprovar}
         />
       )}

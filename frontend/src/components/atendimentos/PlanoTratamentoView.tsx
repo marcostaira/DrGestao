@@ -3,11 +3,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import {
-  Atendimento,
-  ProcedimentoPlano,
-  ProgressoProcedimento,
-} from "@/types/atendimento.types";
+import { Atendimento, ProgressoProcedimento } from "@/types/atendimento.types";
 import {
   calcularProgressoPlano,
   calcularValorTotalPlano,

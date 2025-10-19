@@ -1,7 +1,12 @@
 // backend/src/types/index.ts
 
 import { Request } from "express";
-import { StatusAgendamento, TipoUsuario } from "../../generated/prisma";
+import {
+  Atendimento,
+  AtendimentoProcedimento,
+  StatusAgendamento,
+  TipoUsuario,
+} from "../../generated/prisma";
 
 // Importar tipos do Prisma Client GERADO (não do @prisma/client)
 export { TipoUsuario, StatusAgendamento } from "../../generated/prisma";
@@ -542,4 +547,148 @@ export interface AnamneseComFormulario {
     id: string;
     nome: string;
   };
+}
+
+// ============================================================================
+// DETALHAMENTO DE ATENDIMENTO
+// ============================================================================
+
+export interface RegistroAtendimentoData {
+  anotacoes?: string;
+  procedimentosRealizados?: {
+    procedimentoId: string;
+    observacao?: string;
+  }[];
+  procedimentosPlano?: {
+    id?: string; // Se já existe
+    procedimentoId: string;
+    ordem: number;
+    progresso?: ProgressoProcedimento;
+    observacoes?: string;
+    valorPraticado?: number;
+  }[];
+}
+
+// ============================================================================
+// ATENDIMENTO DETALHADO TYPES
+// ============================================================================
+
+export interface AtendimentoDetalhado {
+  id: string;
+  tenantId: string;
+  agendamentoId: string;
+  pacienteId: string;
+  profissionalId: string;
+  procedimentoId?: string;
+  tipo: StatusAtendimento;
+  statusAprovacao?: StatusAprovacao;
+  anotacoes?: string;
+  procedimentosRealizados: any[];
+  aprovadoEm?: Date;
+  aprovadoPor?: string;
+  reprovadoEm?: Date;
+  reprovadoMotivo?: string;
+  avaliacaoId?: string;
+  planoTratamentoId?: string;
+  cancelado: boolean;
+  canceladoEm?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+
+  // Relações expandidas
+  agendamento: {
+    id: string;
+    dataHora: Date;
+    dataHoraFim: Date;
+    status: string;
+    observacoes?: string;
+    paciente: {
+      id: string;
+      nome: string;
+      telefone: string;
+      email?: string;
+      dataNascimento?: Date;
+    } | null;
+    profissional: {
+      id: string;
+      nome: string;
+      especialidade?: string;
+      cor: string;
+    };
+    procedimento?: {
+      id: string;
+      nome: string;
+      duracaoMinutos: number;
+      valor?: number;
+    };
+  };
+
+  // Procedimentos do plano (se for AVALIACAO ou PLANO_TRATAMENTO)
+  procedimentosPlano?: ProcedimentoPlanoDetalhado[];
+
+  // Prontuário do paciente (histórico de atendimentos)
+  prontuario?: ProntuarioAtendimento[];
+
+  // Se for plano de tratamento, trazer a avaliação origem
+  avaliacaoOrigem?: {
+    id: string;
+    createdAt: Date;
+    anotacoes?: string;
+    statusAprovacao?: StatusAprovacao;
+  };
+}
+
+export interface ProcedimentoPlanoDetalhado {
+  id: string;
+  procedimentoId: string;
+  ordem: number;
+  progresso: ProgressoProcedimento;
+  percentualProgresso?: number; // NOVO: 0-100
+  agendamentoId?: string;
+  observacoes?: string;
+  valorPraticado?: number;
+  concluidoEm?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+
+  procedimento: {
+    id: string;
+    nome: string;
+    duracaoMinutos: number;
+    valor?: number;
+    temStatus: boolean; // NOVO
+  };
+
+  agendamento?: {
+    id: string;
+    dataHora: Date;
+    status: string;
+  };
+}
+
+export interface ProntuarioAtendimento {
+  id: string;
+  tipo: StatusAtendimento;
+  createdAt: Date;
+  anotacoes?: string;
+  procedimentosRealizados: any[];
+  statusAprovacao?: StatusAprovacao;
+
+  procedimentosPlano?: {
+    id: string;
+    ordem: number;
+    progresso: ProgressoProcedimento;
+    percentualProgresso?: number;
+    procedimento: {
+      nome: string;
+    };
+  }[];
+}
+
+export interface UpdateProgressoProcedimentoDataV2 {
+  progresso: ProgressoProcedimento;
+  percentualProgresso?: number; // NOVO: 0-100
+  agendamentoId?: string;
+  observacoes?: string;
+  concluidoEm?: Date | string;
 }

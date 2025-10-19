@@ -1,3 +1,5 @@
+// backend/src/modules/procedimentos/controllers/procedimento.controller.ts
+
 import { Response } from "express";
 import { ProcedimentoService } from "../services/procedimento.service";
 import { AuthenticatedRequest, ApiResponse } from "../../../types";

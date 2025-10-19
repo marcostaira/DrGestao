@@ -6,7 +6,10 @@ import { authenticate } from "../../../middleware/auth";
 import { autorizar } from "../../../middleware/autorizar";
 import { Modulo } from "../../../types";
 import { validateTenant } from "../../../middleware/tenant";
-import { validate } from "../../../middleware/validation";
+import {
+  getAtendimentoDetalhadoSchema,
+  validate,
+} from "../../../middleware/validation";
 import {
   createAtendimentoSchema,
   updateAtendimentoSchema,
@@ -28,22 +31,6 @@ const router = Router();
 // ==========================================================================
 // ROTAS PÚBLICAS (SEM AUTENTICAÇÃO) - LINK DE APROVAÇÃO
 // ==========================================================================
-
-/**
- * @route   GET /atendimentos/:id/link-aprovacao/status
- * @desc    Verificar status do link de aprovação
- * @access  Private (Requer permissão: ATENDIMENTOS.visualizar)
- */
-router.get(
-  "/:id/link-aprovacao/status",
-  authenticate,
-  validateTenant,
-  autorizar(Modulo.ATENDIMENTOS, "visualizar"),
-  validate({
-    params: Joi.object({ id: idSchema }),
-  }),
-  AtendimentoController.verificarStatusLink
-);
 
 /**
  * @route   GET /atendimentos/link-aprovacao/:token
@@ -97,8 +84,9 @@ router.post(
       }),
     }),
   }),
-  LinkAprovacaoController.reprovar // ✅ Usar o novo método
+  LinkAprovacaoController.reprovar
 );
+
 // ==========================================================================
 // MIDDLEWARE DE AUTENTICAÇÃO E TENANT
 // ==========================================================================
@@ -184,15 +172,49 @@ router.get(
 );
 
 /**
- * @route   GET /atendimentos/:id
- * @desc    Obter atendimento por ID
+ * @route   GET /atendimentos/plano/:planoId/procedimentos-pendentes
+ * @desc    Listar procedimentos pendentes de agendamento
  * @access  Private (Requer permissão: ATENDIMENTOS.visualizar)
  */
 router.get(
-  "/:id",
+  "/plano/:planoId/procedimentos-pendentes",
   autorizar(Modulo.ATENDIMENTOS, "visualizar"),
-  validate({ params: Joi.object({ id: idSchema }) }),
-  AtendimentoController.getById
+  validate({
+    params: Joi.object({
+      planoId: idSchema,
+    }),
+  }),
+  AtendimentoController.getProcedimentosPendentes
+);
+
+// ⭐ MOVER ESTA ROTA ANTES DA ROTA /:id
+/**
+ * @route   GET /atendimentos/:id/detalhado
+ * @desc    Buscar atendimento detalhado com prontuário e procedimentos
+ * @access  Private (Requer permissão: ATENDIMENTOS.visualizar)
+ */
+router.get(
+  "/:id/detalhado",
+  autorizar(Modulo.ATENDIMENTOS, "visualizar"),
+  validate({
+    params: Joi.object({ id: idSchema }),
+    query: getAtendimentoDetalhadoSchema,
+  }),
+  AtendimentoController.getDetalhado
+);
+
+/**
+ * @route   GET /atendimentos/:id/link-aprovacao/status
+ * @desc    Verificar status do link de aprovação
+ * @access  Private (Requer permissão: ATENDIMENTOS.visualizar)
+ */
+router.get(
+  "/:id/link-aprovacao/status",
+  autorizar(Modulo.ATENDIMENTOS, "visualizar"),
+  validate({
+    params: Joi.object({ id: idSchema }),
+  }),
+  AtendimentoController.verificarStatusLink
 );
 
 /**
@@ -207,24 +229,16 @@ router.get(
   AtendimentoController.getProcedimentosPlano
 );
 
-// ==========================================================================
-// NOVAS ROTAS - PLANO DE TRATAMENTO
-// ==========================================================================
-
 /**
- * @route   GET /atendimentos/plano/:planoId/procedimentos-pendentes
- * @desc    Listar procedimentos pendentes de agendamento
+ * @route   GET /atendimentos/:id
+ * @desc    Obter atendimento por ID
  * @access  Private (Requer permissão: ATENDIMENTOS.visualizar)
  */
 router.get(
-  "/plano/:planoId/procedimentos-pendentes",
+  "/:id",
   autorizar(Modulo.ATENDIMENTOS, "visualizar"),
-  validate({
-    params: Joi.object({
-      planoId: idSchema,
-    }),
-  }),
-  AtendimentoController.getProcedimentosPendentes
+  validate({ params: Joi.object({ id: idSchema }) }),
+  AtendimentoController.getById
 );
 
 // ==========================================================================
@@ -270,10 +284,6 @@ router.patch(
   AtendimentoController.toggleStatus
 );
 
-// ==========================================================================
-// NOVAS ROTAS - LINK DE APROVAÇÃO (AUTENTICADO)
-// ==========================================================================
-
 /**
  * @route   POST /atendimentos/:id/link-aprovacao
  * @desc    Gerar link de aprovação
@@ -305,10 +315,6 @@ router.post(
   AtendimentoController.enviarLinkAprovacaoWhatsApp
 );
 
-// ==========================================================================
-// NOVAS ROTAS - AGENDAR PROCEDIMENTO DO PLANO
-// ==========================================================================
-
 /**
  * @route   POST /atendimentos/plano/:planoId/procedimento/:procedimentoId/agendar
  * @desc    Agendar procedimento do plano
@@ -328,10 +334,6 @@ router.post(
   }),
   AtendimentoController.agendarProcedimentoPlano
 );
-
-// ==========================================================================
-// ROTAS DE AVALIAÇÃO - REQUER PERMISSÃO DE CRIAR/ALTERAR
-// ==========================================================================
 
 /**
  * @route   POST /atendimentos/:id/aprovar
@@ -363,10 +365,6 @@ router.post(
   AtendimentoController.reprovarAvaliacao
 );
 
-// ==========================================================================
-// ROTAS DE PROGRESSO DE PROCEDIMENTO - REQUER PERMISSÃO DE CRIAR/ALTERAR
-// ==========================================================================
-
 /**
  * @route   PATCH /atendimentos/procedimento/:procedimentoPlanoId/progresso
  * @desc    Atualizar progresso de procedimento do plano
@@ -381,10 +379,6 @@ router.patch(
   }),
   AtendimentoController.updateProgressoProcedimento
 );
-
-// ==========================================================================
-// ROTA DE CANCELAMENTO - REQUER PERMISSÃO DE CANCELAR
-// ==========================================================================
 
 /**
  * @route   PATCH /atendimentos/:id/cancel

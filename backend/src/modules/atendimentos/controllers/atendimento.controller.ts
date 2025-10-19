@@ -698,4 +698,53 @@ export class AtendimentoController {
       res.status(error.statusCode || 400).json(response);
     }
   }
+
+  // ==========================================================================
+  // GET ATENDIMENTO DETALHADO (COM PRONTUÁRIO E PROCEDIMENTOS)
+  // ==========================================================================
+
+  static async getDetalhado(
+    req: AuthenticatedRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      console.log("🎯 CONTROLLER getDetalhado CHAMADO");
+      console.log("Params:", req.params);
+      console.log("Query:", req.query);
+      console.log("User TenantId:", req.user?.tenantId);
+
+      const tenantId = req.user!.tenantId;
+      const { id } = req.params;
+      const { incluirProntuario, incluirProcedimentosPlano } = req.query;
+
+      console.log("🔍 Chamando service com:", {
+        tenantId,
+        id,
+        incluirProntuario: incluirProntuario !== "false",
+        incluirProcedimentosPlano: incluirProcedimentosPlano !== "false",
+      });
+
+      const atendimento = await AtendimentoService.getDetalhado(tenantId, id, {
+        incluirProntuario: incluirProntuario !== "false",
+        incluirProcedimentosPlano: incluirProcedimentosPlano !== "false",
+      });
+
+      console.log("✅ Service retornou dados com sucesso");
+
+      const response: ApiResponse = {
+        success: true,
+        data: atendimento,
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      console.error("❌ ERRO no controller getDetalhado:", error);
+
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao buscar atendimento detalhado",
+      };
+      res.status(error.statusCode || 500).json(response);
+    }
+  }
 }

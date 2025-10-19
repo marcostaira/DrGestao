@@ -627,3 +627,52 @@ export const agendarProcedimentoIndividualSchema = Joi.object({
     "any.required": "Data e hora são obrigatórias",
   }),
 });
+
+// ============================================================================
+// ATENDIMENTO DETALHADO VALIDATION SCHEMAS
+// ============================================================================
+
+export const getAtendimentoDetalhadoSchema = Joi.object({
+  incluirProntuario: Joi.boolean().optional().default(true),
+  incluirProcedimentosPlano: Joi.boolean().optional().default(true),
+});
+
+// Schema atualizado para criar procedimento com temStatus
+export const createProcedimentoSchemaV2 = Joi.object({
+  nome: Joi.string().trim().min(2).max(100).required(),
+  valor: Joi.number().min(0).optional(),
+  duracaoMinutos: Joi.number().integer().min(1).required(),
+  temStatus: Joi.boolean().optional().default(false), // NOVO CAMPO
+});
+
+// Schema atualizado para update de procedimento com temStatus
+export const updateProcedimentoSchemaV2 = Joi.object({
+  nome: Joi.string().trim().min(2).max(100),
+  valor: Joi.number().min(0),
+  duracaoMinutos: Joi.number().integer().min(1),
+  temStatus: Joi.boolean(), // NOVO CAMPO
+});
+
+// Schema para atualizar progresso com percentual (0-100)
+export const updateProgressoProcedimentoSchemaV2 = Joi.object({
+  progresso: Joi.string()
+    .valid("NAO_INICIADO", "EM_ANDAMENTO", "CONCLUIDO")
+    .required()
+    .messages({
+      "any.only": "Progresso deve ser NAO_INICIADO, EM_ANDAMENTO ou CONCLUIDO",
+      "any.required": "Progresso é obrigatório",
+    }),
+  percentualProgresso: Joi.number()
+    .integer()
+    .min(0)
+    .max(100)
+    .optional()
+    .messages({
+      "number.base": "Percentual deve ser um número",
+      "number.min": "Percentual deve ser no mínimo 0",
+      "number.max": "Percentual deve ser no máximo 100",
+    }),
+  agendamentoId: Joi.string().optional().allow(null),
+  observacoes: Joi.string().max(500).optional().allow("", null),
+  concluidoEm: Joi.date().iso().optional().allow(null),
+});

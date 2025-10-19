@@ -1,7 +1,15 @@
+// frontend/src/components/ui/Button.tsx
+
 import { ButtonHTMLAttributes, ReactNode } from "react";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "danger" | "ghost";
+  variant?:
+    | "primary"
+    | "secondary"
+    | "danger"
+    | "ghost"
+    | "success"
+    | "warning";
   size?: "sm" | "md" | "lg";
   children: ReactNode;
   isLoading?: boolean;
@@ -26,6 +34,9 @@ export default function Button({
       "bg-secondary-200 text-secondary-900 hover:bg-secondary-300 focus:ring-secondary-500",
     danger: "bg-red-600 text-white hover:bg-red-700 focus:ring-red-500",
     ghost: "text-secondary-700 hover:bg-secondary-100 focus:ring-secondary-500",
+    success: "bg-green-600 text-white hover:bg-green-700 focus:ring-green-500",
+    warning:
+      "bg-yellow-500 text-white hover:bg-yellow-600 focus:ring-yellow-500",
   };
 
   const sizes = {
@@ -59,7 +70,7 @@ export default function Button({
             <path
               className="opacity-75"
               fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l-3-2.647z"
             ></path>
           </svg>
           Carregando...

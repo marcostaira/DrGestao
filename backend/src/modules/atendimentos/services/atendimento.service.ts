@@ -922,13 +922,13 @@ export class AtendimentoService {
   }
 
   // ==========================================================================
-  // UPDATE PROGRESSO PROCEDIMENTO
+  // UPDATE PROGRESSO PROCEDIMENTO (COM PERCENTUAL)
   // ==========================================================================
 
   static async updateProgressoProcedimento(
     tenantId: string,
     procedimentoPlanoId: string,
-    data: UpdateProgressoProcedimentoData
+    data: UpdateProgressoProcedimentoData & { percentualProgresso?: number }
   ) {
     // Buscar procedimento do plano
     const procedimentoPlano = await prisma.atendimentoProcedimento.findFirst({
@@ -948,6 +948,17 @@ export class AtendimentoService {
       throw new AppError("Procedimento não encontrado", 404);
     }
 
+    // Validar se o procedimento tem status habilitado
+    if (
+      !procedimentoPlano.procedimento.temStatus &&
+      data.percentualProgresso !== undefined
+    ) {
+      throw new AppError(
+        "Este procedimento não possui controle de progresso habilitado",
+        400
+      );
+    }
+
     // Validar mudanças de progresso
     const progressoAtual = procedimentoPlano.progresso;
     const novoProgresso = data.progresso;
@@ -960,15 +971,50 @@ export class AtendimentoService {
       );
     }
 
-    // Se está marcando como concluído, definir data
+    // Preparar dados de atualização
     const updateData: any = {
       progresso: novoProgresso,
       observacoes: data.observacoes || procedimentoPlano.observacoes,
       agendamentoId: data.agendamentoId || procedimentoPlano.agendamentoId,
     };
 
+    // Atualizar percentual se fornecido e se o procedimento tem status
+    if (
+      procedimentoPlano.procedimento.temStatus &&
+      data.percentualProgresso !== undefined
+    ) {
+      // Validar percentual
+      if (data.percentualProgresso < 0 || data.percentualProgresso > 100) {
+        throw new AppError("Percentual deve estar entre 0 e 100", 400);
+      }
+
+      updateData.percentualProgresso = data.percentualProgresso;
+
+      // Atualizar automaticamente o progresso baseado no percentual
+      if (data.percentualProgresso === 0) {
+        updateData.progresso = ProgressoProcedimento.NAO_INICIADO;
+      } else if (data.percentualProgresso === 100) {
+        updateData.progresso = ProgressoProcedimento.CONCLUIDO;
+        updateData.concluidoEm = data.concluidoEm || new Date();
+      } else {
+        updateData.progresso = ProgressoProcedimento.EM_ANDAMENTO;
+      }
+    }
+
+    // Se está marcando como concluído manualmente, definir data e percentual 100
     if (novoProgresso === ProgressoProcedimento.CONCLUIDO) {
       updateData.concluidoEm = data.concluidoEm || new Date();
+      if (procedimentoPlano.procedimento.temStatus) {
+        updateData.percentualProgresso = 100;
+      }
+    }
+
+    // Se está marcando como não iniciado, zerar percentual
+    if (novoProgresso === ProgressoProcedimento.NAO_INICIADO) {
+      if (procedimentoPlano.procedimento.temStatus) {
+        updateData.percentualProgresso = 0;
+      }
+      updateData.concluidoEm = null;
     }
 
     // Atualizar procedimento
@@ -1496,5 +1542,188 @@ Este link expira em: ${new Date(linkData!.expiresAt).toLocaleDateString(
     });
 
     return result;
+  }
+
+  // ==========================================================================
+  // GET ATENDIMENTO DETALHADO (COM PRONTUÁRIO E PROCEDIMENTOS)
+  // ==========================================================================
+
+  static async getDetalhado(
+    tenantId: string,
+    atendimentoId: string,
+    options: {
+      incluirProntuario?: boolean;
+      incluirProcedimentosPlano?: boolean;
+    } = {}
+  ) {
+    console.log("🔍 SERVICE getDetalhado INICIANDO");
+    console.log("TenantId:", tenantId);
+    console.log("AtendimentoId:", atendimentoId);
+    console.log("Options:", options);
+
+    const { incluirProntuario = true, incluirProcedimentosPlano = true } =
+      options;
+
+    try {
+      // Buscar atendimento principal
+      console.log("📋 Buscando atendimento no banco...");
+
+      const atendimento = await prisma.atendimento.findFirst({
+        where: { id: atendimentoId, tenantId },
+        include: {
+          agendamento: {
+            include: {
+              paciente: {
+                select: {
+                  id: true,
+                  nome: true,
+                  telefone: true,
+                  email: true,
+                  dataNascimento: true,
+                },
+              },
+              profissional: {
+                select: {
+                  id: true,
+                  nome: true,
+                  especialidade: true,
+                  cor: true,
+                },
+              },
+              procedimento: {
+                select: {
+                  id: true,
+                  nome: true,
+                  duracaoMinutos: true,
+                  valor: true,
+                },
+              },
+            },
+          },
+          procedimento: {
+            select: {
+              id: true,
+              nome: true,
+              valor: true,
+              duracaoMinutos: true,
+            },
+          },
+          procedimentosPlano: incluirProcedimentosPlano
+            ? {
+                include: {
+                  procedimento: {
+                    select: {
+                      id: true,
+                      nome: true,
+                      duracaoMinutos: true,
+                      valor: true,
+                      temStatus: true,
+                    },
+                  },
+                  agendamento: {
+                    select: {
+                      id: true,
+                      dataHora: true,
+                      status: true,
+                    },
+                  },
+                },
+                orderBy: {
+                  ordem: "asc",
+                },
+              }
+            : false,
+          avaliacao: {
+            select: {
+              id: true,
+              createdAt: true,
+              anotacoes: true,
+              statusAprovacao: true,
+            },
+          },
+        },
+      });
+
+      console.log("✅ Atendimento encontrado:", !!atendimento);
+
+      if (!atendimento) {
+        console.error("❌ Atendimento NÃO encontrado no banco!");
+        throw new AppError("Atendimento não encontrado", 404);
+      }
+
+      // Buscar prontuário (histórico de atendimentos do paciente)
+      let prontuario: any[] = [];
+
+      if (incluirProntuario && atendimento.agendamento.paciente) {
+        console.log("📋 Buscando prontuário do paciente...");
+
+        prontuario = await prisma.atendimento.findMany({
+          where: {
+            tenantId,
+            pacienteId: atendimento.agendamento.paciente.id,
+            cancelado: false,
+            id: {
+              not: atendimentoId, // Excluir o atendimento atual
+            },
+          },
+          include: {
+            agendamento: {
+              select: {
+                dataHora: true,
+              },
+            },
+            procedimentosPlano: {
+              include: {
+                procedimento: {
+                  select: {
+                    nome: true,
+                  },
+                },
+              },
+              orderBy: {
+                ordem: "asc",
+              },
+            },
+          },
+          orderBy: {
+            createdAt: "desc", // Mais recente primeiro
+          },
+          take: 10, // Limitar a 10 atendimentos no prontuário
+        });
+
+        console.log(
+          `✅ Prontuário encontrado: ${prontuario.length} atendimentos`
+        );
+      }
+
+      // Formatar resposta
+      const atendimentoDetalhado = {
+        ...atendimento,
+        prontuario: prontuario.map((att) => ({
+          id: att.id,
+          tipo: att.tipo,
+          createdAt: att.createdAt,
+          dataHoraAtendimento: att.agendamento.dataHora,
+          anotacoes: att.anotacoes,
+          procedimentosRealizados: att.procedimentosRealizados,
+          statusAprovacao: att.statusAprovacao,
+          procedimentosPlano: att.procedimentosPlano.map((proc: any) => ({
+            id: proc.id,
+            ordem: proc.ordem,
+            progresso: proc.progresso,
+            percentualProgresso: proc.percentualProgresso,
+            procedimento: {
+              nome: proc.procedimento.nome,
+            },
+          })),
+        })),
+      };
+
+      console.log("✅ SERVICE getDetalhado CONCLUÍDO");
+      return atendimentoDetalhado;
+    } catch (error: any) {
+      console.error("❌ ERRO no service getDetalhado:", error);
+      throw error;
+    }
   }
 }
