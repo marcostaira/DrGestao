@@ -113,7 +113,7 @@ export default function AtendimentoDetalhePage() {
     }
   }, [atendimentoId, isCreating, agendamentoIdFromUrl]);
 
-  // Cardar agendamento (modo criação)
+  // Carregar agendamento (modo criação)
   const loadAgendamento = async (id: string) => {
     try {
       setLoading(true);
@@ -206,6 +206,31 @@ export default function AtendimentoDetalhePage() {
     }
   };
 
+  // ✅ ADICIONAR FUNÇÃO PARA ATUALIZAR PERCENTUAL
+  const handleUpdatePercentual = async (
+    procedimentoPlanoId: string,
+    percentual: number
+  ) => {
+    try {
+      setSaving(true);
+
+      // Chamar API para atualizar o percentual
+      await api.put(`/procedimentos-plano/${procedimentoPlanoId}/percentual`, {
+        percentual,
+      });
+
+      toast.success("Progresso atualizado com sucesso!");
+
+      // Recarregar dados do atendimento
+      await loadAtendimento();
+    } catch (error: any) {
+      console.error("Erro ao atualizar progresso:", error);
+      toast.error(error.response?.data?.error || "Erro ao atualizar progresso");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   // Loading
   if (loading) {
     return (
@@ -294,34 +319,7 @@ export default function AtendimentoDetalhePage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Coluna Principal */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Anotações */}
-          <AtendimentoAnotacoes
-            isEditing={isEditing}
-            anotacoes={editedAnotacoes}
-            onAnotacoesChange={setEditedAnotacoes}
-          />
-
-          {/* Procedimentos Realizados */}
-          <AtendimentoProcedimentos
-            isEditing={isEditing}
-            procedimentos={editedProcedimentos}
-            onProcedimentosChange={setEditedProcedimentos}
-          />
-
-          {/* Procedimentos do Plano (só no modo visualização) */}
-          {atendimento?.procedimentosPlano &&
-            atendimento.procedimentosPlano.length > 0 && (
-              <AtendimentoProcedimentosPlano
-                procedimentos={atendimento.procedimentosPlano}
-              />
-            )}
-
-          {/* Prontuário (só no modo visualização) */}
-          {atendimento?.prontuario && atendimento.prontuario.length > 0 && (
-            <AtendimentoProntuario prontuario={atendimento.prontuario} />
-          )}
           {/* Informações do Agendamento */}
-
           <AtendimentoInfo
             paciente={{
               nome: dataSource.paciente?.nome || "",
@@ -342,10 +340,41 @@ export default function AtendimentoDetalhePage() {
                 : undefined
             }
           />
+
+          {/* Anotações */}
+          <AtendimentoAnotacoes
+            isEditing={isEditing}
+            anotacoes={editedAnotacoes}
+            onAnotacoesChange={setEditedAnotacoes}
+          />
+
+          {/* Procedimentos Realizados */}
+          <AtendimentoProcedimentos
+            isEditing={isEditing}
+            procedimentos={editedProcedimentos}
+            onProcedimentosChange={setEditedProcedimentos}
+          />
+
+          {/* Procedimentos do Plano (só no modo visualização) */}
+          {!isCreating &&
+            atendimento?.procedimentosPlano &&
+            atendimento.procedimentosPlano.length > 0 && (
+              <AtendimentoProcedimentosPlano
+                procedimentos={atendimento.procedimentosPlano}
+                onUpdatePercentual={handleUpdatePercentual}
+                isEditing={isEditing}
+              />
+            )}
+
+          {/* Prontuário (só no modo visualização) */}
+          {!isCreating &&
+            atendimento?.prontuario &&
+            atendimento.prontuario.length > 0 && (
+              <AtendimentoProntuario prontuario={atendimento.prontuario} />
+            )}
         </div>
 
         {/* Sidebar */}
-
         <AtendimentoSidebar
           isCreating={isCreating}
           isEditing={isEditing}

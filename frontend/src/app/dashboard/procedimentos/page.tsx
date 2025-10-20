@@ -42,6 +42,7 @@ export default function ProcedimentosPage() {
     nome: "",
     valor: undefined,
     duracaoMinutos: 30,
+    temStatus: false, // ✅ NOVO CAMPO
   });
 
   useEffect(() => {
@@ -71,6 +72,7 @@ export default function ProcedimentosPage() {
         nome: procedimento.nome,
         valor: procedimento.valor,
         duracaoMinutos: procedimento.duracaoMinutos,
+        temStatus: procedimento.temStatus || false, // ✅ NOVO CAMPO
       });
     } else {
       setEditingProcedimento(null);
@@ -78,6 +80,7 @@ export default function ProcedimentosPage() {
         nome: "",
         valor: undefined,
         duracaoMinutos: 30,
+        temStatus: false, // ✅ NOVO CAMPO
       });
     }
     setIsModalOpen(true);
@@ -90,6 +93,7 @@ export default function ProcedimentosPage() {
       nome: "",
       valor: undefined,
       duracaoMinutos: 30,
+      temStatus: false,
     });
   };
 
@@ -172,6 +176,22 @@ export default function ProcedimentosPage() {
       key: "duracaoMinutos",
       header: "Duração",
       render: (proc: Procedimento) => formatDuration(proc.duracaoMinutos),
+    },
+    // ✅ NOVA COLUNA
+    {
+      key: "temStatus",
+      header: "Controle de Progresso",
+      render: (proc: Procedimento) => (
+        <span
+          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+            proc.temStatus
+              ? "bg-green-100 text-green-800"
+              : "bg-gray-100 text-gray-800"
+          }`}
+        >
+          {proc.temStatus ? "✓ Sim" : "✗ Não"}
+        </span>
+      ),
     },
     {
       key: "actions",
@@ -302,36 +322,68 @@ export default function ProcedimentosPage() {
             required
           />
 
-          <Input
-            label="Valor (opcional)"
-            type="number"
-            step="0.01"
-            value={formData.valor || ""}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                valor: e.target.value ? Number(e.target.value) : undefined,
-              })
-            }
-            placeholder="0.00"
-          />
+          <div className="grid grid-cols-2 gap-4">
+            <Input
+              label="Valor (opcional)"
+              type="number"
+              step="0.01"
+              value={formData.valor || ""}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  valor: e.target.value ? Number(e.target.value) : undefined,
+                })
+              }
+              placeholder="0.00"
+            />
 
-          <Input
-            label="Duração (minutos)"
-            type="number"
-            value={formData.duracaoMinutos}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                duracaoMinutos: Number(e.target.value),
-              })
-            }
-            min="5"
-            step="5"
-            required
-          />
+            <Input
+              label="Duração (minutos)"
+              type="number"
+              value={formData.duracaoMinutos}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  duracaoMinutos: Number(e.target.value),
+                })
+              }
+              min="5"
+              step="5"
+              required
+            />
+          </div>
 
-          <div className="flex justify-end gap-3 pt-4">
+          {/* ✅ NOVO CAMPO - CONTROLE DE PROGRESSO */}
+          <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+            <div className="flex items-start">
+              <div className="flex items-center h-5">
+                <input
+                  id="temStatus"
+                  type="checkbox"
+                  checked={formData.temStatus}
+                  onChange={(e) =>
+                    setFormData({ ...formData, temStatus: e.target.checked })
+                  }
+                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                />
+              </div>
+              <div className="ml-3">
+                <label
+                  htmlFor="temStatus"
+                  className="font-medium text-gray-900 cursor-pointer"
+                >
+                  Habilitar controle de progresso
+                </label>
+                <p className="text-sm text-gray-500 mt-1">
+                  Permite acompanhar o percentual de conclusão quando este
+                  procedimento for adicionado a um plano de tratamento (ex:
+                  implantes, ortodontia)
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-3 pt-4 border-t">
             <Button
               type="button"
               variant="secondary"

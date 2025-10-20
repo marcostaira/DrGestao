@@ -6,6 +6,7 @@ export interface Procedimento {
   nome: string;
   valor?: number;
   duracaoMinutos: number;
+  temStatus: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -14,12 +15,14 @@ export interface CreateProcedimentoData {
   nome: string;
   valor?: number;
   duracaoMinutos: number;
+  temStatus: boolean;
 }
 
 export interface UpdateProcedimentoData {
   nome?: string;
   valor?: number;
   duracaoMinutos?: number;
+  temStatus: boolean;
 }
 
 export async function getProcedimentos(): Promise<Procedimento[]> {

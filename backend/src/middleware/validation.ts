@@ -166,22 +166,6 @@ export const updateProfissionalSchema = Joi.object({
 });
 
 // ============================================================================
-// PROCEDIMENTO VALIDATION SCHEMAS
-// ============================================================================
-
-export const createProcedimentoSchema = Joi.object({
-  nome: Joi.string().trim().min(2).max(100).required(),
-  valor: Joi.number().min(0).optional(),
-  duracaoMinutos: Joi.number().integer().min(1).required(),
-});
-
-export const updateProcedimentoSchema = Joi.object({
-  nome: Joi.string().trim().min(2).max(100),
-  valor: Joi.number().min(0),
-  duracaoMinutos: Joi.number().integer().min(1),
-});
-
-// ============================================================================
 // AGENDAMENTO VALIDATION SCHEMAS
 // ============================================================================
 
@@ -675,4 +659,39 @@ export const updateProgressoProcedimentoSchemaV2 = Joi.object({
   agendamentoId: Joi.string().optional().allow(null),
   observacoes: Joi.string().max(500).optional().allow("", null),
   concluidoEm: Joi.date().iso().optional().allow(null),
+});
+// ============================================================================
+// PROCEDIMENTO SCHEMAS
+// ============================================================================
+
+export const createProcedimentoSchema = Joi.object({
+  nome: Joi.string().required().min(3).max(100).messages({
+    "string.empty": "Nome é obrigatório",
+    "string.min": "Nome deve ter no mínimo 3 caracteres",
+    "string.max": "Nome deve ter no máximo 100 caracteres",
+  }),
+  valor: Joi.number().optional().allow(null).min(0).messages({
+    "number.min": "Valor não pode ser negativo",
+  }),
+  duracaoMinutos: Joi.number().integer().min(5).required().messages({
+    "number.base": "Duração deve ser um número",
+    "number.min": "Duração mínima é 5 minutos",
+    "any.required": "Duração é obrigatória",
+  }),
+  temStatus: Joi.boolean().optional().default(false), // ✅ ADICIONADO
+});
+
+export const updateProcedimentoSchema = Joi.object({
+  nome: Joi.string().optional().min(3).max(100).messages({
+    "string.min": "Nome deve ter no mínimo 3 caracteres",
+    "string.max": "Nome deve ter no máximo 100 caracteres",
+  }),
+  valor: Joi.number().optional().allow(null).min(0).messages({
+    "number.min": "Valor não pode ser negativo",
+  }),
+  duracaoMinutos: Joi.number().integer().min(5).optional().messages({
+    "number.base": "Duração deve ser um número",
+    "number.min": "Duração mínima é 5 minutos",
+  }),
+  temStatus: Joi.boolean().optional(), // ✅ ADICIONADO
 });

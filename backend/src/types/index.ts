@@ -258,12 +258,14 @@ export interface CreateProcedimentoData {
   nome: string;
   valor?: number;
   duracaoMinutos: number;
+  temStatus?: boolean;
 }
 
 export interface UpdateProcedimentoData {
   nome?: string;
   valor?: number;
   duracaoMinutos?: number;
+  temStatus?: boolean;
 }
 
 // ============================================================================

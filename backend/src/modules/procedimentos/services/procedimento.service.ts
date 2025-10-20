@@ -37,6 +37,7 @@ export class ProcedimentoService {
         nome: data.nome.trim(),
         valor: data.valor || null,
         duracaoMinutos: data.duracaoMinutos,
+        temStatus: data.temStatus ?? false, 
       },
     });
 
@@ -142,6 +143,7 @@ export class ProcedimentoService {
     if (data.nome) updateData.nome = data.nome.trim();
     if (data.valor !== undefined) updateData.valor = data.valor;
     if (data.duracaoMinutos) updateData.duracaoMinutos = data.duracaoMinutos;
+    if (data.temStatus !== undefined) updateData.temStatus = data.temStatus; // ✅ ADICIONADO
 
     // Atualizar procedimento
     const procedimento = await prisma.procedimento.update({
