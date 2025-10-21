@@ -1726,4 +1726,68 @@ Este link expira em: ${new Date(linkData!.expiresAt).toLocaleDateString(
       throw error;
     }
   }
+
+  static async updatePercentualProcedimentoPlano(
+    tenantId: string,
+    procedimentoPlanoId: string,
+    percentual: number
+  ) {
+    // Buscar procedimento do plano
+    const procedimentoPlano = await prisma.atendimentoProcedimento.findFirst({
+      where: {
+        id: procedimentoPlanoId,
+        atendimento: {
+          tenantId,
+        },
+      },
+      include: {
+        procedimento: true,
+        atendimento: true,
+      },
+    });
+
+    if (!procedimentoPlano) {
+      throw new AppError("Procedimento do plano não encontrado", 404);
+    }
+
+    // Verificar se o procedimento tem controle de status
+    if (!procedimentoPlano.procedimento.temStatus) {
+      throw new AppError(
+        "Este procedimento não possui controle de progresso",
+        400
+      );
+    }
+
+    // Validar percentual
+    if (percentual < 0 || percentual > 100) {
+      throw new AppError("Percentual deve estar entre 0 e 100", 400);
+    }
+
+    // Determinar o novo status baseado no percentual
+    let novoProgresso: "NAO_INICIADO" | "EM_ANDAMENTO" | "CONCLUIDO";
+
+    if (percentual === 0) {
+      novoProgresso = "NAO_INICIADO";
+    } else if (percentual === 100) {
+      novoProgresso = "CONCLUIDO";
+    } else {
+      novoProgresso = "EM_ANDAMENTO";
+    }
+
+    // Atualizar o procedimento do plano
+    const procedimentoAtualizado = await prisma.atendimentoProcedimento.update({
+      where: { id: procedimentoPlanoId },
+      data: {
+        percentualProgresso: percentual,
+        progresso: novoProgresso,
+        concluidoEm: percentual === 100 ? new Date() : null,
+      },
+      include: {
+        procedimento: true,
+        agendamento: true,
+      },
+    });
+
+    return procedimentoAtualizado;
+  }
 }

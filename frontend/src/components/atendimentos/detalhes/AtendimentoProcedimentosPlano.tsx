@@ -5,7 +5,6 @@
 import { useState } from "react";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
-import Button from "@/components/ui/Button";
 import { PercentualSlider } from "./PercentualSlider";
 
 interface ProcedimentoPlano {
@@ -71,11 +70,16 @@ export function AtendimentoProcedimentosPlano({
     useState<ProcedimentoPlano | null>(null);
 
   const handleOpenSlider = (proc: ProcedimentoPlano) => {
+    console.log(
+      "🔵 Abrindo slider de percentual para:",
+      proc.procedimento.nome
+    );
     setSelectedProcedimento(proc);
     setSliderOpen(true);
   };
 
   const handleSavePercentual = (percentual: number) => {
+    console.log("💾 Salvando percentual:", percentual);
     if (selectedProcedimento && onUpdatePercentual) {
       onUpdatePercentual(selectedProcedimento.id, percentual);
     }
@@ -173,6 +177,7 @@ export function AtendimentoProcedimentosPlano({
         <PercentualSlider
           isOpen={sliderOpen}
           onClose={() => {
+            console.log("🔴 Fechando slider de percentual");
             setSliderOpen(false);
             setSelectedProcedimento(null);
           }}

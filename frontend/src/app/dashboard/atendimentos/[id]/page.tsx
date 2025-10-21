@@ -215,7 +215,7 @@ export default function AtendimentoDetalhePage() {
       setSaving(true);
 
       // Chamar API para atualizar o percentual
-      await api.put(`/procedimentos-plano/${procedimentoPlanoId}/percentual`, {
+      await api.put(`/atendimentos/procedimentos-plano/${procedimentoPlanoId}/percentual`, {
         percentual,
       });
 

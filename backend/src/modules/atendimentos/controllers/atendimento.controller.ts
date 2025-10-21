@@ -1,6 +1,6 @@
 // backend/src/modules/atendimentos/controllers/atendimento.controller.ts
 
-import { Response } from "express";
+import { NextFunction, Response } from "express";
 import { AtendimentoService } from "../services/atendimento.service";
 import { AuthenticatedRequest, ApiResponse } from "../../../types";
 import { LinkAprovacaoService } from "../services/link-aprovacao.service";
@@ -743,6 +743,48 @@ export class AtendimentoController {
       const response: ApiResponse = {
         success: false,
         error: error.message || "Erro ao buscar atendimento detalhado",
+      };
+      res.status(error.statusCode || 500).json(response);
+    }
+  }
+
+  static async updatePercentualProcedimentoPlano(
+    req: AuthenticatedRequest,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { id } = req.params;
+      const { percentual } = req.body;
+      const tenantId = req.user?.tenantId;
+
+      if (!tenantId) {
+        const response: ApiResponse = {
+          success: false,
+          error: "Tenant não identificado",
+        };
+        res.status(400).json(response);
+        return;
+      }
+
+      const procedimentoPlano =
+        await AtendimentoService.updatePercentualProcedimentoPlano(
+          tenantId,
+          id,
+          percentual
+        );
+
+      const response: ApiResponse = {
+        success: true,
+        data: procedimentoPlano,
+        message: "Percentual de progresso atualizado com sucesso",
+      };
+
+      res.status(200).json(response);
+    } catch (error: any) {
+      const response: ApiResponse = {
+        success: false,
+        error: error.message || "Erro ao atualizar percentual",
       };
       res.status(error.statusCode || 500).json(response);
     }

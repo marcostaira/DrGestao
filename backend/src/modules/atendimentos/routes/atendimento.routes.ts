@@ -187,7 +187,6 @@ router.get(
   AtendimentoController.getProcedimentosPendentes
 );
 
-// ⭐ MOVER ESTA ROTA ANTES DA ROTA /:id
 /**
  * @route   GET /atendimentos/:id/detalhado
  * @desc    Buscar atendimento detalhado com prontuário e procedimentos
@@ -255,6 +254,29 @@ router.post(
   autorizar(Modulo.ATENDIMENTOS, "criarAlterar"),
   validate({ body: createAtendimentoSchema }),
   AtendimentoController.create
+);
+
+// ✅ NOVA ROTA - ATUALIZAR PERCENTUAL (ANTES DAS ROTAS GENÉRICAS COM /:id)
+/**
+ * @route   PUT /atendimentos/procedimentos-plano/:id/percentual
+ * @desc    Atualizar percentual de progresso de um procedimento do plano
+ * @access  Private (Requer permissão: ATENDIMENTOS.criarAlterar)
+ */
+router.put(
+  "/procedimentos-plano/:id/percentual",
+  autorizar(Modulo.ATENDIMENTOS, "criarAlterar"),
+  validate({
+    params: Joi.object({ id: idSchema }),
+    body: Joi.object({
+      percentual: Joi.number().integer().min(0).max(100).required().messages({
+        "number.base": "Percentual deve ser um número",
+        "number.min": "Percentual mínimo é 0",
+        "number.max": "Percentual máximo é 100",
+        "any.required": "Percentual é obrigatório",
+      }),
+    }),
+  }),
+  AtendimentoController.updatePercentualProcedimentoPlano
 );
 
 /**
